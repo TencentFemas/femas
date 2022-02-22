@@ -1,0 +1,46 @@
+server:
+  port: 18001
+spring:
+  application:
+    name: femas-example-springcloud2020-consumer
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+      username: nacos
+      password: nacos
+      config:
+        server-addr: 127.0.0.1:8848
+
+ribbon:
+  ReadTimeout: 10000
+  ConnectTimeout: 10000
+  MaxAutoRetries: 0
+  # 同一个微服务其他实例的最大重试次数，不包括第一次调用的实例。默认值为1
+  MaxAutoRetriesNextServer: 0
+  # 是否所有操作（GET、POST等）都允许重试。默认值为false
+  OkToRetryOnAllOperations: false
+
+serviceRouter:
+  chain:
+    - FemasDefaultRoute
+loadbalancer:
+  type: random
+circuitBreaker:
+  enable: true
+  chain:
+    - femasCircuitBreaker
+#  plugin:
+#    femasCircuitBreaker:
+#      continuousErrorThreshold: 10
+#      metricStatTimeWindow: 1s
+#      requestCountAfterHalfOpen: 3
+#      sleepWindow: 5s
+#      successCountAfterHalfOpen: 2
+
+rateLimit:
+  type: femasRateLimit
+authenticate:
+  type: femasAuthenticate
+
+paas_server_address: http://127.0.0.1:8080

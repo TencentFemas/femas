@@ -1,0 +1,17 @@
+Java HotSpot(TM) 64-Bit Server VM (25.271-b09) for bsd-amd64 JRE (1.8.0_271-b09), built on Sep 16 2020 16:54:38 by "java_re" with gcc 4.2.1 Compatible Apple LLVM 10.0.0 (clang-1000.11.45.5)
+Memory: 4k page, physical 16777216k(738940k free)
+
+/proc/meminfo:
+
+CommandLine flags: -XX:CompressedClassSpaceSize=528482304 -XX:GCLogFileSize=104857600 -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/Users/leo/github/Femas/femas-console/femas-admin/femas_java_heapdump.hprof -XX:InitialHeapSize=2147483648 -XX:MaxHeapSize=2147483648 -XX:MaxMetaspaceSize=536870912 -XX:MaxNewSize=1073741824 -XX:MetaspaceSize=268435456 -XX:NewSize=1073741824 -XX:NumberOfGCLogFiles=10 -XX:-OmitStackTraceInFastThrow -XX:+PrintGC -XX:+PrintGCDateStamps -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+UseCompressedClassPointers -XX:+UseCompressedOops -XX:+UseGCLogFileRotation -XX:-UseLargePages -XX:+UseParallelGC 
+2022-02-22T21:41:25.480-0800: 4.101: [GC (Allocation Failure) [PSYoungGen: 786432K->38823K(917504K)] 786432K->38927K(1966080K), 0.0769734 secs] [Times: user=0.23 sys=0.03, real=0.07 secs] 
+2022-02-22T21:41:30.057-0800: 8.678: [GC (Allocation Failure) [PSYoungGen: 825255K->49139K(917504K)] 825359K->49283K(1966080K), 0.0689329 secs] [Times: user=0.27 sys=0.03, real=0.07 secs] 
+Heap
+ PSYoungGen      total 917504K, used 390346K [0x00000007a0800000, 0x00000007e0800000, 0x00000007e0800000)
+  eden space 786432K, 43% used [0x00000007a0800000,0x00000007b5535e00,0x00000007d0800000)
+  from space 131072K, 37% used [0x00000007d8800000,0x00000007db7fcce0,0x00000007e0800000)
+  to   space 131072K, 0% used [0x00000007d0800000,0x00000007d0800000,0x00000007d8800000)
+ ParOldGen       total 1048576K, used 144K [0x0000000760800000, 0x00000007a0800000, 0x00000007a0800000)
+  object space 1048576K, 0% used [0x0000000760800000,0x0000000760824010,0x00000007a0800000)
+ Metaspace       used 55101K, capacity 57648K, committed 57728K, reserved 1099776K
+  class space    used 7054K, capacity 7509K, committed 7552K, reserved 1048576K

@@ -1,0 +1,63 @@
+server:
+  port: 8082
+spring:
+  application:
+    name: femas-springcloud-gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+      username: nacos
+      password: nacos
+      config:
+        server-addr: 127.0.0.1:8848
+        file-extension: yml
+        refresh-enabled: true
+#    consul:
+#      host: 127.0.0.1
+#      port: 8500
+#      discovery:
+#        serviceName: femas-springcloud-consumer
+#        instanceId: ${spring.application.name}-${server.port}-${spring.cloud.client.hostname}
+#        heartbeat:
+#          enabled: true
+    gateway:
+      discovery:
+        locator:
+          # 开启从注册中心动态创建路由的功能，利用微服务名进行路由
+          enabled: true
+          # 忽略大小写匹配，默认为 false。
+          # 当 eureka 自动大写 serviceId，MYSERIVCE 会匹配 /myservice/**
+          lowerCaseServiceId: true
+      routes:
+      - id: femas-springcloud-consumer
+        uri: lb://femas-springcloud-consumer
+        predicates:
+        - Path=/consumer/**
+        filters:
+        - StripPrefix=1
+
+      - id: femas-springcloud-provider
+        uri: lb://femas-springcloud-provider
+        predicates:
+        - Path=/provider/**
+        filters:
+        - StripPrefix=1
+
+ribbon:
+  ReadTimeout: 30000 # 处理时间
+  ConnectTimeout: 30000 # 连接时间
+  MaxAutoRetries: 0 #最大自动重试次数
+  MaxAutoRetriesNextServer: 0 # 换实例重试次数
+  MaxTotalHttpConnections: 2000 # 最大http连接数
+  MaxConnectionsPerHost: 1000 # 每个host连接数
+  OkToRetryOnAllOperations: false # 是否所有操作（GET、POST等）都允许重试。默认值为false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+logging:
+  file: ./log/femas/${spring.application.name}/${spring.application.name}

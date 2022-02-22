@@ -1,0 +1,41 @@
+# IntelliJ project files
+.factorypath
+.idea/
+*.iml
+out
+gen
+
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+!/.mvn/wrapper/maven-wrapper.jar
+*/.flattened-pom.xml
+.flattened-pom.xml
+
+# Eclipse
+.classpath
+.settings/
+.project
+
+/logs
+*/logs
+*.log
+
+env.sh
+
+# System related
+*.DS_Store
+Thumbs.db
+
+
+# Atom console
+node_modules
+dist
+.vscode

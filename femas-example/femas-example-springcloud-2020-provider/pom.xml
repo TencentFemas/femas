@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://maven.apache.org/POM/4.0.0"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>femas-example</artifactId>
+        <groupId>com.tencent.tsf</groupId>
+        <version>${revision}</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>femas-example-springcloud-2020-provider</artifactId>
+
+    <properties>
+        <spring-boot-dependencies.version>2.4.3</spring-boot-dependencies.version>
+        <spring-cloud-dependencies.version>2020.0.2</spring-cloud-dependencies.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot-dependencies.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud-dependencies.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+	            <groupId>org.springframework.boot</groupId>
+	            <artifactId>spring-boot-starter-actuator</artifactId>
+	            <version>${spring-boot-dependencies.version}</version>
+	            <exclusions>
+	            	<exclusion>
+	            		<groupId>org.apache.logging.log4j</groupId>
+	            		<artifactId>log4j-to-slf4j</artifactId>
+	            	</exclusion>
+	            </exclusions>
+	        </dependency>
+	        <dependency>
+	        	<groupId>org.apache.logging.log4j</groupId>
+	            <artifactId>log4j-to-slf4j</artifactId>
+	            <version>2.15.0</version>
+	            <exclusions>
+					<exclusion>
+						<groupId>org.apache.logging.log4j</groupId>
+						<artifactId>log4j-api</artifactId>
+					</exclusion>
+				</exclusions>
+	        </dependency>
+	        <dependency>
+	        	<groupId>org.apache.logging.log4j</groupId>
+				<artifactId>log4j-api</artifactId>
+				<version>2.15.0</version>
+	        </dependency>
+    	</dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.tencent.tsf</groupId>
+            <artifactId>femas-springcloud-2020.0-ilford-starter</artifactId>
+        </dependency>
+
+        <!-- nacos获取配置需要的依赖 -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+            <version>2021.1</version>
+        </dependency>
+
+
+        <!--         <dependency> -->
+        <!--             <groupId>org.springframework.cloud</groupId> -->
+        <!--             <artifactId>spring-cloud-starter-consul-discovery</artifactId> -->
+        <!--             <version>3.0.2</version> -->
+        <!--         </dependency> -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+            <version>2021.1</version>
+        </dependency>
+
+
+        <!-- polaris服务注册发现 -->
+<!--         <dependency> -->
+<!-- 	       	<groupId>com.tencent.cloud</groupId> -->
+<!-- 			<artifactId>spring-cloud-starter-tencent-polaris-discovery</artifactId> -->
+<!-- 			<version>1.0.0.2020-SNAPSHOT</version> -->
+<!-- 	    </dependency> -->
+
+	      <dependency>
+	        <groupId>org.springframework.cloud</groupId>
+	        <artifactId>spring-cloud-commons</artifactId>
+	        <version>3.0.2</version>
+	    </dependency>
+
+	    <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <!--         <dependency> -->
+        <!--             <groupId>org.springframework.cloud</groupId> -->
+        <!--             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId> -->
+        <!--             <version>3.0.2</version> -->
+        <!--         </dependency> -->
+
+        <!-- 2021.1版nacos配置需要依赖spring-cloud-starter-bootstrap才能显示出一些监听数据的日志 -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-bootstrap</artifactId>
+            <version>3.0.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+        </dependency>
+    </dependencies>
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>com.femas.example.springcloud2020.provider.ProviderApplication
+                    </mainClass>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+
+</project>

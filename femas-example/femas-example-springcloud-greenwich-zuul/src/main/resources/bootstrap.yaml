@@ -1,0 +1,77 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: femas-zuul-gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+      username: nacos
+      password: nacos
+      config:
+        server-addr: 127.0.0.1:8848
+        file-extension: yml
+        refresh-enabled: true
+#    consul:
+#      host: 127.0.0.1
+#      port: 8500
+#      discovery:
+#        serviceName: ${spring.application.name}
+#        instanceId: ${spring.application.name}-${server.port}-${spring.cloud.client.hostname}
+#        heartbeat:
+#          enabled: true
+#      config:
+#        enabled: true
+#        format: YAML
+zuul:
+  okhttp:
+    enabled: true # 使用okhttp方式请求
+  semaphore:
+    max-semaphores: 500 # 并发处理数
+  host:
+    socket-timeout-millis: 30000 # socket超时时间
+    connect-timeout-millis: 30000 # 连接时间semaphores
+    max-total-connections: 5000  # 最大连接数
+    max-per-route-connections: 1 # 每个router最大连接数
+  routes:
+    femas-springcloud-consumer1: #如果想让单个服务的匹配缩短，可以单个配置，这样匹配成功后，转发时就不会去除前缀，访问路径：http://localhost:8989/user/1
+      path: /ribbon-consumer/**
+      serviceId: femas-springcloud-consumer
+      strip-prefix: true
+    femas-springcloud-provider1: #如果想让单个服务的匹配缩短，可以单个配置，这样匹配成功后，转发时就不会去除前缀，访问路径：http://localhost:8989/user/1
+      path: /ribbon-provider/**
+      serviceId: femas-springcloud-provider
+      strip-prefix: true
+    femas-springcloud-provider2: #如果想让单个服务的匹配缩短，可以单个配置，这样匹配成功后，转发时就不会去除前缀，访问路径：http://localhost:8989/user/1
+      path: /host-provider/**
+      url: http://localhost:19001
+      strip-prefix: true
+
+feign:
+  hystrix:
+    enabled: false
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: false
+
+ribbon:
+  ReadTimeout: 30000 # 处理时间
+  ConnectTimeout: 30000 # 连接时间
+  MaxAutoRetries: 0 #最大自动重试次数
+  MaxAutoRetriesNextServer: 0 # 换实例重试次数
+  MaxTotalHttpConnections: 2000 # 最大http连接数
+  MaxConnectionsPerHost: 1000 # 每个host连接数
+  OkToRetryOnAllOperations: false # 是否所有操作（GET、POST等）都允许重试。默认值为false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+logging:
+  file: ./log/femas/${spring.application.name}/${spring.application.name}

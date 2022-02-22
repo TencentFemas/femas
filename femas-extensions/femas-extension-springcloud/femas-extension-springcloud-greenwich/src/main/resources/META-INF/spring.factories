@@ -1,0 +1,10 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.tencent.tsf.femas.extension.springcloud.discovery.FemasDiscoveryAutoConfiguration,\
+com.tencent.tsf.femas.extension.springcloud.common.discovery.FemasDiscoveryCommonAutoConfiguration,\
+com.tencent.tsf.femas.extension.springcloud.discovery.ribbon.config.FemasRibbonAutoConfiguration,\
+com.tencent.tsf.femas.extension.springcloud.instrumentation.feign.FemasFeignInterceptorAutoConfiguration,\
+com.tencent.tsf.femas.extension.springcloud.common.instrumentation.config.FemasGovernanceAutoConfiguration,\
+com.tencent.tsf.femas.extension.springcloud.common.instrumentation.restapi.FemasSwaggerAutoConfiguration,\
+com.tencent.tsf.femas.extension.springcloud.common.instrumentation.metrics.PrometheusConfig
+org.springframework.context.ApplicationListener=\
+com.tencent.tsf.femas.extension.springcloud.common.instrumentation.restapi.FemasSwaggerApplicationListener

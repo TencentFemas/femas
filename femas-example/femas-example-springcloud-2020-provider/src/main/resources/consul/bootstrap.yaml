@@ -1,0 +1,65 @@
+server:
+  port: 19001
+spring:
+  application:
+    name: femas-example-springcloud2020-provider
+  cloud:
+    nacos:
+      username: nacos
+      password: nacos
+      config:
+        server-addr: 127.0.0.1:8848
+#        file-extension: properties
+#        refresh-enabled: true
+#        namespace: ns-mldqvo58
+#        shared-configs[0]:
+#          data-id: testDataId
+#          refresh: true
+#          group: DEFAULT_GROUP
+    consul:
+      host: 127.0.0.1
+      port: 8500
+      discovery:
+        serviceName: femas-example-springcloud2020-provider
+        instanceId: ${spring.application.name}-${server.port}-${spring.cloud.client.hostname}
+        heartbeat:
+          enabled: true
+
+serviceRouter:
+  chain:
+    - FemasDefaultRoute
+    -
+loadbalancer:
+  type: random
+circuitBreaker:
+  enable: true
+  chain:
+    - femasCircuitBreaker
+#  plugin:
+#    femasCircuitBreaker:
+#      continuousErrorThreshold: 10
+#      metricStatTimeWindow: 1s
+#      requestCountAfterHalfOpen: 3
+#      sleepWindow: 5s
+#      successCountAfterHalfOpen: 2
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+
+rateLimit:
+  type: femasRateLimit
+
+
+authenticate:
+  type: femasAuthenticate
+
+paas_server_address: http://127.0.0.1:8080
+
+
+logging:
+  level:
+    root: info

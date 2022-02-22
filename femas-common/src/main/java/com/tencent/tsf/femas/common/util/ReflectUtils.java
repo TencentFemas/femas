@@ -1,0 +1,182 @@
+package com.tencent.tsf.femas.common.util;
+
+import com.tencent.tsf.femas.common.exception.FemasRuntimeException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.net.URL;
+import java.security.CodeSource;
+import java.security.ProtectionDomain;
+import java.util.Date;
+
+/**
+ * 反射工具类
+ */
+public class ReflectUtils {
+
+    /**
+     * 是否默认类型，基本类型+string+date
+     *
+     * @param clazz the cls
+     * @return the boolean
+     */
+    public static boolean isPrimitives(Class<?> clazz) {
+        if (clazz.isArray()) { // 数组，检查数组类型
+            return isPrimitiveType(clazz.getComponentType());
+        }
+        return isPrimitiveType(clazz);
+    }
+
+    private static boolean isPrimitiveType(Class<?> clazz) {
+        return clazz.isPrimitive() // 基本类型
+                // 基本类型的对象
+                ||
+                Boolean.class == clazz
+                || Character.class == clazz
+                || Number.class.isAssignableFrom(clazz)
+                // string 或者 date
+                || String.class == clazz
+                || Date.class.isAssignableFrom(clazz);
+    }
+
+    /**
+     * 得到类所在地址，可以是文件，也可以是jar包
+     *
+     * @param cls the cls
+     * @return the code base
+     */
+    public static String getCodeBase(Class<?> cls) {
+
+        if (cls == null) {
+            return null;
+        }
+        ProtectionDomain domain = cls.getProtectionDomain();
+        if (domain == null) {
+            return null;
+        }
+        CodeSource source = domain.getCodeSource();
+        if (source == null) {
+            return null;
+        }
+        URL location = source.getLocation();
+        if (location == null) {
+            return null;
+        }
+        return location.getFile();
+    }
+
+    /**
+     * 加载Method方法
+     *
+     * @param clazzName 类名
+     * @param methodName 方法名
+     * @param argsType 参数列表
+     * @return Method对象
+     */
+    public static Method getMethod(String clazzName, String methodName, String[] argsType) {
+        Class clazz = ClassUtils.forName(clazzName);
+        Class[] classes = ClassTypeUtils.getClasses(argsType);
+        return getMethod(clazz, methodName, classes);
+    }
+
+    /**
+     * 加载Method方法
+     *
+     * @param clazz 类
+     * @param methodName 方法名
+     * @param argsType 参数列表
+     * @return Method对象
+     * @since 5.4.0
+     */
+    public static Method getMethod(Class clazz, String methodName, Class... argsType) {
+        try {
+            return clazz.getMethod(methodName, argsType);
+        } catch (NoSuchMethodException e) {
+            throw new FemasRuntimeException(e.getMessage(), e);
+        }
+    }
+
+    /**
+     * 得到set方法
+     *
+     * @param clazz 类
+     * @param property 属性
+     * @param propertyClazz 属性
+     * @return Method 方法对象
+     */
+    public static Method getPropertySetterMethod(Class clazz, String property, Class propertyClazz) {
+        String methodName = "set" + property.substring(0, 1).toUpperCase() + property.substring(1);
+        try {
+            return clazz.getMethod(methodName, propertyClazz);
+        } catch (NoSuchMethodException e) {
+            throw new FemasRuntimeException("No setter method for " + clazz.getName() + "#" + property, e);
+        }
+    }
+
+    /**
+     * 得到get/is方法
+     *
+     * @param clazz 类
+     * @param property 属性
+     * @return Method 方法对象
+     */
+    public static Method getPropertyGetterMethod(Class clazz, String property) {
+        String methodName = "get" + property.substring(0, 1).toUpperCase() + property.substring(1);
+        Method method;
+        try {
+            method = clazz.getMethod(methodName);
+        } catch (NoSuchMethodException e) {
+            try {
+                methodName = "is" + property.substring(0, 1).toUpperCase() + property.substring(1);
+                method = clazz.getMethod(methodName);
+            } catch (NoSuchMethodException e1) {
+                throw new FemasRuntimeException("No getter method for " + clazz.getName() + "#" + property, e);
+            }
+        }
+        return method;
+    }
+
+    protected static boolean isBeanPropertyReadMethod(Method method) {
+        return method != null
+                && Modifier.isPublic(method.getModifiers())
+                && !Modifier.isStatic(method.getModifiers())
+                && method.getReturnType() != void.class
+                && method.getDeclaringClass() != Object.class
+                && method.getParameterTypes().length == 0
+                && (method.getName().startsWith("get") || method.getName().startsWith("is"))
+                // 排除就叫get和is的方法
+                && (!"get".equals(method.getName()) && !"is".equals(method.getName()));
+    }
+
+    protected static String getPropertyNameFromBeanReadMethod(Method method) {
+        if (isBeanPropertyReadMethod(method)) {
+            if (method.getName().startsWith("get")) {
+                return method.getName().substring(3, 4).toLowerCase()
+                        + method.getName().substring(4);
+            }
+            if (method.getName().startsWith("is")) {
+                return method.getName().substring(2, 3).toLowerCase()
+                        + method.getName().substring(3);
+            }
+        }
+        return null;
+    }
+
+    protected static boolean isBeanPropertyWriteMethod(Method method) {
+        return method != null
+                && Modifier.isPublic(method.getModifiers())
+                && !Modifier.isStatic(method.getModifiers())
+                && method.getDeclaringClass() != Object.class
+                && method.getParameterTypes().length == 1
+                && method.getName().startsWith("set")
+                // 排除就叫set的方法
+                && !"set".equals(method.getName());
+    }
+
+    protected static boolean isPublicInstanceField(Field field) {
+        return Modifier.isPublic(field.getModifiers())
+                && !Modifier.isStatic(field.getModifiers())
+                && !Modifier.isFinal(field.getModifiers())
+                && !field.isSynthetic();
+    }
+}

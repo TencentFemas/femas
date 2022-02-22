@@ -1,0 +1,22 @@
+server:
+  port: 19001
+spring:
+  application:
+    name: femas-springcloud-provider
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+      username: nacos
+      password: nacos
+      config:
+        server-addr: 127.0.0.1:8848
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+logging:
+  file: ./log/femas/${spring.application.name}/${spring.application.name}
