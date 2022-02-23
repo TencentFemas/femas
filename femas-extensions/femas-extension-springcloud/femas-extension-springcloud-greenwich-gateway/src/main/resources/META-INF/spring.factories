@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.tencent.tsf.femas.springcloud.gateway.config.FemasDiscoveryAutoConfiguration,\
+com.tencent.tsf.femas.extension.springcloud.common.instrumentation.config.FemasGovernanceAutoConfiguration,\
+com.tencent.tsf.femas.springcloud.gateway.config.GatewayAutoConfiguration

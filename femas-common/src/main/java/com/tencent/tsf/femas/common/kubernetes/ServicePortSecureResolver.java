@@ -1,0 +1,100 @@
+/*
+ * Copyright 2013-2019 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.tencent.tsf.femas.common.kubernetes;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import java.util.Collections;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+public class ServicePortSecureResolver {
+
+    private static final Log LOG = LogFactory.getLog(ServicePortSecureResolver.class);
+
+    private static final Set<String> TRUTHY_STRINGS = Stream.of("true", "on", "yes", "1").collect(Collectors.toSet());
+
+    private final KubernetesDiscoveryProperties properties;
+
+    public ServicePortSecureResolver(KubernetesDiscoveryProperties properties) {
+        this.properties = properties;
+    }
+
+    /**
+     * <p>
+     * Returns true if any of the following conditions apply.
+     * <p>
+     * <ul>
+     * <li>service contains a label named 'secured' that is truthy</li>
+     * <li>service contains an annotation named 'secured' that is truthy</li>
+     * <li>the port is one of the known ports used for secure communication</li>
+     * </ul>
+     */
+    public boolean resolve(Input input) {
+
+        String securedLabelValue = input.serviceLabels.getOrDefault("secured", "false");
+        if (TRUTHY_STRINGS.contains(securedLabelValue)) {
+            LOG.debug("Considering service with name: " + input.serviceName + " and port " + input.port
+                    + " is secure since the service contains a true value for the 'secured' label");
+            return true;
+        }
+
+        String securedAnnotationValue = input.serviceAnnotations.getOrDefault("secured", "false");
+        if (TRUTHY_STRINGS.contains(securedAnnotationValue)) {
+            LOG.debug("Considering service with name: " + input.serviceName + " and port " + input.port
+                    + " is secure since the service contains a true value for the 'secured' annotation");
+            return true;
+        }
+
+        if (input.port != null && this.properties.getKnownSecurePorts().contains(input.port)) {
+            LOG.debug("Considering service with name: " + input.serviceName + " and port " + input.port
+                    + " is secure due to the port being a known https port");
+            return true;
+        }
+
+        return false;
+    }
+
+    public static final class Input {
+
+        private final Integer port;
+
+        private final String serviceName;
+
+        private final Map<String, String> serviceLabels;
+
+        private final Map<String, String> serviceAnnotations;
+
+        // used only for testing
+        Input(Integer port, String serviceName) {
+            this(port, serviceName, null, null);
+        }
+
+        public Input(Integer port, String serviceName, Map<String, String> serviceLabels,
+                     Map<String, String> serviceAnnotations) {
+            this.port = port;
+            this.serviceName = serviceName;
+            this.serviceLabels = serviceLabels == null ? Collections.emptyMap() : serviceLabels;
+            this.serviceAnnotations = serviceAnnotations == null ? Collections.emptyMap() : serviceAnnotations;
+        }
+
+    }
+
+}

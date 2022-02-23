@@ -1,0 +1,5 @@
+com.tencent.tsf.femas.adaptor.paas.governance.auth.FemasAuthHandler
+com.tencent.tsf.femas.adaptor.paas.governance.circuitbreaker.FemasCircuitBreakerHandler
+com.tencent.tsf.femas.adaptor.paas.governance.loadbalance.FemasLoadBalancerHandler
+com.tencent.tsf.femas.adaptor.paas.governance.ratelimiter.FemasRateLimiterHandler
+com.tencent.tsf.femas.adaptor.paas.governance.router.FemasRouterHandler
