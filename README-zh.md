@@ -29,7 +29,7 @@
 - [许可证](#许可证)
 
 ## 简介
-**Femas 是腾讯云微服务平台[TSF](https://cloud.tencent.com/product/tsf) 的开源产品形态，聚焦微服务运行态，提供给多框架统一服务发现、南北及东西流量治理、服务可观测、配置管理等一站式微服务管控能力，解决企业微服务架构转型中异构框架复用难、 激增流量管控难、排障恢复耗时长等核心问题。**
+**Femas 是腾讯云微服务平台[TSF](https://cloud.tencent.com/product/tsf) 的开源产品形态，聚焦微服务运行时，提供给多框架统一服务发现、南北及东西流量治理、服务可观测、配置管理等一站式微服务管控能力，解决企业微服务架构转型中异构框架复用难、 激增流量管控难、排障恢复耗时长等核心问题。**
 
 > - 治理数据面：Femas运用Multi-runtime的架构设计，将微服务底层的核心能力标准化、模块化，将微服务领域割裂的基础组件通过合理的架构组装在一起，来满足多元化的微服务场景，轻量化、可移植、低成本、无云厂商绑定。
 > - 微服务控制面：Femas提供统一的控制面标准协议，一套治理协议，多语言、多数据面下发。
@@ -43,8 +43,8 @@ Femas实现了对主流开源注册中心(目前支持`Consul、nacos、eureka`)
 - 服务配置：应用配置管理、配置热更新，Femas实现了一套标准的配置API接口，配置分为`治理规则`、`应用配置`，**开源侧支持通过Paas平台直接下发`治理规则`，不依赖其他三方组件**。
 - 服务注册发现：Femas实现了一套标准的注册发现API接口，用户可以直接使用Femas提供的SDK注册发现到主流的开源注册中心。
 - 服务监控：
-    - > Metrics:Femas实现了一套标准的业务Metrics指标的API接口，Femas默认使用`micrometer`实现业务Metrics统计
-    - > Tracing:Femas实现了一套标准的tracing的API接口，SDK侧负责制定`OpenTracing`日志规范和链路采集，默认使用Opentelemtry采集Tracing
+    - > Metrics:Femas实现了一套标准的业务Metrics指标的API接口，Femas默认使用`micrometer`实现业务Metrics统计；
+    - > Tracing:实现了一套标准的tracing API接口，SDK侧负责制定OpenTracing日志规范和链路采集。由于业界可观测的统一标准Opentelemtry在发展阶段，第一阶段默认使用SkyWalking agent采集Tracing信息。
 
 ### 特色
 
@@ -65,51 +65,42 @@ Femas实现了对主流开源注册中心(目前支持`Consul、nacos、eureka`)
 运行环境依赖：
 
 > 64 bit OS，支持 Linux/Unix/Mac/Windows，脚本启动支持Linux/Unix/Mac；
-
 > 64 bit JDK 1.8+；
-
 > Maven 3.2.x+；
-
-> APM监控工具Skywalking
-
-> Metrics监控工具promethus、grafana
-
 > 外接数据库Mysql（可选）
 
 ### 单机部署
 
-源码编译方式
-> mvn -Dmaven.test.skip=true clean install -U
+为了方便用户使用，femas提供打包编译好的tar供用户一键启动。
+> cd femas-console/femas-admin/bin
 
-> cd femas-admin-starter/target/femas-admin-starter-$version/femas-admin/bin
+控制台配置：
+项目配置文件在`femas-admin/conf`目录下
+> cd femas-console/femas-admin/conf
+> 控制台配置主要包含：
+- 服务端口
+- 数据库配置(如果使用内嵌数据库则不需要配置)
+- nacos地址配置(如果使用配置管理则需要配置)
+- skywalking web地址配置(获取链路信息需要配置)
+- grafana地址配置(获取metrics信息需要配置)
 
-使用内嵌数据库启动:内嵌数据库仅支持单机部署，暂不支持集群部署，内嵌数据库数据磁盘路径为`${user.home}/rocksdb/femas/data/`
-> sh startup.sh
+使用内嵌数据库启动:
+> 内嵌数据库仅支持单机部署，暂不支持集群部署，内嵌数据库数据磁盘路径为`${user.home}/rocksdb/femas/data/`
+
+> 启动脚本:sh startup.sh
 
 使用外接数据库启动:
-> sh startup.sh external
+> 需要用户提前部署好mysql数据库，mysql数据库初始化脚本地址：cd femas-console/femas-admin/conf/adminDb.sql
 
+> 启动脚本:sh startup.sh external
 
-下载压缩包加压方式
-加压文件
-> tar -zxvf femas-admin-starter-$version.tar.gz
-
-> cd femas-admin-starter-$version/femas-admin/bin
-
-启动脚本，内嵌数据库
-> sh startup.sh
-
-配置文件：
-
-项目配置文件在`femas-admin/conf`目录下
-> cd femas-admin-starter-$version/femas-admin/conf
-
-配置skywalking后端地址
+需要用到监控能力则需要以下配置：
 ```
+#配置skywalking后端地址
 femas:
   trace:
     backend:
-      addr: http://IP:PORT
+      addr: http://skywalking WEB IP:PORT
 #配置Metrics grafana地址
   metrics:
     grafana:
@@ -118,7 +109,7 @@ femas:
 
 ### 集群部署
 
-集群部署同单机部署，唯一区别是数据源必须是外接数据源
+集群部署同单机部署，唯一区别是数据源必须是外接数据源，使femas的server端支持无状态水平扩展
 启动命令为
 > sh startup.sh external 
 
@@ -133,7 +124,7 @@ spring:
       driver-class-name: com.mysql.cj.jdbc.Driver
 ```
 
-**`访问http://localhost:8080/index`**
+**访问`http://localhost:8080/index`即可看到控制台页面**
 
 ### Springcloud接入
 
@@ -151,12 +142,19 @@ spring:
 <!-- femas中间件依赖 -->
 <dependency>
     <groupId>com.tencent.tsf</groupId>
-    <artifactId>femas-extension-springcloud-greenwich-starter</artifactId>
+    <artifactId>femas-springcloud-greenwich-starter</artifactId>
     <version>${femas.latest.version}</version>
 </dependency>
 ```
+目前femas支持starter列表目录：cd femas-starters/
 
-##### 配置文件
+默认支持的版本组件有：
+- springcloud greenwich
+- springcloud 2020
+- springcloud gateway
+- springcloud zuul
+
+##### 业务应用配置文件
 ```
 server:
   port: 18001
@@ -196,16 +194,13 @@ femas_registry_type: consul
 -Dskywalking.collector.backend_service=skywalking后端地址，可以覆盖agent的conf配置
 ```
 > 1.引用skywalking的agent探针
-
 > 2.服务需要指定所属命名空间
-
 > 3.指定服务所属的组别，配合sdk侧的实现服务治理
-
 > 4.注册到skywalking上面的服务名，必须和注册到注册中心的名称一致，否则tracing链路观测会找不到相应服务。
 
 ### Dubbo接入
 
-##### [样例](./)
+##### [样例暂时未放开](./)
 > 详情参见下文官方文档
 
 ## 文档
