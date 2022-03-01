@@ -59,68 +59,62 @@ Femas implements the management of open source registries (currently supports `C
 
 ### Install the server
 
-The operating environment depends on:
+Runtime environment dependencies:
 
-> 64 bit OS, support Linux/Unix/Mac/Windows, script start support Linux/Unix/Mac;
+> 64 bit OS, support Linux/Unix/Mac/Windows, script startup supports Linux/Unix/Mac;
 
 > 64 bit JDK 1.8+;
 
 > Maven 3.2.x+;
 
-> APM monitoring tool Skywalking
-
-> Metrics monitoring tools promethus, grafana
-
 > External database Mysql (optional)
 
 ### Stand-alone deployment
+For the convenience of users, femas provides packaged and compiled tar for users to start with one click.
+> cd femas-console/femas-admin/bin
 
-Source code compilation method
-> mvn -Dmaven.test.skip=true clean install -U
+Console configuration:
+The project configuration file is in the `femas-admin/conf` directory
+> cd femas-console/femas-admin/conf
 
-> cd femas-admin-starter/target/femas-admin-starter-$version/femas-admin/bin
+The console configuration mainly includes:
+- Service port
+- Database configuration (no configuration required if using embedded database)
+- nacos address configuration (if you use configuration management, you need to configure)
+- skywalking web address configuration (requires configuration to obtain link information)
+- grafana address configuration (requires configuration to obtain metrics information)
 
-Start with the embedded database: The embedded database only supports stand-alone deployment, and cluster deployment is not currently supported. The embedded database data disk path is `${user.home}/rocksdb/femas/data/`
-> sh startup.sh
+Start with the embedded database:
+> The embedded database only supports single-machine deployment, and does not support cluster deployment. The embedded database data disk path is `${user.home}/rocksdb/femas/data/`
+
+> Startup script: sh startup.sh
 
 Start with an external database:
-> sh startup.sh external
+> The user needs to deploy the mysql database in advance. The mysql database initialization script address: cd femas-console/femas-admin/conf/adminDb.sql
 
+> Startup script: sh startup.sh external
 
-Download compression method
-Press file
-> tar -zxvf femas-admin-starter-$version.tar.gz
-
-> cd femas-admin-starter-$version/femas-admin/bin
-
-Startup script, embedded database
-> sh startup.sh
-
-Configuration file:
-
-The project configuration file is in the `femas-admin/conf` directory
-> cd femas-admin-starter-$version/femas-admin/conf
-
-Configure skywalking backend address
-```
-femas:
+To use the monitoring capability, the following configuration is required:
+````
+#Configure skywalking backend address
+Femas:
   trace:
     backend:
-      addr: http://IP:PORT
+      addr: http://skywalking WEB IP:PORT
 #Configure Metrics grafana address
   metrics:
     grafana:
       addr: http://IP:PORT
-```
+````
 
 ### Cluster deployment
 
-Cluster deployment is the same as single-machine deployment, the only difference is that the data source must be an external data source
+Cluster deployment is the same as stand-alone deployment. The only difference is that the data source must be an external data source, so that the server side of Femas supports stateless horizontal expansion.
 The start command is
 > sh startup.sh external
 
 Configuration file configuration data source
-```
+````
 spring:
   datasource:
     url: jdbc:mysql://IP:3306/adminDb?useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true&useSSL=false&serverTimezone=Asia/Shanghai
@@ -128,9 +122,9 @@ spring:
     password: password
     hikari:
       driver-class-name: com.mysql.cj.jdbc.Driver
-```
+````
 
-**`Visit http://localhost:8080/index`**
+**Visit `http://localhost:8080/index` to see the console page**
 
 ### Springcloud access
 
@@ -152,8 +146,16 @@ spring:
     <version>${femas.latest.version}</version>
 </dependency>
 ```
+Currently Femas supports starter list directory: cd femas-starters/
+
+The default supported version components are:
+- springcloud greenwich
+- springcloud 2020
+- springcloud gateway
+- springcloud zuul
 
 ##### Configuration file
+##### Business application native configuration file, the path is: resources/bootstrap.yaml
 ```
 server:
   port: 18001
@@ -173,15 +175,31 @@ spring:
 # nacos:
 # discovery:
 # server-addr: 127.0.0.1:8848
- 
- 
-# Is to configure the paas backend if there is no configuration, then obtain the rules from the local configuration file
+ ```
+ ##### Femas component configuration file path: resources/femas.conf (Ymal format, used to configure femas-related local configuration, such as paas address, custom registry cluster, custom governance rules, etc.)
+ ```
+# Configure the paas background address, if not configured, get the rules from the local configuration file
 paas_server_address: http://127.0.0.1:8080
  
-# Use the method provided by Femas to access the registration center
-femas_registry_ip: 127.0.0.1
-femas_registry_port: 8500
-femas_registry_type: consul
+# Use the method provided by Femas to access the registration center, how to use dubbo or self-developed protocol
+femas_registry_ip: 127.0.0.1 //Registry center cluster address
+femas_registry_port: 8500 //Registry center port number
+femas_registry_type: consul //registry type
+
+#The following configuration is optional, which is used to configure and load the basic component type and local governance rules. If not, load the default configuration of femas.
+rateLimit:
+  type: femasRateLimit
+authenticate:
+  type: femasAuthenticate
+serviceRouter:
+  chain:
+    - FemasDefaultRoute
+loadbalancer:
+  type: random
+circuitBreaker:
+  enable: true
+  chain:
+    -femasCircuitBreaker
 ```
 
 ##### Start service command
