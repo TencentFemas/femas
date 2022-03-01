@@ -65,8 +65,11 @@ Femas实现了对主流开源注册中心(目前支持`Consul、nacos、eureka`)
 运行环境依赖：
 
 > 64 bit OS，支持 Linux/Unix/Mac/Windows，脚本启动支持Linux/Unix/Mac；
+
 > 64 bit JDK 1.8+；
+
 > Maven 3.2.x+；
+
 > 外接数据库Mysql（可选）
 
 ### 单机部署
@@ -77,7 +80,8 @@ Femas实现了对主流开源注册中心(目前支持`Consul、nacos、eureka`)
 控制台配置：
 项目配置文件在`femas-admin/conf`目录下
 > cd femas-console/femas-admin/conf
-> 控制台配置主要包含：
+
+控制台配置主要包含：
 - 服务端口
 - 数据库配置(如果使用内嵌数据库则不需要配置)
 - nacos地址配置(如果使用配置管理则需要配置)
@@ -154,7 +158,8 @@ spring:
 - springcloud gateway
 - springcloud zuul
 
-##### 业务应用配置文件
+#### 配置文件
+##### 业务应用原生配置文件，路径为:resources/bootstrap.yaml
 ```
 server:
   port: 18001
@@ -174,15 +179,31 @@ spring:
 #    nacos:
 #      discovery:
 #        server-addr: 127.0.0.1:8848
- 
- 
-# 是配置paas后台如果没有配置，则从本地配置文件获取规则
+ ```
+ ##### Femas组件配置文件路径：resources/femas.conf（Ymal格式，用于配置femas相关本地配置，如paas地址、自定义注册中心集群、自定义治理规则等）
+ ```
+# 配置paas后台地址，如果没有配置，则从本地配置文件获取规则
 paas_server_address: http://127.0.0.1:8080
  
-# 使用Femas提供的方式接入注册中心
-femas_registry_ip: 127.0.0.1
-femas_registry_port: 8500
-femas_registry_type: consul
+# 使用Femas提供的方式接入注册中心，dubbo或者自研协议的使用方式
+femas_registry_ip: 127.0.0.1  //注册中心集群地址
+femas_registry_port: 8500	//注册中心端口号	
+femas_registry_type: consul	//注册中心类型
+
+#以下配置可选，用于配置加载基础组件类型及本地治理规则，不加则加载femas默认配置。
+rateLimit:
+  type: femasRateLimit
+authenticate:
+  type: femasAuthenticate
+serviceRouter:
+  chain:
+    - FemasDefaultRoute
+loadbalancer:
+  type: random
+circuitBreaker:
+  enable: true
+  chain:
+    - femasCircuitBreaker
 ```
 
 ##### 启动服务命令
@@ -204,7 +225,7 @@ femas_registry_type: consul
 > 详情参见下文官方文档
 
 ## 文档
-#### [官方文档]()
+#### [官方文档](https://polarismesh.cn/#/)
 #### [FAQ]()
 #### [贡献手册](./CONTRIBUTING.md)
 #### [行为准则](./Code-of-Conduct.md) 
