@@ -150,7 +150,7 @@ spring:
 
 ### Springcloud接入
 
-##### [样例](./)
+##### [样例](./femas-example/)
 
 ##### 添加依赖
 ```
