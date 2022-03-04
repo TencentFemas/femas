@@ -129,6 +129,7 @@ spring:
 ```
 
 **访问`http://localhost:8080/index`即可看到控制台页面**
+> 登陆用户名:admin，密码:123456，用户名密码写死，开源侧不做任何权限限制。
 
 ### 服务接入paas平台前准备
 
@@ -225,16 +226,15 @@ circuitBreaker:
 
 ##### 启动服务命令
 ```
--javaagent:"{skywalking agent绝对路径}/agent/skywalking-agent.jar" 
--Dfemas_namespace_id=命名空间ID
--Dfemas_prog_version=服务版本
--Dskywalking.agent.service_name=注册到skywalking上的服务名，需要跟注册中心名称一致
--Dskywalking.collector.backend_service=skywalking后端地址，可以覆盖agent的conf配置
+# 接入femas必须参数
+-Dfemas_namespace_id=命名空间ID  //服务需要指定所属命名空间
+-Dfemas_prog_version=服务版本   //指定服务所属的版本（部署组），配合sdk侧的实现服务治理，如流量分拨路由
+
+# 有监控需求的用户按需添加，非必须
+-javaagent:"{skywalking agent绝对路径}/agent/skywalking-agent.jar"  // 引用skywalking的agent探针
+-Dskywalking.agent.service_name=注册到skywalking上的服务名，需要跟注册中心名称一致,否则tracing链路观测会找不到相应服务。
+-Dskywalking.collector.backend_service=skywalking 后端地址，可以覆盖agent的conf配置
 ```
-> 1.引用skywalking的agent探针
-> 2.服务需要指定所属命名空间
-> 3.指定服务所属的组别，配合sdk侧的实现服务治理
-> 4.注册到skywalking上面的服务名，必须和注册到注册中心的名称一致，否则tracing链路观测会找不到相应服务。
 
 ### Dubbo接入
 
