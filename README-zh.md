@@ -130,6 +130,23 @@ spring:
 
 **访问`http://localhost:8080/index`即可看到控制台页面**
 
+### 服务接入paas平台前准备
+
+#### step 1.配置注册中心
+<img width="804" alt="image" src="https://user-images.githubusercontent.com/22976760/156726829-ff8380d1-0a28-426a-8cbb-1398a69f9cb4.png">
+
+> 集群地址支持IP:prot逗号隔开，或者域名方式
+
+#### step 2.创建命名空间
+<img width="1643" alt="image" src="https://user-images.githubusercontent.com/22976760/156727253-834f560f-e147-4217-9203-4b0cbd4e5575.png">
+
+> 命名空间绑定配置的注册中心
+
+> femas治理中心的服务列表是以命名空间维度逻辑隔离，服务列表从第三方注册中心拉取，拉取条件是接入FemasSDK且服务标记（下文中通过—D写入的命名空间ID）的命名空间和列表选取的命名空间一致。
+
+完成以上两步之后，接下来就可以通过SDK接入femas将服务纳管到paas平台了。
+
+
 ### Springcloud接入
 
 ##### [样例](./)
