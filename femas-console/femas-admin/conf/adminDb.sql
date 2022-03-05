@@ -10,7 +10,7 @@ DROP TABLE IF EXISTS `auth_rule`;
 CREATE TABLE `auth_rule` (
   `rule_id` varchar(50) NOT NULL COMMENT '鉴权规则id',
   `namespace_id` varchar(20) DEFAULT NULL COMMENT '命名空间id',
-  `service_name` varchar(20) DEFAULT NULL COMMENT '服务名',
+  `service_name` varchar(50) DEFAULT NULL COMMENT '服务名',
   `rule_name` varchar(20) DEFAULT NULL COMMENT '规则名',
   `is_enable` varchar(20) DEFAULT NULL COMMENT '生效状态 1开启 0 关闭',
   `rule_type` varchar(20) DEFAULT NULL COMMENT '规则类型 关闭状态：CLOSE,白名单：WHITE,黑名单：BLACK',
@@ -30,9 +30,9 @@ DROP TABLE IF EXISTS `circuit_breaker_rule`;
 CREATE TABLE `circuit_breaker_rule` (
   `rule_id` varchar(50) NOT NULL COMMENT '规则id',
   `namespace_id` varchar(20) DEFAULT NULL COMMENT '命名空间id',
-  `service_name` varchar(20) DEFAULT NULL COMMENT '服务名',
+  `service_name` varchar(50) DEFAULT NULL COMMENT '服务名',
   `target_namespace_id` varchar(20) DEFAULT NULL COMMENT '下游命名空间',
-  `target_service_name` varchar(20) DEFAULT NULL COMMENT '下游服务名',
+  `target_service_name` varchar(50) DEFAULT NULL COMMENT '下游服务名',
   `rule_name` varchar(20) DEFAULT NULL COMMENT '规则名',
   `isolation_level` varchar(20) DEFAULT NULL COMMENT '隔离级别',
   `strategy` text COMMENT '熔断策略',
@@ -60,7 +60,7 @@ CREATE TABLE `dcfg_config` (
   `config_id` varchar(50) CHARACTER SET utf8 NOT NULL,
   `config_name` varchar(200) CHARACTER SET utf8 DEFAULT NULL,
   `namespace_id` varchar(50) CHARACTER SET utf8 DEFAULT NULL,
-  `service_name` varchar(20) CHARACTER SET utf8 DEFAULT NULL,
+  `service_name` varchar(50) CHARACTER SET utf8 DEFAULT NULL,
   `system_tag` varchar(20) CHARACTER SET utf8 DEFAULT NULL COMMENT '系统标签',
   `config_desc` varchar(200) CHARACTER SET utf8 DEFAULT NULL,
   `config_type` varchar(20) CHARACTER SET utf8 DEFAULT NULL,
@@ -152,15 +152,16 @@ CREATE TABLE `registry_config` (
 -- ----------------------------
 DROP TABLE IF EXISTS `route_rule`;
 CREATE TABLE `route_rule` (
-  `rule_id` varchar(50) DEFAULT NULL COMMENT '路由规则id',
+  `rule_id` varchar(50) NOT NULL COMMENT '路由规则id',
   `namespace_id` varchar(20) DEFAULT NULL COMMENT '命名空间id',
-  `service_name` varchar(20) DEFAULT NULL COMMENT '服务名',
+  `service_name` varchar(50) DEFAULT NULL COMMENT '服务名',
   `rule_name` varchar(20) DEFAULT NULL COMMENT '规则名',
   `status` varchar(20) DEFAULT NULL COMMENT '生效状态 1开启 0 关闭',
   `route_tag` text COMMENT '路由标签',
   `create_time` bigint(20) DEFAULT NULL COMMENT '创建时间',
   `update_time` bigint(20) DEFAULT NULL COMMENT '生效时间',
-  `desc` varchar(200) DEFAULT NULL COMMENT '描述'
+  `desc` varchar(200) DEFAULT NULL COMMENT '描述',
+  PRIMARY KEY (`rule_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
@@ -170,13 +171,13 @@ DROP TABLE IF EXISTS `service_api`;
 CREATE TABLE `service_api` (
   `api_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '接口id',
   `namespace_id` varchar(50) DEFAULT NULL COMMENT '命名空间',
-  `service_name` varchar(20) DEFAULT NULL COMMENT '服务名',
+  `service_name` varchar(50) DEFAULT NULL COMMENT '服务名',
   `path` varchar(50) DEFAULT NULL COMMENT '接口路径',
   `status` tinyint(4) DEFAULT NULL COMMENT '健康状态1健康 0异常',
   `service_version` varchar(10) DEFAULT NULL COMMENT '服务端版本',
   `method` varchar(10) DEFAULT NULL COMMENT '方法类型 ex:post,get',
   PRIMARY KEY (`api_id`) USING BTREE
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=419 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Table structure for service_event
@@ -185,15 +186,15 @@ DROP TABLE IF EXISTS `service_event`;
 CREATE TABLE `service_event` (
   `event_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '事件id',
   `namespace_id` varchar(50) DEFAULT NULL COMMENT '命名空间',
-  `service_name` varchar(20) DEFAULT NULL COMMENT '服务名',
+  `service_name` varchar(50) DEFAULT NULL COMMENT '服务名',
   `event_type` varchar(20) DEFAULT NULL COMMENT '事件类型',
   `occur_time` bigint(20) DEFAULT NULL COMMENT '时间发生时间(admin产生)',
-  `upstream` varchar(20) DEFAULT NULL COMMENT '上游服务',
-  `downstream` varchar(20) DEFAULT NULL COMMENT '下游服务',
-  `instance_id` varchar(20) DEFAULT NULL COMMENT '实例id',
+  `upstream` varchar(50) DEFAULT NULL COMMENT '上游服务',
+  `downstream` varchar(50) DEFAULT NULL COMMENT '下游服务',
+  `instance_id` varchar(150) DEFAULT NULL COMMENT '实例id',
   `additional_msg` varchar(500) DEFAULT NULL COMMENT '额外信息',
   PRIMARY KEY (`event_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=872572311701537935 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=872572311701537940 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Table structure for tolerant
@@ -201,7 +202,7 @@ CREATE TABLE `service_event` (
 DROP TABLE IF EXISTS `tolerant`;
 CREATE TABLE `tolerant` (
   `namespace_id` varchar(50) NOT NULL COMMENT '命名空间',
-  `service_name` varchar(20) NOT NULL COMMENT '服务名',
+  `service_name` varchar(50) NOT NULL COMMENT '服务名',
   `is_tolerant` tinyint(4) DEFAULT NULL COMMENT '容错保护开关1开启 0关闭',
   PRIMARY KEY (`namespace_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
