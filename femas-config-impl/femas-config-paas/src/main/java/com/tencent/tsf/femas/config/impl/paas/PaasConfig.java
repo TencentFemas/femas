@@ -5,10 +5,7 @@ import static java.util.concurrent.Executors.newCachedThreadPool;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tencent.tsf.femas.common.util.CollectionUtil;
-import com.tencent.tsf.femas.common.util.MD5Util;
-import com.tencent.tsf.femas.common.util.NamedThreadFactory;
-import com.tencent.tsf.femas.common.util.TimeUtil;
+import com.tencent.tsf.femas.common.util.*;
 import com.tencent.tsf.femas.config.AbstractConfigHttpClientManager;
 import com.tencent.tsf.femas.config.AbstractConfigHttpClientManagerFactory;
 import com.tencent.tsf.femas.config.enums.PropertyChangeType;
@@ -115,8 +112,9 @@ public class PaasConfig extends AbstractStringConfig {
                 index = currentIndex;
                 List<GetValue> getValues = null;
                 try {
-                    getValues = mapper.readValue(strValue, new TypeReference<List<GetValue>>() {
-                    });
+                    if (StringUtils.isNotBlank(strValue)) {
+                        getValues = mapper.readValue(strValue, new TypeReference<List<GetValue>>() {});
+                    }
                 } catch (JsonProcessingException e) {
                     LOGGER.warn("Femas PAAS CONFIG] Process Paas Config Value failed.", e);
                 }

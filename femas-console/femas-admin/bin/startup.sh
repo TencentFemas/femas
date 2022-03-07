@@ -49,7 +49,7 @@ if [[ "$JAVA_MAJOR_VERSION" -ge "9" ]] ; then
 else
   JAVA_OPT="${JAVA_OPT} -Xloggc:${BASE_DIR}/logs/femas_gc.log -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintGCTimeStamps -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=10 -XX:GCLogFileSize=100M"
 fi
-if [ -z "$1" ]; then
+if [ ! -z "$1" ]; then
   if [ "external" == "$1" ]; then
     JAVA_OPT="${JAVA_HOME} -DdbType=external"
   fi
