@@ -152,6 +152,10 @@ spring:
 
 ##### [样例](./femas-example/)
 
+在femas父pom下执行脚本：
+> mvn -Dmaven.test.skip=true clean install -U 
+
+
 ##### 添加依赖
 ```
 <!-- 注册中心原生依赖 -->
