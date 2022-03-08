@@ -85,15 +85,8 @@ The console configuration mainly includes:
 - skywalking web address configuration (requires configuration to obtain link information)
 - grafana address configuration (requires configuration to obtain metrics information)
 
-Start with the embedded database:
+Femas default Start with the embedded database:
 > The embedded database only supports single-machine deployment, and does not support cluster deployment. The embedded database data disk path is `${user.home}/rocksdb/femas/data/`
-
-> Startup script: sh startup.sh
-
-Start with an external database:
-> The user needs to deploy the mysql database in advance. The mysql database initialization script address: cd femas-console/femas-admin/conf/adminDb.sql
-
-> Startup script: sh startup.sh external
 
 To use the monitoring capability, the following configuration is required:
 ````
@@ -111,8 +104,6 @@ Femas:
 ### Cluster deployment
 
 Cluster deployment is the same as stand-alone deployment. The only difference is that the data source must be an external data source, so that the server side of Femas supports stateless horizontal expansion.
-The start command is
-> sh startup.sh external
 
 Configuration file configuration data source
 ````
@@ -124,6 +115,9 @@ spring:
     hikari:
       driver-class-name: com.mysql.cj.jdbc.Driver
 ````
+
+The start command is
+> sh startup.sh external
 
 **Visit `http://localhost:8080/index` to see the console page**
 > Login user name: admin, password: 123456, the user name and password are hard-coded, and the open source side does not impose any permission restrictions.
