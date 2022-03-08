@@ -49,8 +49,9 @@ Femas implements the management of open source registries (currently supports `C
 - Provide SDKs for `Java` and `Go` to help users realize **multi-language** unified management on the same Paas platform.
 - Femas standardizes and encapsulates microservice capabilities and provides unified access to the `Layer` layer of irrelevant protocols, which facilitates the integration of a full set of capabilities into any protocol, and realizes the unified management of **multi-protocol**.
 - Femas abstracts the capabilities that a microservice application may need to use in the running process into standard `API` components, which are convenient for expansion and compatible with other open source component ecosystems.
-- Femas does not bind any other components, which is convenient for users at all levels to learn, use and secondary development.
-- Femas's low-level capabilities are **plug-in, easy to expand**, and users can flexibly combine and match the microservice capability matrix according to their needs.
+- The underlying capabilities of Femas are `plug-in` and `standardization`, and users can flexibly combine and match the microservice capability matrix according to their needs.
+- Femas is not bound to any specific components, as long as the components that conform to the Femas standardized protocol can be managed on the Femas platform, it is convenient for users at all levels to learn, use and develop secondary.
+![image](https://user-images.githubusercontent.com/22976760/157235354-27819b3c-69f1-4ad1-95e0-c82d2be99272.png)
 - **Sink-type non-intrusive access, zero cost for user transformation**.
 > - `Agent` bytecode injection (`TODO`)
 > - `ServiceMesh` service mesh
@@ -124,7 +125,7 @@ The start command is
 
 ### Preparation before the service is connected to the paas platform
 
-#### step 1. Configure the registry
+#### step 1. Configure the registry(Before this, you must have a deployed registry cluster, Femas is not bound to any registry, you can host any registry to the Femas platform)
 <img width="804" alt="image" src="https://user-images.githubusercontent.com/22976760/156726829-ff8380d1-0a28-426a-8cbb-1398a69f9cb4.png">
 
 > Cluster addresses support IP:prot comma-separated, or domain name mode
