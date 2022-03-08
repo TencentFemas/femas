@@ -126,10 +126,31 @@ spring:
 ````
 
 **Visit `http://localhost:8080/index` to see the console page**
+> Login user name: admin, password: 123456, the user name and password are hard-coded, and the open source side does not impose any permission restrictions.
+
+### Preparation before the service is connected to the paas platform
+
+#### step 1. Configure the registry
+<img width="804" alt="image" src="https://user-images.githubusercontent.com/22976760/156726829-ff8380d1-0a28-426a-8cbb-1398a69f9cb4.png">
+
+> Cluster addresses support IP:prot comma-separated, or domain name mode
+
+#### step 2. Create namespace
+<img width="1643" alt="image" src="https://user-images.githubusercontent.com/22976760/156727253-834f560f-e147-4217-9203-4b0cbd4e5575.png">
+
+> Registry for namespace binding configuration
+
+> The service list of the femas governance center is logically isolated in the namespace dimension. The service list is pulled from the third-party registration center. The pull condition is to access FemasSDK and the name of the service tag (namespace ID written by -D below) The space is the same as the namespace selected in the list.
+
+After completing the above two steps, you can then access femas through the SDK to manage the service to the paas platform.
+
 
 ### Springcloud access
 
 ##### [Sample](./)
+
+Execute the script under the femas parent pom:
+> mvn -Dmaven.test.skip=true clean install -U 
 
 ##### Add dependency
 ```
