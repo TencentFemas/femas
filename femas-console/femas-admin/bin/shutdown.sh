@@ -11,4 +11,4 @@ echo "The femas-admin($pid) is running..."
 
 kill $pid
 
-echo "Send shutdown request to femas-admin($pid) OK"
+echo "Send shutdown request to femas-admin($pid) success..."
