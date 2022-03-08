@@ -88,15 +88,10 @@ Femas实现了对主流开源注册中心(目前支持`Consul、nacos、eureka`)
 - skywalking web地址配置(获取链路信息需要配置)
 - grafana地址配置(获取metrics信息需要配置)
 
-使用内嵌数据库启动:
-> 内嵌数据库仅支持单机部署，暂不支持集群部署，内嵌数据库数据磁盘路径为`${user.home}/rocksdb/femas/data/`
+默认使用内嵌数据库启动，一键开箱即用，无需依赖第三方存储组件:
+> 内嵌数据库仅支持单机部署，暂不支持集群部署，内嵌数据库数据存储的磁盘路径为`${user.home}/rocksdb/femas/data/`
 
 > 启动脚本:sh startup.sh
-
-使用外接数据库启动:
-> 需要用户提前部署好mysql数据库，mysql数据库初始化脚本地址：cd femas-console/femas-admin/conf/adminDb.sql
-
-> 启动脚本:sh startup.sh external
 
 需要用到监控能力则需要以下配置：
 ```
@@ -114,8 +109,6 @@ femas:
 ### 集群部署
 
 集群部署同单机部署，唯一区别是数据源必须是外接数据源，使femas的server端支持无状态水平扩展
-启动命令为
-> sh startup.sh external 
 
 配置文件配置数据源
 ```
@@ -127,6 +120,10 @@ spring:
     hikari:
       driver-class-name: com.mysql.cj.jdbc.Driver
 ```
+
+启动命令为
+> sh startup.sh external 
+
 
 **访问`http://localhost:8080/index`即可看到控制台页面**
 > 登陆用户名:admin，密码:123456，用户名密码写死，开源侧不做任何权限限制。
