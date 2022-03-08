@@ -2,7 +2,8 @@
 set -e
 
 # femas-admin root dir
-BASE_DIR=$(dirname $(dirname $(realpath "$0")))
+#BASE_DIR=$(dirname $(dirname $(realpath "$0")))
+BASE_DIR=`cd $(dirname $0)/..; pwd`
 [ -z "$HOME" ] && HOME=/root
 
 # 判断参数类型
