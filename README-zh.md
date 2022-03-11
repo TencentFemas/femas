@@ -51,8 +51,10 @@ Femas实现了对主流开源注册中心(目前支持`Consul、nacos、eureka`)
 - 提供 `Java` 与 `Go` 的 SDK，帮助用户在同一套Paas平台上实现**多语言**统一管理。
 - Femas将微服务能力标准化封装，提供无关协议的统一接入`Layer`层，方便将全套能力接入任意协议，实现**多协议的统一管理**。
 - Femas将一个微服务应用在运行过程中可能需要用到的能力抽象成了一个个标准`API`组件，方便扩展，兼容其他开源组件生态。
-- Femas不绑定任何其他组件，方便各个层级的用户学习、使用以及二次开发。
-- Femas的底层能力**插件化，方便扩展**，用户可按需要灵活组合搭配微服务能力矩阵。
+- Femas的底层能力`插件化`，`标准化`，用户可按需要灵活组合搭配微服务能力矩阵。
+- Femas不绑定任何特定组件，只要是符合Femas标准化协议的组件都能纳管到Femas平台，方便各个层级的用户学习、使用以及二次开发。
+![image](https://user-images.githubusercontent.com/22976760/157235354-27819b3c-69f1-4ad1-95e0-c82d2be99272.png)
+
 - **下沉式无侵入接入，用户改造零成本**。
 	> - `Agent`字节码注入（`TODO`）
 	> - `ServiceMesh`服务网格
@@ -88,24 +90,19 @@ Femas实现了对主流开源注册中心(目前支持`Consul、nacos、eureka`)
 - skywalking web地址配置(获取链路信息需要配置)
 - grafana地址配置(获取metrics信息需要配置)
 
-使用内嵌数据库启动:
-> 内嵌数据库仅支持单机部署，暂不支持集群部署，内嵌数据库数据磁盘路径为`${user.home}/rocksdb/femas/data/`
+默认使用内嵌数据库启动，一键开箱即用，无需依赖第三方存储组件:
+> 内嵌数据库仅支持单机部署，暂不支持集群部署，内嵌数据库数据存储的磁盘路径为`${user.home}/rocksdb/femas/data/`
 
 > 启动脚本:sh startup.sh
 
-使用外接数据库启动:
-> 需要用户提前部署好mysql数据库，mysql数据库初始化脚本地址：cd femas-console/femas-admin/conf/adminDb.sql
-
-> 启动脚本:sh startup.sh external
-
 需要用到监控能力则需要以下配置：
 ```
-#配置skywalking后端地址
+#配置skywalking后端地址（在此之前你必须有部署好的Skywalking集群）
 femas:
   trace:
     backend:
       addr: http://skywalking WEB IP:PORT
-#配置Metrics grafana地址
+#配置Metrics grafana地址 （在此之前你必须有部署好的grafana、promethus）
   metrics:
     grafana:
       addr: http://IP:PORT
@@ -114,8 +111,6 @@ femas:
 ### 集群部署
 
 集群部署同单机部署，唯一区别是数据源必须是外接数据源，使femas的server端支持无状态水平扩展
-启动命令为
-> sh startup.sh external 
 
 配置文件配置数据源
 ```
@@ -128,12 +123,16 @@ spring:
       driver-class-name: com.mysql.cj.jdbc.Driver
 ```
 
+启动命令为
+> sh startup.sh external 
+
+
 **访问`http://localhost:8080/index`即可看到控制台页面**
 > 登陆用户名:admin，密码:123456，用户名密码写死，开源侧不做任何权限限制。
 
 ### 服务接入paas平台前准备
 
-#### step 1.配置注册中心
+#### step 1.配置注册中心 (在此之前你必须有已经部署好的注册中心集群，Femas不绑定任何注册中心，你可以将任意注册中心托管到Femas平台)
 <img width="804" alt="image" src="https://user-images.githubusercontent.com/22976760/156726829-ff8380d1-0a28-426a-8cbb-1398a69f9cb4.png">
 
 > 集群地址支持IP:prot逗号隔开，或者域名方式

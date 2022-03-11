@@ -49,8 +49,9 @@ Femas implements the management of open source registries (currently supports `C
 - Provide SDKs for `Java` and `Go` to help users realize **multi-language** unified management on the same Paas platform.
 - Femas standardizes and encapsulates microservice capabilities and provides unified access to the `Layer` layer of irrelevant protocols, which facilitates the integration of a full set of capabilities into any protocol, and realizes the unified management of **multi-protocol**.
 - Femas abstracts the capabilities that a microservice application may need to use in the running process into standard `API` components, which are convenient for expansion and compatible with other open source component ecosystems.
-- Femas does not bind any other components, which is convenient for users at all levels to learn, use and secondary development.
-- Femas's low-level capabilities are **plug-in, easy to expand**, and users can flexibly combine and match the microservice capability matrix according to their needs.
+- The underlying capabilities of Femas are `plug-in` and `standardization`, and users can flexibly combine and match the microservice capability matrix according to their needs.
+- Femas is not bound to any specific components, as long as the components that conform to the Femas standardized protocol can be managed on the Femas platform, it is convenient for users at all levels to learn, use and develop secondary.
+![image](https://user-images.githubusercontent.com/22976760/157235354-27819b3c-69f1-4ad1-95e0-c82d2be99272.png)
 - **Sink-type non-intrusive access, zero cost for user transformation**.
 > - `Agent` bytecode injection (`TODO`)
 > - `ServiceMesh` service mesh
@@ -85,15 +86,8 @@ The console configuration mainly includes:
 - skywalking web address configuration (requires configuration to obtain link information)
 - grafana address configuration (requires configuration to obtain metrics information)
 
-Start with the embedded database:
+Femas default Start with the embedded database:
 > The embedded database only supports single-machine deployment, and does not support cluster deployment. The embedded database data disk path is `${user.home}/rocksdb/femas/data/`
-
-> Startup script: sh startup.sh
-
-Start with an external database:
-> The user needs to deploy the mysql database in advance. The mysql database initialization script address: cd femas-console/femas-admin/conf/adminDb.sql
-
-> Startup script: sh startup.sh external
 
 To use the monitoring capability, the following configuration is required:
 ````
@@ -111,8 +105,6 @@ Femas:
 ### Cluster deployment
 
 Cluster deployment is the same as stand-alone deployment. The only difference is that the data source must be an external data source, so that the server side of Femas supports stateless horizontal expansion.
-The start command is
-> sh startup.sh external
 
 Configuration file configuration data source
 ````
@@ -125,11 +117,35 @@ spring:
       driver-class-name: com.mysql.cj.jdbc.Driver
 ````
 
+The start command is
+> sh startup.sh external
+
 **Visit `http://localhost:8080/index` to see the console page**
+> Login user name: admin, password: 123456, the user name and password are hard-coded, and the open source side does not impose any permission restrictions.
+
+### Preparation before the service is connected to the paas platform
+
+#### step 1. Configure the registry(Before this, you must have a deployed registry cluster, Femas is not bound to any registry, you can host any registry to the Femas platform)
+<img width="804" alt="image" src="https://user-images.githubusercontent.com/22976760/156726829-ff8380d1-0a28-426a-8cbb-1398a69f9cb4.png">
+
+> Cluster addresses support IP:prot comma-separated, or domain name mode
+
+#### step 2. Create namespace
+<img width="1643" alt="image" src="https://user-images.githubusercontent.com/22976760/156727253-834f560f-e147-4217-9203-4b0cbd4e5575.png">
+
+> Registry for namespace binding configuration
+
+> The service list of the femas governance center is logically isolated in the namespace dimension. The service list is pulled from the third-party registration center. The pull condition is to access FemasSDK and the name of the service tag (namespace ID written by -D below) The space is the same as the namespace selected in the list.
+
+After completing the above two steps, you can then access femas through the SDK to manage the service to the paas platform.
+
 
 ### Springcloud access
 
 ##### [Sample](./)
+
+Execute the script under the femas parent pom:
+> mvn -Dmaven.test.skip=true clean install -U 
 
 ##### Add dependency
 ```

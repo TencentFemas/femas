@@ -25,40 +25,11 @@ spring:
         heartbeat:
           enabled: true
 
-serviceRouter:
-  chain:
-    - FemasDefaultRoute
-    -
-loadbalancer:
-  type: random
-circuitBreaker:
-  enable: true
-  chain:
-    - femasCircuitBreaker
-#  plugin:
-#    femasCircuitBreaker:
-#      continuousErrorThreshold: 10
-#      metricStatTimeWindow: 1s
-#      requestCountAfterHalfOpen: 3
-#      sleepWindow: 5s
-#      successCountAfterHalfOpen: 2
-
 management:
   endpoints:
     web:
       exposure:
         include: '*'
-
-
-rateLimit:
-  type: femasRateLimit
-
-
-authenticate:
-  type: femasAuthenticate
-
-paas_server_address: http://127.0.0.1:8080
-
 
 logging:
   level:
