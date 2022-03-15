@@ -7,6 +7,8 @@
 
 > password:123456
 
+**If you like,star fork it and join us**
+
 `English` | **[`简体中文`](./README-zh.md)**
 
 - [Introduction](#introduction)
