@@ -2,6 +2,10 @@
 
 # Femas: Cloud native multi-runtime microservice framework
 
+## [Show me femas](http://106.53.107.83:8080/femas)
+> username:admin
+
+> password:123456
 
 **`English` | [`简体中文`](./README-zh.md)**
 
