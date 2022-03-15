@@ -262,6 +262,12 @@
 
             <dependency>
                 <groupId>com.tencent.tsf</groupId>
+                <artifactId>femas-springcloud-greenwich-gateway-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.tencent.tsf</groupId>
                 <artifactId>femas-springcloud-greenwich-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
