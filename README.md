@@ -7,7 +7,7 @@
 
 > password:123456
 
-**`English` | [`简体中文`](./README-zh.md)**
+`English` | **[`简体中文`](./README-zh.md)**
 
 - [Introduction](#introduction)
     - [ability](#ability)
