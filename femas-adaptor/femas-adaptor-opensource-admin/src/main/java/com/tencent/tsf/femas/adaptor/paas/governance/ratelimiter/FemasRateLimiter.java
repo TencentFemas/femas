@@ -22,7 +22,7 @@ import java.util.Map;
 
 public class FemasRateLimiter implements RateLimiter<RateLimiterRule> {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(RateLimiter.class);
+    private static final  Logger LOGGER = LoggerFactory.getLogger(RateLimiter.class);
 
     RateLimitController rateLimitController = new RateLimitController();
     RateLimitClientCache ratelimitClientCache = new RateLimitClientCache(rateLimitController);

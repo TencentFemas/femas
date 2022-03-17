@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AbstractHttpClient implements FemasHttpClient, Closeable {
 
-    private final static Logger logger = LoggerFactory.getLogger(AbstractHttpClient.class);
+    private static final  Logger logger = LoggerFactory.getLogger(AbstractHttpClient.class);
 
     private final Map<String, ResultWrapper> resultWrapperHashMap = new ConcurrentHashMap<>(5);
 

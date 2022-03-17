@@ -32,9 +32,9 @@ import com.tencent.tsf.femas.governance.plugin.context.ConfigContext;
  */
 public class FemasConfigProviders implements ConfigProvider {
 
-    private final static PluginDefinitionReader reader = new PluginDefinitionReader();
+    private static final  PluginDefinitionReader reader = new PluginDefinitionReader();
 
-    private final static ObjectMapper mapper = new ObjectMapper();
+    private static final  ObjectMapper mapper = new ObjectMapper();
 
     @Override
     public ConfigContext getPluginConfigs() throws FemasRuntimeException {

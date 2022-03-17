@@ -28,7 +28,7 @@ public class PaasConfig extends AbstractStringConfig {
      * default watch timeout in second
      */
     private static final int DEFAULT_WATCH_TIMEOUT = 55;
-    private volatile static ObjectMapper mapper = new ObjectMapper();
+    private static volatile  ObjectMapper mapper = new ObjectMapper();
     private AbstractConfigHttpClientManager manager;
     private String token;
     private ExecutorService notifierExecutor = newCachedThreadPool(

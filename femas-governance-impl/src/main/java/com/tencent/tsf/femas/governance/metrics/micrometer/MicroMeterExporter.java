@@ -36,7 +36,7 @@ public abstract class MicroMeterExporter implements MetricsExporter {
 
 
     public static final int DEFAULT_THREAD_POOL_SIZE = Runtime.getRuntime().availableProcessors();
-    private final static Log LOG = LogFactory.getLog(MicroMeterExporter.class);
+    private static final  Log LOG = LogFactory.getLog(MicroMeterExporter.class);
     public AtomicBoolean microMeterExporterActive = new AtomicBoolean(false);
 
     private ScheduledExecutorService scheduledExecutorService = new ScheduledThreadPoolExecutor(

@@ -176,7 +176,7 @@ public enum HttpStatus {
         return Integer.toString(this.value);
     }
 
-    public static enum Series {
+    public enum Series {
         INFORMATIONAL(1),
         SUCCESSFUL(2),
         REDIRECTION(3),

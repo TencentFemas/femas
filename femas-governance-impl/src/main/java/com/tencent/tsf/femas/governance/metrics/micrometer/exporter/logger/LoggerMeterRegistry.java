@@ -38,7 +38,7 @@ import static java.util.stream.Collectors.joining;
  **/
 public class LoggerMeterRegistry extends StepMeterRegistry {
 
-    private final static InternalLogger log = InternalLoggerFactory.getInstance(LoggerMeterRegistry.class);
+    private static final  InternalLogger log = InternalLoggerFactory.getInstance(LoggerMeterRegistry.class);
 
     private final String METRICS_LOGGER_NAME = "METRICS_LOGGER";
     private final java.util.logging.Logger metricLogger = java.util.logging.Logger.getLogger(METRICS_LOGGER_NAME);

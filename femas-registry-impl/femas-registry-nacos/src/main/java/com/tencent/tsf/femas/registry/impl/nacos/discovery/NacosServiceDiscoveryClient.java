@@ -33,13 +33,13 @@ import static com.tencent.tsf.femas.common.util.CommonUtils.checkNotNull;
  */
 public class NacosServiceDiscoveryClient extends AbstractServiceDiscoveryClient {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(NacosServiceDiscoveryClient.class);
+    private static final  Logger LOGGER = LoggerFactory.getLogger(NacosServiceDiscoveryClient.class);
 
     private final NamingService nacosNamingService;
 
     private final NacosRegistryBuilder builder;
     private static volatile ContextConstant contextConstant = ContextFactory.getContextConstantInstance();
-    private final static String default_namespace = "public";
+    private static final  String default_namespace = "public";
     protected volatile ServerUpdater serverListUpdater;
 
     private final Map<Service, List<ServiceInstance>> instances = new ConcurrentHashMap<>();

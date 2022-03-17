@@ -40,8 +40,8 @@ import static com.tencent.tsf.femas.common.util.HttpHeaderKeys.CONTENT_TYPE;
  */
 public class FemasApacheHttpRestClient extends AbstractHttpClient {
 
-    final static ObjectMapper mapper = new ObjectMapper();
-    private final static Logger logger = LoggerFactory.getLogger(FemasApacheHttpRestClient.class);
+    static final  ObjectMapper mapper = new ObjectMapper();
+    private static final  Logger logger = LoggerFactory.getLogger(FemasApacheHttpRestClient.class);
     protected final CloseableHttpClient client;
 
     public FemasApacheHttpRestClient(CloseableHttpClient client) {

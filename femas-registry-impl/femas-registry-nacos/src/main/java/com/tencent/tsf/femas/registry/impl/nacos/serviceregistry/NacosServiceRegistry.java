@@ -27,7 +27,7 @@ public class NacosServiceRegistry extends AbstractServiceRegistry {
     private static final Logger logger = LoggerFactory.getLogger(NacosServiceRegistry.class);
     private static volatile ContextConstant contextConstant = ContextFactory.getContextConstantInstance();
     private final NamingService nacosNamingService;
-    private final static String default_namespace = "public";
+    private static final  String default_namespace = "public";
     private final NacosRegistryBuilder builder;
 
     public NacosServiceRegistry(Map<String, String> configMap) {

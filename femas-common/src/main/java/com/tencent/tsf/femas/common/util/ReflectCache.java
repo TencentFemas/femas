@@ -51,7 +51,7 @@ public final class ReflectCache {
      * 用于缓存参数列表，不是按接口，是按ServiceUniqueName
      */
     @VisibleForTesting
-    final static ConcurrentMap<String, ConcurrentHashMap<String, Method>> OVERLOAD_METHOD_CACHE = new ConcurrentHashMap<String, ConcurrentHashMap<String, Method>>();
+    static final  ConcurrentMap<String, ConcurrentHashMap<String, Method>> OVERLOAD_METHOD_CACHE = new ConcurrentHashMap<String, ConcurrentHashMap<String, Method>>();
 
     /*----------- Class Cache ------------*/
 

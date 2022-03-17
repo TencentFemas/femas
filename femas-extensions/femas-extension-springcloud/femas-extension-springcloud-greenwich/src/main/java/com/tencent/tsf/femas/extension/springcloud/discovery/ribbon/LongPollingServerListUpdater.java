@@ -130,7 +130,7 @@ public class LongPollingServerListUpdater implements ServerListUpdater {
 
     private static class LazyHolder {
 
-        private final static String CORE_THREAD = "DynamicServerListLoadBalancer.ThreadPoolSize";
+        private static final  String CORE_THREAD = "DynamicServerListLoadBalancer.ThreadPoolSize";
         static ScheduledThreadPoolExecutor _serverListRefreshExecutor = null;
         static AtomicInteger coreSize = new AtomicInteger(1);
         private static Thread _shutdownThread;

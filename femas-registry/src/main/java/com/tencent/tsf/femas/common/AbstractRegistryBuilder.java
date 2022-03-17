@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AbstractRegistryBuilder<T> implements RegistryBuilder {
 
-    private final static Logger log = LoggerFactory.getLogger(AbstractRegistryBuilder.class);
+    private static final  Logger log = LoggerFactory.getLogger(AbstractRegistryBuilder.class);
 
     private final Map<String, T> registryMap = new ConcurrentHashMap<>();
 
