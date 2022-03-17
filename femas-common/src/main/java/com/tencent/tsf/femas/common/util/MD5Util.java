@@ -22,7 +22,7 @@ public class MD5Util {
      * @param str
      * @return
      */
-    public final static String getSaltMD5(String str) {
+    public static final String getSaltMD5(String str) {
         if (str == null || str.trim().length() < 1) {
             str = "";
         }
@@ -57,7 +57,7 @@ public class MD5Util {
      * @param str
      * @return
      */
-    public final static String getPlainMD5(String str) {
+    public static final String getPlainMD5(String str) {
         try {
             MessageDigest md = MessageDigest.getInstance("md5");
             md.update(str.getBytes());

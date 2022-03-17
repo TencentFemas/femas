@@ -7,7 +7,7 @@ import com.tencent.tsf.femas.config.enums.FemasConfigTypeEnum;
 
 public class FemasNacosConfigManager extends FemasConfigManager {
 
-    private volatile static FemasNacosConfig CONFIG;
+    private static volatile  FemasNacosConfig CONFIG;
 
     public Config getConfig() {
         if (CONFIG == null) {

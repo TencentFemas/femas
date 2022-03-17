@@ -23,12 +23,12 @@ public class ScheduledService {
     /**
      * 缓存了目前全部的定时任务， 用于重建
      */
-    protected final static Map<ScheduledService, Long> SCHEDULED_SERVICE_MAP = new ConcurrentHashMap<ScheduledService,
+    protected static final  Map<ScheduledService, Long> SCHEDULED_SERVICE_MAP = new ConcurrentHashMap<ScheduledService,
             Long>();
     /**
      * slf4j Logger for this class
      */
-    private final static Logger LOGGER = LoggerFactory.getLogger(ScheduledService.class);
+    private static final  Logger LOGGER = LoggerFactory.getLogger(ScheduledService.class);
     /**
      * 正在重置标识
      */

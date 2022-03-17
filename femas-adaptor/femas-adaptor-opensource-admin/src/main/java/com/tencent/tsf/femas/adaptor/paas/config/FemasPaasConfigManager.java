@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 
 public class FemasPaasConfigManager {
 
-    private final static Logger logger = LoggerFactory.getLogger(FemasPaasConfigManager.class);
+    private static final  Logger logger = LoggerFactory.getLogger(FemasPaasConfigManager.class);
 
     private static volatile PaasConfig PAAS_CONFIG;
 

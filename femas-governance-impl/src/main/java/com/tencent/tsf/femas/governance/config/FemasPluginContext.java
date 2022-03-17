@@ -49,11 +49,11 @@ import org.slf4j.LoggerFactory;
  */
 public class FemasPluginContext {
 
-    private final static Logger logger = LoggerFactory.getLogger(FemasPluginContext.class);
+    private static final  Logger logger = LoggerFactory.getLogger(FemasPluginContext.class);
 
-    private final static PluginDefinitionReader reader = new PluginDefinitionReader();
+    private static final  PluginDefinitionReader reader = new PluginDefinitionReader();
 
-    private final static ObjectMapper mapper = new ObjectMapper();
+    private static final  ObjectMapper mapper = new ObjectMapper();
 
     private static List<Router> serviceRouters = new CopyOnWriteArrayList<>();
 

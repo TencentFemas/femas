@@ -1,7 +1,7 @@
 package com.tencent.tsf.femas.common.tag.constant;
 
 /**
- * 标签常量
+ * 标签常量.
  *
  * @author zhixinzxliu
  */
@@ -13,7 +13,7 @@ public class TagConstant {
     public static class TYPE {
 
         /**
-         * 系统标签
+         * 系统标签.
          */
         public static final String SYSTEM = "S";
 

@@ -28,7 +28,7 @@ public class BytesUtil {
 
 
     public static final byte[] EMPTY_BYTES = new byte[0];
-    private final static char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
+    private static final  char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
 
 
     private BytesUtil() {

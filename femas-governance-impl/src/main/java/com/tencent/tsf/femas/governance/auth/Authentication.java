@@ -42,7 +42,7 @@ import org.slf4j.LoggerFactory;
  */
 public class Authentication implements IAuthentication<AuthRuleGroup> {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(Authentication.class);
+    private static final  Logger LOGGER = LoggerFactory.getLogger(Authentication.class);
 
     private static Map<Service, AuthRuleGroup> authRuleGroupMap = new ConcurrentHashMap<>();
 

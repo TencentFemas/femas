@@ -30,7 +30,7 @@ import static com.tencent.tsf.femas.common.util.CommonUtils.checkNotNull;
  */
 public class EurekaServiceDiscoveryClient extends AbstractServiceDiscoveryClient {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(EurekaServiceDiscoveryClient.class);
+    private static final  Logger LOGGER = LoggerFactory.getLogger(EurekaServiceDiscoveryClient.class);
 
     private final EurekaNamingService eurekaNamingService;
 

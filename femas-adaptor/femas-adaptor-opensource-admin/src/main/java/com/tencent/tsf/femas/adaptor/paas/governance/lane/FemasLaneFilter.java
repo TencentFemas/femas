@@ -33,32 +33,32 @@ public class FemasLaneFilter implements LaneFilter {
     public static final String SOURCE_LANE_ID_TAG = "source.lane.id";
     private static final Logger LOGGER = LoggerFactory.getLogger(FemasLaneFilter.class);
 
-    private volatile static Set<LaneRule> ALL_LANE_RULES = Sets.newConcurrentHashSet();
+    private static volatile  Set<LaneRule> ALL_LANE_RULES = Sets.newConcurrentHashSet();
 
     /**
      * 实际生效的规则，按照权重排序
      * <p>
      * 规则生效且对应的泳道的入口服务为自身
      */
-    private volatile static Set<LaneRule> EFFECTIVE_LANE_RULES_SET = Sets.newConcurrentHashSet();
+    private static volatile  Set<LaneRule> EFFECTIVE_LANE_RULES_SET = Sets.newConcurrentHashSet();
 
-    private volatile static List<LaneRule> EFFECTIVE_LANE_RULES = new CopyOnWriteArrayList<>();
+    private static volatile  List<LaneRule> EFFECTIVE_LANE_RULES = new CopyOnWriteArrayList<>();
 
     /**
      * 泳道中包含当前部署组且为入口的泳道
      */
-    private volatile static Set<LaneInfo> EFFECTIVE_LANE_INFOS = Sets.newConcurrentHashSet();
+    private static volatile  Set<LaneInfo> EFFECTIVE_LANE_INFOS = Sets.newConcurrentHashSet();
 
     /**
      * key : laneId
      * value : laneInfo
      */
-    private volatile static Map<String, LaneInfo> LANE_ID_LANE_INFO_MAP = new ConcurrentHashMap<>();
+    private static volatile  Map<String, LaneInfo> LANE_ID_LANE_INFO_MAP = new ConcurrentHashMap<>();
 
     /**
      * 命名空间-landIds 映射map
      */
-    private volatile static Map<String, Set<String>> NAMESPACE_LANE_INFO_MAP = new ConcurrentHashMap<>();
+    private static volatile  Map<String, Set<String>> NAMESPACE_LANE_INFO_MAP = new ConcurrentHashMap<>();
 
     /**
      * 部署组id-landIds 映射map
@@ -71,9 +71,9 @@ public class FemasLaneFilter implements LaneFilter {
      * 供color逻辑使用
      * 入口部署组算有色节点
      */
-    private volatile static Map<String, Set<String>> GROUP_LANE_INFO_COLOR_MAP = new ConcurrentHashMap<>();
+    private static volatile  Map<String, Set<String>> GROUP_LANE_INFO_COLOR_MAP = new ConcurrentHashMap<>();
 
-    private volatile static Map<String, Map<Service, Boolean>> EFFECTIVE_SERVICE_MAP = new ConcurrentHashMap<>();
+    private static volatile  Map<String, Map<Service, Boolean>> EFFECTIVE_SERVICE_MAP = new ConcurrentHashMap<>();
 
     /**
      * 将有色节点选出，淘汰无色节点

@@ -19,10 +19,10 @@ import org.springframework.cloud.netflix.eureka.http.RestTemplateTransportClient
  */
 public class EurekaRegistryBuilder extends AbstractRegistryBuilder<EurekaNamingService> {
 
-    private final static Logger log = LoggerFactory.getLogger(EurekaRegistryBuilder.class);
+    private static final  Logger log = LoggerFactory.getLogger(EurekaRegistryBuilder.class);
 
-    private final static String eureka_suffix = "/eureka";
-    private final static String eureka_prefix = "http://";
+    private static final  String eureka_suffix = "/eureka";
+    private static final  String eureka_prefix = "http://";
 
     @Override
     public EurekaNamingService build(Supplier serverAddressSupplier, String namespace)

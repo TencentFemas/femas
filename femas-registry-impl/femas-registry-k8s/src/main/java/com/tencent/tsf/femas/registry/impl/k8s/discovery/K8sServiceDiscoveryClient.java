@@ -37,10 +37,10 @@ import static java.util.stream.Collectors.toMap;
  */
 public class K8sServiceDiscoveryClient extends AbstractServiceDiscoveryClient {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(K8sServiceDiscoveryClient.class);
+    private static final  Logger LOGGER = LoggerFactory.getLogger(K8sServiceDiscoveryClient.class);
     private final KubernetesClient client;
     private static volatile ContextConstant contextConstant = ContextFactory.getContextConstantInstance();
-    private final static String default_namespace = "public";
+    private static final  String default_namespace = "public";
     protected volatile ServerUpdater serverListUpdater;
     private final Map<Service, List<ServiceInstance>> instances = new ConcurrentHashMap<>();
     protected AtomicBoolean serverListUpdateInProgress;

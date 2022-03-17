@@ -22,7 +22,7 @@ import java.util.TreeMap;
  */
 public class PluginDefinitionReader {
 
-    private final static Logger logger = LoggerFactory.getLogger(PluginDefinitionReader.class);
+    private static final  Logger logger = LoggerFactory.getLogger(PluginDefinitionReader.class);
 
     //默认加载顺序，跟springboot保持一致，参见ConfigFileApplicationListener
     private static final String DEFAULT_SEARCH_LOCATIONS = "classpath:/,classpath:/config/";

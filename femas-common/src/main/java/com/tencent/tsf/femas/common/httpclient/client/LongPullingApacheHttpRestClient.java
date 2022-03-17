@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
  */
 public class LongPullingApacheHttpRestClient extends FemasApacheHttpRestClient {
 
-    private final static Logger logger = LoggerFactory.getLogger(LongPullingApacheHttpRestClient.class);
+    private static final  Logger logger = LoggerFactory.getLogger(LongPullingApacheHttpRestClient.class);
 
     public LongPullingApacheHttpRestClient(CloseableHttpClient client) {
         super(client);

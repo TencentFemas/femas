@@ -34,15 +34,15 @@ import java.util.Properties;
 
 public class FemasConfigHttpClientManager extends AbstractConfigHttpClientManager {
 
-    private final static Logger log = LoggerFactory.getLogger(FemasConfigHttpClientManager.class);
-    private final static String webContext = "/atom";
-    private final static String fetchKeyUrl = "/v1/sdk/fetchData";
-    private final static String reportCircuitEvent = "/v1/sdk/reportServiceEvent";
-    private final static String reportApis = "/v1/sdk/reportServiceApi";
-    private final static String intiNamespace = "/v1/sdk/initNamespace";
-    private final static int DEFAULT_READ_TIME_OUT_MILLIS = Integer
+    private static final  Logger log = LoggerFactory.getLogger(FemasConfigHttpClientManager.class);
+    private static final  String webContext = "/atom";
+    private static final  String fetchKeyUrl = "/v1/sdk/fetchData";
+    private static final  String reportCircuitEvent = "/v1/sdk/reportServiceEvent";
+    private static final  String reportApis = "/v1/sdk/reportServiceApi";
+    private static final  String intiNamespace = "/v1/sdk/initNamespace";
+    private static final  int DEFAULT_READ_TIME_OUT_MILLIS = Integer
             .getInteger("femas.paas.config.client.readTimeOut", 50000);
-    private final static int DEFAULT_CON_TIME_OUT_MILLIS = Integer
+    private static final  int DEFAULT_CON_TIME_OUT_MILLIS = Integer
             .getInteger("femas.paas.config.client.conTimeOut", 3000);
     private static Context commonContext = ContextFactory.getContextInstance();
     private static volatile FemasConfigHttpClientManager singleton = null;
