@@ -49,9 +49,7 @@ public class ErrorStatus {
             return true;
         }
         if (obj instanceof ErrorStatus) {
-            if (((ErrorStatus) obj).getCode() == this.getCode()) {
-                return true;
-            }
+            return ((ErrorStatus) obj).getCode() == this.getCode();
         }
         return false;
     }

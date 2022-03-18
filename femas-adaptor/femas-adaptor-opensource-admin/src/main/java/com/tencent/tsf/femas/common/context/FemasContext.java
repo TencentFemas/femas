@@ -131,8 +131,8 @@ public class FemasContext extends Context {
     /**
      * value为String的Tag map，用于存放用户标签
      */
-    private static ThreadLocalContext<String> USER_TAGS = new ThreadLocalContext();
-    private static ThreadLocal<String> RAW_USER_TAGS_CONTENT = new ThreadLocal<String>();
+    private static ThreadLocalContext<String> USER_TAGS = new ThreadLocalContext<>();
+    private static ThreadLocal<String> RAW_USER_TAGS_CONTENT = new ThreadLocal<>();
 
     public static void init() {
     }

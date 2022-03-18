@@ -121,7 +121,7 @@ public class FemasConfigHttpClientManager extends AbstractConfigHttpClientManage
 
     public String fetchKVValue(String key, String namespaceId) {
 
-        final Map<String, Object> params = new HashMap<String, Object>(3);
+        final Map<String, Object> params = new HashMap<>(3);
         params.put("namespaceId", namespaceId);
         params.put("key", key);
         if (context.isEmptyPaasServer()) {
@@ -145,7 +145,6 @@ public class FemasConfigHttpClientManager extends AbstractConfigHttpClientManage
         try {
             ClassLoader loader = Thread.currentThread().getContextClassLoader();
             in = new InputStreamReader(loader.getResourceAsStream(propertyFileName), "UTF-8");
-            ;
             if (in != null) {
                 Properties prop = new Properties();
                 prop.load(in);
@@ -184,10 +183,10 @@ public class FemasConfigHttpClientManager extends AbstractConfigHttpClientManage
             log.debug("initNamespace failed , could not find the paas address profile");
             return;
         }
-        final Map<String, Object> params = new HashMap<String, Object>(2);
+        final Map<String, Object> params = new HashMap<>(2);
         params.put("namespaceId", namespaceId);
         params.put("registryAddress", registryAddress);
-        HttpResult<String> httpResult = null;
+        HttpResult<String> httpResult;
         try {
             httpResult = httpClient.post(initNamespaceUrl, builderHeader(), params, null);
             if (httpResult.getCode().startsWith("4") || httpResult.getCode().startsWith("5")) {
