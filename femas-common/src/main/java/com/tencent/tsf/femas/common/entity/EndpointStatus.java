@@ -1,5 +1,9 @@
 package com.tencent.tsf.femas.common.entity;
 
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.stream.Stream;
+
 /**
  * 节点状态
  *
@@ -36,12 +40,14 @@ public enum EndpointStatus {
 
 
     public static EndpointStatus getTypeByName(String var) {
-        for (EndpointStatus status : EndpointStatus.values()) {
-            if (var.equalsIgnoreCase(status.name())) {
-                return status;
-            }
+        if (StringUtils.isBlank(var)) {
+            return UNKNOWN;
         }
-        return UNKNOWN;
+
+        return Stream.of(values())
+                .filter(status -> var.equalsIgnoreCase(status.name()))
+                .findAny()
+                .orElse(UNKNOWN);
     }
 
 }

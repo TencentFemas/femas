@@ -30,7 +30,7 @@ public abstract class AbstractHttpClient implements FemasHttpClient, Closeable {
 
     @Override
     public ResultWrapper getOneResultWrapper(String key) {
-        //默认处理方式
+        // 默认处理方式
         if (StringUtils.isEmpty(key)) {
             return getDefaultWrapper();
         }
