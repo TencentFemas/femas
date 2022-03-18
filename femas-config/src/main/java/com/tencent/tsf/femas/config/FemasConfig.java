@@ -25,7 +25,7 @@ public class FemasConfig {
 
     public static  <T> T parse(String key, Class<T> type) {
         StringWriter sw = new StringWriter();
-        Map<String, Object> def = new LinkedHashMap();
+        Map<String, Object> def = new LinkedHashMap<>();
         yaml.dump(conf.getProperty(key, def), sw);
         return yaml.loadAs(sw.toString(), type);
     }

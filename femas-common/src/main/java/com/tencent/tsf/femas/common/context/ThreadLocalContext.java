@@ -26,8 +26,6 @@ class ThreadLocalContext<T> {
         }
     };
 
-    ;
-
     public ThreadLocalContext() {
     }
 

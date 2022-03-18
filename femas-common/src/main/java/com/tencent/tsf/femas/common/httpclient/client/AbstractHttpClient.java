@@ -48,17 +48,11 @@ public abstract class AbstractHttpClient implements FemasHttpClient, Closeable {
                     requestEntity.getBody());
         }
         ResultWrapper<T> responseHandler = getOneResultWrapper(wrapperType);
-        HttpClientResponse response = null;
-        try {
-            response = callServer(requestEntity);
+        try (HttpClientResponse response = callServer(requestEntity)) {
             return responseHandler.wrapper(response);
         } catch (Exception e) {
             logger.error("wrapper result error", e);
             throw new FemasRuntimeException(e);
-        } finally {
-            if (response != null) {
-                response.close();
-            }
         }
     }
 
