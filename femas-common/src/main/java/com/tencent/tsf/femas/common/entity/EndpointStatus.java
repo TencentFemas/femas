@@ -37,8 +37,7 @@ public enum EndpointStatus {
     OUT_OF_CONTACT,
 
     UNKNOWN;
-
-
+    
     public static EndpointStatus getTypeByName(String var) {
         if (StringUtils.isBlank(var)) {
             return UNKNOWN;
