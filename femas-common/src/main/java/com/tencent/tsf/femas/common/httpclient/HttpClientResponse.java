@@ -26,10 +26,10 @@ public interface HttpClientResponse extends Closeable {
     String getStatusCode() throws IOException;
 
     default String getCharset() {
-        String acceptCharset = (String) Optional.ofNullable(getHeaders()).orElseGet(() -> Collections.EMPTY_MAP)
+        String acceptCharset = (String) Optional.ofNullable(getHeaders()).orElse(Collections.EMPTY_MAP)
                 .get(HttpHeaderKeys.ACCEPT_CHARSET);
         if (acceptCharset == null) {
-            String contentType = (String) Optional.ofNullable(getHeaders()).orElseGet(() -> Collections.EMPTY_MAP)
+            String contentType = (String) Optional.ofNullable(getHeaders()).orElse(Collections.EMPTY_MAP)
                     .get(HttpHeaderKeys.ACCEPT_CHARSET);
             acceptCharset = StringUtils.isNotBlank(contentType) ? analysisCharset(contentType) : DEFAULT_ENCODE;
         }

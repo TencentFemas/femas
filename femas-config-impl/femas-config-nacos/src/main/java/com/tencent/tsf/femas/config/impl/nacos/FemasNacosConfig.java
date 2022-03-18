@@ -81,23 +81,23 @@ public class FemasNacosConfig extends AbstractStringConfig {
             String group = "DEFAULT_GROUP";
             if (StringUtils.isNotEmpty(systemTag)) {
                 Map<String, String> map = JSONSerializer.deserializeStr(Map.class, systemTag);
-                if (StringUtils.isNotEmpty(map.get("dataId"))) {
-                    dataId = map.get("dataId");
-                }
-                if (StringUtils.isNotEmpty(map.get("group"))) {
-                    group = map.get("group");
+                if (map != null) {
+                    if (StringUtils.isNotEmpty(map.get("dataId"))) {
+                        dataId = map.get("dataId");
+                    }
+                    if (StringUtils.isNotEmpty(map.get("group"))) {
+                        group = map.get("group");
+                    }
                 }
             }
 
             paramsStr = JSONSerializer.serializeStr(params);
             LOGGER.info("[Femas Nacos Config Client] Start to publishConfig, params: " + paramsStr);
-            String content = configValue;
-            String type = configType;
             ConfigService configService = createAndGetNacosConfigService(namespaceId, serverAddr);
             LOGGER.info(
                     "[Atom Nacos Config Client] publishConfig namespaceId:{}, dataId:{}, group:{}, content:{}, type:{}",
-                    namespaceId, dataId, group, content, type);
-            publishResult = configService.publishConfig(dataId, group, content, type);
+                    namespaceId, dataId, group, configValue, configType);
+            publishResult = configService.publishConfig(dataId, group, configValue, configType);
             LOGGER.info("[Femas Nacos Config Client] publishConfig params: " + paramsStr + " success.");
         } catch (Throwable e) {
             LOGGER.error("[Femas Nacos Config Client] publishConfig throwable, params:{}", paramsStr, e);

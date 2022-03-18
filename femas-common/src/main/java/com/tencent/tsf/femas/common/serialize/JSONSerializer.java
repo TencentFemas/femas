@@ -56,9 +56,8 @@ public class JSONSerializer {
 
     public static <T> List<T> deserializeStr2List(Class<T> clazz, final String str) {
         try {
-            List<T> list = mapper.readValue(str, new TypeReference<List<T>>() {
+            return mapper.readValue(str, new TypeReference<List<T>>() {
             });
-            return list;
         } catch (JsonProcessingException e) {
             log.error("deserializeStr2List {} error ", str, e);
         }
