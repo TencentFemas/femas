@@ -11,7 +11,6 @@ public class FemasPaasConfigManager {
 
     private static final  Logger logger = LoggerFactory.getLogger(FemasPaasConfigManager.class);
 
-
     public static PaasConfig getConfig() {
         return Singleton.SINGLETON.getInstance();
     }
