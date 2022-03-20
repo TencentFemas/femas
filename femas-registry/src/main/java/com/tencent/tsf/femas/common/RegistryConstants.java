@@ -14,7 +14,6 @@ public class RegistryConstants {
 
     public static final String REGISTRY_TYPE = "registryType";
 
-
     public static final int DEFAULT_THREAD_POOL_SIZE = Runtime.getRuntime().availableProcessors();
 
 }
