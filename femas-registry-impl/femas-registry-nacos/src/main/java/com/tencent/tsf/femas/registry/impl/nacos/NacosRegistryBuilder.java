@@ -25,8 +25,7 @@ public class NacosRegistryBuilder extends AbstractRegistryBuilder<NamingService>
         Properties properties = new Properties();
         properties.setProperty(PropertyKeyConst.SERVER_ADDR, (String) serverAddressSupplier.get());
         properties.setProperty(PropertyKeyConst.NAMESPACE, namespace);
-        properties
-                .setProperty("namingClientBeatThreadCount", String.valueOf(Runtime.getRuntime().availableProcessors()));
+        properties.setProperty("namingClientBeatThreadCount", String.valueOf(Runtime.getRuntime().availableProcessors()));
         try {
             return NamingFactory.createNamingService(properties);
         } catch (Exception e) {
