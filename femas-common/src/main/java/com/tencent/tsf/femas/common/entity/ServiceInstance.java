@@ -35,6 +35,16 @@ public class ServiceInstance implements Serializable {
      */
     Map<String, String> tags = new HashMap<String, String>();
 
+    /**
+     * 是否开启心跳上报
+     */
+    Boolean heartBeat;
+
+    /**
+     * 上报时间间隔
+     */
+    Integer ttl;
+
     public ServiceInstance() {
     }
 
@@ -59,6 +69,22 @@ public class ServiceInstance implements Serializable {
         this.origin = origin;
         this.metadata = metadata;
         this.tags = tags;
+    }
+
+    public ServiceInstance(Service service, String id, String host, Integer port, Long lastUpdateTime, String serviceVersion, String clientVersion, EndpointStatus status, Object origin, Map<String, String> metadata, Map<String, String> tags, Boolean heartBeat, Integer ttl) {
+        this.service = service;
+        this.id = id;
+        this.host = host;
+        this.port = port;
+        this.lastUpdateTime = lastUpdateTime;
+        this.serviceVersion = serviceVersion;
+        this.clientVersion = clientVersion;
+        this.status = status;
+        this.origin = origin;
+        this.metadata = metadata;
+        this.tags = tags;
+        this.heartBeat = heartBeat;
+        this.ttl = ttl;
     }
 
     public ServiceInstance(String id, String host, Integer port) {
@@ -173,6 +199,22 @@ public class ServiceInstance implements Serializable {
 
     public void setOrigin(Object origin) {
         this.origin = origin;
+    }
+
+    public Boolean getHeartBeat() {
+        return heartBeat;
+    }
+
+    public void setHeartBeat(Boolean heartBeat) {
+        this.heartBeat = heartBeat;
+    }
+
+    public Integer getTtl() {
+        return ttl;
+    }
+
+    public void setTtl(Integer ttl) {
+        this.ttl = ttl;
     }
 
     @Override
