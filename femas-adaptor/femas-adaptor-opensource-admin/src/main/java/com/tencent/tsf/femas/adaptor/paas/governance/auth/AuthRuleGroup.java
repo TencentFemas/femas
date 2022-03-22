@@ -49,11 +49,11 @@ public class AuthRuleGroup implements Serializable {
 
     @Override
     public String toString() {
-        final StringBuffer sb = new StringBuffer("AuthRuleGroup{");
-        sb.append("rules=").append(rules);
-        sb.append(", ruleProgram='").append(ruleProgram).append('\'');
-        sb.append(", type='").append(type).append('\'');
-        sb.append('}');
+        final StringBuffer sb = new StringBuffer("AuthRuleGroup{")
+                .append("rules=").append(rules)
+                .append(", ruleProgram='").append(ruleProgram).append('\'')
+                .append(", type='").append(type).append('\'')
+                .append('}');
         return sb.toString();
     }
 }

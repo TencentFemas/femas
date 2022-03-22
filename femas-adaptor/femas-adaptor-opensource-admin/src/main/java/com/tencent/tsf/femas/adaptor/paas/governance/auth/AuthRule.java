@@ -138,8 +138,11 @@ public class AuthRule implements Serializable {
 
     @Override
     public String toString() {
-        return "命名空间：" + namespaceId + "，服务：" + serviceName + "，规则：" + ruleName + "，规则状态：" + (isEnabled.equals(0) ? "关闭"
-                : "开启");
+        final StringBuffer sb = new StringBuffer("命名空间：").append(namespaceId)
+                .append("，服务：").append(serviceName)
+                .append("，规则：").append(ruleName)
+                .append("，规则状态：").append((isEnabled.equals(0) ? "关闭" : "开启"));
+        return sb.toString();
     }
 
 

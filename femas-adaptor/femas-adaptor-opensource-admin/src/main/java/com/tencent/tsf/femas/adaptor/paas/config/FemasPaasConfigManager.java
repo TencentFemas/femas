@@ -11,18 +11,24 @@ public class FemasPaasConfigManager {
 
     private static final  Logger logger = LoggerFactory.getLogger(FemasPaasConfigManager.class);
 
-    private static volatile PaasConfig PAAS_CONFIG;
 
     public static PaasConfig getConfig() {
-        if (PAAS_CONFIG == null) {
-            synchronized (FemasPaasConfigManager.class) {
-                if (PAAS_CONFIG == null) {
-                    PAAS_CONFIG = (PaasConfig) ConfigService
-                            .createConfig(FemasConstant.FEMAS_CONFIG_PAAS, FemasContext.REGISTRY_CONFIG_MAP);
-                }
-            }
+        return Singleton.SINGLETON.getInstance();
+    }
+
+    private enum Singleton {
+        SINGLETON;
+
+        private PaasConfig paasConfig;
+
+        Singleton() {
+            paasConfig = (PaasConfig) ConfigService
+                    .createConfig(FemasConstant.FEMAS_CONFIG_PAAS, FemasContext.REGISTRY_CONFIG_MAP);
         }
-        return PAAS_CONFIG;
+
+        public PaasConfig getInstance() {
+            return paasConfig;
+        }
     }
 
 }

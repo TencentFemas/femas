@@ -82,7 +82,7 @@ public class FemasConfigHttpClientManager extends AbstractConfigHttpClientManage
             log.debug("reportEvent failed, could not find the paas address profile");
             return;
         }
-        final Map<String, Object> params = new HashMap<String, Object>(3);
+        final Map<String, Object> params = new HashMap<String, Object>(6);
         params.put("namespaceId", service.getNamespace());
         params.put("serviceName", service.getName());
         params.put("eventId", eventId);
@@ -165,7 +165,7 @@ public class FemasConfigHttpClientManager extends AbstractConfigHttpClientManage
     }
 
     public Map<String, String> builderHeader() {
-        Map<String, String> header = new HashMap<>();
+        Map<String, String> header = new HashMap<>(7);
         //标识sdk client版本号，从默认配置文件中获取
         header.put(HttpHeaderKeys.USER_AGENT_HEADER, FemasConfig.getProperty("femas.sdk.client.version"));
         header.put(HttpHeaderKeys.ACCEPT_ENCODING, "gzip,deflate,sdch");
@@ -183,7 +183,7 @@ public class FemasConfigHttpClientManager extends AbstractConfigHttpClientManage
             log.debug("initNamespace failed , could not find the paas address profile");
             return;
         }
-        final Map<String, Object> params = new HashMap<>(2);
+        final Map<String, Object> params = new HashMap<>(3);
         params.put("namespaceId", namespaceId);
         params.put("registryAddress", registryAddress);
         HttpResult<String> httpResult;
