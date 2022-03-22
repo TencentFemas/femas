@@ -2,22 +2,17 @@ package com.tencent.tsf.femas.extension.springcloud.discovery;
 
 import com.alibaba.cloud.nacos.registry.NacosRegistrationCustomizer;
 import com.alibaba.cloud.nacos.ribbon.NacosServer;
-
+import com.netflix.niws.loadbalancer.DiscoveryEnabledServer;
+import com.tencent.tsf.femas.extension.springcloud.common.discovery.eureka.FemasEurekaRegistrationCustomizer;
 import com.tencent.tsf.femas.extension.springcloud.discovery.consul.ConsulServerConverter;
-
+import com.tencent.tsf.femas.extension.springcloud.discovery.eureka.EurekaServerConverter;
 import com.tencent.tsf.femas.extension.springcloud.discovery.nacos.NacosServerConverter;
 import com.tencent.tsf.femas.extension.springcloud.discovery.ribbon.DiscoveryServerConverter;
-
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-
-
 import org.springframework.cloud.consul.discovery.ConsulServer;
 import org.springframework.cloud.consul.serviceregistry.ConsulRegistrationCustomizer;
-
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
 
 @Configuration
 public class FemasDiscoveryAutoConfiguration {
@@ -40,4 +35,17 @@ public class FemasDiscoveryAutoConfiguration {
         }
     }
 
+    @Configuration
+    @ConditionalOnClass({DiscoveryEnabledServer.class, FemasEurekaRegistrationCustomizer.class})
+    static class FemasEurekaConfiguration {
+        @Bean("converterAdapter")
+        public DiscoveryServerConverter eurekaConverterAdapter() {
+            return new EurekaServerConverter();
+        }
+
+        @Bean
+        public FemasEurekaRegistrationCustomizer femasEurekaRegistrationCustomizer() {
+            return new FemasEurekaRegistrationCustomizer();
+        }
+    }
 }
