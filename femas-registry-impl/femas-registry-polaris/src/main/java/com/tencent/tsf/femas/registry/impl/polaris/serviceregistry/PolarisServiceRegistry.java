@@ -17,8 +17,9 @@
 package com.tencent.tsf.femas.registry.impl.polaris.serviceregistry;
 
 import com.tencent.polaris.api.core.ProviderAPI;
+import com.tencent.polaris.api.exception.ErrorCode;
+import com.tencent.polaris.api.exception.PolarisException;
 import com.tencent.polaris.api.rpc.InstanceDeregisterRequest;
-import com.tencent.polaris.api.rpc.InstanceHeartbeatRequest;
 import com.tencent.polaris.api.rpc.InstanceRegisterRequest;
 import com.tencent.polaris.api.rpc.InstanceRegisterResponse;
 import com.tencent.polaris.factory.api.DiscoveryAPIFactory;
@@ -26,9 +27,7 @@ import com.tencent.tsf.femas.common.entity.EndpointStatus;
 import com.tencent.tsf.femas.common.entity.Service;
 import com.tencent.tsf.femas.common.entity.ServiceInstance;
 import com.tencent.tsf.femas.common.serviceregistry.AbstractServiceRegistry;
-import org.slf4j.Logger;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -40,11 +39,12 @@ import java.util.Map;
  */
 public class PolarisServiceRegistry extends AbstractServiceRegistry {
 
-    private ProviderAPI providerAPI = null;
-    private final Map<String, HeartBeatThread> heartBeatThreadMap = new HashMap<>();
+    private final ProviderAPI providerApi;
+    private final PolarisBeatReactor polarisBeatReactor;
 
     public PolarisServiceRegistry(Map<String, String> configMap) {
-        providerAPI = DiscoveryAPIFactory.createProviderAPI();
+        providerApi = DiscoveryAPIFactory.createProviderAPI();
+        polarisBeatReactor = new PolarisBeatReactor(providerApi);
     }
 
     /**
@@ -67,46 +67,26 @@ public class PolarisServiceRegistry extends AbstractServiceRegistry {
             request.setService(serviceName);
             request.setHost(host);
             request.setPort(port);
-            InstanceHeartbeatRequest instanceHeartbeatRequest = null;
+            InstanceInfo instanceInfo = null;
             Integer ttl = serviceInstance.getTtl();
-            if (
-                    Boolean.TRUE.equals(serviceInstance.getHeartBeat())
-                            &&
-                            null != ttl
-                            &&
-                            ttl != 0
-            ) {
+            // 判断是否需要上报心跳,以及校验心跳间隔的合理性
+            if (Boolean.TRUE.equals(serviceInstance.getHeartBeat()) && null != ttl && ttl != 0) {
                 // 设置健康检查ttl
                 request.setTtl(ttl);
                 // 建立一个上报信息,给后面使用
-                instanceHeartbeatRequest = new InstanceHeartbeatRequest();
-                instanceHeartbeatRequest.setHost(host);
-                instanceHeartbeatRequest.setPort(port);
-                instanceHeartbeatRequest.setService(serviceName);
-                instanceHeartbeatRequest.setNamespace(namespace);
+                instanceInfo = new InstanceInfo(null, namespace, serviceName, port, host, ttl);
             }
             logger.info("Service register to polaris request:" + request);
-            InstanceRegisterResponse instanceRegisterResponse = providerAPI.register(request);
+            InstanceRegisterResponse instanceRegisterResponse = providerApi.register(request);
             logger.info("Service register to polaris instanceRegisterResponse:" + instanceRegisterResponse);
-            if (null != instanceHeartbeatRequest) {
-                // 开始上报健康信息
-                String instanceId = instanceRegisterResponse.getInstanceId();
-                HeartBeatThread heartBeatThread = new HeartBeatThread(
-                        logger,
-                        providerAPI,
-                        instanceHeartbeatRequest,
-                        ttl
-                );
-                // 临时设置为instanceId,可能需要更完善的方法
-                serviceInstance.setId(instanceId);
-                heartBeatThreadMap.put(instanceId, heartBeatThread);
-                heartBeatThread.start();
+            if (null != instanceInfo) {
+                instanceInfo.setInstanceId(serviceInstance.getId());
+                polarisBeatReactor.addInstance(serviceInstance.getId(), instanceInfo);
             }
         } catch (Exception e) {
             logger.error("Error registering service with polaris: " + serviceInstance, e);
         }
         logger.info("Service " + serviceInstance + " registered.");
-
     }
 
     /**
@@ -117,10 +97,7 @@ public class PolarisServiceRegistry extends AbstractServiceRegistry {
         logger.info("Deregistering service with polaris: " + serviceInstance);
         try {
             // 停止心跳
-            HeartBeatThread heartBeatThread = heartBeatThreadMap.get(serviceInstance.getId());
-            if (null != heartBeatThread) {
-                heartBeatThread.setExit(Boolean.TRUE);
-            }
+            polarisBeatReactor.removeInstance(serviceInstance.getId());
             // 执行服务反注册
             InstanceDeregisterRequest request = new InstanceDeregisterRequest();
             Service service = serviceInstance.getService();
@@ -129,7 +106,12 @@ public class PolarisServiceRegistry extends AbstractServiceRegistry {
             request.setHost(serviceInstance.getHost());
             request.setPort(serviceInstance.getPort());
             logger.info("Service deregister to polaris request:" + request);
-            providerAPI.deRegister(request);
+            providerApi.deRegister(request);
+        } catch (PolarisException e) {
+            // 反注册后,如果心跳发送已经被载入schedule,会发生错误
+            if (e.getCode().equals(ErrorCode.SERVER_USER_ERROR)) {
+                logger.warn("Last heartbeats still in schedule,please ignore this error:{}", serviceInstance, e);
+            }
         } catch (Exception e) {
             logger.error("Error deregisterInstance service with polaris:{} ", serviceInstance.toString(), e);
         }
@@ -151,49 +133,4 @@ public class PolarisServiceRegistry extends AbstractServiceRegistry {
         return null;
     }
 
-}
-
-class HeartBeatThread extends Thread {
-
-    Logger logger;
-    private volatile boolean exit = false;
-    private ProviderAPI providerAPI;
-    InstanceHeartbeatRequest instanceHeartbeatRequest;
-    Integer TTL;
-
-
-    public HeartBeatThread(Logger logger, ProviderAPI providerAPI, InstanceHeartbeatRequest instanceHeartbeatRequest, Integer TTL) {
-        this.logger = logger;
-        this.providerAPI = providerAPI;
-        this.instanceHeartbeatRequest = instanceHeartbeatRequest;
-        this.TTL = TTL;
-    }
-
-    @Override
-    public void run() {
-        // 防止意外退出
-        if (null == instanceHeartbeatRequest || null == TTL || providerAPI == null) {
-            if (logger != null) {
-                logger.error("Error start heartbeat");
-            }
-            return;
-        }
-        // 轮询上报心跳
-        while (!exit) {
-            // do heartBeat
-            providerAPI.heartbeat(instanceHeartbeatRequest);
-            try {
-                // TTL不会为空
-                Thread.sleep(TTL * 1000);
-            } catch (InterruptedException e) {
-                if (logger != null) {
-                    logger.error("Error sleep heartbeat", e);
-                }
-            }
-        }
-    }
-
-    public void setExit(boolean exit) {
-        this.exit = exit;
-    }
 }
