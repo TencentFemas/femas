@@ -1,4 +1,4 @@
-package com.tencent.tsf.femas.springcloud.gateway.discovery;/*
+/*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -14,6 +14,8 @@ package com.tencent.tsf.femas.springcloud.gateway.discovery;/*
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+package com.tencent.tsf.femas.springcloud.gateway.discovery;
 
 import com.tencent.tsf.femas.extension.springcloud.common.discovery.loadbalancer.BaseDiscoveryServerConverter;
 import org.springframework.cloud.client.ServiceInstance;
