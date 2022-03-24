@@ -1,3 +1,20 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.tencent.tsf.femas.springcloud.gateway.filter;
 
 import com.tencent.tsf.femas.common.context.Context;
@@ -10,31 +27,33 @@ import com.tencent.tsf.femas.common.entity.Request;
 import com.tencent.tsf.femas.common.entity.Response;
 import com.tencent.tsf.femas.common.entity.Service;
 import com.tencent.tsf.femas.springcloud.gateway.exception.GatewayException;
-import io.protostuff.Rpc;
 import org.apache.commons.lang3.StringUtils;
-import org.reactivestreams.Publisher;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.route.Route;
-import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
-import org.springframework.http.server.reactive.ServerHttpResponseDecorator;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+import static com.tencent.tsf.femas.springcloud.gateway.filter.FemasReactiveLoadBalancerClientFilter.GATEWAY_FEMAS_REQUEST;
 import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.GATEWAY_ROUTE_ATTR;
 
-public class FemasGatewayFilter extends AbstractGlobalFilter {
-    private volatile ContextConstant contextConstant = ContextFactory.getContextConstantInstance();
+/**
+ * 网关治理
+ * @Author jolyonzheng
+ * @Description //TODO
+ * @Date 2022/3/24
+ * @Version v1.0
+ **/
+public class FemasGatewayGovernanceFilter extends AbstractGlobalFilter {
 
+    private volatile ContextConstant contextConstant = ContextFactory.getContextConstantInstance();
     private String namespace = Context.getSystemTag(contextConstant.getNamespaceId());
-    private RpcContext rpcContext;
 
     @Override
     public int getOrder() {
-        // NettyWriteResponseFilter 之前
-        return -2;
+        return FemasReactiveLoadBalancerClientFilter.FEMAS_LOAD_BALANCER_CLIENT_FILTER_ORDER - 1;
     }
 
     @Override
@@ -46,51 +65,62 @@ public class FemasGatewayFilter extends AbstractGlobalFilter {
     public Mono<Void> doFilter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest serverHttpRequest = exchange.getRequest();
         ServerHttpResponse serverHttpResponse = exchange.getResponse();
-
         Response femasResponse = new Response();
-        Request femasRequest = beforeInvoke(exchange, femasResponse);
-        ServerHttpResponse originalResponse = exchange.getResponse();
-        ServerHttpResponseDecorator response = new ServerHttpResponseDecorator(originalResponse) {
-            @Override
-            public Mono<Void> writeWith(Publisher<? extends DataBuffer> body) {
-                if (getStatusCode().value() > HttpStatus.BAD_REQUEST.value()) {
-                    femasResponse.setError(new GatewayException(String.valueOf(getStatusCode()), getStatusCode().getReasonPhrase()));
+
+        RpcContext serverRpcContext = this.beforeServerInvoke(serverHttpRequest, serverHttpResponse, femasResponse);
+
+        Request clientFemasRequest = getClientFemasRequest(serverHttpRequest, exchange.getAttribute(GATEWAY_ROUTE_ATTR));
+        RpcContext clientRpcContext;
+        try {
+            clientRpcContext = this.beforeClientInvoke(exchange, clientFemasRequest, femasResponse);
+        } catch (Exception e) {
+            afterServerInvoke(serverRpcContext, serverHttpResponse, femasResponse);
+            throw e;
+        }
+
+        return chain.filter(exchange).then(Mono.fromRunnable(() -> {
+            // Manipulate the response
+            Request femasRequest = exchange.getAttribute(GATEWAY_FEMAS_REQUEST);
+            ServerHttpResponse response = exchange.getResponse();
+            try {
+                if (response.getStatusCode().value() > HttpStatus.BAD_REQUEST.value()) {
+                    femasResponse.setError(new GatewayException(String.valueOf(response.getStatusCode()), response.getStatusCode().getReasonPhrase()));
                 }
-                afterInvoke(rpcContext, serverHttpRequest, serverHttpResponse, femasRequest, femasResponse);
-                return super.writeWith(body);
+            } catch (Exception e) {
+                femasResponse.setError(new GatewayException(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value())));
             }
-        };
-        return chain.filter(exchange.mutate().response(response).build());
+            afterClientInvoke(clientRpcContext, exchange, femasRequest, femasResponse);
+            afterServerInvoke(serverRpcContext, serverHttpResponse, femasResponse);
+        }));
     }
 
-    private Request beforeInvoke(ServerWebExchange exchange, Response femasResponse) {
+    private RpcContext beforeServerInvoke(ServerHttpRequest serverHttpRequest, ServerHttpResponse serverHttpResponse, Response femasResponse) {
+        Request serverFemasRequest = getServerFemasRequest();
+        RpcContext serverRpcContext = extensionLayer.beforeServerInvoke(serverFemasRequest, new GatewayHeaderUtils(serverHttpRequest));
+        if (serverRpcContext.getErrorStatus() != null) {
+            afterServerInvoke(serverRpcContext, serverHttpResponse, femasResponse);
+            throw new GatewayException(serverRpcContext.getErrorStatus().StatusCode(), serverRpcContext.getErrorStatus().getCode().name() + ": " + serverRpcContext.getErrorStatus().getMessage());
+        }
+        return serverRpcContext;
+    }
+
+    private RpcContext beforeClientInvoke(ServerWebExchange exchange, Request clientFemasRequest, Response femasResponse) {
+        ServerHttpRequest serverHttpRequest = exchange.getRequest();
+
+        RpcContext clientRpcContext = extensionLayer.beforeClientInvoke(clientFemasRequest, new GatewayHeaderUtils(serverHttpRequest));
+        if (clientRpcContext.getErrorStatus() != null) {
+            afterClientInvoke(clientRpcContext, exchange, clientFemasRequest, femasResponse);
+            throw new GatewayException(clientRpcContext.getErrorStatus().StatusCode(), clientRpcContext.getErrorStatus().getCode().name() + ": " + clientRpcContext.getErrorStatus().getMessage());
+        }
+        return clientRpcContext;
+    }
+
+    private void afterClientInvoke(RpcContext rpcContext, ServerWebExchange exchange, Request femasRequest, Response femasResponse) {
         ServerHttpRequest serverHttpRequest = exchange.getRequest();
         ServerHttpResponse serverHttpResponse = exchange.getResponse();
 
-        Request femasRequest = getServerFemasRequest();
-        rpcContext = extensionLayer.beforeServerInvoke(femasRequest, new GateWayHeaderUtils(serverHttpRequest));
-        if (rpcContext.getErrorStatus() != null) {
-            afterServerInvoke(rpcContext, serverHttpResponse, femasResponse);
-            throw new GatewayException(rpcContext.getErrorStatus().StatusCode(), rpcContext.getErrorStatus().getCode().name() + ": " + rpcContext.getErrorStatus().getMessage());
-        }
-
-        femasRequest = getClientFemasRequest(exchange);
-        rpcContext = extensionLayer.beforeClientInvoke(femasRequest, new GateWayHeaderUtils(serverHttpRequest));
-        if (rpcContext.getErrorStatus() != null) {
-            afterInvoke(rpcContext, serverHttpRequest, serverHttpResponse, femasRequest, femasResponse);
-            throw new GatewayException(rpcContext.getErrorStatus().StatusCode(), rpcContext.getErrorStatus().getCode().name() + ": " + rpcContext.getErrorStatus().getMessage());
-        }
-        return femasRequest;
-    }
-
-    private void afterInvoke(RpcContext rpcContext
-            , ServerHttpRequest serverHttpRequest, ServerHttpResponse serverHttpResponse
-            , Request femasRequest, Response femasResponse) {
         fillTracingContext(rpcContext, serverHttpRequest, serverHttpResponse);
         extensionLayer.afterClientInvoke(femasRequest, femasResponse, rpcContext);
-        Context.getRpcInfo().setRequest(null);
-
-        afterServerInvoke(rpcContext, serverHttpResponse, femasResponse);
     }
 
     private void afterServerInvoke(RpcContext rpcContext, ServerHttpResponse serverHttpResponse, Response femasResponse) {
@@ -108,15 +138,14 @@ public class FemasGatewayFilter extends AbstractGlobalFilter {
         }
     }
 
-    private Request getClientFemasRequest(ServerWebExchange exchange) {
-        ServerHttpRequest serverHttpRequest = exchange.getRequest();
+    private Request getClientFemasRequest(ServerHttpRequest serverHttpRequest, Route route) {
         Request femasRequest = Context.getRpcInfo().getRequest();
         if (femasRequest == null) {
             femasRequest = new Request();
-            Route route = exchange.getAttribute(GATEWAY_ROUTE_ATTR);
             Service service = new Service();
             service.setName(route.getUri() != null ? route.getUri().getHost() : null);
             service.setNamespace(namespace);
+
             femasRequest.setTargetService(service);
         }
         String url = serverHttpRequest.getURI().getPath();
