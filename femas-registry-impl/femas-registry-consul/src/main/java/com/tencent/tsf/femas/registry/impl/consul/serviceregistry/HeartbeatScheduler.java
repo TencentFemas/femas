@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 public class HeartbeatScheduler {
 
     private static final Logger logger = LoggerFactory.getLogger(HeartbeatScheduler.class);
-    private final static String CHECK_ID_PREFIX = "service:";
+    private static final  String CHECK_ID_PREFIX = "service:";
     private final Map<String, ScheduledFuture> serviceHeartbeats = new ConcurrentHashMap<>();
     private final ScheduledExecutorService heartbeatServiceExecutor = Executors
             .newScheduledThreadPool(1, new NamedThreadFactory("ConsulHeartbeatServiceTimer", true));

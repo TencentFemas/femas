@@ -34,15 +34,15 @@ import java.util.Properties;
 
 public class FemasConfigHttpClientManager extends AbstractConfigHttpClientManager {
 
-    private final static Logger log = LoggerFactory.getLogger(FemasConfigHttpClientManager.class);
-    private final static String webContext = "/atom";
-    private final static String fetchKeyUrl = "/v1/sdk/fetchData";
-    private final static String reportCircuitEvent = "/v1/sdk/reportServiceEvent";
-    private final static String reportApis = "/v1/sdk/reportServiceApi";
-    private final static String intiNamespace = "/v1/sdk/initNamespace";
-    private final static int DEFAULT_READ_TIME_OUT_MILLIS = Integer
+    private static final  Logger log = LoggerFactory.getLogger(FemasConfigHttpClientManager.class);
+    private static final  String webContext = "/atom";
+    private static final  String fetchKeyUrl = "/v1/sdk/fetchData";
+    private static final  String reportCircuitEvent = "/v1/sdk/reportServiceEvent";
+    private static final  String reportApis = "/v1/sdk/reportServiceApi";
+    private static final  String intiNamespace = "/v1/sdk/initNamespace";
+    private static final  int DEFAULT_READ_TIME_OUT_MILLIS = Integer
             .getInteger("femas.paas.config.client.readTimeOut", 50000);
-    private final static int DEFAULT_CON_TIME_OUT_MILLIS = Integer
+    private static final  int DEFAULT_CON_TIME_OUT_MILLIS = Integer
             .getInteger("femas.paas.config.client.conTimeOut", 3000);
     private static Context commonContext = ContextFactory.getContextInstance();
     private static volatile FemasConfigHttpClientManager singleton = null;
@@ -82,7 +82,7 @@ public class FemasConfigHttpClientManager extends AbstractConfigHttpClientManage
             log.debug("reportEvent failed, could not find the paas address profile");
             return;
         }
-        final Map<String, Object> params = new HashMap<String, Object>(3);
+        final Map<String, Object> params = new HashMap<String, Object>(6);
         params.put("namespaceId", service.getNamespace());
         params.put("serviceName", service.getName());
         params.put("eventId", eventId);
@@ -121,7 +121,7 @@ public class FemasConfigHttpClientManager extends AbstractConfigHttpClientManage
 
     public String fetchKVValue(String key, String namespaceId) {
 
-        final Map<String, Object> params = new HashMap<String, Object>(3);
+        final Map<String, Object> params = new HashMap<>(3);
         params.put("namespaceId", namespaceId);
         params.put("key", key);
         if (context.isEmptyPaasServer()) {
@@ -145,7 +145,6 @@ public class FemasConfigHttpClientManager extends AbstractConfigHttpClientManage
         try {
             ClassLoader loader = Thread.currentThread().getContextClassLoader();
             in = new InputStreamReader(loader.getResourceAsStream(propertyFileName), "UTF-8");
-            ;
             if (in != null) {
                 Properties prop = new Properties();
                 prop.load(in);
@@ -166,7 +165,7 @@ public class FemasConfigHttpClientManager extends AbstractConfigHttpClientManage
     }
 
     public Map<String, String> builderHeader() {
-        Map<String, String> header = new HashMap<>();
+        Map<String, String> header = new HashMap<>(7);
         //标识sdk client版本号，从默认配置文件中获取
         header.put(HttpHeaderKeys.USER_AGENT_HEADER, FemasConfig.getProperty("femas.sdk.client.version"));
         header.put(HttpHeaderKeys.ACCEPT_ENCODING, "gzip,deflate,sdch");
@@ -184,10 +183,10 @@ public class FemasConfigHttpClientManager extends AbstractConfigHttpClientManage
             log.debug("initNamespace failed , could not find the paas address profile");
             return;
         }
-        final Map<String, Object> params = new HashMap<String, Object>(2);
+        final Map<String, Object> params = new HashMap<>(3);
         params.put("namespaceId", namespaceId);
         params.put("registryAddress", registryAddress);
-        HttpResult<String> httpResult = null;
+        HttpResult<String> httpResult;
         try {
             httpResult = httpClient.post(initNamespaceUrl, builderHeader(), params, null);
             if (httpResult.getCode().startsWith("4") || httpResult.getCode().startsWith("5")) {

@@ -28,7 +28,7 @@ public class EurekaServiceRegistry extends AbstractServiceRegistry {
     private static final Logger logger = LoggerFactory.getLogger(EurekaServiceRegistry.class);
 
     private final EurekaNamingService eurekaNamingService;
-    private final static String default_namespace = "application";
+    private static final  String default_namespace = "application";
 
     private final EurekaRegistryBuilder builder;
 

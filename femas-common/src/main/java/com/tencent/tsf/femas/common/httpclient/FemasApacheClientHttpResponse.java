@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
  */
 public class FemasApacheClientHttpResponse implements HttpClientResponse {
 
-    private final static Logger log = LoggerFactory.getLogger(FemasApacheClientHttpResponse.class);
+    private static final  Logger log = LoggerFactory.getLogger(FemasApacheClientHttpResponse.class);
 
     private HttpResponse response;
 

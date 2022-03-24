@@ -13,13 +13,13 @@ import java.util.Map;
  */
 public class RpcInfo {
 
-    private ThreadLocalContext<String> metadata = new ThreadLocalContext(Context.SYSTEM_TAGS);
+    private ThreadLocalContext<String> metadata = new ThreadLocalContext<>(Context.SYSTEM_TAGS);
 
     // 将一下通用信息抽象到request中
     // 其余业务相关的tag，自行从metadata中存取
-    private ThreadLocal<Request> requestThreadLocal = new ThreadLocal();
+    private ThreadLocal<Request> requestThreadLocal = new ThreadLocal<>();
 
-    private ThreadLocal<Response> responseThreadLocal = new ThreadLocal();
+    private ThreadLocal<Response> responseThreadLocal = new ThreadLocal<>();
 
     /**
      * 存放RPC INFO的信息

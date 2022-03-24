@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AbstractHttpClient implements FemasHttpClient, Closeable {
 
-    private final static Logger logger = LoggerFactory.getLogger(AbstractHttpClient.class);
+    private static final  Logger logger = LoggerFactory.getLogger(AbstractHttpClient.class);
 
     private final Map<String, ResultWrapper> resultWrapperHashMap = new ConcurrentHashMap<>(5);
 
@@ -30,7 +30,7 @@ public abstract class AbstractHttpClient implements FemasHttpClient, Closeable {
 
     @Override
     public ResultWrapper getOneResultWrapper(String key) {
-        //默认处理方式
+        // 默认处理方式
         if (StringUtils.isEmpty(key)) {
             return getDefaultWrapper();
         }
@@ -48,17 +48,11 @@ public abstract class AbstractHttpClient implements FemasHttpClient, Closeable {
                     requestEntity.getBody());
         }
         ResultWrapper<T> responseHandler = getOneResultWrapper(wrapperType);
-        HttpClientResponse response = null;
-        try {
-            response = callServer(requestEntity);
+        try (HttpClientResponse response = callServer(requestEntity)) {
             return responseHandler.wrapper(response);
         } catch (Exception e) {
             logger.error("wrapper result error", e);
             throw new FemasRuntimeException(e);
-        } finally {
-            if (response != null) {
-                response.close();
-            }
         }
     }
 

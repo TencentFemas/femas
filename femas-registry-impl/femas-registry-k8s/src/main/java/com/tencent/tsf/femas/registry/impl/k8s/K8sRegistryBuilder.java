@@ -24,7 +24,7 @@ import java.util.function.Supplier;
  */
 public class K8sRegistryBuilder extends AbstractRegistryBuilder<KubernetesClient> {
 
-    private final static Logger log = LoggerFactory.getLogger(K8sRegistryBuilder.class);
+    private static final  Logger log = LoggerFactory.getLogger(K8sRegistryBuilder.class);
 
     private static KubernetesClientProperties kubernetesClientProperties;
     private static KubernetesDiscoveryProperties kubernetesDiscoveryProperties;

@@ -176,7 +176,7 @@ public enum HttpStatus {
         return Integer.toString(this.value);
     }
 
-    public static enum Series {
+    public enum Series {
         INFORMATIONAL(1),
         SUCCESSFUL(2),
         REDIRECTION(3),
@@ -185,17 +185,13 @@ public enum HttpStatus {
 
         private final int value;
 
-        private Series(int value) {
+        Series(int value) {
             this.value = value;
         }
 
         public static HttpStatus.Series valueOf(int status) {
             int seriesCode = status / 100;
-            HttpStatus.Series[] var2 = values();
-            int var3 = var2.length;
-
-            for (int var4 = 0; var4 < var3; ++var4) {
-                HttpStatus.Series series = var2[var4];
+            for (Series series : values()) {
                 if (series.value == seriesCode) {
                     return series;
                 }

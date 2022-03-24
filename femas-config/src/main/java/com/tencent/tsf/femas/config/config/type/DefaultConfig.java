@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.Map;
 
 public class DefaultConfig extends AbstractConfig<Object> {
-    private final static Logger logger = LoggerFactory.getLogger(DefaultConfig.class);
+    private static final  Logger logger = LoggerFactory.getLogger(DefaultConfig.class);
 
     private static Map<String, Object> conf;
 

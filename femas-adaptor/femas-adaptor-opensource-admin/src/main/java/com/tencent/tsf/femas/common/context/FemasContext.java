@@ -23,11 +23,11 @@ public class FemasContext extends Context {
 
     public static final String FEMAS_TAG_PLUGIN_HEADER_PREFIX = "femas-ut-";
     public static final String DEFAULT_NAMESPACE = "ns-default";
-    private final static Logger logger = LoggerFactory.getLogger(FemasContext.class);
-    private final static AtomicBoolean isLoggerPrinted = new AtomicBoolean(true);
+    private static final  Logger logger = LoggerFactory.getLogger(FemasContext.class);
+    private static final  AtomicBoolean isLoggerPrinted = new AtomicBoolean(true);
     public static Map<String, String> REGISTRY_CONFIG_MAP = new ConcurrentHashMap<>();
     private static String TOKEN;
-    private volatile static String SERVICE_NAME;
+    private static volatile  String SERVICE_NAME;
 
     /**
      * 初始化，从环境变量中读取config值放入SYS_TAG
@@ -131,8 +131,8 @@ public class FemasContext extends Context {
     /**
      * value为String的Tag map，用于存放用户标签
      */
-    private static ThreadLocalContext<String> USER_TAGS = new ThreadLocalContext();
-    private static ThreadLocal<String> RAW_USER_TAGS_CONTENT = new ThreadLocal<String>();
+    private static ThreadLocalContext<String> USER_TAGS = new ThreadLocalContext<>();
+    private static ThreadLocal<String> RAW_USER_TAGS_CONTENT = new ThreadLocal<>();
 
     public static void init() {
     }

@@ -48,7 +48,7 @@ import java.util.stream.Collectors;
 */
 public class PolarisServiceDiscoveryClient extends AbstractServiceDiscoveryClient {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(PolarisServiceDiscoveryClient.class);
+    private static final  Logger LOGGER = LoggerFactory.getLogger(PolarisServiceDiscoveryClient.class);
     protected volatile ServerUpdater serverListUpdater;
     private final PolarisServerList serverListImpl;
     private final Map<Service, List<ServiceInstance>> instances = new ConcurrentHashMap<>();

@@ -34,7 +34,7 @@ public class InstanceCircuitBreakerService implements ICircuitBreakerService {
 
     private static final Logger logger = LoggerFactory.getLogger(InstanceCircuitBreakerService.class);
     // 每10分钟check一次是否有server被移除了
-    private final static long CHECK_INTERVAL = 10 * 60 * 1000;
+    private static final  long CHECK_INTERVAL = 10 * 60 * 1000;
     private CircuitBreakerStrategy strategy;
     private CircuitBreakerRule rule;
     private volatile Map<ServiceInstance, CircuitBreaker> instanceMap = new ConcurrentHashMap<>();

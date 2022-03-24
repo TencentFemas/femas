@@ -40,8 +40,8 @@ public abstract class Context {
     /**
      * 减少SYS_TAGS_MAP的生成数量，减少GC压力
      */
-    private volatile static Map<String, String> SYSTEM_TAGS_UNMODIFIABLE_MAP;
-    private volatile static String SYSTEM_TAGS_STRING;
+    private static volatile  Map<String, String> SYSTEM_TAGS_UNMODIFIABLE_MAP;
+    private static volatile  String SYSTEM_TAGS_STRING;
 
     // 用户标签放在实现类里，支持不同的处理
 

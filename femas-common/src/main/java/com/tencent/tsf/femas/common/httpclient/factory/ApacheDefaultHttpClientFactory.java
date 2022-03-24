@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
  */
 public class ApacheDefaultHttpClientFactory implements HttpClientFactory {
 
-    private final static Logger log = LoggerFactory.getLogger(ApacheDefaultHttpClientFactory.class);
+    private static final  Logger log = LoggerFactory.getLogger(ApacheDefaultHttpClientFactory.class);
 
     private boolean authenticateSslClients = true;
 

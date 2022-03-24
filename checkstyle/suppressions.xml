@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE suppressions PUBLIC
+        "-//Puppy Crawl//DTD Suppressions 1.1//EN"
+        "https://checkstyle.org/dtds/configuration_1_3.dtd">
+
+<suppressions>
+    <!-- suppress all checks in the generated directories -->
+    <suppress checks="AbbreviationAsWordInName" files="."/>
+    <suppress checks="AvoidStarImport" files="."/>
+    <suppress checks="CustomImportOrder" files="."/>
+    <suppress checks="Indentation" files="."/>
+    <suppress checks="LineLength" files="."/>
+    <suppress checks="MemberName" files="."/>
+    <suppress checks="MissingJavadocMethod" files="."/>
+    <suppress checks="MissingJavadocType" files="."/>
+    <suppress checks="NonEmptyAtclauseDescription" files="."/>
+    <suppress checks="ParameterName" files="."/>
+    <suppress checks="SummaryJavadoc" files="."/>
+    <suppress checks="VariableDeclarationUsageDistance" files="."/>
+    <suppress checks="JavadocStyle" files="."/>
+    <suppress checks="JavadocType" files="."/>
+    <suppress checks="OperatorWrap" files="."/>
+</suppressions>

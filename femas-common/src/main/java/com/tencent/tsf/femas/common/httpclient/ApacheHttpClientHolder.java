@@ -32,13 +32,13 @@ public class ApacheHttpClientHolder {
     private static final AtomicBoolean isShutdown = new AtomicBoolean(false);
 
     static {
-        Thread _shutdownThread = new Thread(new Runnable() {
+        Thread shutdownThread = new Thread(new Runnable() {
             public void run() {
                 LOGGER.info("Shutting down apache http client  Pool for ApacheHttpClientHolder");
                 shutdown();
             }
         });
-        Runtime.getRuntime().addShutdownHook(_shutdownThread);
+        Runtime.getRuntime().addShutdownHook(shutdownThread);
     }
 
     public static AbstractHttpClient getHttpClient() {
