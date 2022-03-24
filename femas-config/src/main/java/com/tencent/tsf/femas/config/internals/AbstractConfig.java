@@ -81,6 +81,7 @@ public abstract class AbstractConfig<T> implements Config<T> {
 
     protected abstract void doSubscribeDirectory(String key);
 
+    @Override
     public List<ConfigChangeEvent<T>> getDirectory(String key) {
         throw new UnsupportedOperationException("method getDirectory has no implementation");
     }
@@ -146,6 +147,7 @@ public abstract class AbstractConfig<T> implements Config<T> {
 
     protected abstract void doUnSubscribe(String key);
 
+    @Override
     public T getProperty(String key, T defaultValue) {
         try {
             T value = cache.get(key, new Callable<T>() {
@@ -163,6 +165,7 @@ public abstract class AbstractConfig<T> implements Config<T> {
 
     protected abstract T doGetProperty(String key);
 
+    @Override
     public <V> V getProperty(String key, Function<T, V> function, V defaultValue) {
         try {
             T value = getProperty(key, null);
