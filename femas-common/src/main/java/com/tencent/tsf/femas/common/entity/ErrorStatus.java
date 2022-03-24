@@ -24,7 +24,7 @@ public class ErrorStatus {
     }
 
     public ErrorStatus(Code code, String message) {
-        if (message == "") {
+        if ("".equals(message)) {
             message = code.name();
         }
         this.code = code;
