@@ -1,5 +1,23 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.tencent.tsf.femas.springcloud.gateway.filter;
 
+import com.tencent.tsf.femas.common.context.Context;
 import com.tencent.tsf.femas.springcloud.gateway.discovery.DiscoveryServerConverter;
 import com.tencent.tsf.femas.springcloud.gateway.loadbalancer.FemasRouteLoadBalancer;
 import org.apache.commons.logging.Log;
@@ -11,15 +29,13 @@ import org.springframework.cloud.client.loadbalancer.reactive.Request;
 import org.springframework.cloud.client.loadbalancer.reactive.Response;
 import org.springframework.cloud.gateway.config.LoadBalancerProperties;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
-import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.cloud.gateway.filter.ReactiveLoadBalancerClientFilter;
 import org.springframework.cloud.gateway.support.DelegatingServiceInstance;
 import org.springframework.cloud.gateway.support.NotFoundException;
 import org.springframework.cloud.gateway.support.ServerWebExchangeUtils;
 import org.springframework.cloud.loadbalancer.core.ServiceInstanceListSupplier;
 import org.springframework.cloud.loadbalancer.support.LoadBalancerClientFactory;
-import org.springframework.core.Ordered;
-import org.springframework.http.HttpHeaders;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
@@ -28,10 +44,11 @@ import java.net.URI;
 public class FemasReactiveLoadBalancerClientFilter extends AbstractGlobalFilter {
 
     private static final Log log = LogFactory.getLog(ReactiveLoadBalancerClientFilter.class);
-    private static final int LOAD_BALANCER_CLIENT_FILTER_ORDER = 10150;
+    public static final int FEMAS_LOAD_BALANCER_CLIENT_FILTER_ORDER = 10150 - 1;
     private final LoadBalancerClientFactory clientFactory;
     private LoadBalancerProperties properties;
     private final DiscoveryServerConverter converter;
+    public static final String GATEWAY_FEMAS_REQUEST = "gatewayFemasRequest";
 
 
     public FemasReactiveLoadBalancerClientFilter(DiscoveryServerConverter converter, LoadBalancerClientFactory clientFactory, LoadBalancerProperties properties) {
@@ -42,7 +59,8 @@ public class FemasReactiveLoadBalancerClientFilter extends AbstractGlobalFilter 
 
     @Override
     public int getOrder() {
-        return LOAD_BALANCER_CLIENT_FILTER_ORDER - 1;
+        // ReactiveLoadBalancerClientFilter 之前
+        return FEMAS_LOAD_BALANCER_CLIENT_FILTER_ORDER;
     }
 
     @Override
@@ -77,6 +95,7 @@ public class FemasReactiveLoadBalancerClientFilter extends AbstractGlobalFilter 
                     }
 
                     exchange.getAttributes().put(ServerWebExchangeUtils.GATEWAY_REQUEST_URL_ATTR, requestUrl);
+                    exchange.getAttributes().put(GATEWAY_FEMAS_REQUEST, Context.getRpcInfo().getRequest());
                 }
             }).then(chain.filter(exchange));
         } else {
@@ -90,17 +109,13 @@ public class FemasReactiveLoadBalancerClientFilter extends AbstractGlobalFilter 
 
     private Mono<Response<ServiceInstance>> choose(ServerWebExchange exchange) {
         URI uri = exchange.getAttribute(ServerWebExchangeUtils.GATEWAY_REQUEST_URL_ATTR);
-        FemasRouteLoadBalancer loadBalancer = new FemasRouteLoadBalancer(converter,clientFactory.getLazyProvider(uri.getHost(), ServiceInstanceListSupplier.class), uri.getHost());
-        if (loadBalancer == null) {
-            throw new NotFoundException("No loadbalancer available for " + uri.getHost());
-        } else {
-            return loadBalancer.choose(this.createRequest(exchange));
-        }
+        FemasRouteLoadBalancer loadBalancer = new FemasRouteLoadBalancer(converter, clientFactory.getLazyProvider(uri.getHost(), ServiceInstanceListSupplier.class), uri.getHost());
+        return loadBalancer.choose(this.createRequest(exchange));
     }
 
     private Request createRequest(ServerWebExchange exchange) {
-        HttpHeaders headers = exchange.getRequest().getHeaders();
-        Request<HttpHeaders> request = new DefaultRequest<>(headers);
+        ServerHttpRequest serverHttpRequest = exchange.getRequest();
+        Request<ServerHttpRequest> request = new DefaultRequest<>(serverHttpRequest);
         return request;
     }
 }
