@@ -46,7 +46,7 @@ public class AddressUtils {
                 NetworkInterface ifc = nics.nextElement();
                 if (ifc.isUp()) {
                     logger.trace("Testing interface: " + ifc.getDisplayName());
-                    if (ifc.getIndex() < lowest || result == null) {
+                    if (ifc.getIndex() < lowest) {
                         lowest = ifc.getIndex();
                     } else if (result != null) {
                         continue;

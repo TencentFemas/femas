@@ -40,8 +40,8 @@ import static com.tencent.tsf.femas.common.util.HttpHeaderKeys.CONTENT_TYPE;
  */
 public class FemasApacheHttpRestClient extends AbstractHttpClient {
 
-    static final  ObjectMapper mapper = new ObjectMapper();
-    private static final  Logger logger = LoggerFactory.getLogger(FemasApacheHttpRestClient.class);
+    static final ObjectMapper mapper = new ObjectMapper();
+    private static final Logger logger = LoggerFactory.getLogger(FemasApacheHttpRestClient.class);
     protected final CloseableHttpClient client;
 
     public FemasApacheHttpRestClient(CloseableHttpClient client) {
@@ -52,11 +52,9 @@ public class FemasApacheHttpRestClient extends AbstractHttpClient {
         if (httpClientConfig == null) {
             return;
         }
-        if (httpClientConfig != null) {
-            requestBase.setConfig(RequestConfig.custom()
-                    .setConnectTimeout(httpClientConfig.getConTimeOutMillis())
-                    .setSocketTimeout(httpClientConfig.getReadTimeOutMillis()).build());
-        }
+        requestBase.setConfig(RequestConfig.custom()
+                .setConnectTimeout(httpClientConfig.getConTimeOutMillis())
+                .setSocketTimeout(httpClientConfig.getReadTimeOutMillis()).build());
     }
 
     public static void initRequestEntity(HttpRequestBase requestBase, HttpRequestEntity requestHttpEntity)
@@ -121,13 +119,13 @@ public class FemasApacheHttpRestClient extends AbstractHttpClient {
     }
 
     public <T> HttpResult<T> post(String url, Map<String, String> header, Map<String, Object> query, Object body,
-            String wrapper)
+                                  String wrapper)
             throws Exception {
         return execute(new HttpRequestEntity(url, HttpElement.HttpMethod.POST, header, query, body), wrapper);
     }
 
     public <T> HttpResult<T> postJson(String url, Map<String, String> header, Map<String, Object> query, Object body,
-            String wrapper)
+                                      String wrapper)
             throws Exception {
         HttpRequestEntity requestHttpEntity = new HttpRequestEntity(url, HttpElement.HttpMethod.POST, header, query,
                 body);
@@ -143,8 +141,8 @@ public class FemasApacheHttpRestClient extends AbstractHttpClient {
     }
 
     public <T> HttpResult<T> postForm(String url, Map<String, String> header, Map<String, Object> query,
-            Map<String, String> body,
-            String wrapper) throws Exception {
+                                      Map<String, String> body,
+                                      String wrapper) throws Exception {
         HttpRequestEntity requestHttpEntity = new HttpRequestEntity(url, HttpElement.HttpMethod.POST, header, query,
                 body);
         requestHttpEntity.addContentType(HttpElement.MediaType.APPLICATION_FORM_URLENCODED);
@@ -161,8 +159,8 @@ public class FemasApacheHttpRestClient extends AbstractHttpClient {
 
     @Override
     public <T> HttpResult<T> request(String url, HttpClientConfig config, Map<String, String> header,
-            Map<String, Object> query,
-            Object body, String httpMethod, String wrapper) throws Exception {
+                                     Map<String, Object> query,
+                                     Object body, String httpMethod, String wrapper) throws Exception {
         HttpRequestEntity requestHttpEntity = new HttpRequestEntity(url, httpMethod, header, config, query, body);
         return execute(requestHttpEntity, wrapper);
     }
