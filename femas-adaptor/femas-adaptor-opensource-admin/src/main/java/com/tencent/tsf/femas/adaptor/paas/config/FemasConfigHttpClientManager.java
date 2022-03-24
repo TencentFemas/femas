@@ -145,11 +145,9 @@ public class FemasConfigHttpClientManager extends AbstractConfigHttpClientManage
         try {
             ClassLoader loader = Thread.currentThread().getContextClassLoader();
             in = new InputStreamReader(loader.getResourceAsStream(propertyFileName), "UTF-8");
-            if (in != null) {
-                Properties prop = new Properties();
-                prop.load(in);
-                return prop;
-            }
+            Properties prop = new Properties();
+            prop.load(in);
+            return prop;
         } catch (IOException e) {
             log.error("load {} error!", propertyFileName);
         } finally {
