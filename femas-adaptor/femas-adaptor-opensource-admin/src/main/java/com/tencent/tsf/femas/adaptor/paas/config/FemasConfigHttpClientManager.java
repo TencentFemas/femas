@@ -34,15 +34,15 @@ import java.util.Properties;
 
 public class FemasConfigHttpClientManager extends AbstractConfigHttpClientManager {
 
-    private static final  Logger log = LoggerFactory.getLogger(FemasConfigHttpClientManager.class);
-    private static final  String webContext = "/atom";
-    private static final  String fetchKeyUrl = "/v1/sdk/fetchData";
-    private static final  String reportCircuitEvent = "/v1/sdk/reportServiceEvent";
-    private static final  String reportApis = "/v1/sdk/reportServiceApi";
-    private static final  String intiNamespace = "/v1/sdk/initNamespace";
-    private static final  int DEFAULT_READ_TIME_OUT_MILLIS = Integer
+    private static final Logger log = LoggerFactory.getLogger(FemasConfigHttpClientManager.class);
+    private static final String webContext = "/atom";
+    private static final String fetchKeyUrl = "/v1/sdk/fetchData";
+    private static final String reportCircuitEvent = "/v1/sdk/reportServiceEvent";
+    private static final String reportApis = "/v1/sdk/reportServiceApi";
+    private static final String intiNamespace = "/v1/sdk/initNamespace";
+    private static final int DEFAULT_READ_TIME_OUT_MILLIS = Integer
             .getInteger("femas.paas.config.client.readTimeOut", 50000);
-    private static final  int DEFAULT_CON_TIME_OUT_MILLIS = Integer
+    private static final int DEFAULT_CON_TIME_OUT_MILLIS = Integer
             .getInteger("femas.paas.config.client.conTimeOut", 3000);
     private static Context commonContext = ContextFactory.getContextInstance();
     private static volatile FemasConfigHttpClientManager singleton = null;
@@ -145,12 +145,9 @@ public class FemasConfigHttpClientManager extends AbstractConfigHttpClientManage
         try {
             ClassLoader loader = Thread.currentThread().getContextClassLoader();
             in = new InputStreamReader(loader.getResourceAsStream(propertyFileName), "UTF-8");
-            ;
-            if (in != null) {
-                Properties prop = new Properties();
-                prop.load(in);
-                return prop;
-            }
+            Properties prop = new Properties();
+            prop.load(in);
+            return prop;
         } catch (IOException e) {
             log.error("load {} error!", propertyFileName);
         } finally {

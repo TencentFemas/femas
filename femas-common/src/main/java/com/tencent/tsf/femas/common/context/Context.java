@@ -24,12 +24,12 @@ public abstract class Context {
      * 在正常的调用逻辑中不需要读取该字段
      * request发给下游时，会从RPC_INFO中读取当前调用信息写入SYS_TAG中，并写入request的Header
      */
-    protected static Map<String, String> SYSTEM_TAGS = new ConcurrentHashMap<>();
+    protected static final Map<String, String> SYSTEM_TAGS = new ConcurrentHashMap<>();
 
     /**
      * 自定义tag需要参与序列化的话，可以塞入该tag map中
      */
-    protected static Set<String> RPC_INFO_SERIALIZE_TAGS = Sets.newConcurrentHashSet();
+    protected static final Set<String> RPC_INFO_SERIALIZE_TAGS = Sets.newConcurrentHashSet();
 
     /**
      * RPC 相关上下文信息
@@ -40,8 +40,8 @@ public abstract class Context {
     /**
      * 减少SYS_TAGS_MAP的生成数量，减少GC压力
      */
-    private static volatile  Map<String, String> SYSTEM_TAGS_UNMODIFIABLE_MAP;
-    private static volatile  String SYSTEM_TAGS_STRING;
+    private static volatile Map<String, String> SYSTEM_TAGS_UNMODIFIABLE_MAP;
+    private static volatile String SYSTEM_TAGS_STRING;
 
     // 用户标签放在实现类里，支持不同的处理
 
@@ -204,6 +204,7 @@ public abstract class Context {
 
     /**
      * 获取当前 rpc info 的内容拷贝（即使修改了也不影响原内容）
+     *
      * @return
      */
     public static Map<String, String> getCopyRpcInfoMap() {
@@ -212,7 +213,7 @@ public abstract class Context {
 
     public static void restoreRpcInfo(Map<String, String> rpcContextInfo) {
         Context.getRpcInfo().reset();
-        for(Map.Entry<String, String> entry: rpcContextInfo.entrySet()) {
+        for (Map.Entry<String, String> entry : rpcContextInfo.entrySet()) {
             if (StringUtils.isNotEmpty(entry.getValue())) {
                 Context.getRpcInfo().put(entry.getKey(), entry.getValue());
             }
@@ -222,6 +223,7 @@ public abstract class Context {
     /**
      * 获取当前上下文的的内容拷贝（即使修改了也不影响原内容）
      * 不同 adaptor 可以由不同的实现，默认是获取 rpc info
+     *
      * @return
      */
     public Object getCopyRpcContext() {

@@ -67,7 +67,6 @@ public class K8sServiceDiscoveryClient extends AbstractServiceDiscoveryClient {
     public K8sServiceDiscoveryClient(Map<String, String> configMap) {
         this.serverListUpdateInProgress = new AtomicBoolean(false);
         this.builder = new K8sRegistryBuilder();
-        String namespace = Context.getSystemTag(contextConstant.getNamespaceId());
         this.client = builder.build(null, null);
         this.serverListUpdater = new SchedulePollingServerListUpdater();
         this.serverListImpl = new KubernetesServerList();

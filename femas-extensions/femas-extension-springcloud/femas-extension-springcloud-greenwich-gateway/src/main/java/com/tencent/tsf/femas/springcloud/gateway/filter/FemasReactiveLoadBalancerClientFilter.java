@@ -91,11 +91,7 @@ public class FemasReactiveLoadBalancerClientFilter extends AbstractGlobalFilter 
     private Mono<Response<ServiceInstance>> choose(ServerWebExchange exchange) {
         URI uri = exchange.getAttribute(ServerWebExchangeUtils.GATEWAY_REQUEST_URL_ATTR);
         FemasRouteLoadBalancer loadBalancer = new FemasRouteLoadBalancer(converter,clientFactory.getLazyProvider(uri.getHost(), ServiceInstanceListSupplier.class), uri.getHost());
-        if (loadBalancer == null) {
-            throw new NotFoundException("No loadbalancer available for " + uri.getHost());
-        } else {
-            return loadBalancer.choose(this.createRequest(exchange));
-        }
+        return loadBalancer.choose(this.createRequest(exchange));
     }
 
     private Request createRequest(ServerWebExchange exchange) {

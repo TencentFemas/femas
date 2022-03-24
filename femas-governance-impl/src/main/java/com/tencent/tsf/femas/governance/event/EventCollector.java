@@ -7,6 +7,7 @@ import com.tencent.tsf.femas.common.entity.Service;
 import com.tencent.tsf.femas.common.util.id.UIdGenerator;
 import com.tencent.tsf.femas.config.AbstractConfigHttpClientManager;
 import com.tencent.tsf.femas.config.AbstractConfigHttpClientManagerFactory;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
@@ -14,6 +15,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,12 +34,12 @@ public class EventCollector {
     protected static final String DOWNSTREAM_NAMESPACE_ID_KEY = "downstream_namespace";
     protected static final String DETAIL = "detail";
     private static final Logger LOGGER = LoggerFactory.getLogger(EventCollector.class);
-    protected static AbstractConfigHttpClientManager manager = AbstractConfigHttpClientManagerFactory
+    protected static final AbstractConfigHttpClientManager manager = AbstractConfigHttpClientManagerFactory
             .getConfigHttpClientManager();
-    protected static ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
-    protected static Gson gson = new GsonBuilder().disableHtmlEscaping().create();
-    protected static String instanceId = Context.getSystemTag("instance.id");
-    protected static String namespaceId = Context.getSystemTag("namespace.id");
+    protected static final ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
+    protected static final Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+    protected static final String instanceId = Context.getSystemTag("instance.id");
+    protected static final String namespaceId = Context.getSystemTag("namespace.id");
 
     // 定时发事件
     static {
