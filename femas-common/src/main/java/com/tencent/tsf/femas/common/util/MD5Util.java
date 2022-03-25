@@ -90,8 +90,4 @@ public class MD5Util {
         return plainMD5.hashCode();
     }
 
-    public static void main(String[] args) {
-        System.out.println(getIndex("a12a2asdfsdfasdfasdfasdf3"));
-    }
-
 }
