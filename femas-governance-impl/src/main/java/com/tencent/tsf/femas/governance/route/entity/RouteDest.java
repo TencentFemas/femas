@@ -1,6 +1,7 @@
 package com.tencent.tsf.femas.governance.route.entity;
 
 import com.tencent.tsf.femas.common.tag.TagRule;
+
 import java.io.Serializable;
 
 /**
@@ -51,4 +52,54 @@ public class RouteDest implements Serializable {
         sb.append('}');
         return sb.toString();
     }
+
+//    @Override
+//    public boolean equals(Object o) {
+//        if (o == this) {
+//            return true;
+//        } else if (!(o instanceof RouteDest)) {
+//            return false;
+//        } else {
+//            RouteDest other = (RouteDest)o;
+//            if (!other.canEqual(this)) {
+//                return false;
+//            } else {
+//                Object this$destWeight = this.getDestWeight();
+//                Object other$destWeight = other.getDestWeight();
+//                if (this$destWeight == null) {
+//                    if (other$destWeight != null) {
+//                        return false;
+//                    }
+//                } else if (!this$destWeight.equals(other$destWeight)) {
+//                    return false;
+//                }
+//
+//                Object this$destItemList = this.getDestItemList();
+//                Object other$destItemList = other.getDestItemList();
+//                if (this$destItemList == null) {
+//                    if (other$destItemList != null) {
+//                        return false;
+//                    }
+//                } else if (!this$destItemList.equals(other$destItemList)) {
+//                    return false;
+//                }
+//
+//                return true;
+//            }
+//        }
+//    }
+//
+//    protected boolean canEqual(Object other) {
+//        return other instanceof RouteDest;
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        int result = 1;
+//        Object destWeight = this.getDestWeight();
+//        result = result * 59 + (destWeight == null ? 43 : destWeight.hashCode());
+//        Object destItemList = this.getDestItemList();
+//        result = result * 59 + (destItemList == null ? 43 : destItemList.hashCode());
+//        return result;
+//    }
 }
