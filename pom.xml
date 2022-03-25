@@ -200,6 +200,12 @@
                     <includes>
 <!--                        <include>**/*/*/*.java</include>-->
                     </includes>
+<<<<<<< HEAD
+=======
+                    <excludes>
+                                                <exclude>**/**/*.jar</exclude>
+                    </excludes>
+>>>>>>> 3b5bf8f (1.add  maven-site-plugin,p3c-pmd 生成代码PMD结果)
                 </configuration>
                 <executions>
                     <execution>
