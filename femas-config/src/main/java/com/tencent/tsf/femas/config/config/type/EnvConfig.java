@@ -11,7 +11,7 @@ import java.io.*;
 import java.util.*;
 
 public class EnvConfig extends AbstractConfig<Object> {
-    private static Map<String, Object> conf;
+    private Map<String, Object> conf;
 
     public static final String FEMAS_CONF_LOCATION_PROPERTY = "femas.conf";
 

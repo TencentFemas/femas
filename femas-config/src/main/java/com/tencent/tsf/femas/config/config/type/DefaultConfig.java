@@ -14,7 +14,7 @@ import java.util.Map;
 public class DefaultConfig extends AbstractConfig<Object> {
     private static final  Logger logger = LoggerFactory.getLogger(DefaultConfig.class);
 
-    private static Map<String, Object> conf;
+    private Map<String, Object> conf;
 
     public static final String FEMAS_DEFAULT_CONFIG = "femas-default.conf";
 
