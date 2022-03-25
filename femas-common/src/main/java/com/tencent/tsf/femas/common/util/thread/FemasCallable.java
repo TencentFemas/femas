@@ -35,7 +35,10 @@ public class FemasCallable<V> implements Callable<V> {
                 return this.callable.call();
             }
         } finally {
+<<<<<<< HEAD
             contextData = null;
+=======
+>>>>>>> 0104159 (统一解决项目内线程上下文变量传递入口)
             Context.getRpcInfo().reset();
         }
         return null;
