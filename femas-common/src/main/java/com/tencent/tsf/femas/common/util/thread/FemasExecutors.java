@@ -1,15 +1,14 @@
-package com.tencent.tsf.femas.common.util;
+package com.tencent.tsf.femas.common.util.thread;
 
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.PriorityBlockingQueue;
-import java.util.concurrent.RejectedExecutionHandler;
-import java.util.concurrent.SynchronousQueue;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
-public class ThreadPoolUtils {
+/**
+ * @author MentosL
+ * @version 1.0
+ * @date 2022/3/25 3:39 PM
+ */
+public class FemasExecutors {
+
 
     public static final int MILLISECONDS_PER_MINUTE = 60000;
     /**
@@ -32,7 +31,7 @@ public class ThreadPoolUtils {
      * @return the thread pool executor
      */
     public static ThreadPoolExecutor newFixedThreadPool(int corePoolSize) {
-        return new ThreadPoolExecutor(corePoolSize,
+        return new FemasThreadPoolExecutor(corePoolSize,
                 corePoolSize,
                 0,
                 TimeUnit.MILLISECONDS,
@@ -47,8 +46,8 @@ public class ThreadPoolUtils {
      * @return the thread pool executor
      */
     public static ThreadPoolExecutor newFixedThreadPool(int corePoolSize,
-            BlockingQueue<Runnable> queue) {
-        return new ThreadPoolExecutor(corePoolSize,
+                                                        BlockingQueue<Runnable> queue) {
+        return new FemasThreadPoolExecutor(corePoolSize,
                 corePoolSize,
                 0,
                 TimeUnit.MILLISECONDS,
@@ -64,9 +63,9 @@ public class ThreadPoolUtils {
      * @return the thread pool executor
      */
     public static ThreadPoolExecutor newFixedThreadPool(int corePoolSize,
-            BlockingQueue<Runnable> queue,
-            ThreadFactory threadFactory) {
-        return new ThreadPoolExecutor(corePoolSize,
+                                                        BlockingQueue<Runnable> queue,
+                                                        ThreadFactory threadFactory) {
+        return new FemasThreadPoolExecutor(corePoolSize,
                 corePoolSize,
                 0,
                 TimeUnit.MILLISECONDS,
@@ -84,10 +83,10 @@ public class ThreadPoolUtils {
      * @return the thread pool executor
      */
     public static ThreadPoolExecutor newFixedThreadPool(int corePoolSize,
-            BlockingQueue<Runnable> queue,
-            ThreadFactory threadFactory,
-            RejectedExecutionHandler handler) {
-        return new ThreadPoolExecutor(corePoolSize,
+                                                        BlockingQueue<Runnable> queue,
+                                                        ThreadFactory threadFactory,
+                                                        RejectedExecutionHandler handler) {
+        return new FemasThreadPoolExecutor(corePoolSize,
                 corePoolSize,
                 0,
                 TimeUnit.MILLISECONDS,
@@ -104,8 +103,8 @@ public class ThreadPoolUtils {
      * @return the thread pool executor
      */
     public static ThreadPoolExecutor newCachedThreadPool(int corePoolSize,
-            int maximumPoolSize) {
-        return new ThreadPoolExecutor(corePoolSize,
+                                                         int maximumPoolSize) {
+        return new FemasThreadPoolExecutor(corePoolSize,
                 maximumPoolSize,
                 MILLISECONDS_PER_MINUTE,
                 TimeUnit.MILLISECONDS,
@@ -121,9 +120,9 @@ public class ThreadPoolUtils {
      * @return the thread pool executor
      */
     public static ThreadPoolExecutor newCachedThreadPool(int corePoolSize,
-            int maximumPoolSize,
-            BlockingQueue<Runnable> queue) {
-        return new ThreadPoolExecutor(corePoolSize,
+                                                         int maximumPoolSize,
+                                                         BlockingQueue<Runnable> queue) {
+        return new FemasThreadPoolExecutor(corePoolSize,
                 maximumPoolSize,
                 MILLISECONDS_PER_MINUTE,
                 TimeUnit.MILLISECONDS,
@@ -140,10 +139,10 @@ public class ThreadPoolUtils {
      * @return the thread pool executor
      */
     public static ThreadPoolExecutor newCachedThreadPool(int corePoolSize,
-            int maximumPoolSize,
-            BlockingQueue<Runnable> queue,
-            ThreadFactory threadFactory) {
-        return new ThreadPoolExecutor(corePoolSize,
+                                                         int maximumPoolSize,
+                                                         BlockingQueue<Runnable> queue,
+                                                         ThreadFactory threadFactory) {
+        return new FemasThreadPoolExecutor(corePoolSize,
                 maximumPoolSize,
                 MILLISECONDS_PER_MINUTE,
                 TimeUnit.MILLISECONDS,
@@ -162,11 +161,11 @@ public class ThreadPoolUtils {
      * @return the thread pool executor
      */
     public static ThreadPoolExecutor newCachedThreadPool(int corePoolSize,
-            int maximumPoolSize,
-            BlockingQueue<Runnable> queue,
-            ThreadFactory threadFactory,
-            RejectedExecutionHandler handler) {
-        return new ThreadPoolExecutor(corePoolSize,
+                                                         int maximumPoolSize,
+                                                         BlockingQueue<Runnable> queue,
+                                                         ThreadFactory threadFactory,
+                                                         RejectedExecutionHandler handler) {
+        return new FemasThreadPoolExecutor(corePoolSize,
                 maximumPoolSize,
                 MILLISECONDS_PER_MINUTE,
                 TimeUnit.MILLISECONDS,
@@ -187,12 +186,12 @@ public class ThreadPoolUtils {
      * @return the thread pool executor
      */
     public static ThreadPoolExecutor newCachedThreadPool(int corePoolSize,
-            int maximumPoolSize,
-            int keepAliveTime,
-            BlockingQueue<Runnable> queue,
-            ThreadFactory threadFactory,
-            RejectedExecutionHandler handler) {
-        return new ThreadPoolExecutor(corePoolSize,
+                                                         int maximumPoolSize,
+                                                         int keepAliveTime,
+                                                         BlockingQueue<Runnable> queue,
+                                                         ThreadFactory threadFactory,
+                                                         RejectedExecutionHandler handler) {
+        return new FemasThreadPoolExecutor(corePoolSize,
                 maximumPoolSize,
                 keepAliveTime,
                 TimeUnit.MILLISECONDS,
