@@ -35,6 +35,7 @@ public class FemasCallable<V> implements Callable<V> {
                 return this.callable.call();
             }
         } finally {
+            contextData = null;
             Context.getRpcInfo().reset();
         }
         return null;

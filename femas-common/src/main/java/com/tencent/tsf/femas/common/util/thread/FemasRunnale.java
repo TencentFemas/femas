@@ -37,6 +37,7 @@ public class FemasRunnale implements Runnable {
                 runnable.run();
             }
         } finally {
+            contextData = null;
             Context.getRpcInfo().reset();
         }
     }
