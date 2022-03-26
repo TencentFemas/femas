@@ -91,7 +91,7 @@ public class LimitRule implements Serializable {
         }
         LimitRule limitRule = (LimitRule) o;
         return duration == limitRule.duration && totalQuota == limitRule.totalQuota
-                && instanceQuota == limitRule.instanceQuota
+                && Objects.equals(instanceQuota, limitRule.instanceQuota)
                 && Objects.equals(ruleId, limitRule.ruleId) && type == limitRule.type
                 && (tagRule == limitRule.tagRule || Objects.equals(tagRule, limitRule.tagRule));
     }

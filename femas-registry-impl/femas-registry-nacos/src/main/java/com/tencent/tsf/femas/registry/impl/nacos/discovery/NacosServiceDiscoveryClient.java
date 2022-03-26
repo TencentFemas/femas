@@ -96,7 +96,7 @@ public class NacosServiceDiscoveryClient extends AbstractServiceDiscoveryClient 
             instance.setHost(i.getIp());
             instance.setPort(i.getPort());
             instance.setService(service);
-            instance.setStatus(i.isEnabled() & i.isHealthy() ? EndpointStatus.UP : EndpointStatus.INITIALIZING);
+            instance.setStatus(i.isEnabled() && i.isHealthy() ? EndpointStatus.UP : EndpointStatus.INITIALIZING);
             instances.add(instance);
         });
         return instances;

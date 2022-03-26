@@ -21,7 +21,6 @@ public class GsonUtil {
         return DESERIALIZE_GSON.fromJson(content, clazz);
     }
 
-    // TODO 编写一个可复用的Writer(reset byte数组)
     public static <T> String serializeToJson(T object) {
         StringWriter writer = new StringWriter();
         EscapeNonAsciiWriter escapeWriter = new EscapeNonAsciiWriter(writer);
@@ -33,4 +32,14 @@ public class GsonUtil {
     public static <T> String toJson(T object) {
         return SERIALIZE_GSON.toJson(object);
     }
+
+
+    public <T> byte[] serialize(T obj) throws Exception {
+        return DESERIALIZE_GSON.toJson(obj).getBytes();
+    }
+
+    public <T> T deserialize(byte[] bytes, Class<T> clazz) throws Exception {
+        return SERIALIZE_GSON.fromJson(new String(bytes), clazz);
+    }
+
 }
