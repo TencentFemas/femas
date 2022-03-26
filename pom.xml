@@ -200,9 +200,6 @@
                     <includes>
 <!--                        <include>**/*/*/*.java</include>-->
                     </includes>
-                    <excludes>
-                                                <exclude>**/**/*.jar</exclude>
-                    </excludes>
                 </configuration>
                 <executions>
                     <execution>
