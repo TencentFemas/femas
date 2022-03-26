@@ -25,7 +25,7 @@ public class FemasContext extends Context {
     public static final String DEFAULT_NAMESPACE = "ns-default";
     private final static Logger logger = LoggerFactory.getLogger(FemasContext.class);
     private final static AtomicBoolean isLoggerPrinted = new AtomicBoolean(true);
-    public static Map<String, String> REGISTRY_CONFIG_MAP = new ConcurrentHashMap<>();
+    public static final Map<String, String> REGISTRY_CONFIG_MAP = new ConcurrentHashMap<>();
     private static String TOKEN;
     private volatile static String SERVICE_NAME;
 

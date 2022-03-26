@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 public class LongPollingServerListUpdater implements ServerListUpdater {
 
     private static final Logger logger = LoggerFactory.getLogger(LongPollingServerListUpdater.class);
-    public static String SECOND_PREFIX = "polling-watch-server-list-updater";
+    public static final String SECOND_PREFIX = "polling-watch-server-list-updater";
     private static long LISTOFSERVERS_CACHE_UPDATE_DELAY = 0; // msecs;
     private static int LISTOFSERVERS_CACHE_REPEAT_INTERVAL = 1000; // msecs;
     private final AtomicBoolean isActive = new AtomicBoolean(false);

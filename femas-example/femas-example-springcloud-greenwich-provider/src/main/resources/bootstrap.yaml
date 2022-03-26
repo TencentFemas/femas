@@ -1,5 +1,5 @@
 server:
-  port: 19001
+  port: 19002
 spring:
   application:
     name: femas-springcloud-provider

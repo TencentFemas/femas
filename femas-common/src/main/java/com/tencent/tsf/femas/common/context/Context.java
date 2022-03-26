@@ -24,12 +24,12 @@ public abstract class Context {
      * 在正常的调用逻辑中不需要读取该字段
      * request发给下游时，会从RPC_INFO中读取当前调用信息写入SYS_TAG中，并写入request的Header
      */
-    protected static Map<String, String> SYSTEM_TAGS = new ConcurrentHashMap<>();
+    protected static final Map<String, String> SYSTEM_TAGS = new ConcurrentHashMap<>();
 
     /**
      * 自定义tag需要参与序列化的话，可以塞入该tag map中
      */
-    protected static Set<String> RPC_INFO_SERIALIZE_TAGS = Sets.newConcurrentHashSet();
+    protected static final Set<String> RPC_INFO_SERIALIZE_TAGS = Sets.newConcurrentHashSet();
 
     /**
      * RPC 相关上下文信息

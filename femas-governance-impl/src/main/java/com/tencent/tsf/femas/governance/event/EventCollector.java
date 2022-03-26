@@ -34,10 +34,10 @@ public class EventCollector {
     private static final Logger LOGGER = LoggerFactory.getLogger(EventCollector.class);
     protected static AbstractConfigHttpClientManager manager = AbstractConfigHttpClientManagerFactory
             .getConfigHttpClientManager();
-    protected static ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
-    protected static Gson gson = new GsonBuilder().disableHtmlEscaping().create();
-    protected static String instanceId = Context.getSystemTag("instance.id");
-    protected static String namespaceId = Context.getSystemTag("namespace.id");
+    protected static  final ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
+    protected static final Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+    protected static final String instanceId = Context.getSystemTag("instance.id");
+    protected static final String namespaceId = Context.getSystemTag("namespace.id");
 
     // 定时发事件
     static {
