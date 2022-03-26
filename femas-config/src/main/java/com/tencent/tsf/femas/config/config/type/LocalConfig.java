@@ -15,7 +15,7 @@ import com.tencent.tsf.femas.config.internals.AbstractConfig;
 public class LocalConfig extends AbstractConfig<Object> {
     private static final  Logger logger = LoggerFactory.getLogger(LocalConfig.class);
 
-    private static Map<String, Object> conf;
+    private Map<String, Object> conf;
 
     //默认加载顺序,很springboot保持一致，参见ConfigFileApplicationListener
     private static final String DEFAULT_SEARCH_LOCATIONS = "classpath:/,classpath:/config/";

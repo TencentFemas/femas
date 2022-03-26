@@ -63,7 +63,7 @@ public class NacosServiceDiscoveryClient extends AbstractServiceDiscoveryClient 
     }
 
     public void updateListOfServers(Service service) {
-        List<Instance> instances = new ArrayList();
+        List<Instance> instances = new ArrayList<>();
         if (this.serverListImpl != null) {
             instances = this.serverListImpl.getUpdatedListOfServers(Optional.ofNullable(service).map(s -> s.getName()).get());
 //            LOGGER.debug("List of Servers for {} obtained from Discovery client: {}", this.getIdentifier(), servers);
@@ -90,7 +90,7 @@ public class NacosServiceDiscoveryClient extends AbstractServiceDiscoveryClient 
 
     List<ServiceInstance> convert(Service service, List<Instance> ls) {
         List<ServiceInstance> instances = new ArrayList<>();
-        ls.stream().forEach(i -> {
+        ls.forEach(i -> {
             ServiceInstance instance = new ServiceInstance();
             instance.setAllMetadata(i.getMetadata());
             instance.setHost(i.getIp());

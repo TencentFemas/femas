@@ -244,8 +244,8 @@ circuitBreaker:
 > For details, see the official document below
 
 ## Documentation
-#### [Official Document]()
-#### [FAQ]()
+#### [Official Document](http://femas.io/)
+#### [FAQ](http://femas.io/doc/community/FAQ.html)
 #### [Contribution Manual](./CONTRIBUTING.md)
 #### [Code of Conduct](./Code-of-Conduct.md)
 
@@ -263,6 +263,8 @@ circuitBreaker:
 
 ## contact us
 ![image](https://user-images.githubusercontent.com/22976760/153156454-9e1718e8-e676-4f1b-838b-bbe95e9237f7.png)
+
+![image](https://user-images.githubusercontent.com/22976760/160102120-e40069d2-bc28-456c-bfb0-5bed570c5484.png)
 
 
 ## License

@@ -15,7 +15,7 @@ public class Body2StringResultWrapper implements ResultWrapper<String> {
     @Override
     public HttpResult<String> dealWithResponse(HttpClientResponse response) throws Exception {
         String stringBody = IOTinyUtils.toString(response.getBody(), response.getCharset());
-        return new HttpResult<String>(response.getHeaders(), response.getStatusCode(), stringBody, null);
+        return new HttpResult<>(response.getHeaders(), response.getStatusCode(), stringBody, null);
     }
 
 }

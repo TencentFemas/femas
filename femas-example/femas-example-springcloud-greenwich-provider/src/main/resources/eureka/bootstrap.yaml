@@ -1,0 +1,19 @@
+server:
+  port: 19001
+spring:
+  application:
+    name: femas-springcloud-provider
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8080/eureka/
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+logging:
+  file: ./log/femas/${spring.application.name}/${spring.application.name}
