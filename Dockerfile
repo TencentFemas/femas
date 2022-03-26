@@ -1,4 +1,4 @@
-FROM hub.grepcode.cn:55582/basic/ubuntu:20.04
+FROM ubuntu:20.04
 
 LABEL maintainer "minghhou <minghhou>"
 
