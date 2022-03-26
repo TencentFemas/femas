@@ -252,8 +252,8 @@ circuitBreaker:
 > 详情参见下文官方文档
 
 ## 文档
-#### [官方文档](https://polarismesh.cn/#/)
-#### [FAQ]()
+#### [官方文档](http://femas.io/)
+#### [FAQ](http://femas.io/doc/community/FAQ.html)
 #### [贡献手册](./CONTRIBUTING.md)
 #### [行为准则](./Code-of-Conduct.md) 
 
@@ -273,6 +273,7 @@ circuitBreaker:
 ## 联系我们
 ![image](https://user-images.githubusercontent.com/22976760/153163498-07f62802-18b3-4e74-94ff-32855d542281.png)
 
+![image](https://user-images.githubusercontent.com/22976760/160102336-bffd2c4b-b3c7-4830-8623-92b39f102fb4.png)
 
 ## 许可证
 [LICENSE.](./LICENSE)

@@ -1,6 +1,8 @@
 package com.tencent.tsf.femas.common.entity;
 
 
+import java.util.Objects;
+
 public class ErrorStatus {
 
     public static final ErrorStatus OK = Code.OK.ToStatus();
@@ -24,7 +26,7 @@ public class ErrorStatus {
     }
 
     public ErrorStatus(Code code, String message) {
-        if (message == "") {
+        if ("".equals(message)) {
             message = code.name();
         }
         this.code = code;
@@ -41,6 +43,11 @@ public class ErrorStatus {
 
     public String StatusCode() {
         return Integer.toString(this.code.Value());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(code);
     }
 
     @Override

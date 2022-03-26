@@ -1,5 +1,7 @@
 package com.tencent.tsf.femas.common.monitor;
 
+import java.util.Objects;
+
 public class Endpoint {
 
     private String serviceName;
@@ -56,6 +58,11 @@ public class Endpoint {
 
     public void setPort(String port) {
         this.port = port;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(serviceName, interfaceName);
     }
 
     @Override
