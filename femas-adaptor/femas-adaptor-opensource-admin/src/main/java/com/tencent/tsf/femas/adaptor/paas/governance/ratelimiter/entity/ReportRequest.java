@@ -21,9 +21,9 @@ public class ReportRequest {
 
     @Override
     public String toString() {
-        return "ReportRequest{" +
-                "rates=" + rates +
-                '}';
+        return "ReportRequest{"
+                + "rates=" + rates
+                + '}';
     }
 
     public List<RuleStatics> getRates() {
@@ -61,11 +61,11 @@ public class ReportRequest {
 
         @Override
         public String toString() {
-            return "RuleStatics{" +
-                    "ruleId='" + ruleId + '\'' +
-                    ", pass=" + pass +
-                    ", block=" + block +
-                    '}';
+            return "RuleStatics{"
+                    + "ruleId='" + ruleId + '\''
+                    + ", pass=" + pass
+                    + ", block=" + block
+                    + '}';
         }
     }
 }

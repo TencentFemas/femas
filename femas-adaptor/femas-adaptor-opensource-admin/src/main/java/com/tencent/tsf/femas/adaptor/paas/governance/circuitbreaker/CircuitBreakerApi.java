@@ -58,9 +58,9 @@ public class CircuitBreakerApi implements Serializable {
 
     @Override
     public String toString() {
-        return "CircuitBreakerApi{" +
-                "path='" + path + '\'' +
-                ", method='" + method + '\'' +
-                '}';
+        return "CircuitBreakerApi{"
+                + "path='" + path + '\''
+                + ", method='" + method + '\''
+                + '}';
     }
 }

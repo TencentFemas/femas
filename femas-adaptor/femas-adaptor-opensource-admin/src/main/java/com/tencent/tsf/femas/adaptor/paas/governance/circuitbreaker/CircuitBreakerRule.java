@@ -117,16 +117,16 @@ public class CircuitBreakerRule implements Serializable {
 
     @Override
     public String toString() {
-        return "CircuitBreakerRule{" +
-                "ruleId='" + ruleId + '\'' +
-                ", serviceName='" + serviceName + '\'' +
-                ", strategyList=" + strategyList +
-                ", namespaceId='" + namespaceId + '\'' +
-                ", updateTime='" + updateTime + '\'' +
-                ", targetServiceName='" + targetServiceName + '\'' +
-                ", targetNamespaceId='" + targetNamespaceId + '\'' +
-                ", isolationLevel=" + isolationLevel +
-                ", ruleName='" + ruleName + '\'' +
-                '}';
+        return "CircuitBreakerRule{"
+                + "ruleId='" + ruleId + '\''
+                + ", serviceName='" + serviceName + '\''
+                + ", strategyList=" + strategyList
+                + ", namespaceId='" + namespaceId + '\''
+                + ", updateTime='" + updateTime + '\''
+                + ", targetServiceName='" + targetServiceName + '\''
+                + ", targetNamespaceId='" + targetNamespaceId + '\''
+                + ", isolationLevel=" + isolationLevel
+                + ", ruleName='" + ruleName + '\''
+                + '}';
     }
 }

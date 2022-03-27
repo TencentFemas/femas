@@ -118,14 +118,13 @@ public abstract class Context {
         }
 
         Map<String, String> keys = new HashMap<>(SYSTEM_TAGS);
-
-        for (String tag : RPC_INFO_SERIALIZE_TAGS) {
+        RPC_INFO_SERIALIZE_TAGS.forEach(tag -> {
             Object value = RPC_INFO.get(tag);
 
             if (value != null) {
                 keys.put(tag, value.toString());
             }
-        }
+        });
 
         return GsonUtil.serializeToJson(keys);
     }

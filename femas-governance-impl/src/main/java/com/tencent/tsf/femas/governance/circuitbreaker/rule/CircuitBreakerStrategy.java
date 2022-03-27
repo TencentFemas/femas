@@ -166,15 +166,15 @@ public class CircuitBreakerStrategy implements Serializable {
 
     @Override
     public String toString() {
-        return "CircuitBreakerStrategy{" +
-                "apiList=" + apiList +
-                ", slidingWindowSize=" + slidingWindowSize +
-                ", minimumNumberOfCalls=" + minimumNumberOfCalls +
-                ", failureRateThreshold=" + failureRateThreshold +
-                ", waitDurationInOpenState=" + waitDurationInOpenState +
-                ", maxEjectionPercent=" + maxEjectionPercent +
-                ", slowCallDurationThreshold=" + slowCallDurationThreshold +
-                ", slowCallRateThreshold=" + slowCallRateThreshold +
-                '}';
+        return "CircuitBreakerStrategy{"
+                + "apiList=" + apiList
+                + ", slidingWindowSize=" + slidingWindowSize
+                + ", minimumNumberOfCalls=" + minimumNumberOfCalls
+                + ", failureRateThreshold=" + failureRateThreshold
+                + ", waitDurationInOpenState=" + waitDurationInOpenState
+                + ", maxEjectionPercent=" + maxEjectionPercent
+                + ", slowCallDurationThreshold=" + slowCallDurationThreshold
+                + ", slowCallRateThreshold=" + slowCallRateThreshold
+                + '}';
     }
 }
