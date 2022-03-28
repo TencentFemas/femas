@@ -135,7 +135,7 @@ public class FemasLaneFilter implements LaneFilter {
         return instances;
     }
 
-    public synchronized static void addLaneInfo(LaneInfo laneInfo) {
+    public static synchronized void addLaneInfo(LaneInfo laneInfo) {
         LANE_ID_LANE_INFO_MAP.put(laneInfo.getLaneId(), laneInfo);
 
         for (LaneGroup laneGroup : laneInfo.getLaneGroupList()) {
@@ -187,7 +187,7 @@ public class FemasLaneFilter implements LaneFilter {
         }
     }
 
-    public synchronized static void removeLaneInfo(LaneInfo laneInfo) {
+    public static synchronized void removeLaneInfo(LaneInfo laneInfo) {
         LANE_ID_LANE_INFO_MAP.remove(laneInfo.getLaneId());
 
         for (LaneGroup laneGroup : laneInfo.getLaneGroupList()) {
@@ -226,7 +226,7 @@ public class FemasLaneFilter implements LaneFilter {
         }
     }
 
-    private synchronized static void refreshEffectiveLaneRule() {
+    private static synchronized void refreshEffectiveLaneRule() {
         EFFECTIVE_LANE_RULES_SET.clear();
         EFFECTIVE_LANE_RULES.clear();
 
@@ -246,7 +246,7 @@ public class FemasLaneFilter implements LaneFilter {
         LOGGER.info("EFFECTIVE LANE Rule changed. EFFECTIVE_LANE_RULES : " + EFFECTIVE_LANE_RULES);
     }
 
-    private synchronized static void resortLaneRule() {
+    private static synchronized void resortLaneRule() {
         List<LaneRule> laneRules = new ArrayList<>(EFFECTIVE_LANE_RULES_SET);
         EFFECTIVE_LANE_RULES = laneRules;
         Collections.sort(EFFECTIVE_LANE_RULES, new Comparator<LaneRule>() {
@@ -261,13 +261,13 @@ public class FemasLaneFilter implements LaneFilter {
         });
     }
 
-    public synchronized static void addLaneRule(LaneRule laneRule) {
+    public static synchronized void addLaneRule(LaneRule laneRule) {
         ALL_LANE_RULES.add(laneRule);
 
         refreshEffectiveLaneRule();
     }
 
-    public synchronized static void removeLaneRule(LaneRule laneRule) {
+    public static synchronized void removeLaneRule(LaneRule laneRule) {
         ALL_LANE_RULES.remove(laneRule);
         EFFECTIVE_LANE_RULES_SET.remove(laneRule);
         EFFECTIVE_LANE_RULES.remove(laneRule);
@@ -333,7 +333,7 @@ public class FemasLaneFilter implements LaneFilter {
                 if (configMatch) {
                     return chooseColorfulInstances(serviceInstances, laneInfo);
                 }
-            } else if (flag == true) {
+            } else if (flag) {
                 return chooseColorfulInstances(serviceInstances, laneInfo);
             }
 
