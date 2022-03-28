@@ -19,7 +19,7 @@ public class CompositeServiceRegistry implements ServiceRegistry {
 
     @Override
     public synchronized void register(ServiceInstance serviceInstance) {
-        // 以注册的节点无需再次注册，如果改版状态，请使用setStatus方法
+        // 已注册的节点无需再次注册，如果改版状态，请使用setStatus方法
         for (Map.Entry<String, ServiceRegistry> entry : serviceRegistries.entrySet()) {
             String id = entry.getKey();
             ServiceRegistry serviceRegistry = entry.getValue();
@@ -68,7 +68,7 @@ public class CompositeServiceRegistry implements ServiceRegistry {
     /**
      * 移除某个注册中心
      * 由于是非频繁操作，直接synchronized即可
-     * remove后可以从该ServiceRegistry移除以注册的节点
+     * remove后可以从该ServiceRegistry移除已注册的节点
      *
      * @param serviceRegistryId
      * @return 返回被删除的注册中心

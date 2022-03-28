@@ -65,11 +65,7 @@ public class FemasCircuitBreakerHandler extends ConfigHandler {
     }
 
     private static float formatRate(float rate) {
-        if (rate < 0) {
-            return 0;
-        }
-
-        return rate;
+        return rate < 0 ? 0 : rate;
     }
 
     private static com.tencent.tsf.femas.governance.circuitbreaker.rule.CircuitBreakerRule convertRule(

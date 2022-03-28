@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://maven.apache.org/POM/4.0.0"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.tencent.tsf</groupId>
+        <artifactId>femas-dubbo-starters</artifactId>
+        <version>${revision}</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>femas-alibaba-dubbo-starter</artifactId>
+
+    <packaging>jar</packaging>
+
+    <description>femas-alibaba-dubbo-starter</description>
+
+    <properties>
+        <dubbo.version>2.6.12</dubbo.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.tencent.tsf</groupId>
+            <artifactId>femas-adaptor-opensource-admin</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.tencent.tsf</groupId>
+            <artifactId>femas-extension-alibaba-dubbo</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>dubbo</artifactId>
+            <version>${dubbo.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>dubbo-remoting-netty4</artifactId>
+            <version>${dubbo.version}</version>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifestEntries>
+                            <Implementation-Version>${project.version}</Implementation-Version>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

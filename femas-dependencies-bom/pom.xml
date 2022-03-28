@@ -284,10 +284,21 @@
                 <version>${project.version}</version>
             </dependency>
 
-
             <dependency>
                 <groupId>com.tencent.tsf</groupId>
                 <artifactId>femas-extension-springcloud-greenwich-gateway</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.tencent.tsf</groupId>
+                <artifactId>femas-extension-alibaba-dubbo</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.tencent.tsf</groupId>
+                <artifactId>femas-alibaba-dubbo-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

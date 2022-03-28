@@ -83,7 +83,7 @@ public class FemasRegistry extends AbstractServiceRegistryMetadata {
     }
 
     public Map<String, String> getRegisterMetadataMap() {
-        Map<String, String> metaDataMap = new HashMap<>();
+        Map<String, String> metaDataMap = new HashMap<>(13);
         metaDataMap.put(FemasConstant.FEMAS_META_APPLICATION_ID_KEY,
                 getEmptyOrDefault(FemasContext.getSystemTag(FemasConstant.FEMAS_APPLICATION_ID), ""));
         metaDataMap.put(FemasConstant.FEMAS_META_APPLICATION_VERSION_KEY,
