@@ -2,21 +2,20 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns="http://maven.apache.org/POM/4.0.0"
         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-
     <parent>
         <groupId>com.tencent.tsf</groupId>
-        <artifactId>femas-parent</artifactId>
+        <artifactId>femas-extensions</artifactId>
         <version>${revision}</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
+    <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>femas-starters</artifactId>
+    <artifactId>femas-extension-dubbo</artifactId>
     <packaging>pom</packaging>
-    <description>femas-starters</description>
+    <description>femas-extension-dubbo</description>
 
     <modules>
-        <module>femas-springcloud-starters</module>
-        <module>femas-dubbo-starters</module>
+        <module>femas-extension-alibaba-dubbo</module>
     </modules>
 
     <build>

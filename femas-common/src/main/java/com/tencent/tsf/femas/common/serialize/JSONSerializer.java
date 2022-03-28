@@ -4,8 +4,10 @@ package com.tencent.tsf.femas.common.serialize;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.IOException;
 import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,8 +58,8 @@ public class JSONSerializer {
 
     public static <T> List<T> deserializeStr2List(Class<T> clazz, final String str) {
         try {
-            return mapper.readValue(str, new TypeReference<List<T>>() {
-            });
+            List<T> list = mapper.readValue(str, mapper.getTypeFactory().constructCollectionType(List.class, clazz));
+            return list;
         } catch (JsonProcessingException e) {
             log.error("deserializeStr2List {} error ", str, e);
         }
