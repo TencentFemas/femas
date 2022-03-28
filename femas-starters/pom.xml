@@ -16,6 +16,7 @@
 
     <modules>
         <module>femas-springcloud-starters</module>
+        <module>femas-dubbo-starters</module>
     </modules>
 
     <build>

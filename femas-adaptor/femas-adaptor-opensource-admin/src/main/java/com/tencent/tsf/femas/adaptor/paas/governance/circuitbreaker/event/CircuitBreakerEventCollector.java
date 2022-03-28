@@ -52,8 +52,8 @@ public class CircuitBreakerEventCollector extends EventCollector {
         // 如果满了就抛出异常
         try {
             eventQueue.add(eventData);
-            LOGGER.info("[FEMAS CIRCUIT BREAKER EVENT COLLECTOR] Add event to EventQueue. TargetServiceName : " +
-                    targetServiceName + ", isolationObject : " + isolationObject);
+            LOGGER.info("[FEMAS CIRCUIT BREAKER EVENT COLLECTOR] Add event to EventQueue. TargetServiceName : "
+                    + targetServiceName + ", isolationObject : " + isolationObject);
         } catch (Exception e) {
             LOGGER.warn("[FEMAS EVENT COLLECTOR] eventQueue is full. Log this event and drop it.");
         }

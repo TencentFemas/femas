@@ -4,12 +4,15 @@
         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <modules>
+        <module>femas-example-alibaba-dubbo-consumer</module>
+        <module>femas-example-alibaba-dubbo-provider</module>
         <module>femas-example-springcloud-greenwich-consumer</module>
         <module>femas-example-springcloud-greenwich-provider</module>
         <module>femas-example-springcloud-2020-consumer</module>
         <module>femas-example-springcloud-2020-provider</module>
         <module>femas-example-springcloud-greenwich-zuul</module>
         <module>femas-example-springcloud-greenwich-gateway</module>
+        <module>femas-example-dubbo</module>
     </modules>
 
     <parent>
