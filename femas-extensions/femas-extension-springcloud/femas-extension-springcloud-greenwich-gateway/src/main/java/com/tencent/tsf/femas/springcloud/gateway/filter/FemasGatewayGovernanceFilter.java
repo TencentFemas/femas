@@ -85,8 +85,10 @@ public class FemasGatewayGovernanceFilter extends AbstractGlobalFilter {
             try {
                 if (response.getStatusCode().value() > HttpStatus.BAD_REQUEST.value()) {
                     femasResponse.setError(new GatewayException(String.valueOf(response.getStatusCode()), response.getStatusCode().getReasonPhrase()));
+                    femasResponse.setErrorStatus(ErrorStatus.INTERNAL);
                 }
             } catch (Exception e) {
+                femasResponse.setErrorStatus(ErrorStatus.INTERNAL);
                 femasResponse.setError(new GatewayException(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value())));
             }
             afterClientInvoke(clientRpcContext, exchange, femasRequest, femasResponse);

@@ -7,10 +7,8 @@ import com.tencent.tsf.femas.common.context.ContextConstant;
 import com.tencent.tsf.femas.common.context.RpcContext;
 import com.tencent.tsf.femas.common.context.TracingContext;
 import com.tencent.tsf.femas.common.context.factory.ContextFactory;
-import com.tencent.tsf.femas.common.entity.Request;
-import com.tencent.tsf.femas.common.entity.Response;
-import com.tencent.tsf.femas.common.entity.Service;
-import com.tencent.tsf.femas.common.entity.ServiceInstance;
+import com.tencent.tsf.femas.common.entity.*;
+
 import java.io.IOException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpStatus;
@@ -56,9 +54,11 @@ public class FemasRestTemplateInterceptor implements ClientHttpRequestIntercepto
             Response femasResponse = new Response();
             if (error != null) {
                 femasResponse.setError(error);
+                femasResponse.setErrorStatus(ErrorStatus.INTERNAL);
             } else if (response.getRawStatusCode() >= HttpStatus.SC_BAD_REQUEST) {
                 // 设置 error，保持 afterClientInvoke 逻辑统一
                 femasResponse.setError(new RuntimeException(String.valueOf(response.getRawStatusCode())));
+                femasResponse.setErrorStatus(ErrorStatus.INTERNAL);
             }
             fillTracingContext(rpcContext, femasRequest, httpRequest, response);
             extensionLayer.afterClientInvoke(femasRequest, femasResponse, rpcContext);
