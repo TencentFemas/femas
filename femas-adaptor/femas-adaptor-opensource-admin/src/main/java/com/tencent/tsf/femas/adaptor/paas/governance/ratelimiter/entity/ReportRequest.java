@@ -61,11 +61,11 @@ public class ReportRequest {
 
         @Override
         public String toString() {
-            return "RuleStatics{" +
-                    "ruleId='" + ruleId + '\'' +
-                    ", pass=" + pass +
-                    ", block=" + block +
-                    '}';
+            return "RuleStatics{"
+                    + "ruleId='" + ruleId + '\''
+                    + ", pass=" + pass
+                    + ", block=" + block
+                    + '}';
         }
     }
 }
