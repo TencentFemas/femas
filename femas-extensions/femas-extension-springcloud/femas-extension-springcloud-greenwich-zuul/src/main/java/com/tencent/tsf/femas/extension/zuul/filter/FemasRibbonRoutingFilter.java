@@ -88,8 +88,10 @@ public class FemasRibbonRoutingFilter extends RibbonRoutingFilter {
                 Response femasResponse = new Response();
                 if (error != null) {
                     femasResponse.setError(error);
+                    femasResponse.setErrorStatus(ErrorStatus.INTERNAL);
                 } else if (response.getRawStatusCode() >= org.apache.http.HttpStatus.SC_BAD_REQUEST) {
                     // 设置 error，保持 afterClientInvoke 逻辑统一
+                    femasResponse.setErrorStatus(ErrorStatus.INTERNAL);
                     femasResponse.setError(new RuntimeException(String.valueOf(response.getRawStatusCode())));
                 }
                 fillTracingContext(rpcContext, httpServletRequest, response, femasRequest, url);

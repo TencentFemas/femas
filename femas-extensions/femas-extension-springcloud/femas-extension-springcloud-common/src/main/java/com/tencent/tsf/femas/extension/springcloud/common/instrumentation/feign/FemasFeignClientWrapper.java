@@ -89,9 +89,11 @@ public class FemasFeignClientWrapper implements Client {
             com.tencent.tsf.femas.common.entity.Response femasResponse = new com.tencent.tsf.femas.common.entity.Response();
             if (error != null) {
                 femasResponse.setError(error);
+                femasResponse.setErrorStatus(ErrorStatus.INTERNAL);
             } else if (response.status() >= HttpStatus.SC_BAD_REQUEST) {
                 // 设置 error，保持 afterClientInvoke 逻辑统一
                 femasResponse.setError(new RuntimeException(String.valueOf(response.status())));
+                femasResponse.setErrorStatus(ErrorStatus.INTERNAL);
             }
             fillTracingContext(rpcContext, request, response, femasRequest, url);
             extensionLayer.afterClientInvoke(femasRequest, femasResponse, rpcContext);
