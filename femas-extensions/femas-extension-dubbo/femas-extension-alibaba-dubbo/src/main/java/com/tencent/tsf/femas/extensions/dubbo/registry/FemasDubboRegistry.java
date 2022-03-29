@@ -67,8 +67,7 @@ public class FemasDubboRegistry extends FailbackRegistry {
         ServiceInstance instance = new ServiceInstance(toServiceId(url),
                 AddressUtils.getValidLocalHost(), url.getPort());
         String category = url.getParameter(Constants.CATEGORY_KEY, Constants.DEFAULT_CATEGORY);
-        URL newURL = url.addParameter(Constants.CATEGORY_KEY, category);
-        newURL = newURL.addParameter(Constants.PROTOCOL_KEY, url.getProtocol());
+        URL newURL = url.addParameter(Constants.CATEGORY_KEY, category).addParameter(Constants.PROTOCOL_KEY, url.getProtocol());
         instance.setAllMetadata(new HashMap<>(newURL.getParameters()));
         return instance;
     }
