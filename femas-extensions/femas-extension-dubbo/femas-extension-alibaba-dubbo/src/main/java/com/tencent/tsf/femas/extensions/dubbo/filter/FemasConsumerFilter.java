@@ -52,6 +52,7 @@ public class FemasConsumerFilter implements Filter {
         } finally {
             Response response = new Response();
             if (error != null) {
+                response.setErrorStatus(ErrorStatus.INTERNAL);
                 response.setError(error);
             }
             extensionLayer.afterClientInvoke(femasRequest, response, rpcContext);
