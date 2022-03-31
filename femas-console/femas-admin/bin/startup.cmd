@@ -20,15 +20,9 @@ set dbType=%1
 rem 判断是否传入
 if not defined dbType set dbType=inner
 if %dbType%==external set %dbType%=external
-if %dbType%==inner (
-    set JAVA_OPTS=-Dspring.config.location=%BASE_DIR%\conf\bootstrap.yaml -jar %BASE_DIR%\femas-admin.jar
-)
+set JAVA_OPTS=-Dspring.config.location=%BASE_DIR%\conf\bootstrap.yaml -jar %BASE_DIR%\femas-admin.jar
 if %dbType%==external (
-    set JAVA_OPTS=-DdbType=external -Dspring.config.location=%BASE_DIR%\conf\bootstrap.yaml -jar %BASE_DIR%\femas-admin.jar
-)
-rem 传入非external
-if %dbType% neq external (
-    set JAVA_OPTS=-Dspring.config.location=%BASE_DIR%\conf\bootstrap.yaml -jar %BASE_DIR%\femas-admin.jar
+    set JAVA_OPTS=-DdbType=external %JAVA_OPTS%
 )
 set "FAMES_CONFIG_OPTS=--spring.config.additional-location=%CUSTOM_SEARCH_LOCATIONS%"
 
