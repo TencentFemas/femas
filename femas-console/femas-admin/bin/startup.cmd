@@ -15,12 +15,11 @@ set CUSTOM_SEARCH_LOCATIONS=file:%BASE_DIR%\conf
 
 set "FAMES_JVM_OPTS=-server -Xms2g -Xmx2g -Xmn1g -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=512m -XX:-OmitStackTraceInFastThrow -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=%BASE_DIR%\logs\java_heapdump.hprof -XX:-UseLargePages"
 
+set JAVA_OPTS=-Dspring.config.location=%BASE_DIR%\conf\bootstrap.yaml -jar %BASE_DIR%\femas-admin.jar
 
 set dbType=%1
 rem 判断是否传入
 if not defined dbType set dbType=inner
-if %dbType%==external set %dbType%=external
-set JAVA_OPTS=-Dspring.config.location=%BASE_DIR%\conf\bootstrap.yaml -jar %BASE_DIR%\femas-admin.jar
 if %dbType%==external (
     set JAVA_OPTS=-DdbType=external %JAVA_OPTS%
 )
