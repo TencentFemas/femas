@@ -10,7 +10,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.tencent.tsf.femas.common.RegistryConstants.DEFAULT_THREAD_POOL_SIZE;
 
@@ -21,11 +20,9 @@ public class PolarisBeatReactor {
 
     Logger logger = LoggerFactory.getLogger(PolarisBeatReactor.class);
 
-    private final AtomicBoolean heatBeatingInProgress = new AtomicBoolean(true);
     private final ScheduledExecutorService executorService;
     private final Map<String, InstanceInfo> polarisBeat = new ConcurrentHashMap<>();
-
-    ProviderAPI providerApi;
+    private final ProviderAPI providerApi;
 
     public PolarisBeatReactor(ProviderAPI providerApi) {
         this.providerApi = providerApi;
@@ -41,35 +38,36 @@ public class PolarisBeatReactor {
         polarisBeat.put(key, instanceInfo);
         // polaris每个任务心跳都可以不一样,因此，马上发送一次心跳再进入队列里面进行定时任务
         sentHeartbeat(instanceInfo);
-        if (this.heatBeatingInProgress.compareAndSet(true, false)) {
-            fireHeatBeat();
-        }
+        executorService.schedule(new EachHeartBeat(instanceInfo), 0, TimeUnit.SECONDS);
     }
 
-    public void removeInstance(String key){
+    public void removeInstance(String key) {
         polarisBeat.remove(key);
     }
 
-    private void fireHeatBeat() {
-        executorService.schedule(new BeatProcessor(), 0, TimeUnit.SECONDS);
-    }
+    class EachHeartBeat implements Runnable {
 
-    class BeatProcessor implements Runnable {
+        private final InstanceInfo instanceInfo;
+
+        EachHeartBeat(InstanceInfo instanceInfo) {
+            this.instanceInfo = instanceInfo;
+        }
 
         @Override
         public void run() {
             try {
-                for (Map.Entry<String, InstanceInfo> entry : polarisBeat.entrySet()) {
-                    InstanceInfo instanceInfo = entry.getValue();
-                    executorService.schedule(() -> {
-                        if (logger.isDebugEnabled()) {
-                            logger.debug("[BEAT] adding beat: {} to beat map.", instanceInfo.getInstanceId());
-                        }
-                        sentHeartbeat(instanceInfo);
-                    }, instanceInfo.getTtl(), TimeUnit.SECONDS);
-                }
+                executorService.schedule(() -> {
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("[BEAT] adding beat: {} to beat map.", instanceInfo.getInstanceId());
+                    }
+                    sentHeartbeat(instanceInfo);
+                }, instanceInfo.getTtl(), TimeUnit.SECONDS);
             } catch (Exception e) {
                 logger.error("[CLIENT-BEAT] Exception while scheduling beat.", e);
+            } finally {
+                if (polarisBeat.containsKey(instanceInfo.getInstanceId())) {
+                    executorService.schedule(this, instanceInfo.getTtl(), TimeUnit.SECONDS);
+                }
             }
         }
     }
