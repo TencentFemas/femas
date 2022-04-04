@@ -85,8 +85,6 @@ public class FemasConstant extends ContextConstant {
 
     public static final String FEMAS_REGISTRY_TYPE_KEY = "femas_registry_type";
 
-    public static final String FEMAS_CONFIG_PAAS = "paas";
-
     /**
      * 请求发起方的应用 ID
      */
