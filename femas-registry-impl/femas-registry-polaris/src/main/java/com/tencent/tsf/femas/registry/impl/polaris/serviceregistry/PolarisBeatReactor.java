@@ -38,7 +38,7 @@ public class PolarisBeatReactor {
         polarisBeat.put(key, instanceInfo);
         // polaris每个任务心跳都可以不一样,因此，马上发送一次心跳再进入队列里面进行定时任务
         sentHeartbeat(instanceInfo);
-        executorService.schedule(new EachHeartBeat(instanceInfo), 0, TimeUnit.SECONDS);
+        executorService.execute(new EachHeartBeat(instanceInfo));
     }
 
     public void removeInstance(String key) {
