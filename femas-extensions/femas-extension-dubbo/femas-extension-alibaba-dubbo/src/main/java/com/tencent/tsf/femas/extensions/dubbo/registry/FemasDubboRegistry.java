@@ -34,7 +34,6 @@ public class FemasDubboRegistry extends FailbackRegistry {
     private static String namespace = Context.getSystemTag(contextConstant.getNamespaceId());
     private IExtensionLayer extensionLayer = ExtensionManager.getExtensionLayer();
 
-
     public FemasDubboRegistry(URL url) {
         super(url);
         // 类初始化的时候，以 dubbo application name 注册服务，以便获取主调方的治理规则

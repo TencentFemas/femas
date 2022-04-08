@@ -238,6 +238,18 @@
 
             <dependency>
                 <groupId>com.tencent.tsf</groupId>
+                <artifactId>femas-agent-tools</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.tencent.tsf</groupId>
+                <artifactId>femas-agent-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.tencent.tsf</groupId>
                 <artifactId>femas-extension-springcloud-common</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -299,6 +311,12 @@
             <dependency>
                 <groupId>com.tencent.tsf</groupId>
                 <artifactId>femas-alibaba-dubbo-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.tencent.tsf</groupId>
+                <artifactId>femas-springcloud-plugin-common</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

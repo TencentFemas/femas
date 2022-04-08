@@ -34,8 +34,8 @@ public class FemasGovernanceFilter extends OncePerRequestFilter {
 
     public static final int ORDER = Ordered.HIGHEST_PRECEDENCE + 12;
     private static final Logger logger = LoggerFactory.getLogger(FemasGovernanceFilter.class);
-    @Value("${server.port:}")
-    Integer port;
+//    @Value("${server.port:}")
+//    Integer port;
     private IExtensionLayer extensionLayer = ExtensionManager.getExtensionLayer();
     private volatile ContextConstant contextConstant = ContextFactory.getContextConstantInstance();
 
