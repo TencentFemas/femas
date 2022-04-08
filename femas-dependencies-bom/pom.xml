@@ -274,6 +274,12 @@
 
             <dependency>
                 <groupId>com.tencent.tsf</groupId>
+                <artifactId>femas-springcloud-hoxton-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.tencent.tsf</groupId>
                 <artifactId>femas-springcloud-2020.0-ilford-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
