@@ -110,8 +110,8 @@
                                 <mkdir dir="${project.basedir}/../femas-agent/plugins"/>
                                 <copy file="${project.build.directory}/${file.name}.jar"
                                       tofile="${project.basedir}/../femas-agent/${file.name}.jar" overwrite="true"/>
-                                <copy file="${project.basedir}/src/main/resources/agent.properties"
-                                      tofile="${project.basedir}/../femas-agent/agent.properties" overwrite="true"/>
+                                <copy file="${project.basedir}/src/main/resources/agent.yml"
+                                      tofile="${project.basedir}/../femas-agent/agent.yml" overwrite="true"/>
                             </tasks>
                         </configuration>
                     </execution>
