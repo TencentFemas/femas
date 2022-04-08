@@ -19,6 +19,7 @@
         <module>femas-springcloud-2020.0-ilford-starter</module>
         <module>femas-springcloud-greenwich-zuul-starter</module>
         <module>femas-springcloud-greenwich-gateway-starter</module>
+        <module>feams-springcloud-hoxton-starter</module>
     </modules>
 
     <build>
