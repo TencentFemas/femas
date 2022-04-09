@@ -20,6 +20,7 @@
         <module>femas-extension-springcloud-2020.0-ilford</module>
         <module>femas-extension-springcloud-greenwich-zuul</module>
         <module>femas-extension-springcloud-greenwich-gateway</module>
+        <module>feams-extension-springcloud-hoxton</module>
     </modules>
 
     <build>

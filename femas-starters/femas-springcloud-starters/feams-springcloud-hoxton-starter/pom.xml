@@ -17,7 +17,7 @@
     <description>femas-springcloud-hoxton-starter</description>
 
     <properties>
-        <spring-boot-dependencies.version>2.1.13.RELEASE</spring-boot-dependencies.version>
+        <spring-boot-dependencies.version>2.3.12.RELEASE</spring-boot-dependencies.version>
         <spring-cloud-dependencies.version>Hoxton.SR12</spring-cloud-dependencies.version>
         <spring.cloud.alibaba.version>2.1.4.RELEASE</spring.cloud.alibaba.version>
         <consul.version>1.4.2</consul.version>
@@ -66,7 +66,7 @@
         </dependency>
         <dependency>
             <groupId>com.tencent.tsf</groupId>
-            <artifactId>femas-extension-springcloud-greenwich</artifactId>
+            <artifactId>femas-extension-springcloud-hoxton</artifactId>
         </dependency>
     </dependencies>
 
