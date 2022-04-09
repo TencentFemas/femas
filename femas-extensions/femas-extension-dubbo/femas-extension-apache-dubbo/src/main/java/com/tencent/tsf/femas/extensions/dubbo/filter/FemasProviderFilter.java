@@ -30,12 +30,8 @@ public class FemasProviderFilter implements Filter{
 
     @Override
     public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException {
-        RpcContext rpcContext = RpcContext.getContext();
+        RpcContext rpcContext = RpcContext.getServerAttachment().setRemoteApplicationName(invocation.getServiceName());
         Request femasRequest =  getFemasRequest();
-
-        if (Objects.isNull(femasRequest)) {
-            femasRequest = CommonUtils.getFemasRequest(invoker.getUrl(), invocation);
-        }
 
         com.tencent.tsf.femas.common.context.RpcContext femasRpcContext =
                 extensionLayer.beforeServerInvoke(femasRequest, ApacheDubboAttachmentUtils.create(rpcContext));

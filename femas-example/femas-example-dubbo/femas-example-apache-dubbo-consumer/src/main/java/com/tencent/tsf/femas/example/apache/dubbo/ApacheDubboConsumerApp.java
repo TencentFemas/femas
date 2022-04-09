@@ -22,9 +22,9 @@ public class ApacheDubboConsumerApp {
     public static void main(String[] args) {
         ConfigurableApplicationContext context = SpringApplication.run(ApacheDubboConsumerApp.class, args);
 
-        ApacheDubboConsumerApp dubboConsumer = context.getBean(ApacheDubboConsumerApp.class);
-        String consumer = dubboConsumer.doSayHello("femas example dubbo consumer");
-        System.out.println("consumer--------"+ consumer);
+//        ApacheDubboConsumerApp dubboConsumer = context.getBean(ApacheDubboConsumerApp.class);
+//        String consumer = dubboConsumer.doSayHello("femas example dubbo consumer");
+//        System.out.println("consumer--------"+ consumer);
     }
 
     public String doSayHello(String name) {

@@ -23,14 +23,14 @@ public class FemasConsumerFilter implements Filter {
     @Override
     public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException {
         Request femasRequest = Context.getRpcInfo().getRequest();
-        RpcContext rpcContext = RpcContext.getContext();
+        RpcContext rpcContext = RpcContext.getClientAttachment().setRemoteApplicationName(invocation.getServiceName());
 
         if (Objects.isNull(femasRequest)) {
             femasRequest = CommonUtils.getFemasRequest(invoker.getUrl(), invocation);
         }
 
         com.tencent.tsf.femas.common.context.RpcContext femasRpcContext =
-                extensionLayer.beforeServerInvoke(femasRequest, ApacheDubboAttachmentUtils.create(rpcContext));
+                extensionLayer.beforeClientInvoke(femasRequest, ApacheDubboAttachmentUtils.create(rpcContext));
 
         Throwable error = null;
 

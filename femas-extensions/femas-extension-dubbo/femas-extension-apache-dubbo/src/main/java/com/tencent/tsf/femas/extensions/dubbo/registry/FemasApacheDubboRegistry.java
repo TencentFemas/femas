@@ -15,6 +15,7 @@ import org.apache.dubbo.common.constants.CommonConstants;
 import org.apache.dubbo.common.constants.RegistryConstants;
 import org.apache.dubbo.common.logger.Logger;
 import org.apache.dubbo.common.logger.LoggerFactory;
+import org.apache.dubbo.common.utils.Assert;
 import org.apache.dubbo.common.utils.UrlUtils;
 import org.apache.dubbo.registry.Constants;
 import org.apache.dubbo.registry.NotifyListener;
@@ -36,6 +37,7 @@ public class FemasApacheDubboRegistry extends FailbackRegistry implements Regist
     private static volatile ContextConstant contextConstant = ContextFactory.getContextConstantInstance();
     private static String namespace = Context.getSystemTag(contextConstant.getNamespaceId());
     private IExtensionLayer extensionLayer = ExtensionManager.getExtensionLayer();
+    private static final String META_SERVICE = "org.apache.dubbo.metadata.MetadataService";
 
     public FemasApacheDubboRegistry(URL url){
         super(url);
@@ -110,11 +112,13 @@ public class FemasApacheDubboRegistry extends FailbackRegistry implements Regist
 
     @Override
     public void doRegister(URL url) {
-        ServiceInstance instance = createServiceInstance(url);
-        Service service = CommonUtils.buildService(url);
-        instance.setService(service);
-        extensionLayer.init(service, url.getPort());
-        extensionLayer.register(instance);
+        if (!url.getPath().equals(META_SERVICE)) {
+            ServiceInstance instance = createServiceInstance(url);
+            Service service = CommonUtils.buildService(url);
+            instance.setService(service);
+            extensionLayer.init(service, url.getPort());
+            extensionLayer.register(instance);
+        }
     }
 
     @Override
