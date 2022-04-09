@@ -25,6 +25,8 @@ import com.tencent.tsf.femas.governance.plugin.context.ConfigRefreshableContext;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ServiceLoader;
+import java.util.concurrent.TimeUnit;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,13 +40,27 @@ public class DefaultConfigurablePluginHolder {
 
     private static volatile ConfigRefreshableContext context;
 
+
+    /**
+     * 标识别是否初始化完成，避免并发的情况下暴露还未初始化完的对象
+     */
+    private static volatile boolean init = false;
+
     public static AbstractSDKContext getSDKContext() {
         if (context == null) {
             synchronized (DefaultConfigurablePluginHolder.class) {
                 if (context == null) {
                     context = new ConfigRefreshableContext();
                     initPluginContext();
+                    init = true;
                 }
+            }
+        }
+        while (!init){
+            try {
+                TimeUnit.MILLISECONDS.sleep(50);
+            } catch (InterruptedException e) {
+
             }
         }
         return context;
