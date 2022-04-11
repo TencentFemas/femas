@@ -123,6 +123,7 @@ public class PolarisServiceRegistry extends AbstractServiceRegistry {
         }
         logger.info("Deregister service with polaris: " + serviceInstance.toString() + " success.");
     }
+
     /**
      * @see com.tencent.tsf.femas.common.serviceregistry.ServiceRegistry#setStatus(com.tencent.tsf.femas.common.entity.ServiceInstance, com.tencent.tsf.femas.common.entity.EndpointStatus)
      */
@@ -137,4 +138,5 @@ public class PolarisServiceRegistry extends AbstractServiceRegistry {
     public EndpointStatus getStatus(ServiceInstance serviceInstance) {
         return null;
     }
+
 }
