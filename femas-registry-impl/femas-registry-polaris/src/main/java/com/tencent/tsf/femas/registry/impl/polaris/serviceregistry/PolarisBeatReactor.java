@@ -147,5 +147,4 @@ class InstanceInfo {
     public void setTtl(Integer ttl) {
         this.ttl = ttl;
     }
-
 }

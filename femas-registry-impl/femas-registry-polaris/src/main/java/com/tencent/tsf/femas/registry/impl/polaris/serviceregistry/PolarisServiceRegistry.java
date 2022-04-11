@@ -20,7 +20,6 @@ import com.tencent.polaris.api.core.ProviderAPI;
 import com.tencent.polaris.api.exception.ErrorCode;
 import com.tencent.polaris.api.exception.PolarisException;
 import com.tencent.polaris.api.rpc.InstanceDeregisterRequest;
-import com.tencent.polaris.api.rpc.InstanceHeartbeatRequest;
 import com.tencent.polaris.api.rpc.InstanceRegisterRequest;
 import com.tencent.polaris.api.rpc.InstanceRegisterResponse;
 import com.tencent.polaris.factory.api.DiscoveryAPIFactory;
@@ -28,9 +27,7 @@ import com.tencent.tsf.femas.common.entity.EndpointStatus;
 import com.tencent.tsf.femas.common.entity.Service;
 import com.tencent.tsf.femas.common.entity.ServiceInstance;
 import com.tencent.tsf.femas.common.serviceregistry.AbstractServiceRegistry;
-import org.slf4j.Logger;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import java.util.Map;
@@ -136,5 +133,4 @@ public class PolarisServiceRegistry extends AbstractServiceRegistry {
     public EndpointStatus getStatus(ServiceInstance serviceInstance) {
         return null;
     }
-
 }
