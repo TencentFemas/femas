@@ -24,10 +24,9 @@
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
-                    <!-- 打成zip包时，id不加在文件名中 -->
                     <appendAssemblyId>false</appendAssemblyId>
                     <descriptors>
-                        <descriptor>/release-femas.xml</descriptor>
+                        <descriptor>/femas-assembly.xml</descriptor>
                     </descriptors>
                 </configuration>
                 <executions>
