@@ -1,0 +1,108 @@
+@charset "utf-8";
+body,
+html {
+  width: 100%;
+  height: 100%;
+  background-color: #e9e9e9;
+  background-size: cover;
+  background-image: url("../image/login-bg.png");
+  overflow: auto;
+}
+
+.tea-login {
+  position: relative;
+  height: 100%;
+  min-height: 620px;
+}
+
+.tea-login__body {
+  position: relative;
+  top: 13%;
+}
+
+.tea-login__title {
+  width: 100%;
+  margin-bottom: 26px;
+}
+
+.tea-login__title-logos {
+  text-align: center;
+}
+
+.tea-login__title-mainlogo {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.tea-login__content {
+  width: 420px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  padding: 40px 30px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+}
+
+.tea-login__greeting {
+  font-size: 20px;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.tea-login__content .tea-form__label {
+  display: none;
+}
+
+.tea-login__content .tea-form__controls {
+  padding-right: 0;
+}
+
+.tea-login__content .tea-form__controls .tea-icon-loading {
+  position: absolute;
+  right: 10px;
+  top: 14px;
+}
+
+.tea-login__content .tea-input {
+  height: 44px;
+}
+
+.tea-login__content .tea-btn {
+  height: 44px;
+  line-height: 44px;
+  width: 110px;
+}
+
+.tea-login__content .tea-form-operate {
+  text-align: center;
+  border-top: none;
+}
+
+.tea-login__content .tea-form-operate .tea-btn {
+  min-width: 180px;
+  height: 44px;
+  font-size: 14px;
+}
+
+.tea-login__content .tea-justify-grid__col--right {
+  width: 120px;
+  padding-left: 10px;
+  flex-grow: 0;
+}
+
+.tea-login__code {
+  width: 100%;
+}
+
+.tea-login__footer {
+  text-align: center;
+  position: absolute;
+  left: 0;
+  bottom: 38px;
+  right: 0;
+}
+
+.tea-login__copyright {
+  font-size: 14px;
+  color: #bbb;
+}

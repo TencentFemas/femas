@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1"
+        xmlns="http://www.w3.org/2000/svg">
+    <!-- Generator: Sketch 52.6 (67491) - http://www.bohemiancoding.com/sketch -->
+    <title>帮助指引-16px</title>
+    <desc>Created with Sketch.</desc>
+    <g id="帮助指引" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="icon-概览">
+            <rect id="Rectangle-Copy" fill="#444444" opacity="0" x="0" y="0" width="16"
+                    height="16"></rect>
+            <path d="M5.714,15 L6,16 L11,16 L11.286,15 L5.714,15 Z M8.5,0 C4.91,0 2,2.91 2,6.5 C2,7.508 2.231,8.461 2.642,9.312 C3.318,10.714 3.966,12.129 4.393,13.625 L4.5,14 L8.5,14 L12.5,14 L12.608,13.625 C13.034,12.129 13.683,10.714 14.359,9.312 C14.77,8.461 15,7.508 15,6.5 C15,2.91 12.09,0 8.5,0 Z M8.5,2 C10.982,2 13,4.019 13,6.5 C13,7.181 12.852,7.834 12.558,8.442 C12.045,9.504 11.482,10.708 11.027,12 L8.5,12 L5.973,12 C5.519,10.708 4.955,9.504 4.443,8.442 C4.149,7.834 4,7.181 4,6.5 C4,4.019 6.019,2 8.5,2 Z"
+                    id="Fill-1-Copy" fill="#888888"></path>
+        </g>
+    </g>
+</svg>
