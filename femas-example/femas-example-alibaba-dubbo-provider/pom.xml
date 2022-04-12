@@ -27,6 +27,11 @@
             <artifactId>femas-registry-nacos</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.dubbo</groupId>
+            <artifactId>dubbo-rpc-triple</artifactId>
+            <version>3.0.6</version>
+        </dependency>
     </dependencies>
 
     <build>
