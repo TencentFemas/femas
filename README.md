@@ -78,12 +78,14 @@ Runtime environment dependencies:
 > External database Mysql (optional)
 
 ### Stand-alone deployment
-For the convenience of users, femas provides packaged and compiled tar for users to start with one click.
-> cd femas-console/femas-admin/bin
 
-Console configuration:
-The project configuration file is in the `femas-admin/conf` directory
-> cd femas-console/femas-admin/conf
+```
+mvn -Dmaven.test.skip=true clean install -U
+
+cd femas-admin-starter/target/femas-admin-starter-$version/femas-admin/bin
+
+sh startup.sh
+```
 
 The console configuration mainly includes:
 - Service port
