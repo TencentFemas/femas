@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assembly>
+    <id>${project.version}</id>
+    <includeBaseDirectory>true</includeBaseDirectory>
+    <baseDirectory>femas-admin</baseDirectory>
+    <formats>
+        <format>dir</format>
+        <format>tar.gz</format>
+        <format>zip</format>
+    </formats>
+    <fileSets>
+        <fileSet>
+            <directory>../femas-admin/src/main/resources</directory>
+            <outputDirectory>conf</outputDirectory>
+            <includes>
+                <include>bootstrap.yaml</include>
+                <include>logback-spring.xml</include>
+                <include>adminDb.sql</include>
+                <include>banner.txt</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <includes>
+                <include>conf/**</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <includes>
+                <include>bin/**</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <includes>
+                <include>logs/**</include>
+            </includes>
+        </fileSet>
+    </fileSets>
+    <files>
+        <file>
+            <source>../femas-admin/target/femas-admin-${parent.version}.jar</source>
+            <outputDirectory></outputDirectory>
+            <destName>femas-admin.jar</destName>
+        </file>
+    </files>
+</assembly>

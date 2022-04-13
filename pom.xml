@@ -68,6 +68,8 @@
         <module>femas-registry-impl</module>
         <module>jacoco-aggregate</module>
         <module>femas-governance</module>
+        <module>femas-admin</module>
+        <module>femas-admin-starter</module>
     </modules>
 
     <dependencyManagement>
