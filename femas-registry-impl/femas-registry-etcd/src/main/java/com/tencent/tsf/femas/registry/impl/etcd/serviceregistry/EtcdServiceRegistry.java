@@ -33,8 +33,11 @@ public class EtcdServiceRegistry extends AbstractServiceRegistry {
     private static final String KEY_STRING_FORMAT = "%s-%s-%s";
 
     private final KV kvClient;
+
     private final Lease leaseClient;
+
     private final StreamObserver<LeaseKeepAliveResponse> observer;
+
     private final ObjectMapper objectMapper;
 
     public EtcdServiceRegistry(Map<String, String> configMap) {
@@ -42,7 +45,7 @@ public class EtcdServiceRegistry extends AbstractServiceRegistry {
         this.kvClient = client.getKVClient();
         this.leaseClient = client.getLeaseClient();
         this.objectMapper = new ObjectMapper();
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        this.objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         this.observer = new StreamObserver<LeaseKeepAliveResponse>() {
 
             @Override

@@ -43,11 +43,11 @@ public class EtcdServiceDiscoveryClient extends AbstractServiceDiscoveryClient {
 
     private final AtomicBoolean serverListUpdateInProgress = new AtomicBoolean(false);
 
-    protected final ServerUpdater serverListUpdater;
-
     private final EtcdServerList etcdServerList;
 
     private final Map<Service, Notifier> notifiers = new ConcurrentHashMap<>();
+
+    protected final ServerUpdater serverListUpdater;
 
     public EtcdServiceDiscoveryClient(Map<String, String> configMap) {
         Client client = Client.builder().endpoints(configMap.get(RegistryConstants.REGISTRY_HOST)).build();
