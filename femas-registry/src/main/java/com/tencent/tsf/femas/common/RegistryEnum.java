@@ -7,5 +7,5 @@ package com.tencent.tsf.femas.common;
  * @Version 1.0
  */
 public enum RegistryEnum {
-    CONSUL, EUREKA, NACOS, KUBERNETES, POLARIS;
+    CONSUL, EUREKA, NACOS, KUBERNETES, POLARIS,ETCD;
 }
