@@ -11,10 +11,6 @@
 
     <artifactId>femas-springcloud-greenwich-nacos-plugin</artifactId>
 
-    <properties>
-        <maven.build.timestamp.format>yyyy.MM.dd_HH.mm.ss</maven.build.timestamp.format>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>com.tencent.tsf</groupId>

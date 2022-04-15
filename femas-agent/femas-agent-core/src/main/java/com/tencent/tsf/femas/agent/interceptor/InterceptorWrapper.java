@@ -18,7 +18,7 @@ package com.tencent.tsf.femas.agent.interceptor;
 
 import com.tencent.tsf.femas.agent.classloader.AgentClassLoader;
 import com.tencent.tsf.femas.agent.classloader.ClassLoaderCache;
-import com.tencent.tsf.femas.agent.logger.AgentLogger;
+import com.tencent.tsf.femas.agent.tools.AgentLogger;
 import net.bytebuddy.implementation.bind.annotation.*;
 
 import java.lang.reflect.Method;

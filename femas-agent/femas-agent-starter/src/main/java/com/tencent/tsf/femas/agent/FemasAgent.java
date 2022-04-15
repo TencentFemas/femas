@@ -18,9 +18,11 @@ package com.tencent.tsf.femas.agent;
 
 import java.lang.instrument.Instrumentation;
 
-import com.tencent.tsf.femas.agent.config.InterceptPluginLoader;
+import com.tencent.tsf.femas.agent.config.AgentPluginLoader;
+import com.tencent.tsf.femas.agent.config.GlobalInterceptPluginConfig;
 import com.tencent.tsf.femas.agent.interceptor.InterceptorWrapper;
-import com.tencent.tsf.femas.agent.logger.AgentLogger;
+
+import com.tencent.tsf.femas.agent.tools.AgentLogger;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.description.type.TypeDescription;
@@ -39,15 +41,15 @@ public class FemasAgent {
         try {
             final ByteBuddy byteBuddy = new ByteBuddy().with(TypeValidation.of(TypeValidation.DISABLED.isEnabled()));
             AgentBuilder agentBuilder = new AgentBuilder.Default(byteBuddy);
-            for (InterceptPluginLoader plugin : InterceptPluginLoader.getConfigs()) {
-                agentBuilder = agentBuilder.type(ElementMatchers.named(plugin.getClassName())).transform((builder, typeDescription, classLoader, module) -> {
+            for (GlobalInterceptPluginConfig plugin : AgentPluginLoader.getInterceptConfig()) {
+                agentBuilder = agentBuilder.type(ElementMatchers.named(plugin.getPlugin().getClassName())).transform((builder, typeDescription, classLoader, module) -> {
                     //按照参数长度处理匹配重载方法
-                    if (plugin.getTakesArguments() != null) {
-                        builder = builder.method(ElementMatchers.named(plugin.getMethodName()).and(ElementMatchers.takesArguments(plugin.getTakesArguments())))
-                                .intercept(MethodDelegation.to(new InterceptorWrapper(plugin.getInterceptorClass())));
+                    if (plugin.getPlugin().getTakesArguments() != null) {
+                        builder = builder.method(ElementMatchers.named(plugin.getPlugin().getMethodName()).and(ElementMatchers.takesArguments(plugin.getPlugin().getTakesArguments())))
+                                .intercept(MethodDelegation.to(new InterceptorWrapper(plugin.getPlugin().getInterceptorClass())));
                     } else {
-                        builder = builder.method(ElementMatchers.named(plugin.getMethodName()))
-                                .intercept(MethodDelegation.to(new InterceptorWrapper(plugin.getInterceptorClass())));
+                        builder = builder.method(ElementMatchers.named(plugin.getPlugin().getMethodName()))
+                                .intercept(MethodDelegation.to(new InterceptorWrapper(plugin.getPlugin().getInterceptorClass())));
                     }
                     return builder;
                 });

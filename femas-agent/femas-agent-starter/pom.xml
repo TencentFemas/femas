@@ -23,7 +23,6 @@
         <dependency>
             <groupId>com.tencent.tsf</groupId>
             <artifactId>femas-agent-core</artifactId>
-            <version>${project.version}</version>
         </dependency>
     </dependencies>
 
@@ -108,10 +107,13 @@
                             <tasks>
                                 <mkdir dir="${project.basedir}/../femas-agent"/>
                                 <mkdir dir="${project.basedir}/../femas-agent/plugins"/>
+                                <mkdir dir="${project.basedir}/../femas-agent/config"/>
                                 <copy file="${project.build.directory}/${file.name}.jar"
                                       tofile="${project.basedir}/../femas-agent/${file.name}.jar" overwrite="true"/>
-                                <copy file="${project.basedir}/src/main/resources/agent.yml"
-                                      tofile="${project.basedir}/../femas-agent/agent.yml" overwrite="true"/>
+                                <copy file="${project.basedir}/src/main/resources/plugin.yaml"
+                                      tofile="${project.basedir}/../femas-agent/config/plugin.yaml" overwrite="true"/>
+                                <copy file="${project.basedir}/src/main/resources/femas.yaml"
+                                      tofile="${project.basedir}/../femas-agent/config/femas.yaml" overwrite="true"/>
                             </tasks>
                         </configuration>
                     </execution>

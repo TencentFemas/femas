@@ -8,7 +8,7 @@ import java.util.logging.SimpleFormatter;
 
 public class AgentLogger {
     static Logger logger = Logger.getLogger("AgentLogger");
-    private static final String AGENT_LOG_LINUX = "/opt/logs/agent_plugin.log";
+    private static final String AGENT_LOG_LINUX = "/tmp/agent.log";
     private static final String AGENT_LOG_WINDOWS = "C:/agent_plugin.log";
 
     static {

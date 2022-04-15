@@ -22,7 +22,18 @@ package com.tencent.tsf.femas.agent.config;
  * @Version 1.0
  */
 public enum MatcherType {
-    CONSTRUCTOR("constructor"),PREFIX("prefix"),SUFFIX("suffix");
+    /**
+     *改写构造方法
+     */
+    CONSTRUCTOR("constructor"),
+    /**
+     *改写前缀匹配的方法
+     */
+    PREFIX("prefix"),
+    /**
+     *改写后缀匹配的方法
+     */
+    SUFFIX("suffix");
 
     MatcherType(String type) {
         this.type = type;

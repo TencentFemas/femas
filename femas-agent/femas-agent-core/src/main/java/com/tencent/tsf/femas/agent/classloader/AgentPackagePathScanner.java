@@ -17,7 +17,7 @@
  */
 package com.tencent.tsf.femas.agent.classloader;
 
-import com.tencent.tsf.femas.agent.logger.AgentLogger;
+import com.tencent.tsf.femas.agent.tools.AgentLogger;
 
 import java.io.File;
 import java.net.MalformedURLException;

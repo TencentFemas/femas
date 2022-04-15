@@ -39,7 +39,6 @@
         <dependency>
             <groupId>com.tencent.tsf</groupId>
             <artifactId>femas-agent-tools</artifactId>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 
