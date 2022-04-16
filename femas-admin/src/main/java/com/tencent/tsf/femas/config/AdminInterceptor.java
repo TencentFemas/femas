@@ -2,6 +2,7 @@ package com.tencent.tsf.femas.config;
 
 import com.tencent.tsf.femas.common.serialize.JSONSerializer;
 import com.tencent.tsf.femas.common.util.Result;
+import com.tencent.tsf.femas.common.util.StringUtils;
 import com.tencent.tsf.femas.util.AESUtils;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -30,7 +31,7 @@ public class AdminInterceptor extends HandlerInterceptorAdapter {
             throws Exception {
         String token = request.getHeader("token");
         // 判断token是否非法
-        if (token == null || token == "") {
+        if (token == null || StringUtils.isBlank(token)) {
             returnJson(response, JSONSerializer.serializeStr(Result.create(Result.UNAUTHORIZED, "请登录", null)));
             return false;
         }
