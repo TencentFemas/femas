@@ -138,7 +138,7 @@ public class RegistryManagerService implements ServiceExecutor {
             });
             tasks.stream().forEach(t -> {
                 try {
-                    t.get(this.FUTURE_TASK_TIMEOUT_SEC, TimeUnit.SECONDS);
+                    t.get(FUTURE_TASK_TIMEOUT_SEC, TimeUnit.SECONDS);
                 } catch (InterruptedException e) {
                     log.error("queryService  failed  ", e);
                 } catch (ExecutionException e) {
