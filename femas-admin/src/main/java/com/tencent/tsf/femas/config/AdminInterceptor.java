@@ -31,7 +31,7 @@ public class AdminInterceptor extends HandlerInterceptorAdapter {
             throws Exception {
         String token = request.getHeader("token");
         // 判断token是否非法
-        if (token == null || StringUtils.isBlank(token)) {
+        if (StringUtils.isBlank(token)) {
             returnJson(response, JSONSerializer.serializeStr(Result.create(Result.UNAUTHORIZED, "请登录", null)));
             return false;
         }
