@@ -56,9 +56,9 @@ public class GlobalExceptionHandler {
             try {
                 return (T) handlerMapCache.get(e.getClass().getName()).invoke(this, e);
             } catch (IllegalAccessException illegalAccessException) {
-                logger.error("global exception handler illegalAccessException ,{}", illegalAccessException);
+                logger.error("global exception handler illegalAccessException ", illegalAccessException);
             } catch (InvocationTargetException invocationTargetException) {
-                logger.error("global exception handler invocationTargetException ,{}",
+                logger.error("global exception handler invocationTargetException",
                         invocationTargetException.getTargetException().getCause());
                 return (T) Result
                         .errorData(invocationTargetException.getTargetException().getMessage(), e.getMessage());
@@ -74,7 +74,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(FemasException.class)
     public <T> T handleFemasException(FemasException e) {
-        logger.error("[femas-admin] got FemasException. error code {},error message {}", e.getErrorCode(),
+        logger.error("[femas-admin] got FemasException. error code {},error message {}, message {}", e.getErrorCode(),
                 e.getErrorMessage(), e.getMessage());
         return (T) Result.errorMessage(e.getMessage());
     }
