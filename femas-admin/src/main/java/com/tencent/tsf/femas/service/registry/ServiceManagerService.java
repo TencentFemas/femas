@@ -109,9 +109,9 @@ public class ServiceManagerService {
         serviceOverview.setNamespaceId(param.getNamespaceId());
         serviceOverview.setNamespaceName(
                 namespaceMangerService.fetchNamespaceById(param.getNamespaceId()).getData().getName());
-        serviceOverview.setStatus("DOWN");
+        serviceOverview.setStatus(EndpointStatus.DOWN.name());
         if (liveInstanceCount != 0) {
-            serviceOverview.setStatus("UP");
+            serviceOverview.setStatus(EndpointStatus.UP.name());
         }
         serviceOverview.setServiceName(param.getServiceName());
         serviceOverview.setVersions(versions);

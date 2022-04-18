@@ -34,6 +34,7 @@ public class FemasLoadBalancerHandler extends ConfigHandler {
      *
      * @param service
      */
+    @Override
     public synchronized void subscribeServiceConfig(Service service) {
         if (StringUtils.isEmpty(service.getNamespace()) || subscribedNamespace.contains(service.getNamespace())) {
             return;
