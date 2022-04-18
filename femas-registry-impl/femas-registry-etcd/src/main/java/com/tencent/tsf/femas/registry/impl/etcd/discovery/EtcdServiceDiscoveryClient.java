@@ -152,13 +152,13 @@ public class EtcdServiceDiscoveryClient extends AbstractServiceDiscoveryClient {
                 }
                 return serviceInstances;
             } catch (Exception e) {
-                logger.error("Error with get instances:{0}", e);
+                logger.error("Error with get instances:", e);
             }
             return new ArrayList<>();
         }
     }
 
-    public ScheduledFuture enableAndInitLearnNewServersFeature(Service service) {
+    public ScheduledFuture<?> enableAndInitLearnNewServersFeature(Service service) {
         logger.info("Using serverListUpdater {}", this.serverListUpdater.getClass().getSimpleName());
         return this.serverListUpdater.start(new Action(service));
     }
