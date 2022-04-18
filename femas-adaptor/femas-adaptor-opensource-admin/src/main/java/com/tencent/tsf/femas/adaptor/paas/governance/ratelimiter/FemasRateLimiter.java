@@ -29,6 +29,7 @@ public class FemasRateLimiter implements RateLimiter<RateLimiterRule> {
     RequestCollector requestCollector;
     private Service service;
 
+    @Override
     public void buildCollector(Service service) {
         this.service = service;
         this.requestCollector = new RequestCollector(service, ratelimitClientCache);
@@ -89,6 +90,7 @@ public class FemasRateLimiter implements RateLimiter<RateLimiterRule> {
     /**
      * 适配单进程多Service的场景
      */
+    @Override
     public void setInsId(String insId) {
         requestCollector.setInsId(insId);
     }
