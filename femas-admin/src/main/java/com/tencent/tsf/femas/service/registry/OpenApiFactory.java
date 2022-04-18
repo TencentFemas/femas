@@ -19,6 +19,7 @@ package com.tencent.tsf.femas.service.registry;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.tencent.tsf.femas.common.RegistryEnum;
 import org.springframework.stereotype.Component;
 
 /**
@@ -42,11 +43,11 @@ public class OpenApiFactory {
         this.consulRegistryOpenApi = consulRegistryOpenApi;
         this.k8sRegistryOpenApi = k8sRegistryOpenApi;
         this.polarisRegistryOpenApi = polarisRegistryOpenApi;
-        registryOpenApiInterfaceMapCache.put("CONSUL", consulRegistryOpenApi);
-        registryOpenApiInterfaceMapCache.put("NACOS", nacosRegistryOpenApi);
-        registryOpenApiInterfaceMapCache.put("EUREKA", eurekaRegistryOpenApi);
-        registryOpenApiInterfaceMapCache.put("K8S", k8sRegistryOpenApi);
-        registryOpenApiInterfaceMapCache.put("POLARIS", polarisRegistryOpenApi);
+        registryOpenApiInterfaceMapCache.put(RegistryEnum.CONSUL.getAlias(), consulRegistryOpenApi);
+        registryOpenApiInterfaceMapCache.put(RegistryEnum.NACOS.getAlias(), nacosRegistryOpenApi);
+        registryOpenApiInterfaceMapCache.put(RegistryEnum.EUREKA.getAlias(), eurekaRegistryOpenApi);
+        registryOpenApiInterfaceMapCache.put(RegistryEnum.KUBERNETES.getAlias(), k8sRegistryOpenApi);
+        registryOpenApiInterfaceMapCache.put(RegistryEnum.POLARIS.getAlias(), polarisRegistryOpenApi);
     }
 
     public RegistryOpenApiInterface select(String type) {

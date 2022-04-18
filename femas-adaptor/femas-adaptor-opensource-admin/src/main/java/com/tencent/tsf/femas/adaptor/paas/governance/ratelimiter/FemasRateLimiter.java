@@ -29,6 +29,7 @@ public class FemasRateLimiter implements RateLimiter<RateLimiterRule> {
     RequestCollector requestCollector;
     private Service service;
 
+    @Override
     public void buildCollector(Service service) {
         this.service = service;
         this.requestCollector = new RequestCollector(service, ratelimitClientCache);
