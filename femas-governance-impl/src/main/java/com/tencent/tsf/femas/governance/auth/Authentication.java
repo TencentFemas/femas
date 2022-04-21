@@ -69,11 +69,13 @@ public class Authentication implements IAuthentication<AuthRuleGroup> {
         return authResult;
     }
 
+    @Override
     public void refreshAuthRuleGroup(Service service, AuthRuleGroup authRuleGroup) {
         authRuleGroupMap.put(service, authRuleGroup);
         LOGGER.info("Refresh auth rule group. Service : " + service + ", authRuleGroup : " + authRuleGroup);
     }
 
+    @Override
     public void disableAuthRuleGroup(Service service) {
         if (service == null) {
             return;

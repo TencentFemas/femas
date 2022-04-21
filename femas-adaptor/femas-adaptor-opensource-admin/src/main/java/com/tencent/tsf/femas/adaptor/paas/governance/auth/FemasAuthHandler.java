@@ -114,6 +114,7 @@ public class FemasAuthHandler extends ConfigHandler {
      *
      * @param service
      */
+    @Override
     public synchronized void subscribeServiceConfig(final Service service) {
         String authKey = "authority/" + service.getNamespace() + "/" + service.getName() + "/";
 

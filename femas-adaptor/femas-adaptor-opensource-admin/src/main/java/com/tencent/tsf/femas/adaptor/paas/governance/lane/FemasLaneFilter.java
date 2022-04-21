@@ -80,6 +80,15 @@ public class FemasLaneFilter implements LaneFilter {
      */
     private static List<ServiceInstance> chooseColorfulInstances(List<ServiceInstance> serviceInstances,
             LaneInfo laneInfo) {
+        //只有一个实例节点，无需筛选，直接使用它
+        if(CollectionUtil.isNotEmpty(serviceInstances) && serviceInstances.size()==1){
+            if(LOGGER.isDebugEnabled()){
+                LOGGER.debug("[FEMAS LANE] Choose Colorful instances. but only one instance = {}",
+                        serviceInstances);
+            }
+            return serviceInstances;
+        }
+
         List<ServiceInstance> serverList = Lists.newArrayList();
         String laneId = laneInfo.getLaneId();
 
@@ -93,6 +102,14 @@ public class FemasLaneFilter implements LaneFilter {
             }
         }
 
+        if(CollectionUtil.isEmpty(serverList)){
+            if(LOGGER.isDebugEnabled()){
+                LOGGER.debug("[FEMAS LANE] Choose Colorful instances is empty. return all service instances = {}",
+                        serviceInstances);
+            }
+            return serviceInstances;
+        }
+
         LOGGER.debug("[FEMAS LANE] Choose Colorful instances. Femas lane take effect, color service list = {}",
                 serverList);
         return serverList;
@@ -103,6 +120,15 @@ public class FemasLaneFilter implements LaneFilter {
      */
     private static List<ServiceInstance> chooseColorlessInstances(Service service,
             List<ServiceInstance> serviceInstances) {
+        //只有一个实例节点，无需筛选，直接使用它
+        if(CollectionUtil.isNotEmpty(serviceInstances) && serviceInstances.size()==1){
+            if(LOGGER.isDebugEnabled()){
+                LOGGER.debug("[FEMAS LANE] Choose Colorless instances. but only one instance = {}",
+                        serviceInstances);
+            }
+            return serviceInstances;
+        }
+
         List<ServiceInstance> instances = new ArrayList<>();
         String namespaceId = service.getNamespace();
 
@@ -127,10 +153,16 @@ public class FemasLaneFilter implements LaneFilter {
             instances.add(instance);
         }
 
-        if (!CollectionUtil.isEmpty(colorInstances)) {
-            LOGGER.debug("[FEMAS LANE] Choose Colorless instances. lane take effect, filter color instance list = {}",
-                    colorInstances);
+        if(CollectionUtil.isEmpty(instances)){
+            if(LOGGER.isDebugEnabled()){
+                LOGGER.debug("[FEMAS LANE] Choose Colorless instances is empty. return all service instances = {}",
+                        serviceInstances);
+            }
+            return serviceInstances;
         }
+
+        LOGGER.debug("[FEMAS LANE] Choose Colorless instances. lane take effect, filter color instance list = {}",
+                colorInstances);
 
         return instances;
     }
@@ -243,7 +275,6 @@ public class FemasLaneFilter implements LaneFilter {
         }
 
         resortLaneRule();
-        LOGGER.info("EFFECTIVE LANE Rule changed. EFFECTIVE_LANE_RULES : " + EFFECTIVE_LANE_RULES);
     }
 
     private static synchronized void resortLaneRule() {
@@ -259,6 +290,7 @@ public class FemasLaneFilter implements LaneFilter {
                 }
             }
         });
+        LOGGER.info("EFFECTIVE LANE Rule changed. EFFECTIVE_LANE_RULES : " + EFFECTIVE_LANE_RULES);
     }
 
     public static synchronized void addLaneRule(LaneRule laneRule) {
@@ -344,6 +376,7 @@ public class FemasLaneFilter implements LaneFilter {
         }
     }
 
+    @Override
     public void preProcessLaneId() {
         /**
          * 入口部署组可以设置或者重新设置LaneId
