@@ -16,7 +16,6 @@
         <dependency>
             <groupId>com.tencent.tsf</groupId>
             <artifactId>femas-springcloud-plugin-common</artifactId>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 
@@ -43,6 +42,17 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifestEntries>
+                            <Implementation-Version>${project.version}</Implementation-Version>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

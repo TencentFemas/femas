@@ -1,10 +1,13 @@
 package com.tencent.tsf.femas.common.context;
 
+import com.tencent.tsf.femas.common.annotation.SPI;
+
 /**
  * Context使用到的常量
  *
  * @author zhixinzxliu
  */
+@SPI
 public abstract class ContextConstant {
 
     /**
@@ -27,6 +30,8 @@ public abstract class ContextConstant {
     public static final String DESTINATION = "destination.";
 
     public static final String LANE_ID_TAG = "lane.id";
+
+    public static final String START_AGENT_FEMAS = "startFemasAgent";
 
     public static final String TRACING_LOG_PATH_KEY = "trace.log.path";
     public static final String MONITOR_LOG_PATH_KEY = "monitor.log.path";

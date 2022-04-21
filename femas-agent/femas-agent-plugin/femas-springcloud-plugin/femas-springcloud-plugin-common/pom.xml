@@ -94,14 +94,17 @@
 
         <dependency>
             <groupId>com.tencent.tsf</groupId>
-            <artifactId>femas-api</artifactId>
-            <scope>compile</scope>
+            <artifactId>femas-adaptor-opensource-admin</artifactId>
         </dependency>
 
         <dependency>
             <groupId>com.tencent.tsf</groupId>
-            <artifactId>femas-governance-impl</artifactId>
-            <scope>compile</scope>
+            <artifactId>femas-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.tencent.tsf</groupId>
+            <artifactId>femas-config</artifactId>
         </dependency>
 
         <dependency>
@@ -121,6 +124,17 @@
                     <target>1.8</target>
                     <encoding>UTF-8</encoding>
                     <showWarnings>true</showWarnings>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifestEntries>
+                            <Implementation-Version>${project.version}</Implementation-Version>
+                        </manifestEntries>
+                    </archive>
                 </configuration>
             </plugin>
         </plugins>

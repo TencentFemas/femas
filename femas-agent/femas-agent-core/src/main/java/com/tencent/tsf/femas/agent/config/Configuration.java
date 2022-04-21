@@ -20,12 +20,6 @@ package com.tencent.tsf.femas.agent.config;
 
 import java.util.List;
 
-/**
- * SDK全量配置对象
- *
- * @author andrewshan
- * @date 2019/8/20
- */
 public interface Configuration extends Verifier {
 
     /**

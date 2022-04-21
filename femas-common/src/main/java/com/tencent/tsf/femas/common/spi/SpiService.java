@@ -4,14 +4,24 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.ServiceLoader;
+
+import com.tencent.tsf.femas.agent.classloader.AgentClassLoader;
+import com.tencent.tsf.femas.agent.classloader.ClassLoaderCache;
+import com.tencent.tsf.femas.common.context.AgentConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static com.tencent.tsf.femas.common.context.ContextConstant.START_AGENT_FEMAS;
 
 public class SpiService {
 
     private static final Logger logger = LoggerFactory.getLogger(SpiService.class);
 
     public static <T extends SpiExtensionClass> Map<String, T> init(Class<T> spiExtensionClass) {
+        if (AgentConfig.doGetProperty(START_AGENT_FEMAS) != null && (Boolean) AgentConfig.doGetProperty(START_AGENT_FEMAS)) {
+            AgentClassLoader agentClassLoader = ClassLoaderCache.getAgentClassLoader(Thread.currentThread().getContextClassLoader());
+            Thread.currentThread().setContextClassLoader(agentClassLoader);
+        }
         ServiceLoader<T> registryFactoryServiceLoader = ServiceLoader.load(spiExtensionClass);
         Iterator<T> it = registryFactoryServiceLoader.iterator();
 

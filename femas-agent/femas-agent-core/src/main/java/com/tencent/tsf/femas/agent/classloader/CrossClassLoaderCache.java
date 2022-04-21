@@ -19,8 +19,6 @@ public class CrossClassLoaderCache {
 
     private static Map<String, Set<Object>> cacheSet = new ConcurrentHashMap<>();
 
-    private static boolean graySwitch = true;
-
     public static Map<String, Object> getCache(String cacheKey) {
         return cache.get(cacheKey);
     }
@@ -88,25 +86,4 @@ public class CrossClassLoaderCache {
         }
     }
 
-    public static void setSwitch(boolean graySwitchflag){
-        graySwitch = graySwitchflag;
-    }
-
-    public static boolean getSwitch(){
-        return graySwitch;
-    }
-
-    public static void main(String[] args) {
-        String testSetKey = "set1";
-        addCacheSet(testSetKey, "123");
-        addCacheSet(testSetKey, "234");
-        addCacheSet(testSetKey, "345");
-
-        System.out.println(isSetContains(testSetKey, "123"));
-        removeCacheSet(testSetKey, "123");
-        removeCacheSet(testSetKey, "123");
-        System.out.println(isSetContains(testSetKey, "123"));
-
-        System.out.println(getCacheSet(testSetKey));
-    }
 }

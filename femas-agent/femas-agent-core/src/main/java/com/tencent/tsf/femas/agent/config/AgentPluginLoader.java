@@ -27,12 +27,20 @@ public class AgentPluginLoader {
         FileReader reader = null;
         try {
             reader = new FileReader(AgentPackagePathScanner.getPath() + filePath);
+            BufferedReader buffer = new BufferedReader(reader);
+            conf = yml.load(buffer);
+            finalYamlLocations = mapper.convertValue(conf, JsonNode.class);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if (reader != null) {
+                    reader.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-        BufferedReader buffer = new BufferedReader(reader);
-        conf = yml.load(buffer);
-        finalYamlLocations = mapper.convertValue(conf, JsonNode.class);
     }
 
     public static List<GlobalInterceptPluginConfig> getInterceptConfig() {

@@ -36,7 +36,6 @@ public class FemasContext extends Context {
         /**
          * SYS_TAG
          */
-
         String zone = FemasConfig.getProperty(FemasConstant.FEMAS_ZONE_KEY);
         if (!StringUtils.isEmpty(zone)) {
             SYSTEM_TAGS.put(FemasConstant.FEMAS_ZONE, zone);

@@ -17,10 +17,16 @@
 
 package com.tencent.tsf.femas.common.context.factory;
 
+import com.tencent.tsf.femas.agent.classloader.AgentClassLoader;
+import com.tencent.tsf.femas.agent.classloader.ClassLoaderCache;
+import com.tencent.tsf.femas.common.context.AgentConfig;
 import com.tencent.tsf.femas.common.context.Context;
 import com.tencent.tsf.femas.common.context.ContextConstant;
+
 import java.util.Iterator;
 import java.util.ServiceLoader;
+
+import static com.tencent.tsf.femas.common.context.ContextConstant.START_AGENT_FEMAS;
 
 /**
  * <pre>
@@ -45,7 +51,10 @@ public class ContextFactory {
         static ContextConstant contextConstantInstance = null;
 
         static {
-
+            if (AgentConfig.doGetProperty(START_AGENT_FEMAS) != null && (Boolean) AgentConfig.doGetProperty(START_AGENT_FEMAS)) {
+                AgentClassLoader agentClassLoader = ClassLoaderCache.getAgentClassLoader(Thread.currentThread().getContextClassLoader());
+                Thread.currentThread().setContextClassLoader(agentClassLoader);
+            }
             // SPI加载并初始化实现类
             ServiceLoader<Context> contextServiceLoader = ServiceLoader.load(Context.class);
             Iterator<Context> contextIterator = contextServiceLoader.iterator();
@@ -53,7 +62,6 @@ public class ContextFactory {
             while (contextIterator.hasNext()) {
                 contextInstance = contextIterator.next();
             }
-
             // SPI加载并初始化实现类
             ServiceLoader<ContextConstant> constantServiceLoader = ServiceLoader.load(ContextConstant.class);
             Iterator<ContextConstant> constantIterator = constantServiceLoader.iterator();

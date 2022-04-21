@@ -107,6 +107,7 @@
                             <tasks>
                                 <mkdir dir="${project.basedir}/../femas-agent"/>
                                 <mkdir dir="${project.basedir}/../femas-agent/plugins"/>
+                                <mkdir dir="${project.basedir}/../femas-agent/plugins/libs"/>
                                 <mkdir dir="${project.basedir}/../femas-agent/config"/>
                                 <copy file="${project.build.directory}/${file.name}.jar"
                                       tofile="${project.basedir}/../femas-agent/${file.name}.jar" overwrite="true"/>

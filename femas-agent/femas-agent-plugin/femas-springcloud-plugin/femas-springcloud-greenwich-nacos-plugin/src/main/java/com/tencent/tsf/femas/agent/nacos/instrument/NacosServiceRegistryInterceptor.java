@@ -56,20 +56,19 @@ public class NacosServiceRegistryInterceptor implements Interceptor {
     @Override
     public Object intercept(Object obj, Object[] allArguments, Callable<?> zuper, Method method) throws Throwable {
         try {
-
             com.alibaba.cloud.nacos.registry.NacosRegistration registration = (com.alibaba.cloud.nacos.registry.NacosRegistration) allArguments[0];
             NacosDiscoveryProperties properties = registration.getNacosDiscoveryProperties();
-            Map<String, String> metadata = properties.getMetadata();
             String namespace = Context.getSystemTag(contextConstant.getNamespaceId());
             Service service = new Service(namespace, properties.getService());
-            AgentLogger.getLogger().info("===================================================");
             String serverAddr = properties.getServerAddr();
             if (StringUtils.isNotEmpty(properties.getServerAddr())) {
                 extensionLayer.init(service, NumberUtils.toInt(serverAddr.split(":")[0]), serverAddr.split(":")[1]);
             } else {
                 extensionLayer.init(service, NumberUtils.toInt(serverAddr.split(":")[0]));
             }
-            metadata.put("AgentProtocol", "spring-cloud-nacos-agent");
+            Map<String, String> registerMetadataMap = serviceRegistryMetadata.getRegisterMetadataMap();
+            registerMetadataMap.put("protocol", "spring-cloud-nacos-plugin");
+            registration.getMetadata().putAll(registerMetadataMap);
             return zuper.call();
         } catch (Exception e) {
         }

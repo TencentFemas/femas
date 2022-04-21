@@ -15,13 +15,41 @@
         <dependency>
             <groupId>com.tencent.tsf</groupId>
             <artifactId>femas-springcloud-plugin-common</artifactId>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 
     <build>
+
         <finalName>femas-springcloud-greenwich-nacos-plugin-${maven.build.timestamp}</finalName>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <encoding>UTF-8</encoding>
+                    <showWarnings>true</showWarnings>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.3.0</version>
+                <executions>
+                    <execution>
+                        <id>copy</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.basedir}/../../../femas-agent/plugins/libs</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
@@ -35,6 +63,7 @@
                             <tasks>
                                 <mkdir dir="${project.basedir}/../../../femas-agent"/>
                                 <mkdir dir="${project.basedir}/../../../femas-agent/plugins"/>
+                                <mkdir dir="${project.basedir}/../../../femas-agent/plugins/libs"/>
                                 <copy file="${project.build.directory}/femas-springcloud-greenwich-nacos-plugin-${maven.build.timestamp}.jar"
                                       tofile="${project.basedir}/../../../femas-agent/plugins/femas-springcloud-greenwich-nacos-plugin-${maven.build.timestamp}.jar"
                                       overwrite="true"/>
@@ -43,16 +72,28 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                    <encoding>UTF-8</encoding>
-                    <showWarnings>true</showWarnings>
-                </configuration>
-            </plugin>
+
+            <!--            <plugin>-->
+            <!--                <groupId>org.apache.maven.plugins</groupId>-->
+            <!--                <artifactId>maven-compiler-plugin</artifactId>-->
+            <!--                <configuration>-->
+            <!--                    <source>1.8</source>-->
+            <!--                    <target>1.8</target>-->
+            <!--                    <encoding>UTF-8</encoding>-->
+            <!--                    <showWarnings>true</showWarnings>-->
+            <!--                </configuration>-->
+            <!--            </plugin>-->
+            <!--            <plugin>-->
+            <!--                <groupId>org.apache.maven.plugins</groupId>-->
+            <!--                <artifactId>maven-jar-plugin</artifactId>-->
+            <!--                <configuration>-->
+            <!--                    <archive>-->
+            <!--                        <manifestEntries>-->
+            <!--                            <Implementation-Version>${project.version}</Implementation-Version>-->
+            <!--                        </manifestEntries>-->
+            <!--                    </archive>-->
+            <!--                </configuration>-->
+            <!--            </plugin>-->
         </plugins>
     </build>
 </project>
