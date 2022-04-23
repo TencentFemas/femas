@@ -2,7 +2,7 @@ package com.tencent.tsf.femas.adaptor.paas.governance.lane;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.tencent.tsf.femas.adaptor.paas.common.FemasConstant;
+import com.tencent.tsf.femas.common.constant.FemasConstant;
 import com.tencent.tsf.femas.common.context.Context;
 import com.tencent.tsf.femas.common.context.FemasContext;
 import com.tencent.tsf.femas.common.entity.Service;

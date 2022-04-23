@@ -3,9 +3,12 @@ package com.tencent.tsf.femas.extension.springcloud.hoxton.discovery.eureka;
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.loadbalancer.Server;
 import com.netflix.niws.loadbalancer.DiscoveryEnabledServer;
+import com.tencent.tsf.femas.common.constant.FemasConstant;
 import com.tencent.tsf.femas.common.entity.EndpointStatus;
 import com.tencent.tsf.femas.common.entity.Service;
 import com.tencent.tsf.femas.common.entity.ServiceInstance;
+import com.tencent.tsf.femas.common.util.StringUtils;
+import com.tencent.tsf.femas.config.FemasConfig;
 import com.tencent.tsf.femas.extension.springcloud.hoxton.discovery.ribbon.DiscoveryServerConverter;
 import org.apache.commons.collections.MapUtils;
 
@@ -17,17 +20,22 @@ import java.util.Map;
  */
 public class EurekaServerConverter implements DiscoveryServerConverter {
 
+
     @Override
     public ServiceInstance convert(Server server) {
         ServiceInstance instance = new ServiceInstance();
         if (server instanceof DiscoveryEnabledServer) {
             DiscoveryEnabledServer eurekaServer = (DiscoveryEnabledServer) server;
-            InstanceInfo i = eurekaServer.getInstanceInfo();
-            instance.setAllMetadata(i.getMetadata());
-            instance.setHost(i.getIPAddr());
-            instance.setPort(i.getPort());
-            instance.setService(new Service(getNamespace(), getServiceName()));
-            instance.setStatus(EndpointStatus.getTypeByName(i.getStatus().name()));
+            InstanceInfo instanceInfo = eurekaServer.getInstanceInfo();
+            instance.setAllMetadata(instanceInfo.getMetadata());
+            instance.setHost(instanceInfo.getIPAddr());
+            instance.setPort(instanceInfo.getPort());
+            Map<String, String> metadata = instanceInfo.getMetadata();
+            String nameSpaceIdValue = FemasConfig.getProperty(FemasConstant.FEMAS_META_NAMESPACE_ID_KEY);
+            String nameSpace = StringUtils.isEmpty(nameSpaceIdValue) ? metadata.get(FemasConstant.FEMAS_META_NAMESPACE_ID_KEY) : nameSpaceIdValue;
+            Service service = new Service(nameSpace, instanceInfo.getAppName());
+            instance.setService(service);
+            instance.setStatus(EndpointStatus.getTypeByName(instanceInfo.getStatus().name()));
             instance.setOrigin(server);
             return instance;
         }
