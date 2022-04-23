@@ -211,6 +211,23 @@ public class NacosRegistryOpenApi extends RegistryOpenApiAdaptor {
     }
 
     @Override
+    public boolean modifyNamespace(RegistryConfig config, Namespace namespace) {
+        String url = selectOne(config);
+        try {
+            Map<String, Object> queryMap = new HashMap<>();
+            queryMap.put("namespace", namespace.getNamespaceId());
+            queryMap.put("namespaceShowName", namespace.getName());
+            queryMap.put("namespaceDesc", namespace.getDesc());
+            HttpResult<String> result = httpClient.put(url.concat(NAMESPCE_URL), null, queryMap);
+            return Boolean.TRUE.toString().equals(result.getData());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
+    @Override
     public boolean deleteNamespace(RegistryConfig config, Namespace namespace) {
         String url = selectOne(config);
         try {

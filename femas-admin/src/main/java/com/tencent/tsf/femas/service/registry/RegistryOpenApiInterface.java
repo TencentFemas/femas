@@ -42,6 +42,8 @@ public interface RegistryOpenApiInterface {
 
     boolean createNamespace(RegistryConfig config, Namespace namespace);
 
+    boolean modifyNamespace(RegistryConfig config, Namespace namespace);
+
     default boolean healthCheck(RegistryConfig config) {
         return true;
     }

@@ -200,7 +200,7 @@ public class MysqlDataOperation implements DataOperation {
         if(!CollectionUtil.isEmpty(namespace.getRegistryId())){
             RegistryConfig config = fetchRegistryById(namespace.getRegistryId().get(0));
             RegistryOpenApiInterface registryOpenApiInterface = factory.select(config.getRegistryType());
-            registryOpenApiInterface.createNamespace(config, namespace);
+            registryOpenApiInterface.modifyNamespace(config, namespace);
         }
         return res;
     }

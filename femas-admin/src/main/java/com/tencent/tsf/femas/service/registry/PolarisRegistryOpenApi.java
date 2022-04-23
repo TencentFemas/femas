@@ -267,6 +267,12 @@ public class PolarisRegistryOpenApi extends RegistryOpenApiAdaptor {
     }
 
     @Override
+    public boolean modifyNamespace(RegistryConfig config, Namespace namespace) {
+        //不熟悉polaris，沿用原先的逻辑
+        return createNamespace(config, namespace);
+    }
+
+    @Override
     public boolean deleteNamespace(RegistryConfig config, Namespace namespace) {
         String url = selectOne(config);
         try {

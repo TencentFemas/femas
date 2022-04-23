@@ -201,7 +201,7 @@ public class RocksDbDataOperation implements DataOperation {
                 return 0;
             }
             RegistryOpenApiInterface registryOpenApiInterface = factory.select(config.getRegistryType());
-            registryOpenApiInterface.createNamespace(config, namespace);
+            registryOpenApiInterface.modifyNamespace(config, namespace);
         }
         if(!res.getStatus().equalsIgnoreCase(StorageResult.SUCCESS)){
             return 0;
