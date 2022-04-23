@@ -1,8 +1,8 @@
 package com.tencent.tsf.femas.adaptor.paas.registry;
 
 
-import com.tencent.tsf.femas.adaptor.paas.common.FemasConstant;
 import com.tencent.tsf.femas.common.RegistryEnum;
+import com.tencent.tsf.femas.common.constant.FemasConstant;
 import com.tencent.tsf.femas.common.context.FemasContext;
 import com.tencent.tsf.femas.common.discovery.DiscoveryService;
 import com.tencent.tsf.femas.common.discovery.ServiceDiscoveryClient;

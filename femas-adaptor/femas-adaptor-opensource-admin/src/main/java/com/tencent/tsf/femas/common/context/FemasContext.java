@@ -1,7 +1,7 @@
 package com.tencent.tsf.femas.common.context;
 
-import com.tencent.tsf.femas.adaptor.paas.common.FemasConstant;
 import com.tencent.tsf.femas.common.RegistryConstants;
+import com.tencent.tsf.femas.common.constant.FemasConstant;
 import com.tencent.tsf.femas.common.header.AbstractRequestMetaUtils;
 import com.tencent.tsf.femas.common.util.AddressUtils;
 import com.tencent.tsf.femas.common.util.GsonUtil;

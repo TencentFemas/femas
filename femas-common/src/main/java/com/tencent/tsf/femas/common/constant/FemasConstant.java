@@ -1,4 +1,4 @@
-package com.tencent.tsf.femas.adaptor.paas.common;
+package com.tencent.tsf.femas.common.constant;
 
 import com.tencent.tsf.femas.common.context.ContextConstant;
 
