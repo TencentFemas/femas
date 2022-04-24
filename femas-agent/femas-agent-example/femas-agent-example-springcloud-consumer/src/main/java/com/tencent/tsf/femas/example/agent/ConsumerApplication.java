@@ -24,6 +24,7 @@ import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.concurrent.*;
 
@@ -33,6 +34,7 @@ import java.util.concurrent.*;
  */
 @SpringBootApplication
 @EnableDiscoveryClient
+@EnableSwagger2
 @EnableFeignClients // 使用Feign微服务调用时请启用
 public class ConsumerApplication {
 

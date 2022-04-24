@@ -18,6 +18,13 @@ package com.tencent.tsf.femas.agent.config;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.tencent.tsf.femas.agent.exception.InterceptorWrapperException;
+import net.bytebuddy.description.method.MethodDescription;
+import net.bytebuddy.matcher.ElementMatcher;
+import net.bytebuddy.matcher.ElementMatchers;
+import org.apache.commons.lang3.StringUtils;
+
+import static net.bytebuddy.matcher.ElementMatchers.*;
 
 /**
  * @Author leoziltong@tencent.com
@@ -41,6 +48,12 @@ public class InterceptPlugin {
      */
     @JsonProperty
     private String matcherType;
+
+    /**
+     * 匹配类型  methodType
+     */
+    @JsonProperty
+    private String methodType;
     /**
      * 字节码拦截interceptor
      */
@@ -52,16 +65,47 @@ public class InterceptPlugin {
     @JsonProperty
     private Integer takesArguments;
 
+    /**
+     * 方法参数长度
+     */
+    @JsonProperty
+    private Boolean overrideArgs;
+
+    /**
+     * true 使用com.tencent.tsf.femas.agent.interceptor.Interceptor方式拦截
+     */
+    @JsonProperty
+    private Boolean originAround;
+
     public InterceptPlugin() {
 
     }
 
-    public InterceptPlugin(String className, String methodName, String matcherType, String interceptorClass, Integer takesArguments) {
+    public InterceptPlugin(String className, String methodName, String matcherType, String methodType, String interceptorClass, Integer takesArguments, Boolean overrideArgs, Boolean originAround) {
         this.className = className;
         this.methodName = methodName;
         this.matcherType = matcherType;
+        this.methodType = methodType;
         this.interceptorClass = interceptorClass;
         this.takesArguments = takesArguments;
+        this.overrideArgs = overrideArgs;
+        this.originAround = originAround;
+    }
+
+    public String getMethodType() {
+        return methodType;
+    }
+
+    public void setMethodType(String methodType) {
+        this.methodType = methodType;
+    }
+
+    public Boolean getOverrideArgs() {
+        return overrideArgs;
+    }
+
+    public void setOverrideArgs(Boolean overrideArgs) {
+        this.overrideArgs = overrideArgs;
     }
 
     public String getMatcherType() {
@@ -103,4 +147,36 @@ public class InterceptPlugin {
     public void setTakesArguments(Integer takesArguments) {
         this.takesArguments = takesArguments;
     }
+
+    public Boolean getOriginAround() {
+        return originAround;
+    }
+
+    public void setOriginAround(Boolean originAround) {
+        this.originAround = originAround;
+    }
+
+    public ElementMatcher<MethodDescription> getPluginMatcher() {
+        ElementMatcher.Junction<MethodDescription> junction = null;
+        if (StringUtils.isEmpty(matcherType) || MatcherType.EXACT_MATCH.getType().equalsIgnoreCase(matcherType)) {
+            junction = named(methodName);
+        }
+        if (MatcherType.PREFIX.getType().equalsIgnoreCase(matcherType)) {
+            junction = nameStartsWithIgnoreCase(methodName);
+        }
+        if (MatcherType.SUFFIX.getType().equalsIgnoreCase(matcherType)) {
+            junction = nameEndsWithIgnoreCase(methodName);
+        }
+        if (MatcherType.CONTAIN.getType().equalsIgnoreCase(matcherType)) {
+            junction = nameContainsIgnoreCase(methodName);
+        }
+        if (junction == null) {
+            throw new InterceptorWrapperException("get Plugin Matcher failed,illegal plugin config...");
+        }
+        if (takesArguments != null) {
+            junction.and(ElementMatchers.takesArguments(takesArguments));
+        }
+        return junction;
+    }
+
 }

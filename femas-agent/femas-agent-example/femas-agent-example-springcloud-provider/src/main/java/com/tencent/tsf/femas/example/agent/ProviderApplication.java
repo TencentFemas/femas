@@ -32,6 +32,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -46,6 +47,7 @@ import java.util.concurrent.ThreadFactory;
  * @Date: 2021/5/11 17:05
  */
 @SpringBootApplication
+@EnableSwagger2
 @EnableDiscoveryClient
 @EnableScheduling
 public class ProviderApplication {

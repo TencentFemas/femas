@@ -21,26 +21,21 @@ package com.tencent.tsf.femas.agent.config;
  * @Date: 2022/4/8 17:12
  * @Version 1.0
  */
-public enum MatcherType {
+public enum MethodType {
     /**
-     * 精准匹配
+     * 构造方法
      */
-    EXACT_MATCH("exactMatch"),
+    CONSTRUCTOR("constructor"),
     /**
-     * 前缀
+     * 实例方法
      */
-    PREFIX("prefix"),
+    INSTANCE("instance"),
+    /**
+     * 静态方法
+     */
+    STATIC("static");
 
-    /**
-     * 前缀
-     */
-    CONTAIN("contain"),
-    /**
-     * 后缀匹配
-     */
-    SUFFIX("suffix");
-
-    MatcherType(String type) {
+    MethodType(String type) {
         this.type = type;
     }
 

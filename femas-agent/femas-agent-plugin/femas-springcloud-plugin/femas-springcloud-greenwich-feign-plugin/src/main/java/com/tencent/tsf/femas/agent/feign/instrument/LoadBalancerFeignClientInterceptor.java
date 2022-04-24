@@ -29,6 +29,7 @@ import java.util.concurrent.Callable;
  */
 public class LoadBalancerFeignClientInterceptor implements Interceptor {
 
+    private volatile Context commonContext = ContextFactory.getContextInstance();
     private volatile ContextConstant contextConstant = ContextFactory.getContextConstantInstance();
     private String namespace = Context.getSystemTag(contextConstant.getNamespaceId());
     private IExtensionLayer extensionLayer = ExtensionManager.getExtensionLayer();
@@ -55,6 +56,13 @@ public class LoadBalancerFeignClientInterceptor implements Interceptor {
             femasRequest.setTargetMethodSig(httpMethod + "/" + url.getPath());
             femasRequest.setDoneChooseInstance(true);
             RpcContext rpcContext = extensionLayer.beforeClientInvoke(femasRequest, new AbstractRequestMetaUtils() {
+                @Override
+                public void preprocess() {
+                }
+
+                @Override
+                public void setRequestMeta(String name, String value) {
+                }
             });
             Response response = null;
             Throwable error = null;

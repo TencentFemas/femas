@@ -7,7 +7,6 @@
         <groupId>com.tencent.tsf</groupId>
         <artifactId>femas-agent</artifactId>
         <version>${revision}</version>
-        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -18,22 +17,21 @@
         <dependency>
             <groupId>net.bytebuddy</groupId>
             <artifactId>byte-buddy</artifactId>
-            <version>1.8.20</version>
+            <version>1.10.16</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>net.bytebuddy</groupId>
             <artifactId>byte-buddy-agent</artifactId>
-            <version>1.8.20</version>
+            <version>1.10.16</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>org.javassist</groupId>
             <artifactId>javassist</artifactId>
-            <version>3.23.2-GA</version>
-            <optional>true</optional>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>

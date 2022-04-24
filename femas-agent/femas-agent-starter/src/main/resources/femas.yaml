@@ -7,7 +7,6 @@ authenticate:
 serviceRouter:
   chain:
     - FemasDefaultRoute
-    -
 
 loadbalancer:
   type: random
@@ -31,4 +30,5 @@ paas_server_address: http://127.0.0.1:8080
 
 femas_namespace_id: leo11111
 femas_prog_version: 22222
+#agent启动必须带上 true or false
 startFemasAgent: true

@@ -13,44 +13,15 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
-package com.tencent.tsf.femas.agent.config;
 
-/**
- * @Author leoziltong
- * @Date: 2022/4/8 17:12
- * @Version 1.0
- */
-public enum MatcherType {
+package com.tencent.tsf.femas.agent.interceptor;
+
+
+public interface ConstructorInterceptor {
     /**
-     * 精准匹配
+     * Called after the origin constructor invocation.
      */
-    EXACT_MATCH("exactMatch"),
-    /**
-     * 前缀
-     */
-    PREFIX("prefix"),
-
-    /**
-     * 前缀
-     */
-    CONTAIN("contain"),
-    /**
-     * 后缀匹配
-     */
-    SUFFIX("suffix");
-
-    MatcherType(String type) {
-        this.type = type;
-    }
-
-    String type;
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
+    void afterConstructorInvocation(Object[] allArguments) throws Throwable;
 }

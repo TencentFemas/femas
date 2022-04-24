@@ -17,20 +17,34 @@
 package com.tencent.tsf.femas.agent;
 
 import java.lang.instrument.Instrumentation;
+import java.nio.file.FileSystems;
+import java.security.AllPermission;
+import java.util.Optional;
 
 import com.tencent.tsf.femas.agent.config.AgentPluginLoader;
 import com.tencent.tsf.femas.agent.config.GlobalInterceptPluginConfig;
-import com.tencent.tsf.femas.agent.interceptor.InterceptorWrapper;
+import com.tencent.tsf.femas.agent.config.InterceptPlugin;
+import com.tencent.tsf.femas.agent.config.MethodType;
+import com.tencent.tsf.femas.agent.interceptor.wrapper.*;
 
 import com.tencent.tsf.femas.agent.tools.AgentLogger;
+import com.tencent.tsf.femas.agent.tools.JvmRuntimeInfo;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.agent.builder.AgentBuilder;
+import net.bytebuddy.description.NamedElement;
+import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.dynamic.scaffold.TypeValidation;
 import net.bytebuddy.implementation.MethodDelegation;
+import net.bytebuddy.implementation.SuperMethodCall;
+import net.bytebuddy.implementation.bind.annotation.Morph;
+import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.matcher.ElementMatchers;
 import net.bytebuddy.utility.JavaModule;
+import org.apache.commons.lang3.StringUtils;
+
+import static net.bytebuddy.matcher.ElementMatchers.*;
 
 /**
  * @Author leoziltong@tencent.com
@@ -38,56 +52,227 @@ import net.bytebuddy.utility.JavaModule;
  */
 public class FemasAgent {
     public static void premain(String agentArgs, Instrumentation inst) {
-        try {
-            final ByteBuddy byteBuddy = new ByteBuddy().with(TypeValidation.of(TypeValidation.DISABLED.isEnabled()));
-            AgentBuilder agentBuilder = new AgentBuilder.Default(byteBuddy);
-            for (GlobalInterceptPluginConfig plugin : AgentPluginLoader.getInterceptConfig()) {
-                agentBuilder = agentBuilder.type(ElementMatchers.named(plugin.getPlugin().getClassName())).transform((builder, typeDescription, classLoader, module) -> {
-                    //按照参数长度处理匹配重载方法
-                    if (plugin.getPlugin().getTakesArguments() != null) {
-                        builder = builder.method(ElementMatchers.named(plugin.getPlugin().getMethodName()).and(ElementMatchers.takesArguments(plugin.getPlugin().getTakesArguments())))
-                                .intercept(MethodDelegation.to(new InterceptorWrapper(plugin.getPlugin().getInterceptorClass())));
-                    } else {
-                        builder = builder.method(ElementMatchers.named(plugin.getPlugin().getMethodName()))
-                                .intercept(MethodDelegation.to(new InterceptorWrapper(plugin.getPlugin().getInterceptorClass())));
-                    }
-                    return builder;
-                });
-            }
-//            if(agentArgs == null || Boolean.valueOf(agentArgs)) {
-//                inst.addTransformer(new FemasTransformer(), true);
-//            }
-            agentBuilder.with(new Listener()).installOn(inst);
-        } catch (Throwable throwable) {
-            AgentLogger.getLogger().severe("install agent exception: " + AgentLogger.getStackTraceString(throwable));
-        } finally {
-            AgentLogger.getLogger().info("femas agent install on finally !!!!!!");
-        }
+        init(agentArgs, inst, true);
     }
 
     private static class Listener implements AgentBuilder.Listener {
         @Override
         public void onDiscovery(String s, ClassLoader classLoader, JavaModule javaModule, boolean b) {
+//            AgentLogger.getLogger().info("On Discovery class {}." + s);
+
         }
 
         @Override
         public void onTransformation(TypeDescription typeDescription, ClassLoader classLoader, JavaModule javaModule, boolean b, DynamicType dynamicType) {
-            AgentLogger.getLogger().info("On Transformation class {}." + typeDescription.getName());
+            AgentLogger.getLogger().info("[femas-agent] On Transformation class {}." + typeDescription.getName());
         }
 
         @Override
         public void onIgnored(TypeDescription typeDescription, ClassLoader classLoader, JavaModule javaModule, boolean b) {
+//            AgentLogger.getLogger().info("On Ignored class {}." + typeDescription.getName());
         }
 
         @Override
         public void onError(String s, ClassLoader classLoader, JavaModule javaModule, boolean b, Throwable throwable) {
-            AgentLogger.getLogger().severe("Enhance class: " + s + " error." + AgentLogger.getStackTraceString(throwable));
+            AgentLogger.getLogger().severe(" [femas-agent] Enhance class: " + s + " error." + AgentLogger.getStackTraceString(throwable));
         }
 
         @Override
         public void onComplete(String s, ClassLoader classLoader, JavaModule javaModule, boolean b) {
+//            AgentLogger.getLogger().info("On Complete class {}." + s);
         }
     }
 
+
+    public synchronized static void init(String agentArguments, Instrumentation instrumentation, boolean premain) {
+        securityManagerCheck();
+        long delayInitMs = -1L;
+        String delayAgentInitMsProperty = System.getProperty("delay_agent_premain_ms");
+        if (delayAgentInitMsProperty != null) {
+            try {
+                delayInitMs = Long.parseLong(delayAgentInitMsProperty.trim());
+            } catch (NumberFormatException numberFormatException) {
+                AgentLogger.getLogger().info("[femas-agent] WARN The value of the delay_agent_premain_ms must be a number");
+            }
+        }
+        if (premain && shouldDelayOnPremain()) {
+            delayInitMs = Math.max(delayInitMs, 3000L);
+        }
+        if (delayInitMs > 0) {
+            delayInitAgentAsync(agentArguments, instrumentation, premain, delayInitMs);
+        } else {
+            String startAgentAsyncProperty = System.getProperty("agent.start.async");
+            if (startAgentAsyncProperty != null) {
+                delayInitAgentAsync(agentArguments, instrumentation, premain, 0);
+            } else {
+                initializeAgent(agentArguments, instrumentation, premain);
+            }
+        }
+    }
+
+    /**
+     * Returns whether agent initialization should be delayed when occurring through the {@code premain} route.
+     * This works around a JVM bug (https://bugs.openjdk.java.net/browse/JDK-8041920) causing JIT fatal error if
+     * agent code causes the loading of MethodHandles prior to JIT compiler initialization.
+     *
+     * @return {@code true} for any Java 7 and early Java 8 HotSpot JVMs, {@code false} for all others
+     */
+    static boolean shouldDelayOnPremain() {
+        JvmRuntimeInfo runtimeInfo = JvmRuntimeInfo.ofCurrentVM();
+        int majorVersion = runtimeInfo.getMajorVersion();
+        return
+                (majorVersion == 7) ||
+                        // In case bootstrap checks were disabled
+                        (majorVersion == 8 && runtimeInfo.isHotSpot() && runtimeInfo.getUpdateVersion() < 2) ||
+                        (majorVersion == 8 && runtimeInfo.isHotSpot() && runtimeInfo.getUpdateVersion() < 40);
+    }
+
+    private static void delayInitAgentAsync(final String agentArguments, final Instrumentation instrumentation,
+                                            final boolean premain, final long delayAgentInitMs) {
+        AgentLogger.getLogger().info("[femas-agent] INFO Delaying  Agent initialization by " + delayAgentInitMs + " milliseconds.");
+        Thread initThread = new Thread("[femas-agent] initialization thread") {
+            @Override
+            public void run() {
+                try {
+                    synchronized (FemasAgent.class) {
+                        if (delayAgentInitMs > 0) {
+                            Thread.sleep(delayAgentInitMs);
+                        }
+                        initializeAgent(agentArguments, instrumentation, premain);
+                    }
+                } catch (InterruptedException e) {
+                    AgentLogger.getLogger().info("[femas-agent] ERROR " + getName() + " thread was interrupted, the agent will not be attached to this JVM.");
+                    e.printStackTrace();
+                } catch (Throwable throwable) {
+                    AgentLogger.getLogger().info("[femas-agent] ERROR  Agent initialization failed: " + throwable.getMessage());
+                    throwable.printStackTrace();
+                }
+            }
+        };
+        initThread.setDaemon(true);
+        initThread.start();
+    }
+
+    private synchronized static void initializeAgent(String agentArguments, Instrumentation instrumentation, boolean premain) {
+        try {
+            final ByteBuddy byteBuddy = new ByteBuddy().with(TypeValidation.of(TypeValidation.DISABLED.isEnabled()));
+            AgentBuilder agentBuilder = new AgentBuilder.Default(byteBuddy)
+                    .ignore(agentIgnoreElement()
+                            //忽略编译器自动生成的方法
+                            .or(ElementMatchers.isSynthetic()));
+            for (GlobalInterceptPluginConfig plugin : AgentPluginLoader.getInterceptConfig()) {
+                InterceptPlugin interceptPlugin = plugin.getPlugin();
+                agentBuilder = pluginAgentBuilder(agentBuilder, interceptPlugin);
+
+            }
+            //此处添加javasist Transformer
+//            if(agentArgs == null || Boolean.valueOf(agentArgs)) {
+//                inst.addTransformer(new FemasTransformer(), true);
+//            }
+            agentBuilder.with(new Listener()).installOn(instrumentation);
+        } catch (Throwable throwable) {
+            AgentLogger.getLogger().severe("[femas-agent] install agent exception: " + AgentLogger.getStackTraceString(throwable));
+        } finally {
+            AgentLogger.getLogger().info("[femas-agent] install on finally !!!!!!");
+        }
+    }
+
+    private static AgentBuilder pluginAgentBuilder(AgentBuilder agentBuilder, InterceptPlugin interceptPlugin) {
+        if (!checkPluginValidate(interceptPlugin))
+            return agentBuilder;
+        //原始的改写方式
+        if (interceptPlugin.getOriginAround() != null && interceptPlugin.getOriginAround()) {
+            agentBuilder = agentBuilder.type(ElementMatchers.named(interceptPlugin.getClassName())).transform((builder, typeDescription, classLoader, module) -> {
+                ElementMatcher.Junction<MethodDescription> junction = not(isStatic()).and(interceptPlugin.getPluginMatcher());
+                builder = builder.method(junction)
+                        .intercept(MethodDelegation.withDefaultConfiguration()
+                                .to(new InterceptorWrapper(interceptPlugin
+                                        .getInterceptorClass())));
+                return builder;
+            });
+            return agentBuilder;
+        }
+        //改写构造方法
+        if (MethodType.CONSTRUCTOR.getType().equalsIgnoreCase(interceptPlugin.getMethodType())) {
+            agentBuilder = agentBuilder.type(ElementMatchers.named(interceptPlugin.getClassName())).transform((builder, typeDescription, classLoader, module) -> {
+                builder = builder.constructor(interceptPlugin.getPluginMatcher())
+                        .intercept(SuperMethodCall.INSTANCE.andThen(MethodDelegation.withDefaultConfiguration()
+                                .to(new ConstructorInterceptorWrapper(interceptPlugin
+                                        .getInterceptorClass(), classLoader))));
+                return builder;
+            });
+            return agentBuilder;
+        }
+        //改写实例方法,默认是实例方法
+        if (StringUtils.isEmpty(interceptPlugin.getMethodType()) || interceptPlugin.getMethodType().equalsIgnoreCase(MethodType.INSTANCE.getType())) {
+            if (interceptPlugin.getOverrideArgs() != null && interceptPlugin.getOverrideArgs()) {
+                agentBuilder = agentBuilder.type(ElementMatchers.named(interceptPlugin.getClassName())).transform((builder, typeDescription, classLoader, module) -> {
+                    ElementMatcher.Junction<MethodDescription> junction = not(isStatic()).and(interceptPlugin.getPluginMatcher());
+                    builder = builder.method(junction)
+                            .intercept(MethodDelegation.withDefaultConfiguration()
+                                    .withBinders(Morph.Binder.install(OverrideArgsCallable.class))
+                                    .to(new InstanceMethodsInterceptorWrapper(interceptPlugin
+                                            .getInterceptorClass(), classLoader)));
+                    return builder;
+                });
+            } else {
+                agentBuilder = agentBuilder.type(ElementMatchers.named(interceptPlugin.getClassName())).transform((builder, typeDescription, classLoader, module) -> {
+                    ElementMatcher.Junction<MethodDescription> junction = not(isStatic()).and(interceptPlugin.getPluginMatcher());
+                    builder = builder.method(junction)
+                            .intercept(MethodDelegation.withDefaultConfiguration()
+                                    .to(new InstanceMethodsInterceptorWrapper(interceptPlugin
+                                            .getInterceptorClass(), classLoader)));
+                    return builder;
+                });
+            }
+            return agentBuilder;
+        }
+        //改写静态方法
+        if (MethodType.STATIC.getType().equalsIgnoreCase(interceptPlugin.getMethodType())) {
+            if (interceptPlugin.getOverrideArgs() != null && interceptPlugin.getOverrideArgs()) {
+                agentBuilder = agentBuilder.type(ElementMatchers.named(interceptPlugin.getClassName())).transform((builder, typeDescription, classLoader, module) -> {
+                    builder = builder.method(isStatic().and(interceptPlugin.getPluginMatcher()))
+                            .intercept(MethodDelegation.withDefaultConfiguration()
+                                    .withBinders(Morph.Binder.install(OverrideArgsCallable.class))
+                                    .to(new StaticMethodsInterceptorWrapper(interceptPlugin.getInterceptorClass())));
+                    return builder;
+                });
+            } else {
+                agentBuilder = agentBuilder.type(ElementMatchers.named(interceptPlugin.getClassName())).transform((builder, typeDescription, classLoader, module) -> {
+                    builder = builder.method(isStatic().and(interceptPlugin.getPluginMatcher()))
+                            .intercept(MethodDelegation.withDefaultConfiguration()
+                                    .to(new StaticMethodsInterceptorWrapper(interceptPlugin.getInterceptorClass())));
+                    return builder;
+                });
+            }
+            return agentBuilder;
+        }
+        return agentBuilder;
+    }
+
+    private static boolean checkPluginValidate(InterceptPlugin plugin) {
+        boolean classNameIsValid = Optional.of(plugin).map(i -> i.getClassName()).isPresent();
+        boolean InterClassNameIsValid = Optional.of(plugin).map(i -> i.getInterceptorClass()).isPresent();
+        boolean methodNameIsValid = Optional.of(plugin).map(i -> i.getMethodName()).isPresent();
+        return classNameIsValid && InterClassNameIsValid && methodNameIsValid;
+    }
+
+    private static ElementMatcher.Junction<NamedElement> agentIgnoreElement() {
+        //可以放在一个公共配置里面，拼接Junction，暂时懒得写
+        return nameStartsWith("net.bytebuddy.")
+                .or(nameContains("javassist"));
+    }
+
+    private static void securityManagerCheck() {
+        SecurityManager sm = System.getSecurityManager();
+        if (sm == null) {
+            return;
+        }
+        try {
+            sm.checkPermission(new AllPermission());
+        } catch (SecurityException e) {
+            AgentLogger.getLogger().info("[femas-agent] WARN  permission java.security.AllPermission;");
+        }
+    }
 
 }

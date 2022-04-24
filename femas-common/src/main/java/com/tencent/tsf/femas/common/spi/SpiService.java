@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.ServiceLoader;
 
 import com.tencent.tsf.femas.agent.classloader.AgentClassLoader;
-import com.tencent.tsf.femas.agent.classloader.ClassLoaderCache;
+import com.tencent.tsf.femas.agent.classloader.InterceptorClassLoaderCache;
 import com.tencent.tsf.femas.common.context.AgentConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +19,7 @@ public class SpiService {
 
     public static <T extends SpiExtensionClass> Map<String, T> init(Class<T> spiExtensionClass) {
         if (AgentConfig.doGetProperty(START_AGENT_FEMAS) != null && (Boolean) AgentConfig.doGetProperty(START_AGENT_FEMAS)) {
-            AgentClassLoader agentClassLoader = ClassLoaderCache.getAgentClassLoader(Thread.currentThread().getContextClassLoader());
+            AgentClassLoader agentClassLoader = InterceptorClassLoaderCache.getAgentClassLoader(Thread.currentThread().getContextClassLoader());
             Thread.currentThread().setContextClassLoader(agentClassLoader);
         }
         ServiceLoader<T> registryFactoryServiceLoader = ServiceLoader.load(spiExtensionClass);

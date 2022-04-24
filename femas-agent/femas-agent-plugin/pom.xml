@@ -16,7 +16,8 @@
     <url>https://github.com/polarismesh/femas</url>
 
     <properties>
-        <maven.build.timestamp.format>yyyy.MM.dd_HH.mm</maven.build.timestamp.format>
+        <!--        <maven.build.timestamp.format>yyyy.MM.dd_HH.mm</maven.build.timestamp.format>-->
+        <maven.build.timestamp.format>yyyy.MM.dd</maven.build.timestamp.format>
     </properties>
 
     <modules>

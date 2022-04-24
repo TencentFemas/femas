@@ -8,7 +8,7 @@ import java.util.Set;
  *
  */
 public class CacheProxy {
-    private static final String CrossClassLoaderCacheClassName = "org.flamingo.gray.agent.classloader.CrossClassLoaderCache";
+    private static final String CrossClassLoaderCacheClassName = "com.tencent.tsf.femas.agent.classloader.CrossClassLoaderCache.CrossClassLoaderCache";
 
     public static Map<String, Object> getCache(String cacheKey) {
         return (Map<String, Object>) ReflectionUtils.invokeStaticMethod(CrossClassLoaderCacheClassName, "getCache", cacheKey);

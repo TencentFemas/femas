@@ -13,44 +13,46 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
-package com.tencent.tsf.femas.agent.config;
 
-/**
- * @Author leoziltong
- * @Date: 2022/4/8 17:12
- * @Version 1.0
- */
-public enum MatcherType {
-    /**
-     * 精准匹配
-     */
-    EXACT_MATCH("exactMatch"),
-    /**
-     * 前缀
-     */
-    PREFIX("prefix"),
+package com.tencent.tsf.femas.agent.interceptor.wrapper;
 
-    /**
-     * 前缀
-     */
-    CONTAIN("contain"),
-    /**
-     * 后缀匹配
-     */
-    SUFFIX("suffix");
+import java.util.List;
 
-    MatcherType(String type) {
-        this.type = type;
+public class InterceptResult {
+    private boolean isContinue = true;
+
+    private Object ret = null;
+
+    private List<Object> context = null;
+
+
+    public void defineReturnValueWithContext(Object ret, List<Object> context) {
+        this.isContinue = false;
+        this.ret = ret;
+        this.context = context;
     }
 
-    String type;
-
-    public String getType() {
-        return type;
+    public void defineReturnValue(Object ret) {
+        this.isContinue = false;
+        this.ret = ret;
     }
 
-    public void setType(String type) {
-        this.type = type;
+
+    public boolean isContinue() {
+        return isContinue;
+    }
+
+    public void setContinue(boolean aContinue) {
+        isContinue = aContinue;
+    }
+
+    public Object ret() {
+        return ret;
+    }
+
+    public Object getContext() {
+        return context;
     }
 }

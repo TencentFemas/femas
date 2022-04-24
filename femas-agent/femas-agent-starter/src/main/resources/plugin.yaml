@@ -1,4 +1,5 @@
 #选择agent要加载的plugin，减少premain对启动速度的影响，在这里统一简单标注每个plugin的作用
+#配置逻辑参见com.tencent.tsf.femas.agent.interceptor.wrapper.InterceptResult，非常重要，不要瞎配
 femas:
   agent:
     interceptors:
@@ -6,27 +7,27 @@ femas:
       - plugin:
           className: org.springframework.cloud.openfeign.ribbon.LoadBalancerFeignClient
           methodName: execute
-          matcherType:
-          takesArguments:
+          originAround: true
           interceptorClass: com.tencent.tsf.femas.agent.feign.instrument.LoadBalancerFeignClientInterceptor
       #请求的header写入feign
-      - plugin:
-          className: feign.auth.BasicAuthRequestInterceptor
-          methodName: apply
-          takesArguments:
-          interceptorClass: com.tencent.tsf.femas.agent.feign.instrument.FeignRequestHeaderInterceptor
+      #      - plugin:
+      #          className: feign.auth.BasicAuthRequestInterceptor
+      #          methodName: apply
+      #          interceptorClass: com.tencent.tsf.femas.agent.feign.instrument.FeignRequestHeaderInterceptor
       - plugin:
           className: com.netflix.loadbalancer.ZoneAwareLoadBalancer
           methodName: chooseServer
-          takesArguments:
           interceptorClass: com.tencent.tsf.femas.agent.nacos.instrument.ZoneAwareLoadBalancerInterceptor
       - plugin:
           className: com.netflix.loadbalancer.BaseLoadBalancer
           methodName: getAllServers
-          takesArguments:
           interceptorClass: com.tencent.tsf.femas.agent.nacos.instrument.BaseLoadBalancerInterceptor
       - plugin:
           className: com.alibaba.cloud.nacos.registry.NacosServiceRegistry
           methodName: register
-          #解决方法重载问题，暂时只支持参数长度（byte buddy支持参数类型）
           interceptorClass: com.tencent.tsf.femas.agent.nacos.instrument.NacosServiceRegistryInterceptor
+      - plugin:
+          className: com.alibaba.nacos.client.naming.utils.InitUtils
+          methodName: initNamespaceForNaming
+          methodType: static
+          interceptorClass: com.tencent.tsf.femas.agent.nacos.instrument.NacosNameSpaceInitUtilsInterceptor

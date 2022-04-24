@@ -18,7 +18,7 @@
 package com.tencent.tsf.femas.common.serviceregistry;
 
 import com.tencent.tsf.femas.agent.classloader.AgentClassLoader;
-import com.tencent.tsf.femas.agent.classloader.ClassLoaderCache;
+import com.tencent.tsf.femas.agent.classloader.InterceptorClassLoaderCache;
 
 import java.util.Iterator;
 import java.util.ServiceLoader;
@@ -40,7 +40,7 @@ public class AbstractServiceRegistryMetadataFactory {
         static AbstractServiceRegistryMetadata serviceRegistryMetadata = null;
 
         static {
-            AgentClassLoader agentClassLoader = ClassLoaderCache.getAgentClassLoader(Thread.currentThread().getContextClassLoader());
+            AgentClassLoader agentClassLoader = InterceptorClassLoaderCache.getAgentClassLoader(Thread.currentThread().getContextClassLoader());
             Thread.currentThread().setContextClassLoader(agentClassLoader);
             // SPI加载并初始化实现类
             ServiceLoader<AbstractServiceRegistryMetadata> contextServiceLoader = ServiceLoader

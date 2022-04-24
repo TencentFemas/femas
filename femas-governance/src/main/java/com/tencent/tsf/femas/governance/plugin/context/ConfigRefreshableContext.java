@@ -1,7 +1,7 @@
 package com.tencent.tsf.femas.governance.plugin.context;
 
 import com.tencent.tsf.femas.agent.classloader.AgentClassLoader;
-import com.tencent.tsf.femas.agent.classloader.ClassLoaderCache;
+import com.tencent.tsf.femas.agent.classloader.InterceptorClassLoaderCache;
 import com.tencent.tsf.femas.common.context.AgentConfig;
 import com.tencent.tsf.femas.common.exception.FemasRuntimeException;
 import com.tencent.tsf.femas.governance.plugin.Plugin;
@@ -36,7 +36,7 @@ public class ConfigRefreshableContext implements AbstractSDKContext {
             Map<String, Plugin> plugins = new HashMap<>();
             typedPlugins.put(pluginType, plugins);
             if (AgentConfig.doGetProperty(START_AGENT_FEMAS) != null && (Boolean) AgentConfig.doGetProperty(START_AGENT_FEMAS)) {
-                AgentClassLoader agentClassLoader = ClassLoaderCache.getAgentClassLoader(Thread.currentThread().getContextClassLoader());
+                AgentClassLoader agentClassLoader = InterceptorClassLoaderCache.getAgentClassLoader(Thread.currentThread().getContextClassLoader());
                 Thread.currentThread().setContextClassLoader(agentClassLoader);
             }
             ServiceLoader<? extends Plugin> loader = ServiceLoader.load(pluginType);

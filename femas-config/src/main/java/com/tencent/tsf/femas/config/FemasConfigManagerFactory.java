@@ -18,7 +18,7 @@
 package com.tencent.tsf.femas.config;
 
 import com.tencent.tsf.femas.agent.classloader.AgentClassLoader;
-import com.tencent.tsf.femas.agent.classloader.ClassLoaderCache;
+import com.tencent.tsf.femas.agent.classloader.InterceptorClassLoaderCache;
 import com.tencent.tsf.femas.common.context.AgentConfig;
 
 import java.util.Iterator;
@@ -46,7 +46,7 @@ public class FemasConfigManagerFactory {
         static {
             // SPI加载并初始化实现类
             if (AgentConfig.doGetProperty(START_AGENT_FEMAS) != null && (Boolean) AgentConfig.doGetProperty(START_AGENT_FEMAS)) {
-                AgentClassLoader agentClassLoader = ClassLoaderCache.getAgentClassLoader(Thread.currentThread().getContextClassLoader());
+                AgentClassLoader agentClassLoader = InterceptorClassLoaderCache.getAgentClassLoader(Thread.currentThread().getContextClassLoader());
                 Thread.currentThread().setContextClassLoader(agentClassLoader);
             }
             ServiceLoader<FemasConfigManager> femasConfigManagerLoader = ServiceLoader.load(FemasConfigManager.class);

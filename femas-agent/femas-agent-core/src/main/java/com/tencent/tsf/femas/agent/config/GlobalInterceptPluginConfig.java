@@ -27,4 +27,7 @@ public class GlobalInterceptPluginConfig {
     public void setPlugin(InterceptPlugin plugin) {
         this.plugin = plugin;
     }
+
+
+
 }

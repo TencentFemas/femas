@@ -14,43 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.tencent.tsf.femas.agent.config;
+
+package com.tencent.tsf.femas.agent.exception;
 
 /**
- * @Author leoziltong
- * @Date: 2022/4/8 17:12
- * @Version 1.0
+ * @Author leoziltong@tencent.com
+ * @Date: 2022/4/22 22:03
  */
-public enum MatcherType {
-    /**
-     * 精准匹配
-     */
-    EXACT_MATCH("exactMatch"),
-    /**
-     * 前缀
-     */
-    PREFIX("prefix"),
+public class InterceptorWrapperException extends RuntimeException {
 
-    /**
-     * 前缀
-     */
-    CONTAIN("contain"),
-    /**
-     * 后缀匹配
-     */
-    SUFFIX("suffix");
-
-    MatcherType(String type) {
-        this.type = type;
+    public InterceptorWrapperException(String message) {
+        super(message);
     }
 
-    String type;
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
+    public InterceptorWrapperException(String message, Throwable cause) {
+        super(message, cause);
     }
 }

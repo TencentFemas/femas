@@ -19,7 +19,7 @@ package com.tencent.tsf.femas.governance.plugin;
 
 
 import com.tencent.tsf.femas.agent.classloader.AgentClassLoader;
-import com.tencent.tsf.femas.agent.classloader.ClassLoaderCache;
+import com.tencent.tsf.femas.agent.classloader.InterceptorClassLoaderCache;
 import com.tencent.tsf.femas.common.context.AgentConfig;
 import com.tencent.tsf.femas.common.exception.FemasRuntimeException;
 import com.tencent.tsf.femas.governance.plugin.context.AbstractSDKContext;
@@ -66,7 +66,7 @@ public class DefaultConfigurablePluginHolder {
         ConfigContext initContext = null;
         //插件具体配置
         if (AgentConfig.doGetProperty(START_AGENT_FEMAS) != null && (Boolean) AgentConfig.doGetProperty(START_AGENT_FEMAS)) {
-            AgentClassLoader agentClassLoader = ClassLoaderCache.getAgentClassLoader(Thread.currentThread().getContextClassLoader());
+            AgentClassLoader agentClassLoader = InterceptorClassLoaderCache.getAgentClassLoader(Thread.currentThread().getContextClassLoader());
             Thread.currentThread().setContextClassLoader(agentClassLoader);
         }
         ServiceLoader<ConfigProvider> configProviders = ServiceLoader.load(ConfigProvider.class);

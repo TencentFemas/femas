@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.tencent.tsf.femas.agent.interceptor;
+package com.tencent.tsf.femas.agent.interceptor.wrapper;
 
 import com.tencent.tsf.femas.agent.classloader.AgentClassLoader;
-import com.tencent.tsf.femas.agent.classloader.ClassLoaderCache;
+import com.tencent.tsf.femas.agent.classloader.InterceptorClassLoaderCache;
 import com.tencent.tsf.femas.agent.tools.AgentLogger;
 import net.bytebuddy.implementation.bind.annotation.*;
 
@@ -59,10 +59,10 @@ public class InterceptorWrapper {
     private void initInterceptor() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
         if (classInterceptor == null) {
             try {
-                AgentClassLoader agentClassLoader = ClassLoaderCache.getAgentClassLoader(Thread.currentThread().getContextClassLoader());
+                AgentClassLoader agentClassLoader = InterceptorClassLoaderCache.getAgentClassLoader(Thread.currentThread().getContextClassLoader());
                 classInterceptor = agentClassLoader.loadClass(this.className).newInstance();
             } catch (Throwable throwable) {
-                AgentLogger.getLogger().severe("initInterceptor error " + AgentLogger.getStackTraceString(throwable));
+                AgentLogger.getLogger().severe("[femas-agent] initInterceptor error " + AgentLogger.getStackTraceString(throwable));
             }
         }
     }
@@ -79,7 +79,7 @@ public class InterceptorWrapper {
                 }
             }
         } catch (Throwable throwable) {
-            AgentLogger.getLogger().severe("findInterceptor error " + AgentLogger.getStackTraceString(throwable));
+            AgentLogger.getLogger().severe("[femas-agent] findInterceptor error " + AgentLogger.getStackTraceString(throwable));
         }
         return null;
     }
