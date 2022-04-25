@@ -6,7 +6,7 @@ spring:
       username: nacos
       password: nacos
       config:
-        server-addr: 10.10.5.41:8848
+        server-addr: 127.0.0.1:8848
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/adminDb?useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true&useSSL=false&serverTimezone=Asia/Shanghai
     username: root
