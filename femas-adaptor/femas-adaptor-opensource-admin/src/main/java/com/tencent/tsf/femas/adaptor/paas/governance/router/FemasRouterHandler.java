@@ -1,7 +1,7 @@
 package com.tencent.tsf.femas.adaptor.paas.governance.router;
 
-import com.tencent.tsf.femas.adaptor.paas.common.FemasConstant;
 import com.tencent.tsf.femas.adaptor.paas.config.FemasPaasConfigManager;
+import com.tencent.tsf.femas.common.constant.FemasConstant;
 import com.tencent.tsf.femas.common.context.FemasContext;
 import com.tencent.tsf.femas.common.entity.Service;
 import com.tencent.tsf.femas.common.serialize.JSONSerializer;

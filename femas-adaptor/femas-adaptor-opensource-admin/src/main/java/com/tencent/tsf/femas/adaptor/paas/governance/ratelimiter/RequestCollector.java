@@ -2,8 +2,8 @@ package com.tencent.tsf.femas.adaptor.paas.governance.ratelimiter;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.tencent.tsf.femas.adaptor.paas.common.FemasConstant;
 import com.tencent.tsf.femas.adaptor.paas.governance.ratelimiter.entity.ReportResponse;
+import com.tencent.tsf.femas.common.constant.FemasConstant;
 import com.tencent.tsf.femas.common.context.FemasContext;
 import com.tencent.tsf.femas.common.entity.Service;
 import java.util.HashMap;
