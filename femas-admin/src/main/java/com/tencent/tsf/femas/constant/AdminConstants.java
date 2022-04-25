@@ -37,8 +37,6 @@ public class AdminConstants {
     public static final String APPLICATION_VERSION_KEY = "application.version";
     public static final String APPLICATION_VERSION = "1.2.0";
 
-
-
     public static final String FEMAS_BASE_PATH = "femas_base_path";
 
     public static final String FEMAS_META_APPLICATION_VERSION_KEY = "FEMAS_PROG_VERSION";
