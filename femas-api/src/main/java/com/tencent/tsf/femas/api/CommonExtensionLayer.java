@@ -85,10 +85,7 @@ public class CommonExtensionLayer implements IExtensionLayer {
         String registryUrl = commonContext.getRegistryConfigMap().get(REGISTRY_HOST)
                 + ":" + commonContext.getRegistryConfigMap().get(REGISTRY_PORT);
         this.init(service, port, registryUrl);
-
-
     }
-
 
     public void init(Service service, Integer port, String registryUrl) {
         commonContext.init(service.getName(), port);

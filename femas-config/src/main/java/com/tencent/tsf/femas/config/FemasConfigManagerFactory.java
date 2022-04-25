@@ -17,8 +17,14 @@
 
 package com.tencent.tsf.femas.config;
 
+import com.tencent.tsf.femas.agent.classloader.AgentClassLoader;
+import com.tencent.tsf.femas.agent.classloader.InterceptorClassLoaderCache;
+import com.tencent.tsf.femas.common.context.AgentConfig;
+
 import java.util.Iterator;
 import java.util.ServiceLoader;
+
+import static com.tencent.tsf.femas.common.context.ContextConstant.START_AGENT_FEMAS;
 
 /**
  * <pre>
@@ -38,8 +44,11 @@ public class FemasConfigManagerFactory {
         static FemasConfigManager configManagerInstance = null;
 
         static {
-
             // SPI加载并初始化实现类
+            if (AgentConfig.doGetProperty(START_AGENT_FEMAS) != null && (Boolean) AgentConfig.doGetProperty(START_AGENT_FEMAS)) {
+                AgentClassLoader agentClassLoader = InterceptorClassLoaderCache.getAgentClassLoader(Thread.currentThread().getContextClassLoader());
+                Thread.currentThread().setContextClassLoader(agentClassLoader);
+            }
             ServiceLoader<FemasConfigManager> femasConfigManagerLoader = ServiceLoader.load(FemasConfigManager.class);
             Iterator<FemasConfigManager> femasConfigManagerIterator = femasConfigManagerLoader.iterator();
             // 一般就一个实现类，如果有多个，那么加载的是最后一个

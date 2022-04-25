@@ -1,0 +1,34 @@
+rateLimit:
+  type: femasRateLimit
+
+authenticate:
+  type: femasAuthenticate
+
+serviceRouter:
+  chain:
+    - FemasDefaultRoute
+
+loadbalancer:
+  type: random
+
+circuitBreaker:
+  enable: true
+  chain:
+    - femasCircuitBreaker
+#  plugin:
+#    femasCircuitBreaker:
+#      continuousErrorThreshold: 10
+#      metricStatTimeWindow: 1s
+#      requestCountAfterHalfOpen: 3
+#      sleepWindow: 5s
+#      successCountAfterHalfOpen: 2
+
+femas_registry_ip: 127.0.0.1
+femas_registry_port: 8848
+femas_registry_type: nacos
+paas_server_address: http://127.0.0.1:8080
+
+femas_namespace_id: leo11111
+femas_prog_version: 22222
+#agent启动必须带上 true or false
+startFemasAgent: true

@@ -2,6 +2,7 @@ package com.tencent.tsf.femas.common.context;
 
 import com.google.common.collect.Sets;
 import com.tencent.tsf.femas.common.annotation.AdaptorComponent;
+import com.tencent.tsf.femas.common.annotation.SPI;
 import com.tencent.tsf.femas.common.header.AbstractRequestMetaUtils;
 import com.tencent.tsf.femas.common.util.GsonUtil;
 import com.tencent.tsf.femas.common.util.StringUtils;
@@ -16,6 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author zhixinzxliu
  */
 @AdaptorComponent
+@SPI
 public abstract class Context {
 
     /**

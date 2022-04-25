@@ -2,16 +2,28 @@ package com.tencent.tsf.femas.governance.plugin;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tencent.tsf.femas.agent.classloader.AgentPackagePathScanner;
+import com.tencent.tsf.femas.common.context.AgentConfig;
 import com.tencent.tsf.femas.common.util.ConfigUtils;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yaml.snakeyaml.Yaml;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.TreeMap;
+
+import static com.tencent.tsf.femas.common.context.ContextConstant.START_AGENT_FEMAS;
 
 /**
  * 加载配置文件
@@ -22,7 +34,7 @@ import java.util.TreeMap;
  */
 public class PluginDefinitionReader {
 
-    private static final  Logger logger = LoggerFactory.getLogger(PluginDefinitionReader.class);
+    private static final Logger logger = LoggerFactory.getLogger(PluginDefinitionReader.class);
 
     //默认加载顺序，跟springboot保持一致，参见ConfigFileApplicationListener
     private static final String DEFAULT_SEARCH_LOCATIONS = "classpath:/,classpath:/config/";
@@ -51,7 +63,9 @@ public class PluginDefinitionReader {
                 conf.putAll(ConfigUtils.loadRelativeConfig(lo));
             }
         }
-
+        if (MapUtils.isEmpty(conf) && AgentConfig.doGetProperty(START_AGENT_FEMAS) != null && ((Boolean) AgentConfig.doGetProperty(START_AGENT_FEMAS))) {
+            conf.putAll(AgentConfig.getConf());
+        }
         conf.putAll(new LinkedHashMap(System.getenv()));
         conf.putAll(new LinkedHashMap(System.getProperties())); // 注意部分属性可能被覆盖为字符串
 
@@ -73,4 +87,5 @@ public class PluginDefinitionReader {
     public Properties getProperties() {
         return this.finalPropertiesLocations;
     }
+
 }

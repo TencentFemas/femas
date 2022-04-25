@@ -13,7 +13,7 @@ import com.tencent.tsf.femas.common.util.FileUtils;
 import com.tencent.tsf.femas.config.internals.AbstractConfig;
 
 public class LocalConfig extends AbstractConfig<Object> {
-    private static final  Logger logger = LoggerFactory.getLogger(LocalConfig.class);
+    private static final Logger logger = LoggerFactory.getLogger(LocalConfig.class);
 
     private Map<String, Object> conf;
 
