@@ -56,7 +56,7 @@ public class InstanceMethodsInterceptorWrapper {
         try {
             result = interceptor.beforeMethod(method, allArguments, method.getParameterTypes());
         } catch (Throwable t) {
-            AgentLogger.getLogger().info("[femas-agent] error class:" + obj.getClass() + " before method:" + method.getName() + "intercept failure");
+            AgentLogger.getLogger().info("[femas-agent] error class:" + obj.getClass() + " before method:" + method.getName() + "intercept failure" + AgentLogger.getStackTraceString(t));
         }
         Object ret = null;
         try {
@@ -69,14 +69,14 @@ public class InstanceMethodsInterceptorWrapper {
             try {
                 interceptor.handleMethodException(method, allArguments, method.getParameterTypes(), t);
             } catch (Throwable t2) {
-                AgentLogger.getLogger().info("[femas-agent] error  class:" + obj.getClass() + " before method:" + method.getName() + "intercept failure");
+                AgentLogger.getLogger().info("[femas-agent] error  class:" + obj.getClass() + " before method:" + method.getName() + "intercept failure" + AgentLogger.getStackTraceString(t));
             }
             throw t;
         } finally {
             try {
                 ret = interceptor.afterMethod(method, allArguments, method.getParameterTypes(), ret);
             } catch (Throwable t) {
-                AgentLogger.getLogger().info("[femas-agent] error  class:" + obj.getClass() + " before method:" + method.getName() + "intercept failure");
+                AgentLogger.getLogger().info("[femas-agent] error  class:" + obj.getClass() + " before method:" + method.getName() + "intercept failure" + AgentLogger.getStackTraceString(t));
             }
         }
         return ret;

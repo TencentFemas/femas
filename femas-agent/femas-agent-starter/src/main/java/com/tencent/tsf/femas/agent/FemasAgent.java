@@ -25,6 +25,7 @@ import com.tencent.tsf.femas.agent.config.AgentPluginLoader;
 import com.tencent.tsf.femas.agent.config.GlobalInterceptPluginConfig;
 import com.tencent.tsf.femas.agent.config.InterceptPlugin;
 import com.tencent.tsf.femas.agent.config.MethodType;
+import com.tencent.tsf.femas.agent.interceptor.InstanceMethodsAroundInterceptor;
 import com.tencent.tsf.femas.agent.interceptor.wrapper.*;
 
 import com.tencent.tsf.femas.agent.tools.AgentLogger;
@@ -211,8 +212,9 @@ public class FemasAgent {
                     builder = builder.method(junction)
                             .intercept(MethodDelegation.withDefaultConfiguration()
                                     .withBinders(Morph.Binder.install(OverrideArgsCallable.class))
-                                    .to(new InstanceMethodsInterceptorWrapper(interceptPlugin
-                                            .getInterceptorClass(), classLoader)));
+                                    .to(new InstanceMethodsInterceptOverrideArgsWrapper(interceptPlugin
+                                            .getInterceptorClass(), classLoader) {
+                                    }));
                     return builder;
                 });
             } else {
@@ -234,7 +236,7 @@ public class FemasAgent {
                     builder = builder.method(isStatic().and(interceptPlugin.getPluginMatcher()))
                             .intercept(MethodDelegation.withDefaultConfiguration()
                                     .withBinders(Morph.Binder.install(OverrideArgsCallable.class))
-                                    .to(new StaticMethodsInterceptorWrapper(interceptPlugin.getInterceptorClass())));
+                                    .to(new StaticMethodsInterceptOverrideArgsWrapper(interceptPlugin.getInterceptorClass())));
                     return builder;
                 });
             } else {

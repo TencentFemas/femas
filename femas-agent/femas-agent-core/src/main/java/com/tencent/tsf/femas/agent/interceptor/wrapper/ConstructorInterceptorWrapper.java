@@ -49,7 +49,7 @@ public class ConstructorInterceptorWrapper {
         try {
             interceptor.afterConstructorInvocation(allArguments);
         } catch (Throwable t) {
-            AgentLogger.getLogger().severe("ConstructorInterceptorWrapper failure.");
+            AgentLogger.getLogger().severe("ConstructorInterceptorWrapper failure." + AgentLogger.getStackTraceString(t));
         }
 
     }

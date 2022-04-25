@@ -45,7 +45,8 @@ public class InterceptorClassLoaderCache {
     public static <T> T load(String className,
                              ClassLoader targetClassLoader) throws IllegalAccessException, InstantiationException, ClassNotFoundException {
         if (targetClassLoader == null) {
-            targetClassLoader = InterceptorClassLoaderCache.class.getClassLoader();
+//            targetClassLoader = InterceptorClassLoaderCache.class.getClassLoader();
+            targetClassLoader = Thread.currentThread().getContextClassLoader();
         }
         //JAVA强类型语言，类名和classLoader确定唯一性
         String instanceKey = className + "_OF_" + targetClassLoader.getClass()

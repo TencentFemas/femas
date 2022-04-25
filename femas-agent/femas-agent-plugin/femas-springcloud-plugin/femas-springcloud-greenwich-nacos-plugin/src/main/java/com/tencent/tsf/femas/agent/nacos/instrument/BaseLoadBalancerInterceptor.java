@@ -23,7 +23,6 @@ import com.tencent.tsf.femas.agent.interceptor.wrapper.InterceptResult;
 
 import java.lang.reflect.Method;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 /**
  * @Author leoziltong@tencent.com

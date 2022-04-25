@@ -44,13 +44,13 @@ public class InterceptPlugin {
     @JsonProperty
     private String methodName;
     /**
-     * 匹配类型  MatcherType
+     * 匹配类型  MatcherType 默认是精准匹配
      */
     @JsonProperty
     private String matcherType;
 
     /**
-     * 匹配类型  methodType
+     * 匹配类型  MethodType 默认是实例方法
      */
     @JsonProperty
     private String methodType;
@@ -66,7 +66,7 @@ public class InterceptPlugin {
     private Integer takesArguments;
 
     /**
-     * 方法参数长度
+     * before重写之后，是否需要用修改之后的参数调用原始方法
      */
     @JsonProperty
     private Boolean overrideArgs;

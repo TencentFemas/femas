@@ -17,17 +17,14 @@
 
 package com.tencent.tsf.femas.agent.nacos.instrument;
 
-import com.tencent.tsf.femas.agent.interceptor.Interceptor;
 import com.tencent.tsf.femas.agent.interceptor.StaticMethodsAroundInterceptor;
 import com.tencent.tsf.femas.agent.interceptor.wrapper.InterceptResult;
-import com.tencent.tsf.femas.agent.interceptor.wrapper.StaticMethodsInterceptorWrapper;
 import com.tencent.tsf.femas.common.context.Context;
 import com.tencent.tsf.femas.common.context.ContextConstant;
 import com.tencent.tsf.femas.common.context.factory.ContextFactory;
 import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Method;
-import java.util.concurrent.Callable;
 
 /**
  * @Author leoziltong@tencent.com
