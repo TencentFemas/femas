@@ -190,6 +190,11 @@ public abstract class RegistryOpenApiAdaptor implements RegistryOpenApiInterface
     }
 
     @Override
+    public boolean modifyNamespace(RegistryConfig config, Namespace namespace) {
+        return true;
+    }
+
+    @Override
     public boolean deleteNamespace(RegistryConfig config, Namespace namespace) {
         return true;
     }
