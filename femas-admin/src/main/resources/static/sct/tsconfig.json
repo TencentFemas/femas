@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "target": "es2017",
+    "module": "es2015",
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "jsx": "react",
+    "outDir": ".js-out",
+    "noImplicitAny": false,
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "lib": [
+      "es2017",
+      "dom"
+    ],
+    "paths": {
+      "@src/*": [
+        "./src/*"
+      ],
+      "tea-component": [
+        "./node_modules/tea-component/es"
+      ],
+      "tea-component/*": [
+        "./node_modules/tea-component/es/*"
+      ]
+    }
+  },
+  "exclude": [
+    "dist",
+    "node_modules"
+  ]
+}

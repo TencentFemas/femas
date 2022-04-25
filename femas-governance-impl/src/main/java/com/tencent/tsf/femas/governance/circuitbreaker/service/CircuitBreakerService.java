@@ -147,6 +147,7 @@ public class CircuitBreakerService implements ICircuitBreakerService<CircuitBrea
         return FemasCircuitBreakerIsolationLevelEnum.SERVICE;
     }
 
+    @Override
     public void disableCircuitBreaker(Service service) {
         if (service == null) {
             return;

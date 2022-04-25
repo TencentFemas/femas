@@ -1,0 +1,66 @@
+diff --git a/node_modules/codemirror/addon/merge/merge.js b/node_modules/codemirror/addon/merge/merge.js
+index 827edb7..33a9346 100644
+--- a/node_modules/codemirror/addon/merge/merge.js
++++ b/node_modules/codemirror/addon/merge/merge.js
+@@ -2,12 +2,16 @@
+ // Distributed under an MIT license: https://codemirror.net/LICENSE
+ 
+ // declare global: diff_match_patch, DIFF_INSERT, DIFF_DELETE, DIFF_EQUAL
++var jsDiff = require('diff');
++var DIFF_INSERT = -1;
++var DIFF_DELETE = 1;
++var DIFF_EQUAL = 0;
+ 
+ (function(mod) {
+   if (typeof exports == "object" && typeof module == "object") // CommonJS
+     mod(require("../../lib/codemirror")); // Note non-packaged dependency diff_match_patch
+-  else if (typeof define == "function" && define.amd) // AMD
+-    define(["../../lib/codemirror", "diff_match_patch"], mod);
++  // else if (typeof define == "function" && define.amd) // AMD
++    // define(["../../lib/codemirror", "diff_match_patch"], mod);
+   else // Plain browser env
+     mod(CodeMirror);
+ })(function(CodeMirror) {
+@@ -650,14 +654,39 @@
+   // Operations on diffs
+   var dmp;
+   function getDiff(a, b, ignoreWhitespace) {
+-    if (!dmp) dmp = new diff_match_patch();
++    // if (!dmp) dmp = new diff_match_patch();
++    // var diff = dmp.diff_main(a, b);
++
++    // 算法变更-QQ
++    var diff = []
++    var diffCon = jsDiff.diffWordsWithSpace(a, b)
++    diffCon.forEach(d => {
++      var diff_type = d.removed ? DIFF_DELETE : d.added ? DIFF_INSERT: DIFF_EQUAL
++      diff.push([diff_type, d.value])
++    })
++
++    // 渲染分行处理
++    var  diffArr = []
++    diff.forEach((element) => {
++      var temp = element[1].split('\n')
++      temp.forEach((d, i) => {
++        diffArr.push([element[0], d + (i === temp.length - 1 ? '' : '\n')])
++      })
++    });
++    diff = diffArr
+ 
+-    var diff = dmp.diff_main(a, b);
+     // The library sometimes leaves in empty parts, which confuse the algorithm
+     for (var i = 0; i < diff.length; ++i) {
+       var part = diff[i];
+       if (ignoreWhitespace ? !/[^ \t]/.test(part[1]) : !part[1]) {
+-        diff.splice(i--, 1);
++        diff.splice(i, 1);
++        // 将当前换行加入后两个
++        if(diff[i]){
++          diff[i][1] = part[1] + diff[i][1];
++          if(diff[i+1] && diff[i+1][0] !== DIFF_EQUAL && diff[i+1][0] !== diff[i][0]){
++            diff[i+1][1] = part[1] + diff[i+1][1]
++          }
++        }
+       } else if (i && diff[i - 1][0] == part[0]) {
+         diff.splice(i--, 1);
+         diff[i][1] += part[1];
