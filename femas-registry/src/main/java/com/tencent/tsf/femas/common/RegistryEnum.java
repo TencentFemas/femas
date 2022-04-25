@@ -11,7 +11,8 @@ public enum RegistryEnum {
     EUREKA("EUREKA"),
     NACOS("NACOS"),
     KUBERNETES("K8S"),
-    POLARIS("POLARIS");
+    POLARIS("POLARIS"),
+    ETCD("ETCD");
 
 
     String alias;
