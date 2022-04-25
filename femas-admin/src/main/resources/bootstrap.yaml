@@ -3,8 +3,10 @@ spring:
     name: femas-admin
   cloud:
     nacos:
+      username: nacos
+      password: nacos
       config:
-        enabled: false
+        server-addr: 127.0.0.1:8848
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/adminDb?useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true&useSSL=false&serverTimezone=Asia/Shanghai
     username: root

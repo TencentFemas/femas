@@ -25,6 +25,10 @@ import com.tencent.tsf.femas.governance.plugin.context.ConfigRefreshableContext;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ServiceLoader;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,13 +42,42 @@ public class DefaultConfigurablePluginHolder {
 
     private static volatile ConfigRefreshableContext context;
 
+
+    /**
+     * 标识别是否初始化完成，避免并发的情况下暴露还未初始化完的对象
+     * 0 代表 未初始化
+     * 1 代表 已经初始化
+     * -1 代表 初始化失败
+     */
+    private static volatile int init = 0;
+
+    private static final Lock LOCK = new ReentrantLock();
+
     public static AbstractSDKContext getSDKContext() {
         if (context == null) {
-            synchronized (DefaultConfigurablePluginHolder.class) {
+            LOCK.lock();
+            try {
                 if (context == null) {
                     context = new ConfigRefreshableContext();
                     initPluginContext();
+                    init = InitStatus.INIT_SUCCESS.getStatus();
                 }
+            } catch (Exception e) {
+                init = InitStatus.ERROR.getStatus();
+                throw e;
+            } finally {
+                LOCK.unlock();
+            }
+
+        }
+        while (init != InitStatus.INIT_SUCCESS.getStatus()) {
+            LOCK.lock();
+            try {
+                if (init == InitStatus.ERROR.getStatus()) {
+                    throw new RuntimeException("initPluginContext error");
+                }
+            } finally {
+                LOCK.unlock();
             }
         }
         return context;
@@ -78,4 +111,29 @@ public class DefaultConfigurablePluginHolder {
         context.initPlugins(initContext, types);
     }
 
+    private enum InitStatus {
+
+        /**
+         * 初始化失败
+         */
+        ERROR(-1),
+        /**
+         * 未初始化
+         */
+        UN_INIT(0),
+        /**
+         * 已经初始化
+         */
+        INIT_SUCCESS(1);
+
+        private int status;
+
+        InitStatus(int status) {
+            this.status = status;
+        }
+
+        public int getStatus() {
+            return status;
+        }
+    }
 }
