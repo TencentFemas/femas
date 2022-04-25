@@ -310,8 +310,8 @@ public class CommonExtensionLayer implements IExtensionLayer {
     @Override
     public void afterClientInvoke(Request request, Response response, RpcContext rpcContext) {
         long duration = TimeUtil.currentTimeMillis() - rpcContext.getTracingContext().getStartTime();
-
-        ErrorStatus statusCode = ErrorStatus.OK;
+        // actual status from response
+        ErrorStatus statusCode = response.getErrorStatus() != null ? response.getErrorStatus() : ErrorStatus.OK;
 
         if (response.getError() != null) {
             circuitBreakerService.handleFailedServiceRequest(request, duration, response.getError());

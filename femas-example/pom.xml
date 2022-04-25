@@ -10,6 +10,7 @@
         <module>femas-example-springcloud-2020-provider</module>
         <module>femas-example-springcloud-greenwich-zuul</module>
         <module>femas-example-springcloud-greenwich-gateway</module>
+        <module>feams-example-springcloud-hoxton</module>
     </modules>
 
     <parent>

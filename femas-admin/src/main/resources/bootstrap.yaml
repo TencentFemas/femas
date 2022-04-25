@@ -1,0 +1,40 @@
+spring:
+  application:
+    name: femas-admin
+  cloud:
+    nacos:
+      username: nacos
+      password: nacos
+      config:
+        server-addr: 127.0.0.1:8848
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/adminDb?useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true&useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: root
+    hikari:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+management:
+  health:
+    db:
+      enabled: false
+femas:
+  trace:
+    backend:
+      addr: http://127.0.0.1:8080
+  metrics:
+    grafana:
+      addr: http://127.0.0.1:3000
+    prometheus:
+      addr: http://127.0.0.1:9090
+  ignore:
+    prefix: true
+
+logging:
+  file: ${user.home}/log/femas/${spring.application.name}/${spring.application.name}
+

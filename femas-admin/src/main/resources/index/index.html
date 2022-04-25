@@ -1,0 +1,24 @@
+<!--html入口模板-->
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width,initial-scale=1" name="viewport">
+  <meta content="ie=edge" http-equiv="X-UA-Compatible">
+  <title>Femas</title>
+  <link href="${FEMAS_BASE_PATH}/icon/favicon_bac.ico" rel="shortcut icon" type="image/x-icon"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.12.1/polyfill.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"></script>
+  <script>
+    window.FEMAS_BASE_PATH = '${FEMAS_BASE_PATH}'
+  </script>
+  <script defer="defer" src="${FEMAS_BASE_PATH}/js/sct.js"></script>
+  <link href="${FEMAS_BASE_PATH}/css/sct.css" rel="stylesheet">
+</head>
+
+<body>
+<div id="sct_app" style="height: 100%;width: 100%;"></div>
+</body>
+
+</html>

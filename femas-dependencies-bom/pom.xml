@@ -264,6 +264,12 @@
 
             <dependency>
                 <groupId>com.tencent.tsf</groupId>
+                <artifactId>femas-extension-springcloud-hoxton</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.tencent.tsf</groupId>
                 <artifactId>femas-extension-springcloud-2020.0-ilford</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -283,6 +289,12 @@
             <dependency>
                 <groupId>com.tencent.tsf</groupId>
                 <artifactId>femas-springcloud-greenwich-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.tencent.tsf</groupId>
+                <artifactId>femas-springcloud-hoxton-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

@@ -83,12 +83,18 @@ Femas实现了对主流开源注册中心(目前支持`Consul、nacos、eureka`)
 
 ### 单机部署
 
-为了方便用户使用，femas提供打包编译好的tar供用户一键启动。
-> cd femas-console/femas-admin/bin
+源码编译方式启动：
+```
+mvn -Dmaven.test.skip=true clean install -U
+
+cd femas-admin-starter/target/femas-admin-starter-$version/femas-admin/bin
+
+sh startup.sh
+```
 
 控制台配置：
 项目配置文件在`femas-admin/conf`目录下
-> cd femas-console/femas-admin/conf
+> cd femas-admin-starter-$version/femas-admin/conf
 
 控制台配置主要包含：
 - 服务端口
