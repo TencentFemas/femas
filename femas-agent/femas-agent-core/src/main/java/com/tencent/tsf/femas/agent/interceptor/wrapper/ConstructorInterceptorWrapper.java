@@ -26,6 +26,11 @@ import net.bytebuddy.implementation.bind.annotation.AllArguments;
 import net.bytebuddy.implementation.bind.annotation.RuntimeType;
 import net.bytebuddy.implementation.bind.annotation.This;
 
+/**
+ * 构造方法的拦截
+ *
+ * @Author leoziltong@tencent.com
+ */
 public class ConstructorInterceptorWrapper {
 
     private ConstructorInterceptor interceptor;

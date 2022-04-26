@@ -10,6 +10,8 @@ import java.lang.reflect.Modifier;
 
 /**
  * Transform抽象父类，提供获取方法名的公用方法
+ *
+ * @Author leoziltong@tencent.com
  */
 public abstract class AbstractTransformer implements ClassFileTransformer {
     protected static final byte[] EMPTY_BYTE_ARRAY = {};

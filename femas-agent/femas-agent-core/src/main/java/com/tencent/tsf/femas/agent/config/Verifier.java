@@ -20,9 +20,7 @@ package com.tencent.tsf.femas.agent.config;
 /**
  * 检验SDK配置
  *
- * @author andrewshan
  * @author leoziltong
- * @date 2019/8/20
  */
 public interface Verifier {
 

@@ -30,7 +30,11 @@ import net.bytebuddy.implementation.bind.annotation.SuperCall;
 import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
 
-
+/**
+ * 拦截静态方法
+ *
+ * @Author leoziltong@tencent.com
+ */
 public class StaticMethodsInterceptorWrapper {
 
     private String interceptorClassName;

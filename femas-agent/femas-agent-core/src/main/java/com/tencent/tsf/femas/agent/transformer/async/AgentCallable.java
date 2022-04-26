@@ -3,6 +3,10 @@ package com.tencent.tsf.femas.agent.transformer.async;
 
 import java.util.concurrent.Callable;
 
+
+/**
+ * @Author leoziltong@tencent.com
+ */
 public class AgentCallable implements Callable {
     private String tag;
     private Callable wrapCallable;

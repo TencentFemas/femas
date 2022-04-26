@@ -27,7 +27,11 @@ import net.bytebuddy.implementation.bind.annotation.*;
 import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
 
-
+/**
+ * 拦截实例方法
+ *
+ * @Author leoziltong@tencent.com
+ */
 public class InstanceMethodsInterceptorWrapper {
 
 

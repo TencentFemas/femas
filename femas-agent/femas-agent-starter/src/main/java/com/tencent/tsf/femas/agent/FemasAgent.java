@@ -17,7 +17,6 @@
 package com.tencent.tsf.femas.agent;
 
 import java.lang.instrument.Instrumentation;
-import java.nio.file.FileSystems;
 import java.security.AllPermission;
 import java.util.Optional;
 
@@ -25,7 +24,6 @@ import com.tencent.tsf.femas.agent.config.AgentPluginLoader;
 import com.tencent.tsf.femas.agent.config.GlobalInterceptPluginConfig;
 import com.tencent.tsf.femas.agent.config.InterceptPlugin;
 import com.tencent.tsf.femas.agent.config.MethodType;
-import com.tencent.tsf.femas.agent.interceptor.InstanceMethodsAroundInterceptor;
 import com.tencent.tsf.femas.agent.interceptor.wrapper.*;
 
 import com.tencent.tsf.femas.agent.tools.AgentLogger;
@@ -56,6 +54,9 @@ public class FemasAgent {
         init(agentArgs, inst, true);
     }
 
+    /**
+     * agent 监听器
+     */
     private static class Listener implements AgentBuilder.Listener {
         @Override
         public void onDiscovery(String s, ClassLoader classLoader, JavaModule javaModule, boolean b) {
@@ -128,6 +129,14 @@ public class FemasAgent {
                         (majorVersion == 8 && runtimeInfo.isHotSpot() && runtimeInfo.getUpdateVersion() < 40);
     }
 
+    /**
+     * 延迟初始化agent
+     *
+     * @param agentArguments
+     * @param instrumentation
+     * @param premain
+     * @param delayAgentInitMs
+     */
     private static void delayInitAgentAsync(final String agentArguments, final Instrumentation instrumentation,
                                             final boolean premain, final long delayAgentInitMs) {
         AgentLogger.getLogger().info("[femas-agent] INFO Delaying  Agent initialization by " + delayAgentInitMs + " milliseconds.");
@@ -154,6 +163,13 @@ public class FemasAgent {
         initThread.start();
     }
 
+    /**
+     * 初始化agent
+     *
+     * @param agentArguments
+     * @param instrumentation
+     * @param premain
+     */
     private synchronized static void initializeAgent(String agentArguments, Instrumentation instrumentation, boolean premain) {
         try {
             final ByteBuddy byteBuddy = new ByteBuddy().with(TypeValidation.of(TypeValidation.DISABLED.isEnabled()));
@@ -178,8 +194,16 @@ public class FemasAgent {
         }
     }
 
+    /**
+     * 组装transformer
+     * 这里可以根据不同拦截的类型在Plugin做统一封装，放在一个新的transformer里面，第一期为了让读者更清晰直观，先这样写吧 TODO
+     *
+     * @param agentBuilder
+     * @param interceptPlugin
+     * @return
+     */
     private static AgentBuilder pluginAgentBuilder(AgentBuilder agentBuilder, InterceptPlugin interceptPlugin) {
-        if (!checkPluginValidate(interceptPlugin))
+        if (!validateInterceptPlugin(interceptPlugin))
             return agentBuilder;
         //原始的改写方式
         if (interceptPlugin.getOriginAround() != null && interceptPlugin.getOriginAround()) {
@@ -252,7 +276,7 @@ public class FemasAgent {
         return agentBuilder;
     }
 
-    private static boolean checkPluginValidate(InterceptPlugin plugin) {
+    private static boolean validateInterceptPlugin(InterceptPlugin plugin) {
         boolean classNameIsValid = Optional.of(plugin).map(i -> i.getClassName()).isPresent();
         boolean InterClassNameIsValid = Optional.of(plugin).map(i -> i.getInterceptorClass()).isPresent();
         boolean methodNameIsValid = Optional.of(plugin).map(i -> i.getMethodName()).isPresent();

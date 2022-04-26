@@ -13,6 +13,8 @@ import java.util.*;
 
 /**
  * 解析配置文件
+ *
+ * @Author leoziltong@tencent.com
  */
 public class AgentPluginLoader {
 

@@ -15,6 +15,8 @@ import java.util.concurrent.locks.ReentrantLock;
  * Feign.Request并不一定是由AppClassLoader所加载，可能是由Tomcat相关的类加载器所加载，因此如果直接把AppClassLoader设为AgentCLassLoader的父类加载器，
  * 则就算AppClassLoader可以加载，=两边是由不同类加载器加载的类，无法完成转换（类加载器和带包的类名决定类的唯一性）。因此需要传入执行到对应拦截方法时
  * 的对应类加载器作为父类加载器，以此完成转换。而由于每个父类加载可能不同，因此针对每个父类加载器都有个AgentClassLoader,从而衍生出这个cache。
+ *
+ * @Author leoziltong@tencent.com
  */
 public class InterceptorClassLoaderCache {
     private static volatile Map<ClassLoader, AgentClassLoader> agentClassLoaderMap = new ConcurrentHashMap<>();

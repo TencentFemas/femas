@@ -7,6 +7,12 @@ import java.security.ProtectionDomain;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+
+/**
+ * copy from springcloud
+ *
+ * @Author leoziltong@tencent.com
+ */
 public abstract class ReflectionUtils {
     private static final Method[] NO_METHODS = new Method[0];
     private static final Field[] NO_FIELDS = new Field[0];

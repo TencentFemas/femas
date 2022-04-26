@@ -26,6 +26,11 @@ import net.bytebuddy.implementation.bind.annotation.*;
 
 import java.lang.reflect.Method;
 
+/**
+ * 拦截实例方法，并且origin调用的时候，使用修改过的参数作为入参
+ *
+ * @Author leoziltong@tencent.com
+ */
 public class InstanceMethodsInterceptOverrideArgsWrapper {
 
     private InstanceMethodsAroundInterceptor<InterceptResult> interceptor;
@@ -56,7 +61,7 @@ public class InstanceMethodsInterceptOverrideArgsWrapper {
             result = interceptor.beforeMethod(method, allArguments, method.getParameterTypes());
             context = result.getContext();
         } catch (Throwable t) {
-            AgentLogger.getLogger().info("[femas-agent] error  class:" + obj.getClass() + " before method:" + method.getName() + "intercept failure"+ AgentLogger.getStackTraceString(t));
+            AgentLogger.getLogger().info("[femas-agent] error  class:" + obj.getClass() + " before method:" + method.getName() + "intercept failure" + AgentLogger.getStackTraceString(t));
         }
         Object ret = null;
         try {
@@ -68,12 +73,12 @@ public class InstanceMethodsInterceptOverrideArgsWrapper {
         } catch (Throwable t) {
             try {
                 if (context != null) {
-                    interceptor.handleMethodExceptionWithResult(method, allArguments, method.getParameterTypes(), t,result);
-                }else{
+                    interceptor.handleMethodExceptionWithResult(method, allArguments, method.getParameterTypes(), t, result);
+                } else {
                     interceptor.handleMethodException(method, allArguments, method.getParameterTypes(), t);
                 }
             } catch (Throwable t2) {
-                AgentLogger.getLogger().info("[femas-agent] error  class:" + obj.getClass() + " before method:" + method.getName() + "intercept failure"+ AgentLogger.getStackTraceString(t));
+                AgentLogger.getLogger().info("[femas-agent] error  class:" + obj.getClass() + " before method:" + method.getName() + "intercept failure" + AgentLogger.getStackTraceString(t));
             }
             throw t;
         } finally {
@@ -84,7 +89,7 @@ public class InstanceMethodsInterceptOverrideArgsWrapper {
                     ret = interceptor.afterMethod(method, allArguments, method.getParameterTypes(), ret);
                 }
             } catch (Throwable t) {
-                AgentLogger.getLogger().info("[femas-agent] error  class:" + obj.getClass() + " before method:" + method.getName() + "intercept failure"+ AgentLogger.getStackTraceString(t));
+                AgentLogger.getLogger().info("[femas-agent] error  class:" + obj.getClass() + " before method:" + method.getName() + "intercept failure" + AgentLogger.getStackTraceString(t));
             }
         }
         return ret;

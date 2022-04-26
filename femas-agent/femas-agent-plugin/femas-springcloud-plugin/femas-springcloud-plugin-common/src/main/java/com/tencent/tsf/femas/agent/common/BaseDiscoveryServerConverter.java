@@ -1,10 +1,8 @@
-package com.tencent.tsf.femas.agent.common;/*
-/**
- * 所有spring cloud版本通用的converter转换器里的方法
- * 
- * @Author juanyinyang
- */
+package com.tencent.tsf.femas.agent.common;
 
+/**
+ * @Author leoziltong@tencent.com
+ */
 public interface BaseDiscoveryServerConverter {
 
     default String getNamespace() {

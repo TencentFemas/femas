@@ -7,12 +7,16 @@ import javassist.LoaderClassPath;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
+
+/**
+ * @Author leoziltong@tencent.com
+ */
 public class ClassInfo {
     private final String className;
     private final byte[] classFileBuffer;
     private final ClassLoader loader;
 
-    public ClassInfo(String className,  byte[] classFileBuffer, ClassLoader loader) {
+    public ClassInfo(String className, byte[] classFileBuffer, ClassLoader loader) {
         this.className = className;
         this.classFileBuffer = classFileBuffer;
         this.loader = loader;

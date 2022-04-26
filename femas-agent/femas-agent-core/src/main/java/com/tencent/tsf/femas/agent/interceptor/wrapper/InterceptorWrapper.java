@@ -25,6 +25,12 @@ import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
 
 /**
+ * 有了Around interceptor 为什么还需要这个Interceptor
+ * <p>
+ * 这里需要解释下，某些特殊情况下，Around方式存在一些局限性，before after exception各个方法都需要有上下文关联处理的话，
+ * 很难在割裂的各个方法中协调处理，容易出错，干脆就合并到一起，简单直观，能解决问题，所以衍生出了这个类，这个类目前只用来处理实例方法，
+ * 这个Feature在agent的premain入口体现的
+ *
  * @Author leoziltong@tencent.com
  * @Date: 2022/3/29 15:55
  */

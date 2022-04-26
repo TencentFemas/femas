@@ -22,8 +22,9 @@ package com.tencent.tsf.femas.agent.interceptor;
 import java.lang.reflect.Method;
 
 /**
- * The static method's interceptor interface. Any plugin, which wants to intercept static methods, must implement this
- * interface.
+ * 静态方法interceptor
+ *
+ * @Author leoziltong@tencent.com
  */
 public interface StaticMethodsAroundInterceptor<T> {
     /**

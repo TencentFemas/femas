@@ -29,6 +29,11 @@ import net.bytebuddy.implementation.bind.annotation.RuntimeType;
 
 import java.lang.reflect.Method;
 
+/**
+ * 拦截静态方法，并且origin调用的时候，使用修改过的参数作为入参
+ *
+ * @Author leoziltong@tencent.com
+ */
 public class StaticMethodsInterceptOverrideArgsWrapper {
 
     private String interceptorClassName;
@@ -68,14 +73,14 @@ public class StaticMethodsInterceptOverrideArgsWrapper {
             try {
                 interceptor.handleMethodException(clazz, method, allArguments, method.getParameterTypes(), t);
             } catch (Throwable t2) {
-                AgentLogger.getLogger().info("[femas-agent] error  class:" + clazz + " before method:" + method.getName() + "intercept failure"+ AgentLogger.getStackTraceString(t));
+                AgentLogger.getLogger().info("[femas-agent] error  class:" + clazz + " before method:" + method.getName() + "intercept failure" + AgentLogger.getStackTraceString(t));
             }
             throw t;
         } finally {
             try {
                 ret = interceptor.afterMethod(clazz, method, allArguments, method.getParameterTypes(), ret);
             } catch (Throwable t) {
-                AgentLogger.getLogger().info("[femas-agent] error  class:" + clazz + " before method:" + method.getName() + "intercept failure"+ AgentLogger.getStackTraceString(t));
+                AgentLogger.getLogger().info("[femas-agent] error  class:" + clazz + " before method:" + method.getName() + "intercept failure" + AgentLogger.getStackTraceString(t));
             }
         }
         return ret;

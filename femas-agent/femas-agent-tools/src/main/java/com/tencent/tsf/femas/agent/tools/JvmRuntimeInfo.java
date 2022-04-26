@@ -18,7 +18,6 @@
  */
 package com.tencent.tsf.femas.agent.tools;
 
-
 public class JvmRuntimeInfo {
 
     private static final JvmRuntimeInfo CURRENT_VM = new JvmRuntimeInfo(System.getProperty("java.version"), System.getProperty("java.vm.name"), System.getProperty("java.vm.version"));
