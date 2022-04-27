@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 插件加载
+ * @Author leoziltong@tencent.com
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class GlobalInterceptPluginConfig {
@@ -27,7 +27,6 @@ public class GlobalInterceptPluginConfig {
     public void setPlugin(InterceptPlugin plugin) {
         this.plugin = plugin;
     }
-
 
 
 }

@@ -6,12 +6,16 @@ import javassist.CannotCompileException;
 import javassist.CtField;
 import javassist.CtMethod;
 import javassist.NotFoundException;
+
 import java.io.IOException;
 import java.lang.instrument.IllegalClassFormatException;
 import java.security.ProtectionDomain;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * @Author leoziltong@tencent.com
+ */
 public class ForkJoinTransformer extends AbstractTransformer {
 
     private static Set<String> EXECUTOR_CLASS_NAMES = new HashSet<>();
@@ -47,7 +51,7 @@ public class ForkJoinTransformer extends AbstractTransformer {
                 classInfo.getCtClass().detach();
                 return classInfo.getCtClass().toBytecode();
             }
-        }catch (IOException e) {
+        } catch (IOException e) {
             AgentLogger.getLogger().severe("ExecutorTransformer.transform error: " + AgentLogger.getStackTraceString(e));
         } catch (NotFoundException e) {
             AgentLogger.getLogger().severe("ExecutorTransformer.transform error: " + AgentLogger.getStackTraceString(e));

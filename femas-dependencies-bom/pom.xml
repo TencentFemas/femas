@@ -31,7 +31,6 @@
         <springfox.swagger2.version>2.9.2</springfox.swagger2.version>
         <io.swagger.version>1.5.24</io.swagger.version>
         <!-- Common libs -->
-        <javassist.version>3.27.0-GA</javassist.version>
         <guava.version>20.0</guava.version>
         <httpclient.version>4.5.12</httpclient.version>
         <consul.version>1.4.2</consul.version>
@@ -496,12 +495,6 @@
                 <groupId>com.spring4all</groupId>
                 <artifactId>swagger-spring-boot-starter</artifactId>
                 <version>${spring.boot.swagger}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.javassist</groupId>
-                <artifactId>javassist</artifactId>
-                <version>${javassist.version}</version>
             </dependency>
 
             <!--K8s-->

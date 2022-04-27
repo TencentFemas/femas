@@ -4,8 +4,9 @@ import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Set;
 
+
 /**
- *
+ * @Author leoziltong@tencent.com
  */
 public class CacheProxy {
     private static final String CrossClassLoaderCacheClassName = "com.tencent.tsf.femas.agent.classloader.CrossClassLoaderCache.CrossClassLoaderCache";
@@ -36,24 +37,24 @@ public class CacheProxy {
 
     public static void addCacheSet(String cacheKey, Object value) {
         try {
-            if (addMethod == null){
+            if (addMethod == null) {
                 Class clazz = Thread.currentThread().getContextClassLoader().loadClass(CrossClassLoaderCacheClassName);
-                addMethod = clazz.getMethod("addCacheSet",String.class,Object.class);
+                addMethod = clazz.getMethod("addCacheSet", String.class, Object.class);
             }
-            addMethod.invoke(null,cacheKey,value);
-        }catch (Exception e){
-           AgentLogger.getLogger().info(AgentLogger.getStackTraceString(e));
+            addMethod.invoke(null, cacheKey, value);
+        } catch (Exception e) {
+            AgentLogger.getLogger().info(AgentLogger.getStackTraceString(e));
         }
     }
 
     public static void removeCacheSet(String cacheKey, Object value) {
         try {
-            if (removeMethod == null){
+            if (removeMethod == null) {
                 Class clazz = Thread.currentThread().getContextClassLoader().loadClass(CrossClassLoaderCacheClassName);
-                removeMethod = clazz.getMethod("removeCacheSet",String.class,Object.class);
+                removeMethod = clazz.getMethod("removeCacheSet", String.class, Object.class);
             }
-            removeMethod.invoke(null,cacheKey,value);
-        }catch (Exception e){
+            removeMethod.invoke(null, cacheKey, value);
+        } catch (Exception e) {
             AgentLogger.getLogger().info(AgentLogger.getStackTraceString(e));
         }
     }
@@ -61,12 +62,12 @@ public class CacheProxy {
     public static boolean isSetContains(String cacheKey, Object value) {
         boolean contains = false;
         try {
-            if (containsMethod == null){
+            if (containsMethod == null) {
                 Class clazz = Thread.currentThread().getContextClassLoader().loadClass(CrossClassLoaderCacheClassName);
-                containsMethod = clazz.getMethod("isSetContains",String.class,Object.class);
+                containsMethod = clazz.getMethod("isSetContains", String.class, Object.class);
             }
-            contains = (boolean)containsMethod.invoke(null,cacheKey,value);
-        }catch (Exception e){
+            contains = (boolean) containsMethod.invoke(null, cacheKey, value);
+        } catch (Exception e) {
             AgentLogger.getLogger().info(AgentLogger.getStackTraceString(e));
         }
         return contains;

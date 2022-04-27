@@ -27,7 +27,11 @@ import net.bytebuddy.implementation.bind.annotation.*;
 import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
 
-
+/**
+ * 拦截实例方法
+ *
+ * @Author leoziltong@tencent.com
+ */
 public class InstanceMethodsInterceptorWrapper {
 
 
@@ -37,7 +41,7 @@ public class InstanceMethodsInterceptorWrapper {
         try {
             interceptor = InterceptorClassLoaderCache.load(interceptorClassName, classLoader);
         } catch (Throwable t) {
-            throw new InterceptorWrapperException("[femas-agent] create InstanceMethodsAroundInterceptor failed.", t);
+            throw new InterceptorWrapperException("[femas-agent] create InstanceMethodsAroundInterceptor:" + interceptorClassName + "failed.", t);
         }
     }
 

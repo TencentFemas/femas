@@ -5,6 +5,9 @@ import java.util.TimerTask;
 import java.util.concurrent.Callable;
 
 
+/**
+ * @Author leoziltong@tencent.com
+ */
 public class RunnableWrapper {
 
     public static Runnable wrapRunnable(Runnable runnable) {

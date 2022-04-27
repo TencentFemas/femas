@@ -26,6 +26,8 @@ circuitBreaker:
 femas_registry_ip: 127.0.0.1
 femas_registry_port: 8848
 femas_registry_type: nacos
+#femas体验环境
+#paas_server_address: http://106.53.107.83:8080/
 paas_server_address: http://127.0.0.1:8080
 
 femas_namespace_id: leo11111

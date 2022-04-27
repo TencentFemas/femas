@@ -1,7 +1,9 @@
 package com.tencent.tsf.femas.agent.transformer.async;
 
 
-
+/**
+ * @Author leoziltong@tencent.com
+ */
 public class AgentRunnable implements Runnable {
     private String tag;
     private Runnable wrapRunnable;
@@ -18,7 +20,7 @@ public class AgentRunnable implements Runnable {
     public void run() {
         try {
             AgentContext.setAgentHead(tag);
-            if(wrapRunnable != null) {
+            if (wrapRunnable != null) {
                 this.wrapRunnable.run();
             }
         } finally {

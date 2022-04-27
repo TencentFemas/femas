@@ -8,7 +8,9 @@ import javassist.NotFoundException;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.reflect.Modifier;
 
-
+/**
+ * @Author leoziltong@tencent.com
+ */
 public abstract class AbstractTransformer implements ClassFileTransformer {
     protected static final byte[] EMPTY_BYTE_ARRAY = {};
 

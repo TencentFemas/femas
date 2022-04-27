@@ -18,7 +18,11 @@
 
 package com.tencent.tsf.femas.agent.interceptor;
 
-
+/**
+ * 构造方法interceptor，构造方法字节码只能追加在方法后面（java规范）
+ *
+ * @Author leoziltong@tencent.com
+ */
 public interface ConstructorInterceptor {
     /**
      * Called after the origin constructor invocation.

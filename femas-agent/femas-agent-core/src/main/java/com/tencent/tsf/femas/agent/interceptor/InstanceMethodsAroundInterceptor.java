@@ -22,7 +22,9 @@ package com.tencent.tsf.femas.agent.interceptor;
 import java.lang.reflect.Method;
 
 /**
- * A interceptor, which intercept method's invocation. The target methods will be defined in {@link
+ * 实例方法interceptor
+ *
+ * @Author leoziltong@tencent.com
  */
 public interface InstanceMethodsAroundInterceptor<T> {
     /**

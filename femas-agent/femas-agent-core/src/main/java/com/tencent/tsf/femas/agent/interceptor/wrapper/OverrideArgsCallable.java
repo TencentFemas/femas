@@ -18,6 +18,9 @@
 
 package com.tencent.tsf.femas.agent.interceptor.wrapper;
 
+/**
+ * @Author leoziltong@tencent.com
+ */
 public interface OverrideArgsCallable {
     Object call(Object[] args);
 }

@@ -20,6 +20,9 @@ package com.tencent.tsf.femas.agent.interceptor.wrapper;
 
 import java.util.List;
 
+/**
+ * @Author leoziltong@tencent.com
+ */
 public class InterceptResult {
     private boolean isContinue = true;
 

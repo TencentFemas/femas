@@ -25,7 +25,8 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 /**
- * 定位 femas-agent.jar,并返回其父path
+ * @Author leoziltong@tencent.com
+ * agent classloader path scanner
  */
 public class AgentPackagePathScanner {
 

@@ -2,6 +2,10 @@ package com.tencent.tsf.femas.agent.transformer.async;
 
 import java.util.TimerTask;
 
+
+/**
+ * @Author leoziltong@tencent.com
+ */
 public class AgentTimerTask extends TimerTask {
 
     private String tag;
@@ -16,7 +20,7 @@ public class AgentTimerTask extends TimerTask {
     public void run() {
         try {
             AgentContext.setAgentHead(tag);
-            if(timerTask != null) {
+            if (timerTask != null) {
                 this.timerTask.run();
             }
         } finally {
