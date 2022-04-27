@@ -42,3 +42,16 @@ femas:
           methodName: doFilterInternal
           originAround: true
           interceptorClass: com.tencent.tsf.femas.agent.feign.instrument.RequestContextFilterInterceptor
+      # eureka
+      - plugin:
+          className: org.springframework.cloud.netflix.eureka.serviceregistry.EurekaServiceRegistry
+          methodName: register
+          interceptorClass: com.tencent.tsf.femas.agent.eureka.instrument.EurekaServiceRegistryInterceptor
+      - plugin:
+          className: com.netflix.loadbalancer.ZoneAwareLoadBalancer
+          methodName: chooseServer
+          interceptorClass: com.tencent.tsf.femas.agent.eureka.instrument.ZoneAwareLoadBalancerInterceptor
+      - plugin:
+          className: com.netflix.loadbalancer.BaseLoadBalancer
+          methodName: getAllServers
+          interceptorClass: com.tencent.tsf.femas.agent.eureka.instrument.BaseLoadBalancerInterceptor
