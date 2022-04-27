@@ -4,8 +4,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.TreeTraversingParser;
 import com.tencent.tsf.femas.agent.classloader.AgentPackagePathScanner;
-import com.tencent.tsf.femas.agent.tools.Resource;
-import com.tencent.tsf.femas.agent.tools.YamlPropertiesFactoryBean;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.*;
