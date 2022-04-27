@@ -57,9 +57,9 @@ public class NacosServiceRegistryInterceptor implements InstanceMethodsAroundInt
         Service service = new Service(namespace, properties.getService());
         String serverAddr = properties.getServerAddr();
         if (StringUtils.isNotEmpty(properties.getServerAddr())) {
-            extensionLayer.init(service, NumberUtils.toInt(serverAddr.split(":")[0]), serverAddr.split(":")[1]);
+            extensionLayer.init(service, NumberUtils.toInt(serverAddr.split(":")[1]), serverAddr.split(":")[0]);
         } else {
-            extensionLayer.init(service, NumberUtils.toInt(serverAddr.split(":")[0]));
+            extensionLayer.init(service, NumberUtils.toInt(serverAddr.split(":")[1]));
         }
         Map<String, String> registerMetadataMap = serviceRegistryMetadata.getRegisterMetadataMap();
         registerMetadataMap.put("protocol", "spring-cloud-nacos-plugin");

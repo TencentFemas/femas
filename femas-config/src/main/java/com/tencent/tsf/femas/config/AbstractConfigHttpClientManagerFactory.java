@@ -17,8 +17,15 @@
 
 package com.tencent.tsf.femas.config;
 
+import com.tencent.tsf.femas.agent.classloader.AgentClassLoader;
+import com.tencent.tsf.femas.agent.classloader.InterceptorClassLoaderCache;
+import com.tencent.tsf.femas.common.context.AgentConfig;
+import com.tencent.tsf.femas.common.context.factory.ContextFactory;
+
 import java.util.Iterator;
 import java.util.ServiceLoader;
+
+import static com.tencent.tsf.femas.common.context.ContextConstant.START_AGENT_FEMAS;
 
 /**
  * <pre>
@@ -38,7 +45,16 @@ public class AbstractConfigHttpClientManagerFactory {
         static AbstractConfigHttpClientManager configHttpClientManager = null;
 
         static {
-
+            //spi加载器加载不到agent class的问题
+            if (AgentConfig.doGetProperty(START_AGENT_FEMAS) != null && (Boolean) AgentConfig.doGetProperty(START_AGENT_FEMAS)) {
+                AgentClassLoader agentClassLoader;
+                try {
+                    agentClassLoader = InterceptorClassLoaderCache.getAgentClassLoader(AbstractConfigHttpClientManagerFactory.class.getClassLoader());
+                } catch (Exception e) {
+                    agentClassLoader = InterceptorClassLoaderCache.getAgentClassLoader(Thread.currentThread().getContextClassLoader());
+                }
+                Thread.currentThread().setContextClassLoader(agentClassLoader);
+            }
             // SPI加载并初始化实现类
             ServiceLoader<AbstractConfigHttpClientManager> configHttpClientManagerServiceLoader = ServiceLoader
                     .load(AbstractConfigHttpClientManager.class);

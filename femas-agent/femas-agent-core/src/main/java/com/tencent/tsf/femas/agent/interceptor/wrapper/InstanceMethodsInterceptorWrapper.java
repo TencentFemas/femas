@@ -41,7 +41,7 @@ public class InstanceMethodsInterceptorWrapper {
         try {
             interceptor = InterceptorClassLoaderCache.load(interceptorClassName, classLoader);
         } catch (Throwable t) {
-            throw new InterceptorWrapperException("[femas-agent] create InstanceMethodsAroundInterceptor failed.", t);
+            throw new InterceptorWrapperException("[femas-agent] create InstanceMethodsAroundInterceptor:" + interceptorClassName + "failed.", t);
         }
     }
 

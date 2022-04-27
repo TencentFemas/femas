@@ -158,6 +158,13 @@ public class InterceptPlugin {
 
     public ElementMatcher<MethodDescription> getPluginMatcher() {
         ElementMatcher.Junction<MethodDescription> junction = null;
+        if (MethodType.CONSTRUCTOR.getType().equalsIgnoreCase(methodType)) {
+            if (takesArguments != null) {
+                return takesArguments(takesArguments);
+            } else {
+                return any();
+            }
+        }
         if (StringUtils.isEmpty(matcherType) || MatcherType.EXACT_MATCH.getType().equalsIgnoreCase(matcherType)) {
             junction = named(methodName);
         }

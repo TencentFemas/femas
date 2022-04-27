@@ -29,7 +29,6 @@ import java.util.concurrent.Callable;
  */
 public class LoadBalancerFeignClientInterceptor implements Interceptor {
 
-    private volatile Context commonContext = ContextFactory.getContextInstance();
     private volatile ContextConstant contextConstant = ContextFactory.getContextConstantInstance();
     private String namespace = Context.getSystemTag(contextConstant.getNamespaceId());
     private IExtensionLayer extensionLayer = ExtensionManager.getExtensionLayer();

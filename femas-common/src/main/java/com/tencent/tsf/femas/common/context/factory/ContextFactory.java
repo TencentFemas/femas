@@ -22,6 +22,7 @@ import com.tencent.tsf.femas.agent.classloader.InterceptorClassLoaderCache;
 import com.tencent.tsf.femas.common.context.AgentConfig;
 import com.tencent.tsf.femas.common.context.Context;
 import com.tencent.tsf.femas.common.context.ContextConstant;
+import com.tencent.tsf.femas.common.spi.SpiService;
 
 import java.util.Iterator;
 import java.util.ServiceLoader;
@@ -51,8 +52,14 @@ public class ContextFactory {
         static ContextConstant contextConstantInstance = null;
 
         static {
+            //spi加载器加载不到agent class的问题
             if (AgentConfig.doGetProperty(START_AGENT_FEMAS) != null && (Boolean) AgentConfig.doGetProperty(START_AGENT_FEMAS)) {
-                AgentClassLoader agentClassLoader = InterceptorClassLoaderCache.getAgentClassLoader(Thread.currentThread().getContextClassLoader());
+                AgentClassLoader agentClassLoader;
+                try {
+                    agentClassLoader = InterceptorClassLoaderCache.getAgentClassLoader(ContextFactory.class.getClassLoader());
+                } catch (Exception e) {
+                    agentClassLoader = InterceptorClassLoaderCache.getAgentClassLoader(Thread.currentThread().getContextClassLoader());
+                }
                 Thread.currentThread().setContextClassLoader(agentClassLoader);
             }
             // SPI加载并初始化实现类

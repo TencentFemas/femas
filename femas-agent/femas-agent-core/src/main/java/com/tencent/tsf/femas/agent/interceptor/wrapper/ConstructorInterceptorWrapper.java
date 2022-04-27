@@ -39,7 +39,7 @@ public class ConstructorInterceptorWrapper {
         try {
             interceptor = InterceptorClassLoaderCache.load(constructorInterceptorClassName, classLoader);
         } catch (Throwable t) {
-            throw new InterceptorWrapperException("Can't create ConstructorInterceptor.", t);
+            throw new InterceptorWrapperException("[femas-agent] create constructorInterceptorClassName:" + constructorInterceptorClassName + "failed.", t);
         }
     }
 

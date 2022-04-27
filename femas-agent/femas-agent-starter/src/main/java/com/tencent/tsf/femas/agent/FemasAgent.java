@@ -85,7 +85,6 @@ public class FemasAgent {
         }
     }
 
-
     public synchronized static void init(String agentArguments, Instrumentation instrumentation, boolean premain) {
         securityManagerCheck();
         long delayInitMs = -1L;
@@ -212,7 +211,7 @@ public class FemasAgent {
                 builder = builder.method(junction)
                         .intercept(MethodDelegation.withDefaultConfiguration()
                                 .to(new InterceptorWrapper(interceptPlugin
-                                        .getInterceptorClass())));
+                                        .getInterceptorClass(), classLoader)));
                 return builder;
             });
             return agentBuilder;

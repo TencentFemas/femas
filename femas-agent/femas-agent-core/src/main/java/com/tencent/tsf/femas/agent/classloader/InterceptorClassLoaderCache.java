@@ -1,5 +1,7 @@
 package com.tencent.tsf.femas.agent.classloader;
 
+import com.tencent.tsf.femas.agent.tools.AgentLogger;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantLock;
@@ -47,8 +49,8 @@ public class InterceptorClassLoaderCache {
     public static <T> T load(String className,
                              ClassLoader targetClassLoader) throws IllegalAccessException, InstantiationException, ClassNotFoundException {
         if (targetClassLoader == null) {
-//            targetClassLoader = InterceptorClassLoaderCache.class.getClassLoader();
-            targetClassLoader = Thread.currentThread().getContextClassLoader();
+            targetClassLoader = InterceptorClassLoaderCache.class.getClassLoader();
+//            targetClassLoader = Thread.currentThread().getContextClassLoader();
         }
         //JAVA强类型语言，类名和classLoader确定唯一性
         String instanceKey = className + "_OF_" + targetClassLoader.getClass()
@@ -57,6 +59,7 @@ public class InterceptorClassLoaderCache {
         Object inst = INSTANCE_CACHE.get(instanceKey);
         if (inst == null) {
             inst = Class.forName(className, true, getAgentClassLoader(targetClassLoader)).newInstance();
+            AgentLogger.getLogger().info("[femas-agent] InterceptorClassLoaderCache load class :" + instanceKey);
             if (inst != null) {
                 INSTANCE_CACHE.put(instanceKey, inst);
             }

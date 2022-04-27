@@ -30,8 +30,10 @@ import com.tencent.tsf.femas.governance.auth.entity.AuthRuleGroup;
 import com.tencent.tsf.femas.governance.config.impl.AuthenticateConfigImpl;
 import com.tencent.tsf.femas.governance.event.AuthEventCollector;
 import com.tencent.tsf.femas.governance.plugin.context.ConfigContext;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,11 +44,9 @@ import org.slf4j.LoggerFactory;
  */
 public class Authentication implements IAuthentication<AuthRuleGroup> {
 
-    private static final  Logger LOGGER = LoggerFactory.getLogger(Authentication.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Authentication.class);
 
     private static Map<Service, AuthRuleGroup> authRuleGroupMap = new ConcurrentHashMap<>();
-
-    private volatile Context commonContext = ContextFactory.getContextInstance();
 
     /**
      * 鉴权

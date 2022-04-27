@@ -1,5 +1,23 @@
-package com.tencent.tsf.femas.extension.springcloud.common.instrumentation.filter;
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.tencent.tsf.femas.agent.feign.instrument;
 
+import com.tencent.tsf.femas.agent.common.HttpServletHeaderUtils;
+import com.tencent.tsf.femas.agent.interceptor.Interceptor;
 import com.tencent.tsf.femas.api.ExtensionManager;
 import com.tencent.tsf.femas.api.IExtensionLayer;
 import com.tencent.tsf.femas.common.context.Context;
@@ -12,40 +30,32 @@ import com.tencent.tsf.femas.common.entity.Request;
 import com.tencent.tsf.femas.common.entity.Response;
 import com.tencent.tsf.femas.common.entity.Service;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.filter.OncePerRequestFilter;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
+import java.lang.reflect.Method;
+import java.util.concurrent.Callable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 /**
- * http 入流量拦截
+ * @Author leoziltong@tencent.com
+ * @Date: 2022/4/26 15:50
  */
-@Order(FemasGovernanceFilter.ORDER)
-public class FemasGovernanceFilter extends OncePerRequestFilter {
+public class RequestContextFilterInterceptor implements Interceptor {
 
-    public static final int ORDER = Ordered.HIGHEST_PRECEDENCE + 12;
-    private static final Logger logger = LoggerFactory.getLogger(FemasGovernanceFilter.class);
-//    @Value("${server.port:}")
-//    Integer port;
+
+    private volatile Context commonContext = ExtensionManager.getExtensionLayer().getCommonContext();
+
     private IExtensionLayer extensionLayer = ExtensionManager.getExtensionLayer();
     private volatile ContextConstant contextConstant = ContextFactory.getContextConstantInstance();
 
     @Override
-    protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
-            FilterChain filterChain) throws ServletException, IOException {
+    public Object intercept(Object obj, Object[] allArguments, Callable<?> zuper, Method method) throws Throwable {
+        HttpServletRequest httpServletRequest = (HttpServletRequest) allArguments[0];
+        HttpServletResponse httpServletResponse = (HttpServletResponse) allArguments[1];
         Request request = getFemasRequest();
         RpcContext rpcContext = extensionLayer
                 .beforeServerInvoke(request, new HttpServletHeaderUtils(httpServletRequest));
-
         Throwable error = null;
         try {
             if (ErrorStatus.UNAUTHENTICATED.equals(rpcContext.getErrorStatus())) {
@@ -55,7 +65,7 @@ public class FemasGovernanceFilter extends OncePerRequestFilter {
                 httpServletResponse.sendError(ErrorStatus.RESOURCE_EXHAUSTED.getCode().Value(),
                         ErrorStatus.RESOURCE_EXHAUSTED.getMessage());
             } else {
-                filterChain.doFilter(httpServletRequest, httpServletResponse);
+                zuper.call();
             }
         } catch (Throwable throwable) {
             // 异常时，如果未设置 status 则设置 500，原本是外层 WebMvcMetricsFilter 才设置，这里提前设置以获取 tracing 信息
@@ -70,22 +80,21 @@ public class FemasGovernanceFilter extends OncePerRequestFilter {
             fillTracingContext(rpcContext, httpServletRequest, httpServletResponse);
             extensionLayer.afterServerInvoke(response, rpcContext);
         }
+        return null;
     }
 
+
     private Request getFemasRequest() {
-
-        String serviceName = Context.getSystemTag(contextConstant.getServiceName());
-        String namespace = Context.getSystemTag(contextConstant.getNamespaceId());
-
+        String serviceName = commonContext.getSystemTag(contextConstant.getServiceName());
+        String namespace = commonContext.getSystemTag(contextConstant.getNamespaceId());
         Service service = new Service(namespace, serviceName);
         Request request = new Request();
         request.setTargetService(service);
-
         return request;
     }
 
     private void fillTracingContext(RpcContext rpcContext, HttpServletRequest httpServletRequest,
-            HttpServletResponse httpServletResponse) {
+                                    HttpServletResponse httpServletResponse) {
         TracingContext tracingContext = rpcContext.getTracingContext();
         tracingContext.setLocalServiceName(Context.getSystemTag(contextConstant.getServiceName()));
         tracingContext.setLocalNamespaceId(Context.getSystemTag(contextConstant.getNamespaceId()));
@@ -100,4 +109,5 @@ public class FemasGovernanceFilter extends OncePerRequestFilter {
         tracingContext.setLocalIpv4(Context.getSystemTag(contextConstant.getLocalIp()));
         tracingContext.setResultStatus(String.valueOf(httpServletResponse.getStatus()));
     }
+
 }

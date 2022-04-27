@@ -6,6 +6,7 @@
         <artifactId>femas-agent</artifactId>
         <groupId>com.tencent.tsf</groupId>
         <version>${revision}</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 

@@ -39,9 +39,11 @@ public class InterceptorWrapper {
     private String className;
     private Object classInterceptor = null;
     private Method interceptorMethod = null;
+    private ClassLoader classLoader;
 
-    public InterceptorWrapper(String className) {
+    public InterceptorWrapper(String className, ClassLoader classLoader) {
         this.className = className;
+        this.classLoader = classLoader;
     }
 
     @RuntimeType
@@ -65,10 +67,9 @@ public class InterceptorWrapper {
     private void initInterceptor() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
         if (classInterceptor == null) {
             try {
-                AgentClassLoader agentClassLoader = InterceptorClassLoaderCache.getAgentClassLoader(Thread.currentThread().getContextClassLoader());
-                classInterceptor = agentClassLoader.loadClass(this.className).newInstance();
+                classInterceptor = InterceptorClassLoaderCache.load(this.className, classLoader);
             } catch (Throwable throwable) {
-                AgentLogger.getLogger().severe("[femas-agent] initInterceptor error " + AgentLogger.getStackTraceString(throwable));
+                AgentLogger.getLogger().severe("[femas-agent] initInterceptor error " + className + AgentLogger.getStackTraceString(throwable));
             }
         }
     }

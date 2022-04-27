@@ -32,7 +32,6 @@ public class FemasRibbonRouteLoadbalancer implements FemasServiceFilterLoadBalan
     private final ICircuitBreakerService circuitBreakerService = FemasPluginContext.getCircuitBreakers().get(0);
     private final DiscoveryServerConverter converter;
     private IExtensionLayer extensionLayer = ExtensionManager.getExtensionLayer();
-    private volatile ContextConstant contextConstant = ContextFactory.getContextConstantInstance();
 
     public FemasRibbonRouteLoadbalancer(DiscoveryServerConverter converter) {
         this.converter = converter;
