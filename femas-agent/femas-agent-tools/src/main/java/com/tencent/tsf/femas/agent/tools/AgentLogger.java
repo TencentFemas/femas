@@ -1,5 +1,7 @@
 package com.tencent.tsf.femas.agent.tools;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.IOException;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
@@ -14,7 +16,7 @@ public class AgentLogger {
     static {
         FileHandler fh;
         try {
-            String filePath = EnvUtils.isOSWindows() ? AGENT_LOG_WINDOWS : AGENT_LOG_LINUX;
+            String filePath = isOSWindows() ? AGENT_LOG_WINDOWS : AGENT_LOG_LINUX;
             fh = new FileHandler(filePath);
             logger.addHandler(fh);
             SimpleFormatter formatter = new SimpleFormatter();
@@ -25,6 +27,7 @@ public class AgentLogger {
             e.printStackTrace();
         }
     }
+
 
     public static Logger getLogger() {
         return logger;
@@ -56,6 +59,14 @@ public class AgentLogger {
             }
         }
         return result;
+    }
+
+    public static boolean isOSWindows() {
+        String osName = System.getProperty("os.name");
+        if (StringUtils.isEmpty(osName)) {
+            return false;
+        }
+        return osName.startsWith("Windows");
     }
 
 }

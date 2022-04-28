@@ -30,6 +30,7 @@ import com.tencent.tsf.femas.agent.tools.AgentLogger;
 import com.tencent.tsf.femas.agent.tools.JvmRuntimeInfo;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.agent.builder.AgentBuilder;
+import net.bytebuddy.agent.builder.ResettableClassFileTransformer;
 import net.bytebuddy.description.NamedElement;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.type.TypeDescription;
@@ -185,7 +186,8 @@ public class FemasAgent {
 //            if(agentArgs == null || Boolean.valueOf(agentArgs)) {
 //                inst.addTransformer(new FemasTransformer(), true);
 //            }
-            agentBuilder.with(new Listener()).installOn(instrumentation);
+            ResettableClassFileTransformer rct = agentBuilder.with(new Listener()).installOn(instrumentation);
+//            rft.reset(instrumentation, AgentBuilder.RedefinitionStrategy.RETRANSFORMATION);
         } catch (Throwable throwable) {
             AgentLogger.getLogger().severe("[femas-agent] install agent exception: " + AgentLogger.getStackTraceString(throwable));
         } finally {
