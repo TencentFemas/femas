@@ -3,6 +3,7 @@ package com.tencent.tsf.femas.agent.common.discovery;
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.loadbalancer.Server;
 import com.netflix.niws.loadbalancer.DiscoveryEnabledServer;
+import com.tencent.tsf.femas.common.constant.FemasConstant;
 import com.tencent.tsf.femas.common.entity.EndpointStatus;
 import com.tencent.tsf.femas.common.entity.Service;
 import com.tencent.tsf.femas.common.entity.ServiceInstance;
@@ -21,12 +22,18 @@ public class EurekaServerConverter implements DiscoveryServerConverter {
         ServiceInstance instance = new ServiceInstance();
         if (server instanceof DiscoveryEnabledServer) {
             DiscoveryEnabledServer eurekaServer = (DiscoveryEnabledServer) server;
-            InstanceInfo i = eurekaServer.getInstanceInfo();
-            instance.setAllMetadata(i.getMetadata());
-            instance.setHost(i.getIPAddr());
-            instance.setPort(i.getPort());
-            instance.setService(new Service(getNamespace(), getServiceName()));
-            instance.setStatus(EndpointStatus.getTypeByName(i.getStatus().name()));
+            InstanceInfo instanceInfo = eurekaServer.getInstanceInfo();
+            instance.setAllMetadata(instanceInfo.getMetadata());
+            instance.setHost(instanceInfo.getIPAddr());
+            instance.setPort(instanceInfo.getPort());
+            Service service = new Service();
+            Map<String, String> metadata = instanceInfo.getMetadata();
+            String appName = instanceInfo.getAppName();
+            String nameSpace = metadata.get(FemasConstant.FEMAS_META_NAMESPACE_ID_KEY);
+            service.setNamespace(nameSpace);
+            service.setName(appName);
+            instance.setService(service);
+            instance.setStatus(EndpointStatus.getTypeByName(instanceInfo.getStatus().name()));
             instance.setOrigin(server);
             return instance;
         }

@@ -20,6 +20,7 @@ import org.springframework.util.CollectionUtils;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -44,7 +45,7 @@ public class EurekaServiceRegistryInterceptor implements InstanceMethodsAroundIn
         String region = eurekaClientConfig.getRegion();
         List<String> eurekaServerServiceUrls = eurekaClientConfig.getEurekaServerServiceUrls(region);
         Map<Integer, String> portAndServerAddress = getPortAndServerAddress(eurekaServerServiceUrls);
-        Service service = new Service(namespace, eurekaRegistration.getInstanceConfig().getAppname());
+        Service service = new Service(namespace, eurekaRegistration.getInstanceConfig().getAppname().toUpperCase(Locale.ROOT));
         if (!CollectionUtils.isEmpty(portAndServerAddress)) {
             for (Map.Entry<Integer, String> entry : portAndServerAddress.entrySet()) {
                 if (StringUtils.isNotBlank(entry.getValue())) {
