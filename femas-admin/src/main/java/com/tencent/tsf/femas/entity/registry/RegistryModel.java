@@ -53,6 +53,12 @@ public class RegistryModel {
     @ApiModelProperty(value = "k8s secret")
     private String secret;
 
+    @ApiModelProperty(value = "nacos username")
+    private String username;
+
+    @ApiModelProperty(value = "nacos password")
+    private String password;
+
 
     public String getApiServerAddr() {
         return apiServerAddr;
@@ -118,6 +124,22 @@ public class RegistryModel {
         this.registryType = registryType;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public RegistryConfig toRegistryConfig() {
         RegistryConfig registryConfig = new RegistryConfig();
         registryConfig.setRegistryId(this.registryId);
@@ -139,6 +161,14 @@ public class RegistryModel {
             registryConfig.setApiServerAddr(this.apiServerAddr.trim());
         }
         registryConfig.setKubeConfig(this.kubeConfig);
+
+
+        if (StringUtils.isNotEmpty(this.username)) {
+            registryConfig.setUsername(this.username.trim());
+        }
+        if (StringUtils.isNotEmpty(this.password)) {
+            registryConfig.setPassword(this.password.trim());
+        }
         return registryConfig;
     }
 
