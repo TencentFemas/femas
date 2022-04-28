@@ -44,6 +44,8 @@ const CreateForm = purify(function CreateForm(props: DuckCmpProps<Duck>) {
     secret,
     apiServer,
     k8sApiProtocol,
+    username,
+    password,
   } = formApi.getFields([
     'registryName',
     'registryType',
@@ -53,6 +55,8 @@ const CreateForm = purify(function CreateForm(props: DuckCmpProps<Duck>) {
     'secret',
     'apiServer',
     'k8sApiProtocol',
+    'username',
+    'password',
   ]);
   const { addMode } = duck.selectors.options(store);
   const k8configCheckResult = form.selectors.k8configCheckResult(store);
@@ -78,6 +82,18 @@ const CreateForm = purify(function CreateForm(props: DuckCmpProps<Duck>) {
         <FormField field={registryName} label={'注册中心名称'} required message={nameTipMessage}>
           <Input field={registryName} maxLength={60} placeholder={'请输入注册中心名称'} />
         </FormField>
+
+        {addMode && registryType.getValue() === ClusterType.Nacos && (
+            <FormField field={username} label={'账号'} required>
+              <Input field={username} maxLength={60} placeholder={'请输入Nacos账号'} />
+            </FormField>
+        )}
+
+        {addMode && registryType.getValue() === ClusterType.Nacos && (
+            <FormField field={password} label={'密码'} required>
+              <Input field={password} maxLength={60} placeholder={'请输入Nacos password'} />
+            </FormField>
+        )}
 
         {addMode && registryType.getValue() === ClusterType.K8s && (
           <>

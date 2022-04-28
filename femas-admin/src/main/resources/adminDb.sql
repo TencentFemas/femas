@@ -142,6 +142,8 @@ CREATE TABLE `registry_config` (
   `certificate_type` varchar(20) DEFAULT NULL COMMENT 'k8s验证类型',
   `kube_config` varchar(2000) DEFAULT NULL COMMENT 'k8s配置',
   `secret` varchar(200) DEFAULT NULL COMMENT 'k8s秘钥',
+  `user_name` varchar(16) DEFAULT NULL COMMENT 'nacos账号',
+  `password` varchar(32) DEFAULT NULL COMMENT 'nacos密码',
   `status` int(20) DEFAULT NULL COMMENT '1正常 2 异常',
   `instance_count` int(20) DEFAULT NULL COMMENT '实例数',
   PRIMARY KEY (`registry_id`) USING BTREE

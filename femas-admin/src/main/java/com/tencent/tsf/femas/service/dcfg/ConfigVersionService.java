@@ -179,7 +179,8 @@ public class ConfigVersionService implements ServiceExecutor {
             }
             RegistryConfig registryConfig = registryManagerService.getConfigById(namespaceId);
             params = new Object[]{config.getNamespaceId(), config.getConfigId(), config.getSystemTag(),
-                    releaseVersion.getConfigValue(), config.getConfigType(), config.getServiceName(), registryConfig.getRegistryCluster()};
+                    releaseVersion.getConfigValue(), config.getConfigType(), config.getServiceName(),
+                    registryConfig.getRegistryCluster(),registryConfig.getUsername(),registryConfig.getPassword()};
 
             String paramStr = Arrays.toString(params);
             log.info("release femasConfig requestParam: {}", paramStr);

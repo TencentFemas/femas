@@ -31,6 +31,8 @@ export default class CreateDuck extends FormDialog {
       k8sApiProtocol,
       secret,
       apiServer,
+      username,
+      password,
     } = form.selectors.values(yield select());
     const params = {
       registryName,
@@ -46,6 +48,12 @@ export default class CreateDuck extends FormDialog {
         params.secret = secret;
       }
     }
+
+    if(registryType === ClusterType.Nacos){
+      params.username = username;
+      params.password = password;
+    }
+
     if (addMode) {
       const res = yield* resolvePromise(configureRegistry(params));
       return res;
@@ -84,6 +92,8 @@ export interface Values
   > {
   k8sApiProtocol?: string;
   apiServer?: string;
+  username?:string;
+  password?:string;
 }
 
 interface CheckResult {
@@ -135,7 +145,7 @@ export class CreateFormDuck extends Form {
     yield* super.saga();
     const { types, selectors } = this;
     yield takeLatest(types.RETEST_K8S_CONNECTION, function*() {
-      const { registryType, kubeConfig, apiServer, secret, certificateType, k8sApiProtocol } = selectors.values(
+      const { registryType, kubeConfig, apiServer, secret, certificateType, k8sApiProtocol,username,password } = selectors.values(
         yield select(),
       );
       const { addMode, registryId } = selectors.validateMeta(yield select());
@@ -149,6 +159,7 @@ export class CreateFormDuck extends Form {
       if (!addMode) {
         params.registryId = registryId;
       }
+
       if (certificateType === K8S_NATIVE_TYPE.kubeconfig && kubeConfig) {
         // 校验kubeconfig
         params.kubeConfig = kubeConfig;

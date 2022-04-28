@@ -74,6 +74,9 @@ public class FemasNacosConfig extends AbstractStringConfig {
             String serviceName = (String) params[5];
             String serverAddr = (String) params[6];
 
+            String username = (String) params[7];
+            String password = (String) params[8];
+
             String dataId = configId;
             if (StringUtils.isNotBlank(serviceName)) {
                 dataId = serviceName;
@@ -93,7 +96,7 @@ public class FemasNacosConfig extends AbstractStringConfig {
 
             paramsStr = JSONSerializer.serializeStr(params);
             LOGGER.info("[Femas Nacos Config Client] Start to publishConfig, params: " + paramsStr);
-            ConfigService configService = createAndGetNacosConfigService(namespaceId, serverAddr);
+            ConfigService configService = createAndGetNacosConfigService(namespaceId, serverAddr,username,password);
             LOGGER.info(
                     "[Atom Nacos Config Client] publishConfig namespaceId:{}, dataId:{}, group:{}, content:{}, type:{}",
                     namespaceId, dataId, group, configValue, configType);
@@ -117,7 +120,7 @@ public class FemasNacosConfig extends AbstractStringConfig {
             LOGGER.info("[Femas Nacos Config Client] Start to subscribe key : " + key);
             FemasNacosListener femasNacosListener = createAndGetFemasNacosListener(key);
             FemasNacosConfigProp femasNacosConfigProp = getFemasNacosConfigProp(key);
-            ConfigService configService = createAndGetNacosConfigService(femasNacosConfigProp.getNamespaceId(), null);
+            ConfigService configService = createAndGetNacosConfigService(femasNacosConfigProp.getNamespaceId(), null,null,null);
             configService
                     .addListener(femasNacosConfigProp.getDataId(), femasNacosConfigProp.getGroup(), femasNacosListener);
             LOGGER.info("[Femas Nacos Config Client] subscribe key : " + key + " success.");
@@ -135,7 +138,7 @@ public class FemasNacosConfig extends AbstractStringConfig {
         try {
             FemasNacosListener femasNacosListener = createAndGetFemasNacosListener(key);
             FemasNacosConfigProp femasNacosConfigProp = getFemasNacosConfigProp(key);
-            ConfigService configService = createAndGetNacosConfigService(femasNacosConfigProp.getNamespaceId(), null);
+            ConfigService configService = createAndGetNacosConfigService(femasNacosConfigProp.getNamespaceId(), null,null,null);
             configService.removeListener(femasNacosConfigProp.getDataId(), femasNacosConfigProp.getGroup(),
                     femasNacosListener);
         } catch (Throwable e) {
@@ -148,7 +151,7 @@ public class FemasNacosConfig extends AbstractStringConfig {
         String result = null;
         try {
             FemasNacosConfigProp femasNacosConfigProp = getFemasNacosConfigProp(key);
-            ConfigService configService = createAndGetNacosConfigService(femasNacosConfigProp.getNamespaceId(), null);
+            ConfigService configService = createAndGetNacosConfigService(femasNacosConfigProp.getNamespaceId(), null,null,null);
             result = configService.getConfig(femasNacosConfigProp.getDataId(), femasNacosConfigProp.getGroup(),
                     DEFAULT_WATCH_TIMEOUT);
         } catch (Throwable e) {
@@ -157,12 +160,12 @@ public class FemasNacosConfig extends AbstractStringConfig {
         return result;
     }
 
-    private synchronized ConfigService createAndGetNacosConfigService(String namespaceId, String serverAddr) {
+    private synchronized ConfigService createAndGetNacosConfigService(String namespaceId, String serverAddr,String userName,String password) {
         ConfigService configService = null;
         try {
             configService = femasNacosConfigServiceMap.get(namespaceId);
             if (configService == null) {
-                Properties properties = assembleNacosConfigProperties(namespaceId, serverAddr);
+                Properties properties = assembleNacosConfigProperties(namespaceId, serverAddr,userName,password);
                 configService = NacosFactory.createConfigService(properties);
                 femasNacosConfigServiceMap.put(namespaceId, configService);
             }
@@ -172,7 +175,7 @@ public class FemasNacosConfig extends AbstractStringConfig {
         return configService;
     }
 
-    private Properties assembleNacosConfigProperties(String namespaceId, String newServerAddr) {
+    private Properties assembleNacosConfigProperties(String namespaceId, String newServerAddr,String userName,String password) {
         // 某个命名空间的Properties只会初始化一次，后续直接从femasNacosConfigServiceMap获取
         // 所以这里不必太担心getProperty和nacosConfigProperties.assembleConfigServiceProperties()的性能问题
         Properties properties = null;
@@ -181,11 +184,11 @@ public class FemasNacosConfig extends AbstractStringConfig {
             // 非SpringBoot方式启动初始化配置
             properties = new Properties();
             String serverAddr = System.getProperty("spring.cloud.nacos.config.server-addr", DEFAULT_NACOS_SERVER_ADDR);
-            String userName = System.getProperty("spring.cloud.nacos.username", DEFAULT_NACOS_USERNAME);
-            String password = System.getProperty("spring.cloud.nacos.password", DEFAULT_NACOS_PASSWORD);
+            String userName2 = System.getProperty("spring.cloud.nacos.username", DEFAULT_NACOS_USERNAME);
+            String password2 = System.getProperty("spring.cloud.nacos.password", DEFAULT_NACOS_PASSWORD);
             properties.put(PropertyKeyConst.SERVER_ADDR, serverAddr);
-            properties.put(PropertyKeyConst.USERNAME, userName);
-            properties.put(PropertyKeyConst.PASSWORD, password);
+            properties.put(PropertyKeyConst.USERNAME, userName2);
+            properties.put(PropertyKeyConst.PASSWORD, password2);
         } else {
             // SpringBoot方式启动初始化配置
             properties = nacosConfigProperties.assembleConfigServiceProperties();
@@ -198,6 +201,14 @@ public class FemasNacosConfig extends AbstractStringConfig {
         // 当传入的newServerAddr(nacos地址)不为空时，设置为传入的newServerAddr
         if (StringUtils.isNotBlank(newServerAddr)) {
             properties.put(PropertyKeyConst.SERVER_ADDR, newServerAddr);
+        }
+
+        if (StringUtils.isNotBlank(userName)) {
+            properties.put(PropertyKeyConst.USERNAME, userName);
+        }
+
+        if (StringUtils.isNotBlank(password)) {
+            properties.put(PropertyKeyConst.PASSWORD, password);
         }
         return properties;
     }
