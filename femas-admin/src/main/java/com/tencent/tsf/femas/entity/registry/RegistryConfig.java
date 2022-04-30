@@ -92,6 +92,13 @@ public class RegistryConfig implements Serializable {
     @ApiModelProperty(value = "k8s api地址信息")
     private String apiServerAddr;
 
+    @ApiModelProperty(value = "nacos username")
+    private String username;
+
+    @ApiModelProperty(value = "nacos password")
+    private String password;
+
+
     public String getApiServerAddr() {
         return apiServerAddr;
     }
@@ -185,6 +192,22 @@ public class RegistryConfig implements Serializable {
 
     public void setRegistryType(String registryType) {
         this.registryType = registryType;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override
