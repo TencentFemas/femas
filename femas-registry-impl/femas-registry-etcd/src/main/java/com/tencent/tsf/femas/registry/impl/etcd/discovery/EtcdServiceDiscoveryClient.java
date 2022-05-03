@@ -2,7 +2,6 @@ package com.tencent.tsf.femas.registry.impl.etcd.discovery;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tencent.tsf.femas.common.RegistryConstants;
 import com.tencent.tsf.femas.common.discovery.AbstractServiceDiscoveryClient;
