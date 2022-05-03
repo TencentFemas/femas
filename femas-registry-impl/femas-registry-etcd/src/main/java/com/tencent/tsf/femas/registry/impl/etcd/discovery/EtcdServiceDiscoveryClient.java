@@ -1,6 +1,8 @@
 package com.tencent.tsf.femas.registry.impl.etcd.discovery;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tencent.tsf.femas.common.RegistryConstants;
 import com.tencent.tsf.femas.common.discovery.AbstractServiceDiscoveryClient;
@@ -19,10 +21,12 @@ import org.slf4j.LoggerFactory;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -86,6 +90,24 @@ public class EtcdServiceDiscoveryClient extends AbstractServiceDiscoveryClient {
         instancesList = etcdServerList.getInitialListOfServers(service);
         refreshServiceCache(service, instancesList);
         return instancesList;
+    }
+
+    @Override
+    public List<String> getAllServices() {
+        CompletableFuture<GetResponse> future = kvClient.get(ByteSequence.EMPTY);
+        List<String> services = new ArrayList<>();
+
+        try {
+            List<KeyValue> keyValues = future.get().getKvs();
+
+            for (KeyValue keyValue : keyValues) {
+                ServiceInstance serviceInstance = objectMapper.readValue(keyValue.getValue().toString(), ServiceInstance.class);
+                services.add(serviceInstance.getService().getName());
+            }
+        } catch (InterruptedException | ExecutionException | JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return services;
     }
 
     private class Notifier {
@@ -154,7 +176,7 @@ public class EtcdServiceDiscoveryClient extends AbstractServiceDiscoveryClient {
             } catch (Exception e) {
                 logger.error("Error with get instances:", e);
             }
-            return new ArrayList<>();
+            return Collections.emptyList();
         }
     }
 
