@@ -39,7 +39,7 @@ public class FemasServiceDiscovery extends AbstractServiceDiscovery {
     @Override
     protected void doRegister(ServiceInstance serviceInstance) throws RuntimeException {
         execute(extensionLayer, service -> {
-            extensionLayer.init(new Service(namespace, serviceInstance.getServiceName()), -1);
+            extensionLayer.init(new Service(namespace, serviceInstance.getServiceName()), serviceInstance.getPort());
             com.tencent.tsf.femas.common.entity.ServiceInstance instance = toFemasInstance(serviceInstance);
             service.register(instance);
         });
