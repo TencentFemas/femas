@@ -1,8 +1,0 @@
-{
-  "properties": [
-    {
-      "name": "dubbo.protocol.serialization",
-      "type": "java.lang.String",
-      "description": "Description for dubbo.protocol.serialization."
-  }
-] }

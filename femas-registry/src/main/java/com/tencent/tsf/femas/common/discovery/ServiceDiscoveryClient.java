@@ -17,6 +17,8 @@ public interface ServiceDiscoveryClient {
      */
     List<ServiceInstance> getInstances(Service service);
 
+    List<String> getAllServices();
+
     /**
      * 订阅服务
      */

@@ -5,12 +5,8 @@ import com.tencent.tsf.femas.api.IExtensionLayer;
 import com.tencent.tsf.femas.common.context.Context;
 import com.tencent.tsf.femas.common.context.ContextConstant;
 import com.tencent.tsf.femas.common.context.factory.ContextFactory;
-import com.tencent.tsf.femas.common.entity.ErrorStatus;
-import com.tencent.tsf.femas.common.entity.Request;
-import com.tencent.tsf.femas.common.entity.Response;
-import com.tencent.tsf.femas.common.entity.Service;
+import com.tencent.tsf.femas.common.entity.*;
 import com.tencent.tsf.femas.extensions.dubbo.util.ApacheDubboAttachmentUtils;
-import com.tencent.tsf.femas.extensions.dubbo.util.CommonUtils;
 import org.apache.dubbo.common.constants.CommonConstants;
 import org.apache.dubbo.common.extension.Activate;
 import org.apache.dubbo.rpc.*;
@@ -21,7 +17,7 @@ import java.util.Objects;
 
 
 @Activate(group = CommonConstants.PROVIDER, order = -10000 + 2)
-public class FemasProviderFilter implements Filter{
+public class FemasProviderFilter implements Filter {
     private static final Logger logger = LoggerFactory.getLogger(FemasProviderFilter.class);
 
     private volatile Context commonContext = ContextFactory.getContextInstance();
@@ -30,8 +26,11 @@ public class FemasProviderFilter implements Filter{
 
     @Override
     public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException {
+        RpcContext.getServiceContext().setInvoker(invoker)
+                .setInvocation(invocation);
+
         RpcContext rpcContext = RpcContext.getServerAttachment().setRemoteApplicationName(invocation.getServiceName());
-        Request femasRequest =  getFemasRequest();
+        Request femasRequest = getFemasRequest();
 
         com.tencent.tsf.femas.common.context.RpcContext femasRpcContext =
                 extensionLayer.beforeServerInvoke(femasRequest, ApacheDubboAttachmentUtils.create(rpcContext));
@@ -39,17 +38,17 @@ public class FemasProviderFilter implements Filter{
         Throwable error = null;
 
         try {
-            if (Objects.equals(ErrorStatus.UNAUTHENTICATED,femasRpcContext.getErrorStatus())) {
+            if (Objects.equals(ErrorStatus.UNAUTHENTICATED, femasRpcContext.getErrorStatus())) {
                 throw new RuntimeException("Unauthorized error, Request : " + femasRequest);
             }
 
-            if (Objects.equals(ErrorStatus.RESOURCE_EXHAUSTED,femasRpcContext.getErrorStatus())) {
+            if (Objects.equals(ErrorStatus.RESOURCE_EXHAUSTED, femasRpcContext.getErrorStatus())) {
                 throw new RuntimeException("Resource exhausted error, Request : " + femasRequest);
             }
             return invoker.invoke(invocation);
         } catch (Throwable throwable) {
-           error = throwable;
-           throw throwable;
+            error = throwable;
+            throw throwable;
         } finally {
             Response response = new Response();
             response.setError(error);

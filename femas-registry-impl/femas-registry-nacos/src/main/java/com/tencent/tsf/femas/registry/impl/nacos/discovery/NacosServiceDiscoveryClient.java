@@ -1,7 +1,10 @@
 package com.tencent.tsf.femas.registry.impl.nacos.discovery;
 
+import com.alibaba.nacos.api.common.Constants;
+import com.alibaba.nacos.api.exception.NacosException;
 import com.alibaba.nacos.api.naming.NamingService;
 import com.alibaba.nacos.api.naming.pojo.Instance;
+import com.alibaba.nacos.api.naming.pojo.ListView;
 import com.tencent.tsf.femas.common.context.Context;
 import com.tencent.tsf.femas.common.context.ContextConstant;
 import com.tencent.tsf.femas.common.context.factory.ContextFactory;
@@ -127,10 +130,34 @@ public class NacosServiceDiscoveryClient extends AbstractServiceDiscoveryClient 
         if (instancesList != null) {
             return instancesList;
         }
-        List<Instance> instances = serverListImpl.getInitialListOfServers(service.getName());
+        List<Instance> instances = null;
+        try {
+            instances = nacosNamingService.selectInstances(service.getName(), true);
+
+        } catch (NacosException e) {
+            throw new RuntimeException(e.getCause());
+        }
         instancesList = convert(service, instances);
+
         refreshServiceCache(service, instancesList);
         return instancesList;
+    }
+
+    @Override
+    public List<String> getAllServices() {
+       // return nacosNamingService.getServicesOfServer(1, Integer.MAX_VALUE,)
+        ListView<String> view = null;
+        try {
+            view = nacosNamingService.getServicesOfServer(0, Integer.MAX_VALUE, Constants.DEFAULT_GROUP);
+        } catch (NacosException e) {
+            e.printStackTrace();
+        }
+
+        if (view.getData().isEmpty()){
+            return Collections.emptyList();
+        }
+
+        return view.getData();
     }
 
     class Action implements ServerUpdater.UpdateAction {

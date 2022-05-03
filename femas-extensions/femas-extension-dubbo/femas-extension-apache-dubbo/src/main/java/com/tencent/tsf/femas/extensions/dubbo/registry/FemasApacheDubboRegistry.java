@@ -32,12 +32,13 @@ import java.util.stream.Collectors;
  * apache dubbo registry center implementation for femas
  */
 
-public class FemasApacheDubboRegistry extends FailbackRegistry implements Registry {
-    private static final Logger logger = LoggerFactory.getLogger(FemasApacheDubboRegistry.class);
+public class FemasApacheDubboRegistry extends FailbackRegistry {
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+
     private static volatile ContextConstant contextConstant = ContextFactory.getContextConstantInstance();
     private static String namespace = Context.getSystemTag(contextConstant.getNamespaceId());
     private IExtensionLayer extensionLayer = ExtensionManager.getExtensionLayer();
-    private static final String META_SERVICE = "org.apache.dubbo.metadata.MetadataService";
+    private static final String group = Context.getSystemTag(contextConstant.getGroupId());
 
     public FemasApacheDubboRegistry(URL url){
         super(url);
@@ -112,13 +113,13 @@ public class FemasApacheDubboRegistry extends FailbackRegistry implements Regist
 
     @Override
     public void doRegister(URL url) {
-        if (!url.getPath().equals(META_SERVICE)) {
+     //   if (!url.getPath().equals(META_SERVICE)) {
             ServiceInstance instance = createServiceInstance(url);
             Service service = CommonUtils.buildService(url);
             instance.setService(service);
             extensionLayer.init(service, url.getPort());
             extensionLayer.register(instance);
-        }
+    //    }
     }
 
     @Override

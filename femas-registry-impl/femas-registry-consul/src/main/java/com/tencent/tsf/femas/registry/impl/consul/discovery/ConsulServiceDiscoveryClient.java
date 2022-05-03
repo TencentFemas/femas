@@ -3,6 +3,8 @@ package com.tencent.tsf.femas.registry.impl.consul.discovery;
 import com.ecwid.consul.v1.ConsulClient;
 import com.ecwid.consul.v1.QueryParams;
 import com.ecwid.consul.v1.Response;
+import com.ecwid.consul.v1.catalog.CatalogClient;
+import com.ecwid.consul.v1.catalog.model.CatalogService;
 import com.ecwid.consul.v1.health.HealthServicesRequest;
 import com.ecwid.consul.v1.health.model.HealthService;
 import com.tencent.tsf.femas.common.discovery.AbstractServiceDiscoveryClient;
@@ -21,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
+import java.util.stream.Collectors;
 
 import static com.tencent.tsf.femas.common.RegistryConstants.REGISTRY_HOST;
 import static com.tencent.tsf.femas.common.RegistryConstants.REGISTRY_PORT;
@@ -95,6 +98,12 @@ public class ConsulServiceDiscoveryClient extends AbstractServiceDiscoveryClient
 
         refreshServiceCache(service, instancesList);
         return instancesList;
+    }
+
+    @Override
+    public List<String> getAllServices() {
+        Response<List<String>> catalogDatacenters = client.getCatalogDatacenters();
+        return catalogDatacenters.getValue();
     }
 
     /**
