@@ -65,8 +65,8 @@ public class CommonExtensionLayer implements IExtensionLayer {
     private AbstractConfigHttpClientManager manager = AbstractConfigHttpClientManagerFactory
             .getConfigHttpClientManager();
 
-    private volatile Context commonContext = ContextFactory.getContextInstance();
-    private volatile ContextConstant contextConstant = ContextFactory.getContextConstantInstance();
+    private volatile static Context commonContext = ContextFactory.getContextInstance();
+    private volatile static ContextConstant contextConstant = ContextFactory.getContextConstantInstance();
     private String namespace = Context.getSystemTag(contextConstant.getNamespaceId());
 
     private volatile AbstractServiceRegistryMetadata serviceRegistryMetadata = AbstractServiceRegistryMetadataFactory
@@ -85,10 +85,7 @@ public class CommonExtensionLayer implements IExtensionLayer {
         String registryUrl = commonContext.getRegistryConfigMap().get(REGISTRY_HOST)
                 + ":" + commonContext.getRegistryConfigMap().get(REGISTRY_PORT);
         this.init(service, port, registryUrl);
-
-
     }
-
 
     public void init(Service service, Integer port, String registryUrl) {
         commonContext.init(service.getName(), port);
@@ -313,8 +310,8 @@ public class CommonExtensionLayer implements IExtensionLayer {
     @Override
     public void afterClientInvoke(Request request, Response response, RpcContext rpcContext) {
         long duration = TimeUtil.currentTimeMillis() - rpcContext.getTracingContext().getStartTime();
-
-        ErrorStatus statusCode = ErrorStatus.OK;
+        // actual status from response
+        ErrorStatus statusCode = response.getErrorStatus() != null ? response.getErrorStatus() : ErrorStatus.OK;
 
         if (response.getError() != null) {
             circuitBreakerService.handleFailedServiceRequest(request, duration, response.getError());
@@ -328,5 +325,10 @@ public class CommonExtensionLayer implements IExtensionLayer {
                 meterRegistry.buildTags(request, response, rpcContext, statusCode)))
                 .record(System.currentTimeMillis() - rpcContext.getTracingContext().getStartTime(),
                         TimeUnit.MILLISECONDS);
+    }
+
+    @Override
+    public Context getCommonContext() {
+        return commonContext;
     }
 }

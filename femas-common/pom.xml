@@ -17,6 +17,11 @@
     <dependencies>
 
         <dependency>
+            <groupId>com.tencent.tsf</groupId>
+            <artifactId>femas-agent-core</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
         </dependency>

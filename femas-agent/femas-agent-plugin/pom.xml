@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>femas-agent</artifactId>
+        <groupId>com.tencent.tsf</groupId>
+        <version>${revision}</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>femas-agent-plugin</artifactId>
+    <packaging>pom</packaging>
+    <name>${project.artifactId}</name>
+    <description>The parent project of femas agent plugin</description>
+    <url>https://github.com/polarismesh/femas</url>
+
+    <properties>
+        <!--        <maven.build.timestamp.format>yyyy.MM.dd_HH.mm</maven.build.timestamp.format>-->
+        <maven.build.timestamp.format>yyyy.MM.dd</maven.build.timestamp.format>
+    </properties>
+
+    <modules>
+        <module>femas-dubbo-2.6.x-plugin</module>
+        <module>femas-springcloud-plugin</module>
+    </modules>
+
+</project>

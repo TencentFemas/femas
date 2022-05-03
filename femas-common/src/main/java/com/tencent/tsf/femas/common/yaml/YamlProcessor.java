@@ -1,6 +1,7 @@
 package com.tencent.tsf.femas.common.yaml;
 
 import com.tencent.tsf.femas.common.util.StringUtils;
+
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Arrays;
@@ -10,6 +11,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.LoaderOptions;
@@ -154,7 +156,9 @@ public abstract class YamlProcessor {
                             " from YAML resource: " + resource);
                 }
             } finally {
-                reader.close();
+                if (reader != null) {
+                    reader.close();
+                }
             }
         } catch (IOException ex) {
             handleProcessError(resource, ex);
@@ -358,9 +362,9 @@ public abstract class YamlProcessor {
          * Process the given representation of the parsing results.
          *
          * @param properties the properties to process (as a flattened
-         *         representation with indexed keys in case of a collection or map)
-         * @param map the result map (preserving the original value structure
-         *         in the YAML document)
+         *                   representation with indexed keys in case of a collection or map)
+         * @param map        the result map (preserving the original value structure
+         *                   in the YAML document)
          */
         void process(Properties properties, Map<String, Object> map);
     }
@@ -384,7 +388,7 @@ public abstract class YamlProcessor {
      * A specialized {@link Constructor} that checks for duplicate keys.
      *
      * @deprecated as of Spring Framework 5.0.6 (not used anymore here),
-     *         superseded by SnakeYAML's own duplicate key handling
+     * superseded by SnakeYAML's own duplicate key handling
      */
     @Deprecated
     protected static class StrictMapAppenderConstructor extends Constructor {

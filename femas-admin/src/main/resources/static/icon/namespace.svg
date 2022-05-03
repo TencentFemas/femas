@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1"
+        xmlns="http://www.w3.org/2000/svg">
+    <!-- Generator: Sketch 59.1 (86144) - https://sketch.com -->
+    <title>命名空间-16px</title>
+    <desc>Created with Sketch.</desc>
+    <g id="命名空间-16px" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="wall">
+            <rect id="Rectangle-Copy" fill="#444444" opacity="0" x="0" y="0" width="16"
+                    height="16"></rect>
+            <path d="M15,1 L15,15 L1,15 L1,1 L15,1 Z M5.626,11.051 L3,11.051 L3,13 L5.626,13 L5.626,11.051 Z M13,11.051 L7.626,11.051 L7.626,13 L13,13 L13,11.051 Z M8.533,6.976 L3,6.976 L3,9.051 L8.533,9.051 L8.533,6.976 Z M13,6.976 L10.533,6.976 L10.533,9.051 L13,9.051 L13,6.976 Z M5.626,3 L3,3 L3,4.976 L5.626,4.976 L5.626,3 Z M13,3 L7.626,3 L7.626,4.976 L13,4.976 L13,3 Z"
+                    id="形状结合" fill="#888888" fill-rule="nonzero"></path>
+        </g>
+    </g>
+</svg>

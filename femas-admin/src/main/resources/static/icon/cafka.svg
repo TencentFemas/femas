@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="68px" height="88px" viewBox="0 0 68 88" version="1.1"
+        xmlns="http://www.w3.org/2000/svg">
+    <!-- Generator: Sketch 52.3 (67297) - http://www.bohemiancoding.com/sketch -->
+    <title>Cafka</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="1-2中" transform="translate(-1142.000000, -525.000000)">
+            <g id="Cafka" transform="translate(1142.000000, 525.000000)">
+                <polygon id="Rectangle"
+                        points="0 -1.56319402e-13 68 -1.56319402e-13 68 88 0 88"></polygon>
+                <text id="Ckafka" font-family="RobotoCondensed-Bold, Roboto Condensed"
+                        font-size="12" font-style="condensed" font-weight="bold" line-spacing="12"
+                        fill="#00A4FF">
+                    <tspan x="17.5" y="16">Ckafka</tspan>
+                </text>
+                <g id="画板-1-副本" transform="translate(4.250000, 24.250000)" fill="#00A4FF">
+                    <polygon id="Path" points="8.5 0 59.5 0 59.5 4.25 8.5 4.25"></polygon>
+                    <polygon id="Path" points="0 8.5 4.25 8.5 4.25 40.375 0 40.375"></polygon>
+                    <polygon id="Path" points="8.5 0 0 8.5 4.25 10.625 10.625 4.25"></polygon>
+                    <polygon id="Path" points="8.5 55.25 51 55.25 51 59.5 8.5 59.5"></polygon>
+                    <polygon id="Path" points="0 40.375 4.25 40.375 4.25 51 0 51"></polygon>
+                    <polygon id="Path" points="55.25 10.625 59.5 10.625 59.5 51 55.25 51"></polygon>
+                    <polygon id="Path" points="8.5 59.5 0 51 4.25 48.875 10.625 55.25"></polygon>
+                    <polygon id="Path" points="51 59.5 59.5 51 55.25 48.875 48.875 55.25"></polygon>
+                    <g id="Group" transform="translate(12.750000, 14.875000)">
+                        <polygon id="Path"
+                                points="13.69775 17 13.69775 12.75 29.63525 12.75 29.63525 17"></polygon>
+                        <circle id="Oval" cx="29.63525" cy="14.875" r="4.25"></circle>
+                        <path d="M8.57225,29.5205 L25.480875,29.5205 L29.019,23.394125 C27.6173267,23.0605748 26.3241046,22.3744649 25.262,21.400875 L23.0265,25.2705 L11.0245,25.2705 L5.021375,14.875 L11.0245,4.4795 L23.0265,4.4795 L25.47025,8.710375 C26.5561868,7.7606012 27.8683302,7.10635901 29.280375,6.810625 L25.480875,0.223125 L8.57225,0.223125 L0.11475,14.875 L8.57225,29.5205 Z"
+                                id="Path"></path>
+                        <polygon id="Path"
+                                points="18.2665 29.5205 20.71875 25.2705 14.715625 14.875 20.71875 4.4795 18.2665 0.2295 9.811125 14.875"></polygon>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

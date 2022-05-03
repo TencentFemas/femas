@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1"
+        xmlns="http://www.w3.org/2000/svg">
+    <!-- Generator: Sketch 59.1 (86144) - https://sketch.com -->
+    <title>服务治理-16px-hover</title>
+    <desc>Created with Sketch.</desc>
+    <g id="服务治理-16px-hover" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="编组">
+            <path d="M8,0 L1,4.001 L1,6.304 L8,2.304 L12.999,5.161 L12.999,8.644 L15,7.501 L15,4.001 L8,0 Z M7,5.155 L7,12.001 L9,10.845 L9,4.001 L7,5.155 Z M1,8.501 L1,12.001 L8,16 L15,12.001 L15,9.697 L8,13.696 L3,10.84 L3,7.357 L1,8.501 Z"
+                    id="Fill-1" fill="#006EFF"></path>
+            <rect id="Rectangle-Copy" fill="#444444" opacity="0" x="0" y="0" width="16"
+                    height="16"></rect>
+        </g>
+    </g>
+</svg>

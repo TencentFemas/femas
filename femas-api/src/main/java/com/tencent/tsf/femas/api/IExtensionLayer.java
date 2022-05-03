@@ -1,6 +1,7 @@
 package com.tencent.tsf.femas.api;
 
 import com.tencent.tsf.femas.common.annotation.AdaptorComponent;
+import com.tencent.tsf.femas.common.context.Context;
 import com.tencent.tsf.femas.common.context.RpcContext;
 import com.tencent.tsf.femas.common.discovery.ServiceNotifyListener;
 import com.tencent.tsf.femas.common.entity.Request;
@@ -8,12 +9,13 @@ import com.tencent.tsf.femas.common.entity.Response;
 import com.tencent.tsf.femas.common.entity.Service;
 import com.tencent.tsf.femas.common.entity.ServiceInstance;
 import com.tencent.tsf.femas.common.header.AbstractRequestMetaUtils;
+
 import java.util.List;
 
 /**
  * 将大部分组件能力进行封装
  * 方便用户实现 Extension
- *
+ * <p>
  * 主要包括生命周期，rpc 部分
  * 原则上每个部分只抽象最少集，多余能力，允许用户自己使用相应组件接口自己封装
  */
@@ -108,4 +110,12 @@ public interface IExtensionLayer {
      * @param rpcContext 将 beforeInvoke 返回的 RpcContext 传入
      */
     void afterClientInvoke(Request request, Response response, RpcContext rpcContext);
+
+    /**
+     * 获取全局的上下文
+     *
+     * @return
+     */
+    Context getCommonContext();
+
 }

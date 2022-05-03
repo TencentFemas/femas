@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Femas</title>
+    <link rel="shortcut icon" href="https://imgcache.qq.com/qcloud/app/resource/ac/favicon.ico" type="image/x-icon" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.12.1/polyfill.min.js"
+        integrity="sha512-uzOpZ74myvXTYZ+mXUsPhDF+/iL/n32GDxdryI2SJronkEyKC8FBFRLiBQ7l7U/PTYebDbgTtbqTa6/vGtU23A=="
+        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
+        integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+    <script>
+        window.FEMAS_BASE_PATH = '${FEMAS_BASE_PATH}'
+    </script>
+    <script defer="defer" src="${FEMAS_BASE_PATH}/js/sct.js"></script>
+    <link href="${FEMAS_BASE_PATH}/css/sct.css" rel="stylesheet">
+</head>
+
+<body>
+    <div id="sct_app" style="height: 100%;width: 100%;"></div>
+</body>
+
+</html>

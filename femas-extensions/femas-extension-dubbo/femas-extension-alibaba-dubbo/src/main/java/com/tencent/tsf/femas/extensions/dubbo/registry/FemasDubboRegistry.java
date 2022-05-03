@@ -34,7 +34,6 @@ public class FemasDubboRegistry extends FailbackRegistry {
     private static String namespace = Context.getSystemTag(contextConstant.getNamespaceId());
     private IExtensionLayer extensionLayer = ExtensionManager.getExtensionLayer();
 
-
     public FemasDubboRegistry(URL url) {
         super(url);
         // 类初始化的时候，以 dubbo application name 注册服务，以便获取主调方的治理规则
@@ -67,8 +66,7 @@ public class FemasDubboRegistry extends FailbackRegistry {
         ServiceInstance instance = new ServiceInstance(toServiceId(url),
                 AddressUtils.getValidLocalHost(), url.getPort());
         String category = url.getParameter(Constants.CATEGORY_KEY, Constants.DEFAULT_CATEGORY);
-        URL newURL = url.addParameter(Constants.CATEGORY_KEY, category);
-        newURL = newURL.addParameter(Constants.PROTOCOL_KEY, url.getProtocol());
+        URL newURL = url.addParameter(Constants.CATEGORY_KEY, category).addParameter(Constants.PROTOCOL_KEY, url.getProtocol());
         instance.setAllMetadata(new HashMap<>(newURL.getParameters()));
         return instance;
     }

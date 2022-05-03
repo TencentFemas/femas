@@ -1,14 +1,22 @@
 package com.tencent.tsf.femas.governance.plugin.context;
 
+import com.tencent.tsf.femas.agent.classloader.AgentClassLoader;
+import com.tencent.tsf.femas.agent.classloader.InterceptorClassLoaderCache;
+import com.tencent.tsf.femas.common.context.AgentConfig;
 import com.tencent.tsf.femas.common.exception.FemasRuntimeException;
+import com.tencent.tsf.femas.governance.plugin.DefaultConfigurablePluginHolder;
 import com.tencent.tsf.femas.governance.plugin.Plugin;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.concurrent.ConcurrentHashMap;
+
 import org.apache.commons.lang3.StringUtils;
+
+import static com.tencent.tsf.femas.common.context.ContextConstant.START_AGENT_FEMAS;
 
 /**
  * 插件容器
@@ -28,6 +36,16 @@ public class ConfigRefreshableContext implements AbstractSDKContext {
         for (Class<? extends Plugin> pluginType : types) {
             Map<String, Plugin> plugins = new HashMap<>();
             typedPlugins.put(pluginType, plugins);
+            //spi加载器加载不到agent class的问题
+            if (AgentConfig.doGetProperty(START_AGENT_FEMAS) != null && (Boolean) AgentConfig.doGetProperty(START_AGENT_FEMAS)) {
+                AgentClassLoader agentClassLoader;
+                try {
+                    agentClassLoader = InterceptorClassLoaderCache.getAgentClassLoader(ConfigRefreshableContext.class.getClassLoader());
+                } catch (Exception e) {
+                    agentClassLoader = InterceptorClassLoaderCache.getAgentClassLoader(Thread.currentThread().getContextClassLoader());
+                }
+                Thread.currentThread().setContextClassLoader(agentClassLoader);
+            }
             ServiceLoader<? extends Plugin> loader = ServiceLoader.load(pluginType);
             Iterator<? extends Plugin> iterator = loader.iterator();
             while (iterator.hasNext()) {

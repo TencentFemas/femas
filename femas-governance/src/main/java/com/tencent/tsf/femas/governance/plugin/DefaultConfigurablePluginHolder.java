@@ -18,15 +18,27 @@
 package com.tencent.tsf.femas.governance.plugin;
 
 
+import com.tencent.tsf.femas.agent.classloader.AgentClassLoader;
+import com.tencent.tsf.femas.agent.classloader.InterceptorClassLoaderCache;
+import com.tencent.tsf.femas.common.context.AgentConfig;
+import com.tencent.tsf.femas.common.context.factory.ContextFactory;
 import com.tencent.tsf.femas.common.exception.FemasRuntimeException;
 import com.tencent.tsf.femas.governance.plugin.context.AbstractSDKContext;
 import com.tencent.tsf.femas.governance.plugin.context.ConfigContext;
 import com.tencent.tsf.femas.governance.plugin.context.ConfigRefreshableContext;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ServiceLoader;
+
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static com.tencent.tsf.femas.common.context.ContextConstant.START_AGENT_FEMAS;
 
 /**
  * @Author leoziltong
@@ -38,13 +50,42 @@ public class DefaultConfigurablePluginHolder {
 
     private static volatile ConfigRefreshableContext context;
 
+
+    /**
+     * 标识别是否初始化完成，避免并发的情况下暴露还未初始化完的对象
+     * 0 代表 未初始化
+     * 1 代表 已经初始化
+     * -1 代表 初始化失败
+     */
+    private static volatile int init = 0;
+
+    private static final Lock LOCK = new ReentrantLock();
+
     public static AbstractSDKContext getSDKContext() {
         if (context == null) {
-            synchronized (DefaultConfigurablePluginHolder.class) {
+            LOCK.lock();
+            try {
                 if (context == null) {
                     context = new ConfigRefreshableContext();
                     initPluginContext();
+                    init = InitStatus.INIT_SUCCESS.getStatus();
                 }
+            } catch (Exception e) {
+                init = InitStatus.ERROR.getStatus();
+                throw e;
+            } finally {
+                LOCK.unlock();
+            }
+
+        }
+        while (init != InitStatus.INIT_SUCCESS.getStatus()) {
+            LOCK.lock();
+            try {
+                if (init == InitStatus.ERROR.getStatus()) {
+                    throw new RuntimeException("initPluginContext error");
+                }
+            } finally {
+                LOCK.unlock();
             }
         }
         return context;
@@ -58,6 +99,16 @@ public class DefaultConfigurablePluginHolder {
     public static void initPluginContext() throws FemasRuntimeException {
         ConfigContext initContext = null;
         //插件具体配置
+        //spi加载器加载不到agent class的问题
+        if (AgentConfig.doGetProperty(START_AGENT_FEMAS) != null && (Boolean) AgentConfig.doGetProperty(START_AGENT_FEMAS)) {
+            AgentClassLoader agentClassLoader;
+            try {
+                agentClassLoader = InterceptorClassLoaderCache.getAgentClassLoader(DefaultConfigurablePluginHolder.class.getClassLoader());
+            } catch (Exception e) {
+                agentClassLoader = InterceptorClassLoaderCache.getAgentClassLoader(Thread.currentThread().getContextClassLoader());
+            }
+            Thread.currentThread().setContextClassLoader(agentClassLoader);
+        }
         ServiceLoader<ConfigProvider> configProviders = ServiceLoader.load(ConfigProvider.class);
         //插件列表
         ServiceLoader<PluginProvider> providers = ServiceLoader.load(PluginProvider.class);
@@ -78,4 +129,29 @@ public class DefaultConfigurablePluginHolder {
         context.initPlugins(initContext, types);
     }
 
+    private enum InitStatus {
+
+        /**
+         * 初始化失败
+         */
+        ERROR(-1),
+        /**
+         * 未初始化
+         */
+        UN_INIT(0),
+        /**
+         * 已经初始化
+         */
+        INIT_SUCCESS(1);
+
+        private int status;
+
+        InitStatus(int status) {
+            this.status = status;
+        }
+
+        public int getStatus() {
+            return status;
+        }
+    }
 }
