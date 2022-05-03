@@ -351,13 +351,19 @@
                 <version>${project.version}</version>
             </dependency>
 
+
             <dependency>
                 <groupId>com.tencent.tsf</groupId>
                 <artifactId>femas-apache-dubbo-starter</artifactId>
-                <artifactId>femas-springcloud-plugin-common</artifactId>
-
                 <version>${project.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.tencent.tsf</groupId>
+                <artifactId>femas-springcloud-plugin-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
 
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
