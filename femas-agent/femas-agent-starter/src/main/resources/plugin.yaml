@@ -55,3 +55,8 @@ femas:
           className: com.netflix.loadbalancer.BaseLoadBalancer
           methodName: getAllServers
           interceptorClass: com.tencent.tsf.femas.agent.eureka.instrument.BaseLoadBalancerInterceptor
+      # consul
+      - plugin:
+          className: org.springframework.cloud.consul.serviceregistry.ConsulServiceRegistry
+          methodName: register
+          interceptorClass: com.tencent.tsf.femas.agent.consul.instrument.ConsulServiceRegistryInterceptor

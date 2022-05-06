@@ -11,14 +11,26 @@ spring:
       password: nacos
       config:
         server-addr: 106.53.127.164:8848
+### consul配置
 #    consul:
 #      host: 127.0.0.1
 #      port: 8500
 #      discovery:
+#        tags: FEMAS_NAMESPACE_ID=****
 #        serviceName: femas-springcloud-consumer
 #        instanceId: ${spring.application.name}-${server.port}-${spring.cloud.client.hostname}
 #        heartbeat:
 #          enabled: true
+
+###   eureka 配置
+#eureka:
+#  client:
+#    service-url:
+#      default-zone: http://localhost:8761/eureka/
+#    fetch-registry: true
+#  instance:
+#    metadata-map:
+#      FEMAS_NAMESPACE_ID: ****
 
 ribbon:
   ReadTimeout: 10000

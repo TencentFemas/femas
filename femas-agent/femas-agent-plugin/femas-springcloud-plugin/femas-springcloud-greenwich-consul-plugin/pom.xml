@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>femas-springcloud-greenwich-eureka-plugin</artifactId>
+    <artifactId>femas-springcloud-greenwich-consul-plugin</artifactId>
 
     <dependencies>
         <dependency>
@@ -20,7 +20,7 @@
     </dependencies>
 
     <build>
-        <finalName>femas-springcloud-greenwich-eureka-plugin-${maven.build.timestamp}</finalName>
+        <finalName>femas-springcloud-greenwich-consul-plugin-${maven.build.timestamp}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -64,8 +64,8 @@
                                 <mkdir dir="${project.basedir}/../../../femas-agent"/>
                                 <mkdir dir="${project.basedir}/../../../femas-agent/plugins"/>
                                 <mkdir dir="${project.basedir}/../../../femas-agent/plugins/libs"/>
-                                <copy file="${project.build.directory}/femas-springcloud-greenwich-eureka-plugin-${maven.build.timestamp}.jar"
-                                      tofile="${project.basedir}/../../../femas-agent/plugins/femas-springcloud-greenwich-eureka-plugin-${maven.build.timestamp}.jar"
+                                <copy file="${project.build.directory}/femas-springcloud-greenwich-consul-plugin-${maven.build.timestamp}.jar"
+                                      tofile="${project.basedir}/../../../femas-agent/plugins/femas-springcloud-greenwich-consul-plugin-${maven.build.timestamp}.jar"
                                       overwrite="true"/>
                             </tasks>
                         </configuration>
@@ -74,4 +74,5 @@
             </plugin>
         </plugins>
     </build>
+
 </project>
