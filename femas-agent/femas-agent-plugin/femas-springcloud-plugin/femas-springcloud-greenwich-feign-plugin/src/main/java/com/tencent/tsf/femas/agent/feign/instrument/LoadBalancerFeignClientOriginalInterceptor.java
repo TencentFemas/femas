@@ -1,6 +1,6 @@
 package com.tencent.tsf.femas.agent.feign.instrument;
 
-import com.tencent.tsf.femas.agent.interceptor.Interceptor;
+import com.tencent.tsf.femas.agent.interceptor.OriginalInterceptor;
 import com.tencent.tsf.femas.agent.tools.AgentLogger;
 import com.tencent.tsf.femas.api.ExtensionManager;
 import com.tencent.tsf.femas.api.IExtensionLayer;
@@ -27,7 +27,8 @@ import java.util.concurrent.Callable;
  * @Author leoziltong@tencent.com
  * @Date: 2022/4/7 16:26
  */
-public class LoadBalancerFeignClientInterceptor implements Interceptor {
+public class LoadBalancerFeignClientOriginalInterceptor implements OriginalInterceptor {
+    private static final AgentLogger LOG = AgentLogger.getLogger(LoadBalancerFeignClientOriginalInterceptor.class);
 
     private volatile ContextConstant contextConstant = ContextFactory.getContextConstantInstance();
     private String namespace = Context.getSystemTag(contextConstant.getNamespaceId());
@@ -90,7 +91,7 @@ public class LoadBalancerFeignClientInterceptor implements Interceptor {
             }
             return response;
         } catch (Throwable t) {
-            AgentLogger.getLogger().severe("FeignExecuteError: " + AgentLogger.getStackTraceString(t));
+            LOG.error("FeignExecuteError: ", t);
         } finally {
         }
         return zuper.call();
@@ -101,7 +102,7 @@ public class LoadBalancerFeignClientInterceptor implements Interceptor {
         try {
             url = new URL(request.url());
         } catch (MalformedURLException e) {
-            AgentLogger.getLogger().info("MalformedURLException, feign request:" + request.toString());
+            LOG.info("MalformedURLException, feign request:" + request.toString());
         }
         return url;
     }

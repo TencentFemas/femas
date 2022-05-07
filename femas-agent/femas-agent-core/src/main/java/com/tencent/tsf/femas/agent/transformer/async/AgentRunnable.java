@@ -10,7 +10,7 @@ public class AgentRunnable implements Runnable {
 
     public AgentRunnable(String tag, Runnable runnable) {
 //        if(runnable == null){
-//            AgentLogger.getLogger().info("runnable is null");
+//            LOG.info("runnable is null");
 //        }
         this.tag = tag;
         this.wrapRunnable = runnable;

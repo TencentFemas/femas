@@ -51,9 +51,14 @@ import static net.bytebuddy.matcher.ElementMatchers.*;
  * @Date: 2022/3/29 15:18
  */
 public class FemasAgent {
+
+    private static final AgentLogger LOG = AgentLogger.getLogger(FemasAgent.class);
+
+
     public static void premain(String agentArgs, Instrumentation inst) {
         init(agentArgs, inst, true);
     }
+
 
     /**
      * agent 监听器
@@ -61,28 +66,24 @@ public class FemasAgent {
     private static class Listener implements AgentBuilder.Listener {
         @Override
         public void onDiscovery(String s, ClassLoader classLoader, JavaModule javaModule, boolean b) {
-//            AgentLogger.getLogger().info("On Discovery class {}." + s);
-
         }
 
         @Override
         public void onTransformation(TypeDescription typeDescription, ClassLoader classLoader, JavaModule javaModule, boolean b, DynamicType dynamicType) {
-            AgentLogger.getLogger().info("[femas-agent] On Transformation class {}." + typeDescription.getName());
+            LOG.info("[femas-agent] On Transformation class :" + typeDescription.getName());
         }
 
         @Override
         public void onIgnored(TypeDescription typeDescription, ClassLoader classLoader, JavaModule javaModule, boolean b) {
-//            AgentLogger.getLogger().info("On Ignored class {}." + typeDescription.getName());
         }
 
         @Override
         public void onError(String s, ClassLoader classLoader, JavaModule javaModule, boolean b, Throwable throwable) {
-            AgentLogger.getLogger().severe(" [femas-agent] Enhance class: " + s + " error." + AgentLogger.getStackTraceString(throwable));
+            LOG.error(" [femas-agent] Enhance class: " + s + " error.", throwable);
         }
 
         @Override
         public void onComplete(String s, ClassLoader classLoader, JavaModule javaModule, boolean b) {
-//            AgentLogger.getLogger().info("On Complete class {}." + s);
         }
     }
 
@@ -94,7 +95,7 @@ public class FemasAgent {
             try {
                 delayInitMs = Long.parseLong(delayAgentInitMsProperty.trim());
             } catch (NumberFormatException numberFormatException) {
-                AgentLogger.getLogger().info("[femas-agent] WARN The value of the delay_agent_premain_ms must be a number");
+                LOG.info("[femas-agent] WARN The value of the delay_agent_premain_ms must be a number");
             }
         }
         if (premain && shouldDelayOnPremain()) {
@@ -139,7 +140,7 @@ public class FemasAgent {
      */
     private static void delayInitAgentAsync(final String agentArguments, final Instrumentation instrumentation,
                                             final boolean premain, final long delayAgentInitMs) {
-        AgentLogger.getLogger().info("[femas-agent] INFO Delaying  Agent initialization by " + delayAgentInitMs + " milliseconds.");
+        LOG.info("[femas-agent] INFO Delaying  Agent initialization by " + delayAgentInitMs + " milliseconds.");
         Thread initThread = new Thread("[femas-agent] initialization thread") {
             @Override
             public void run() {
@@ -151,10 +152,10 @@ public class FemasAgent {
                         initializeAgent(agentArguments, instrumentation, premain);
                     }
                 } catch (InterruptedException e) {
-                    AgentLogger.getLogger().info("[femas-agent] ERROR " + getName() + " thread was interrupted, the agent will not be attached to this JVM.");
+                    LOG.info("[femas-agent] ERROR " + getName() + " thread was interrupted, the agent will not be attached to this JVM.");
                     e.printStackTrace();
                 } catch (Throwable throwable) {
-                    AgentLogger.getLogger().info("[femas-agent] ERROR  Agent initialization failed: " + throwable.getMessage());
+                    LOG.info("[femas-agent] ERROR  Agent initialization failed: " + throwable.getMessage());
                     throwable.printStackTrace();
                 }
             }
@@ -189,9 +190,9 @@ public class FemasAgent {
             ResettableClassFileTransformer rct = agentBuilder.with(new Listener()).installOn(instrumentation);
 //            rft.reset(instrumentation, AgentBuilder.RedefinitionStrategy.RETRANSFORMATION);
         } catch (Throwable throwable) {
-            AgentLogger.getLogger().severe("[femas-agent] install agent exception: " + AgentLogger.getStackTraceString(throwable));
+            LOG.error("[femas-agent] install agent exception: ", throwable);
         } finally {
-            AgentLogger.getLogger().info("[femas-agent] install on finally !!!!!!");
+            LOG.info("[femas-agent] install on instrumentation success !!!!!!");
         }
     }
 
@@ -212,7 +213,7 @@ public class FemasAgent {
                 ElementMatcher.Junction<MethodDescription> junction = not(isStatic()).and(interceptPlugin.getPluginMatcher());
                 builder = builder.method(junction)
                         .intercept(MethodDelegation.withDefaultConfiguration()
-                                .to(new InterceptorWrapper(interceptPlugin
+                                .to(new OriginalInterceptorWrapper(interceptPlugin
                                         .getInterceptorClass(), classLoader)));
                 return builder;
             });
@@ -231,9 +232,9 @@ public class FemasAgent {
         }
         //改写实例方法,默认是实例方法
         if (StringUtils.isEmpty(interceptPlugin.getMethodType()) || interceptPlugin.getMethodType().equalsIgnoreCase(MethodType.INSTANCE.getType())) {
+            ElementMatcher.Junction<MethodDescription> junction = not(isStatic()).and(interceptPlugin.getPluginMatcher());
             if (interceptPlugin.getOverrideArgs() != null && interceptPlugin.getOverrideArgs()) {
                 agentBuilder = agentBuilder.type(ElementMatchers.named(interceptPlugin.getClassName())).transform((builder, typeDescription, classLoader, module) -> {
-                    ElementMatcher.Junction<MethodDescription> junction = not(isStatic()).and(interceptPlugin.getPluginMatcher());
                     builder = builder.method(junction)
                             .intercept(MethodDelegation.withDefaultConfiguration()
                                     .withBinders(Morph.Binder.install(OverrideArgsCallable.class))
@@ -244,7 +245,6 @@ public class FemasAgent {
                 });
             } else {
                 agentBuilder = agentBuilder.type(ElementMatchers.named(interceptPlugin.getClassName())).transform((builder, typeDescription, classLoader, module) -> {
-                    ElementMatcher.Junction<MethodDescription> junction = not(isStatic()).and(interceptPlugin.getPluginMatcher());
                     builder = builder.method(junction)
                             .intercept(MethodDelegation.withDefaultConfiguration()
                                     .to(new InstanceMethodsInterceptorWrapper(interceptPlugin
@@ -256,9 +256,10 @@ public class FemasAgent {
         }
         //改写静态方法
         if (MethodType.STATIC.getType().equalsIgnoreCase(interceptPlugin.getMethodType())) {
+            ElementMatcher.Junction<MethodDescription> junction = isStatic().and(interceptPlugin.getPluginMatcher());
             if (interceptPlugin.getOverrideArgs() != null && interceptPlugin.getOverrideArgs()) {
                 agentBuilder = agentBuilder.type(ElementMatchers.named(interceptPlugin.getClassName())).transform((builder, typeDescription, classLoader, module) -> {
-                    builder = builder.method(isStatic().and(interceptPlugin.getPluginMatcher()))
+                    builder = builder.method(junction)
                             .intercept(MethodDelegation.withDefaultConfiguration()
                                     .withBinders(Morph.Binder.install(OverrideArgsCallable.class))
                                     .to(new StaticMethodsInterceptOverrideArgsWrapper(interceptPlugin.getInterceptorClass())));
@@ -266,7 +267,7 @@ public class FemasAgent {
                 });
             } else {
                 agentBuilder = agentBuilder.type(ElementMatchers.named(interceptPlugin.getClassName())).transform((builder, typeDescription, classLoader, module) -> {
-                    builder = builder.method(isStatic().and(interceptPlugin.getPluginMatcher()))
+                    builder = builder.method(junction)
                             .intercept(MethodDelegation.withDefaultConfiguration()
                                     .to(new StaticMethodsInterceptorWrapper(interceptPlugin.getInterceptorClass())));
                     return builder;
@@ -298,7 +299,7 @@ public class FemasAgent {
         try {
             sm.checkPermission(new AllPermission());
         } catch (SecurityException e) {
-            AgentLogger.getLogger().info("[femas-agent] WARN  permission java.security.AllPermission;");
+            LOG.info("[femas-agent] WARN  permission java.security.AllPermission;");
         }
     }
 

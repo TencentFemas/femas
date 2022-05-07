@@ -6,7 +6,7 @@ import java.util.concurrent.Callable;
 /**
  * @Author leoziltong@tencent.com
  */
-public interface Interceptor {
+public interface OriginalInterceptor {
     Object intercept(Object obj,
                      Object[] allArguments,
                      Callable<?> zuper,

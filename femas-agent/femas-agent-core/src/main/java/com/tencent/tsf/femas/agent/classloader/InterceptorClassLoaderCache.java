@@ -21,6 +21,8 @@ import java.util.concurrent.locks.ReentrantLock;
  * @Author leoziltong@tencent.com
  */
 public class InterceptorClassLoaderCache {
+    private static final AgentLogger LOG = AgentLogger.getLogger(InterceptorClassLoaderCache.class);
+
     private static volatile Map<ClassLoader, AgentClassLoader> agentClassLoaderMap = new ConcurrentHashMap<>();
     private static ConcurrentHashMap<String, Object> INSTANCE_CACHE = new ConcurrentHashMap<>();
     private static ReentrantLock cacheLock = new ReentrantLock();
@@ -59,7 +61,7 @@ public class InterceptorClassLoaderCache {
         Object inst = INSTANCE_CACHE.get(instanceKey);
         if (inst == null) {
             inst = Class.forName(className, true, getAgentClassLoader(targetClassLoader)).newInstance();
-            AgentLogger.getLogger().info("[femas-agent] InterceptorClassLoaderCache load class :" + instanceKey);
+            LOG.info("[femas-agent] InterceptorClassLoaderCache load class :" + instanceKey);
             if (inst != null) {
                 INSTANCE_CACHE.put(instanceKey, inst);
             }

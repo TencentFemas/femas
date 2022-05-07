@@ -17,11 +17,8 @@
 package com.tencent.tsf.femas.agent.nacos.instrument;
 
 import com.alibaba.cloud.nacos.NacosDiscoveryProperties;
-import com.alibaba.nacos.client.naming.NacosNamingService;
 import com.tencent.tsf.femas.agent.interceptor.InstanceMethodsAroundInterceptor;
-import com.tencent.tsf.femas.agent.interceptor.Interceptor;
 import com.tencent.tsf.femas.agent.interceptor.wrapper.InterceptResult;
-import com.tencent.tsf.femas.agent.tools.AgentLogger;
 import com.tencent.tsf.femas.api.ExtensionManager;
 import com.tencent.tsf.femas.api.IExtensionLayer;
 import com.tencent.tsf.femas.common.context.Context;

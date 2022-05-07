@@ -29,6 +29,7 @@ import java.net.URL;
  * agent classloader path scanner
  */
 public class AgentPackagePathScanner {
+    private static final AgentLogger LOG = AgentLogger.getLogger(AgentPackagePathScanner.class);
 
     private static File AGENT_PACKAGE_PATH;
 
@@ -50,7 +51,7 @@ public class AgentPackagePathScanner {
         if (resource != null) {
             String urlString = resource.toString();
 
-//            AgentLogger.getLogger().info("The beacon class location is " + urlString);
+//            LOG.info("The beacon class location is " + urlString);
 
             int insidePathIndex = urlString.indexOf('!');
             boolean isInJar = insidePathIndex > -1;
@@ -61,9 +62,9 @@ public class AgentPackagePathScanner {
                 try {
                     agentJarFile = new File(new URL(urlString).toURI());
                 } catch (MalformedURLException e) {
-                    AgentLogger.getLogger().severe("Can not locate agent jar file by url:" + urlString + " ex:" + AgentLogger.getStackTraceString(e));
+                    LOG.error("Can not locate agent jar file by url:" + urlString + " ex:", e);
                 } catch (URISyntaxException e) {
-                    AgentLogger.getLogger().severe("Can not locate agent jar file by url:" + urlString + " ex:" + AgentLogger.getStackTraceString(e));
+                    LOG.error("Can not locate agent jar file by url:" + urlString + " ex:", e);
                 }
                 if (agentJarFile.exists()) {
                     return agentJarFile.getParentFile();
@@ -74,8 +75,7 @@ public class AgentPackagePathScanner {
                 return new File(classLocation);
             }
         }
-
-        AgentLogger.getLogger().severe("Can not locate agent jar file.");
+        LOG.warn("Can not locate agent jar file.");
         throw new RuntimeException("Can not locate agent jar file.");
     }
 }

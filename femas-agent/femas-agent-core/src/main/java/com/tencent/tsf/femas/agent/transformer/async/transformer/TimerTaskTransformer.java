@@ -19,6 +19,7 @@ import java.util.Set;
  * @Author leoziltong@tencent.com
  */
 public class TimerTaskTransformer extends AbstractTransformer {
+    private static final AgentLogger LOG = AgentLogger.getLogger(TimerTaskTransformer.class);
 
     private static Set<String> EXECUTOR_CLASS_NAMES = new HashSet<>();
     private static final Set<String> INTERCEPT_METHEDS = new HashSet<>();
@@ -52,18 +53,18 @@ public class TimerTaskTransformer extends AbstractTransformer {
 
                     if (code.length() > 0) {
                         method.insertBefore(code);
-//                        AgentLogger.getLogger().severe("insert code before method " + signatureOfMethod(method) + " of class " + method.getDeclaringClass().getName() + ": " + code);
+//                        LOG.error("insert code before method " + signatureOfMethod(method) + " of class " + method.getDeclaringClass().getName() + ": " + code);
                     }
                 }
                 classInfo.getCtClass().detach();
                 return classInfo.getCtClass().toBytecode();
             }
         } catch (IOException e) {
-            AgentLogger.getLogger().severe("ExecutorTransformer.transform error: " + AgentLogger.getStackTraceString(e));
+            LOG.error("ExecutorTransformer.transform error: ", e);
         } catch (NotFoundException e) {
-            AgentLogger.getLogger().severe("ExecutorTransformer.transform error: " + AgentLogger.getStackTraceString(e));
+            LOG.error("ExecutorTransformer.transform error: ", e);
         } catch (CannotCompileException e) {
-            AgentLogger.getLogger().severe("ExecutorTransformer.transform error: " + AgentLogger.getStackTraceString(e));
+            LOG.error("ExecutorTransformer.transform error: ", e);
         }
 
         return EMPTY_BYTE_ARRAY;

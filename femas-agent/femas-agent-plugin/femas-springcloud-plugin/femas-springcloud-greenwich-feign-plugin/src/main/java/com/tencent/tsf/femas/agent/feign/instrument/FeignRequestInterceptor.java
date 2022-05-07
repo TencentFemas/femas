@@ -16,6 +16,7 @@
  */
 package com.tencent.tsf.femas.agent.feign.instrument;
 
+import com.tencent.tsf.femas.agent.classloader.InterceptorClassLoaderCache;
 import com.tencent.tsf.femas.agent.interceptor.ConstructorInterceptor;
 import com.tencent.tsf.femas.agent.interceptor.StaticMethodsAroundInterceptor;
 import com.tencent.tsf.femas.agent.interceptor.wrapper.InterceptResult;
@@ -39,6 +40,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Date: 2022/4/26 15:10
  */
 public class FeignRequestInterceptor implements StaticMethodsAroundInterceptor<InterceptResult> {
+    private static final AgentLogger LOG = AgentLogger.getLogger(FeignRequestInterceptor.class);
 
     private volatile Context commonContext = ExtensionManager.getExtensionLayer().getCommonContext();
 
@@ -55,8 +57,8 @@ public class FeignRequestInterceptor implements StaticMethodsAroundInterceptor<I
                     temp.put(entry.getKey(),
                             Arrays.asList(URLEncoder.encode(entry.getValue(), "UTF-8")));
                 } catch (UnsupportedEncodingException e) {
-                    AgentLogger.getLogger().severe("[UnsupportedEncodingException] name:" + entry.getKey() + ", value:" +
-                            entry.getValue());
+                    LOG.error("[UnsupportedEncodingException] name:" + entry.getKey() + ", value:" +
+                            entry.getValue(),e);
                     temp.put(entry.getKey(), Arrays.asList(entry.getValue()));
                 }
             }
@@ -87,7 +89,7 @@ public class FeignRequestInterceptor implements StaticMethodsAroundInterceptor<I
 //                    temp.put(entry.getKey(),
 //                            Arrays.asList(URLEncoder.encode(entry.getValue(), "UTF-8")));
 //                } catch (UnsupportedEncodingException e) {
-//                    AgentLogger.getLogger().severe("[UnsupportedEncodingException] name:" + entry.getKey() + ", value:" +
+//                    LOG.error("[UnsupportedEncodingException] name:" + entry.getKey() + ", value:" +
 //                            entry.getValue());
 //                    temp.put(entry.getKey(), Arrays.asList(entry.getValue()));
 //                }

@@ -18,12 +18,9 @@ package com.tencent.tsf.femas.agent.nacos.instrument;
 
 import com.tencent.tsf.femas.agent.common.AgentLoadBalancerInterceptor;
 import com.tencent.tsf.femas.agent.interceptor.InstanceMethodsAroundInterceptor;
-import com.tencent.tsf.femas.agent.interceptor.Interceptor;
-import com.netflix.loadbalancer.Server;
 import com.tencent.tsf.femas.agent.interceptor.wrapper.InterceptResult;
 
 import java.lang.reflect.Method;
-import java.util.concurrent.Callable;
 
 /**
  * @Author leoziltong@tencent.com

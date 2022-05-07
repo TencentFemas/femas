@@ -16,7 +16,7 @@
 // */
 //package com.tencent.tsf.femas.agent.feign.instrument;
 //
-//import com.tencent.tsf.femas.agent.interceptor.Interceptor;
+//import com.tencent.tsf.femas.agent.interceptor.OriginalInterceptor;
 //import com.tencent.tsf.femas.agent.tools.AgentLogger;
 //import com.tencent.tsf.femas.common.context.Context;
 //import com.tencent.tsf.femas.common.context.factory.ContextFactory;
@@ -33,7 +33,7 @@
 // * @Author leoziltong@tencent.com
 // * @Date: 2022/4/7 16:26
 // */
-//public class FeignRequestHeaderInterceptor implements Interceptor {
+//public class FeignRequestHeaderInterceptor implements OriginalInterceptor {
 //
 //    private volatile Context commonContext = ContextFactory.getContextInstance();
 //
@@ -57,14 +57,14 @@
 //                        template.header(entry.getKey(),
 //                                URLEncoder.encode(entry.getValue(), "UTF-8"));
 //                    } catch (UnsupportedEncodingException e) {
-//                        AgentLogger.getLogger().severe("[UnsupportedEncodingException] name:" + entry.getKey() + ", value:" +
+//                        LOG.error("[UnsupportedEncodingException] name:" + entry.getKey() + ", value:" +
 //                                entry.getValue());
 //                        template.header(entry.getKey(), entry.getValue());
 //                    }
 //                }
 //            }
 //        } catch (Throwable throwable) {
-//            AgentLogger.getLogger().severe("HttpClientInterceptor," + AgentLogger.getStackTraceString(throwable));
+//            LOG.error("HttpClientInterceptor," + AgentLogger.getStackTraceString(throwable));
 //        } finally {
 //        }
 //        return zuper.call();
