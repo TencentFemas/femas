@@ -49,4 +49,8 @@ public interface RegistryOpenApiInterface {
     boolean deleteNamespace(RegistryConfig config, Namespace namespace);
 
     boolean modifyNamespace(RegistryConfig config, Namespace namespace);
+
+    List<Namespace> allNamespaces(RegistryConfig config);
+
+
 }

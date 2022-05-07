@@ -31,12 +31,9 @@ import com.tencent.tsf.femas.entity.registry.ServiceBriefInfo;
 import com.tencent.tsf.femas.entity.registry.nacos.NacosInstance;
 import com.tencent.tsf.femas.entity.registry.nacos.NacosServer;
 import com.tencent.tsf.femas.entity.registry.nacos.NacosService;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+
+import java.util.*;
+
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -239,4 +236,26 @@ public class NacosRegistryOpenApi extends RegistryOpenApiAdaptor {
             return false;
         }
     }
+
+    @Override
+    public List<Namespace> allNamespaces(RegistryConfig config){
+        List namespaceList = new ArrayList();
+        String url = selectOne(config);
+        try {
+            HttpResult<String> result = httpClient.get(url.concat(NAMESPCE_URL), null, null);
+            Map map = JSONSerializer.deserializeStr(Map.class, result.getData());
+            List<Map> namespaceMapList =(List) map.get("data");
+            for(Map nsp:namespaceMapList){
+                Namespace namespace =new Namespace();
+                namespace.setNamespaceId((String) nsp.get("namespace"));
+                namespace.setName((String) nsp.get("namespaceShowName"));
+                namespace.setRegistryId(Arrays.asList(config.getRegistryId()));
+                namespaceList.add(namespace);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return namespaceList;
+    }
+
 }
