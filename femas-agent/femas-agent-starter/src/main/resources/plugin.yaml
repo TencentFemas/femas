@@ -42,3 +42,7 @@ femas:
           methodName: doFilterInternal
           originAround: true
           interceptorClass: com.tencent.tsf.femas.agent.feign.instrument.RequestContextFilterOriginalInterceptor
+      - plugin:
+          className: org.springframework.cloud.consul.serviceregistry.ConsulServiceRegistry
+          methodName: register
+          interceptorClass: com.tencent.tsf.femas.agent.consul.instrument.ConsulServiceRegistryInterceptor
