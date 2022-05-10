@@ -8,7 +8,7 @@ femas:
           className: org.springframework.cloud.openfeign.ribbon.LoadBalancerFeignClient
           methodName: execute
           originAround: true
-          interceptorClass: com.tencent.tsf.femas.agent.feign.instrument.LoadBalancerFeignClientInterceptor
+          interceptorClass: com.tencent.tsf.femas.agent.feign.instrument.LoadBalancerFeignClientOriginalInterceptor
       #请求的header写入feign
       #      - plugin:
       #          className: feign.auth.BasicAuthRequestInterceptor
@@ -41,4 +41,4 @@ femas:
           className: org.springframework.web.filter.RequestContextFilter
           methodName: doFilterInternal
           originAround: true
-          interceptorClass: com.tencent.tsf.femas.agent.feign.instrument.RequestContextFilterInterceptor
+          interceptorClass: com.tencent.tsf.femas.agent.feign.instrument.RequestContextFilterOriginalInterceptor
