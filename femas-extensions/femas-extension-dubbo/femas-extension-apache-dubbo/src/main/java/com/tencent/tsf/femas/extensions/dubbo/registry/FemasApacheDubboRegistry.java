@@ -43,9 +43,9 @@ public class FemasApacheDubboRegistry extends FailbackRegistry {
     public FemasApacheDubboRegistry(URL url){
         super(url);
         Service service = new Service(namespace, url.getParameter("application"));
-        extensionLayer.init(service, -1); // mock服务，端口号为 -1
+        extensionLayer.init(service, url.getPort()); // mock服务，端口号为 -1
         ServiceInstance instance = createServiceInstance(url);
-        instance.setPort(-1);
+        instance.setPort(url.getPort());
         instance.setService(service);
         extensionLayer.register(instance);
     }
