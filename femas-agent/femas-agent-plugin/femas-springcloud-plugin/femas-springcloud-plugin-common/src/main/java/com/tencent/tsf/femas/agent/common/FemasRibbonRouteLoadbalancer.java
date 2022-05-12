@@ -1,5 +1,6 @@
 package com.tencent.tsf.femas.agent.common;
 
+import com.alibaba.cloud.nacos.ribbon.NacosServer;
 import com.google.common.collect.Lists;
 import com.netflix.loadbalancer.Server;
 import com.tencent.tsf.femas.agent.common.discovery.DiscoveryServerConverter;
@@ -12,6 +13,7 @@ import com.tencent.tsf.femas.common.entity.Request;
 import com.tencent.tsf.femas.common.entity.Service;
 import com.tencent.tsf.femas.common.entity.ServiceInstance;
 import com.tencent.tsf.femas.common.util.CollectionUtil;
+import com.tencent.tsf.femas.common.util.StringUtils;
 import com.tencent.tsf.femas.governance.circuitbreaker.FemasCircuitBreakerIsolationLevelEnum;
 import com.tencent.tsf.femas.governance.circuitbreaker.ICircuitBreakerService;
 import com.tencent.tsf.femas.governance.config.FemasPluginContext;
@@ -21,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author leo
@@ -36,6 +39,8 @@ public class FemasRibbonRouteLoadbalancer implements FemasServiceFilterLoadBalan
     public FemasRibbonRouteLoadbalancer(DiscoveryServerConverter converter) {
         this.converter = converter;
     }
+
+    private volatile ContextConstant contextConstant = ContextFactory.getContextConstantInstance();
 
     @Override
     public void beforeChooseServer(Object key) {
@@ -95,7 +100,8 @@ public class FemasRibbonRouteLoadbalancer implements FemasServiceFilterLoadBalan
     }
 
     private Request getRequest(final List<Server> servers) {
-        ServiceInstance serviceInstance = converter.convert(servers.get(0));
+        Server femasServer = getFemasServerIfPresent(servers);
+        ServiceInstance serviceInstance = converter.convert(femasServer);
         Request request = new Request();
         String serviceName = null;
         if (serviceInstance != null && serviceInstance.getService() != null) {
@@ -108,5 +114,29 @@ public class FemasRibbonRouteLoadbalancer implements FemasServiceFilterLoadBalan
         request.setTargetService(service);
         Context.getRpcInfo().setRequest(request);
         return request;
+    }
+
+    /**
+     * 针对不是所有实例接入Femas的场景，优先选择Femas实例
+     */
+    private Server getFemasServerIfPresent(final List<Server> servers){
+        if(servers.size()==1){
+            return servers.get(0);
+        }
+        if(!(servers.get(0) instanceof NacosServer)){
+            return servers.get(0);
+        }
+
+        for(Server server:servers){
+            NacosServer nacosServer = (NacosServer) server;
+            if (nacosServer.getMetadata() != null) {
+                Map<String, String> meta = nacosServer.getMetadata();
+                String nameSpace = meta.get(contextConstant.getMetaNamespaceIdKey());
+                if(StringUtils.isNotBlank(nameSpace)){
+                    return server;
+                }
+            }
+        }
+        return servers.get(0);
     }
 }
