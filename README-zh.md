@@ -69,6 +69,62 @@ Femas实现了对主流开源注册中心(目前支持`Consul、nacos、eureka`)
 - Femas支撑了腾讯内部亿级用户生态。
 ## 快速入门
 
+### 代码结构
+
+代码结构:
+```
+.
+├── femas-adaptor
+│   └── femas-adaptor-opensource-admin
+├── femas-admin
+├── femas-admin-starter
+├── femas-agent
+│   ├── femas-agent-core
+│   ├── femas-agent-example
+│   ├── femas-agent-plugin
+│   ├── femas-agent-starter
+│   └── femas-agent-tools
+├── femas-api
+├── femas-benchmark
+├── femas-common
+├── femas-config
+├── femas-config-impl
+│   ├── femas-config-consul
+│   ├── femas-config-nacos
+│   └── femas-config-paas
+├── femas-console
+│   └── femas-admin
+├── femas-dependencies-bom
+├── femas-example
+│   ├── feams-example-springcloud-hoxton
+│   ├── femas-example-alibaba-dubbo-consumer
+│   ├── femas-example-alibaba-dubbo-provider
+│   ├── femas-example-springcloud-2020-consumer
+│   ├── femas-example-springcloud-2020-provider
+│   ├── femas-example-springcloud-greenwich-consumer
+│   ├── femas-example-springcloud-greenwich-gateway
+│   ├── femas-example-springcloud-greenwich-provider
+│   └── femas-example-springcloud-greenwich-zuul
+├── femas-extensions
+│   ├── femas-extension-dubbo
+│   └── femas-extension-springcloud
+├── femas-governance
+├── femas-governance-impl
+├── femas-helm
+├── femas-registry
+├── femas-registry-impl
+│   ├── femas-registry-consul
+│   ├── femas-registry-etcd
+│   ├── femas-registry-eureka
+│   ├── femas-registry-k8s
+│   ├── femas-registry-nacos
+│   └── femas-registry-polaris
+├── femas-starters
+│   ├── femas-dubbo-starters
+│   └── femas-springcloud-starters
+└── jacoco-aggregate
+```
+
 ### 安装服务端
 
 运行环境依赖：
