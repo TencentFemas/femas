@@ -74,29 +74,27 @@ Femas实现了对主流开源注册中心(目前支持`Consul、nacos、eureka`)
 代码结构:
 ```
 .
-├── femas-adaptor
-│   └── femas-adaptor-opensource-admin
-├── femas-admin
-├── femas-admin-starter
-├── femas-agent
-│   ├── femas-agent-core
-│   ├── femas-agent-example
-│   ├── femas-agent-plugin
-│   ├── femas-agent-starter
-│   └── femas-agent-tools
-├── femas-api
+├── femas-adaptor # paas平台插件化适配层
+│   └── femas-adaptor-opensource-admin # paas平台适配层，这里默认是跟开源平台的适配，如果要对接其他控制面，可以插件化实现一个adaptor，其次在这里可以组装平台所需要的能力矩阵
+├── femas-admin # 控制台
+├── femas-admin-starter # 控制台打包部署文件
+├── femas-agent # java agent模块
+│   ├── femas-agent-core # javaagent bytebuddy封装模块
+│   ├── femas-agent-example
+│   ├── femas-agent-plugin #字节码插装插件模块
+│   ├── femas-agent-starter #premain入口
+│   └── femas-agent-tools
+├── femas-api #微服务生命周期抽象层，方便用户对接异构rpc框架
 ├── femas-benchmark
-├── femas-common
-├── femas-config
-├── femas-config-impl
-│   ├── femas-config-consul
-│   ├── femas-config-nacos
-│   └── femas-config-paas
-├── femas-console
-│   └── femas-admin
-├── femas-dependencies-bom
-├── femas-example
-│   ├── feams-example-springcloud-hoxton
+├── femas-common #工具包
+├── femas-config #配置模块插件化的抽象层
+├── femas-config-impl #配置模块的实现层
+│   ├── femas-config-consul #consul配置实现
+│   ├── femas-config-nacos #nacos配置实现层
+│   └── femas-config-paas #开源控制台的配置实现层，开源数据面和控制面的治理规则交互
+├── femas-dependencies-bom #统一管理femas依赖版本
+├── femas-example #示例
+│   ├── feams-example-springcloud-hoxton
 │   ├── femas-example-alibaba-dubbo-consumer
 │   ├── femas-example-alibaba-dubbo-provider
 │   ├── femas-example-springcloud-2020-consumer
@@ -105,22 +103,22 @@ Femas实现了对主流开源注册中心(目前支持`Consul、nacos、eureka`)
 │   ├── femas-example-springcloud-greenwich-gateway
 │   ├── femas-example-springcloud-greenwich-provider
 │   └── femas-example-springcloud-greenwich-zuul
-├── femas-extensions
-│   ├── femas-extension-dubbo
-│   └── femas-extension-springcloud
-├── femas-governance
-├── femas-governance-impl
+├── femas-extensions #sdk对接RPC框架层
+│   ├── femas-extension-dubbo #对接dubbo
+│   └── femas-extension-springcloud #对接springcloud
+├── femas-governance #治理模块的插件化抽象层
+├── femas-governance-impl #治理模块的实现层
 ├── femas-helm
-├── femas-registry
-├── femas-registry-impl
-│   ├── femas-registry-consul
+├── femas-registry #注册中心插件化抽象层
+├── femas-registry-impl #注册中心插件化的实现层
+│   ├── femas-registry-consul
 │   ├── femas-registry-etcd
 │   ├── femas-registry-eureka
 │   ├── femas-registry-k8s
 │   ├── femas-registry-nacos
 │   └── femas-registry-polaris
-├── femas-starters
-│   ├── femas-dubbo-starters
+├── femas-starters #用户的sdk的starter依赖
+│   ├── femas-dubbo-starters
 │   └── femas-springcloud-starters
 └── jacoco-aggregate
 ```
