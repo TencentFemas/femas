@@ -47,7 +47,6 @@ public class FemasConsumerFilter implements Filter {
 
         if (!invocation.getObjectAttachments().containsKey(ATTACHMENT_ARG)){
             Service targetService = femasRequest.getTargetService();
-           // invocation.getAttachment(CommonConstants.REMOTE_APPLICATION_KEY)
             targetService.setName(serviceName);
             femasRequest.setTargetService(targetService);
         }

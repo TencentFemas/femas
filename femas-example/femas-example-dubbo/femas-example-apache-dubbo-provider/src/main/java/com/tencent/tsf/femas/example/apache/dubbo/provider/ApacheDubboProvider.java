@@ -9,7 +9,7 @@ public class ApacheDubboProvider  implements ApacheDubboExampleService {
     @Override
     public String sayHello(String name) {
         try {
-            Thread.sleep(1200);
+            Thread.sleep(100);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

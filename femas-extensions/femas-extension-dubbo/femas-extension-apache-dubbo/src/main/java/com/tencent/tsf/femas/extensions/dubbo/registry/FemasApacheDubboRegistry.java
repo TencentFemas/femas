@@ -40,10 +40,10 @@ public class FemasApacheDubboRegistry extends FailbackRegistry {
     private IExtensionLayer extensionLayer = ExtensionManager.getExtensionLayer();
     private static final String group = Context.getSystemTag(contextConstant.getGroupId());
 
-    public FemasApacheDubboRegistry(URL url){
+    public FemasApacheDubboRegistry(URL url) {
         super(url);
         Service service = new Service(namespace, url.getParameter("application"));
-        extensionLayer.init(service, url.getPort()); // mock服务，端口号为 -1
+        extensionLayer.init(service, url.getPort());
         ServiceInstance instance = createServiceInstance(url);
         instance.setPort(url.getPort());
         instance.setService(service);
@@ -93,7 +93,7 @@ public class FemasApacheDubboRegistry extends FailbackRegistry {
     }
 
     @Override
-    public void subscribe(URL url,NotifyListener listener) {
+    public void subscribe(URL url, NotifyListener listener) {
         if (isProviderSide(url)) {
             return;
         }
@@ -113,13 +113,11 @@ public class FemasApacheDubboRegistry extends FailbackRegistry {
 
     @Override
     public void doRegister(URL url) {
-     //   if (!url.getPath().equals(META_SERVICE)) {
-            ServiceInstance instance = createServiceInstance(url);
-            Service service = CommonUtils.buildService(url);
-            instance.setService(service);
-            extensionLayer.init(service, url.getPort());
-            extensionLayer.register(instance);
-    //    }
+        ServiceInstance instance = createServiceInstance(url);
+        Service service = CommonUtils.buildService(url);
+        instance.setService(service);
+        extensionLayer.init(service, url.getPort());
+        extensionLayer.register(instance);
     }
 
     @Override

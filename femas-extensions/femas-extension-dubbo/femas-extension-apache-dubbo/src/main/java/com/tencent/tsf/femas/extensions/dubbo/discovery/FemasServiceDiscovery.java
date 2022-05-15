@@ -65,7 +65,6 @@ public class FemasServiceDiscovery extends AbstractServiceDiscovery {
                         .collect(Collectors.toSet())
         );
     }
-
     @Override
     public List<ServiceInstance> getInstances(String serviceName) throws NullPointerException {
         return ThrowableFunction.execute(extensionLayer, service -> {
