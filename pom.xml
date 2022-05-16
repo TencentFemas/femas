@@ -340,6 +340,18 @@
             </distributionManagement>
         </profile>
     </profiles>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>innerRepo</id>
+            <url>http://10.10.5.41:8081/repository/maven-snapshots/</url>
+        </snapshotRepository>
+        <repository>
+            <id>innerRepo</id>
+            <url>http://10.10.5.41:8081/repository/maven-releases/</url>
+        </repository>
+    </distributionManagement>
+
     <!-- 添加相关仓库依赖 -->
     <repositories>
         <repository>
