@@ -68,54 +68,52 @@ Femas implements the management of open source registries (currently supports `C
 ### Code Structure
 ```
 .
-├── femas-adaptor
-│   └── femas-adaptor-opensource-admin
-├── femas-admin
-├── femas-admin-starter
-├── femas-agent
-│   ├── femas-agent-core
-│   ├── femas-agent-example
-│   ├── femas-agent-plugin
-│   ├── femas-agent-starter
-│   └── femas-agent-tools
-├── femas-api
+├── femas-adaptor # adaptation layer plugin for paas plateform
+│   └── femas-adaptor-opensource-admin #  The PAAS platform adaptation layer is adapted to the open source platform by default. If you want to connect to other control surfaces, you can plug-in an adapter. Secondly, you can assemble the capability matrix required by the platform here
+├── femas-admin # admin 
+├── femas-admin-starter # starter for admin
+├── femas-agent # java agent module
+│   ├── femas-agent-core # javaagent bytebuddy core module
+│   ├── femas-agent-example 
+│   ├── femas-agent-plugin # byte-code plugin module
+│   ├── femas-agent-starter # premain entrance
+│   └── femas-agent-tools 
+├── femas-api # the abstract layer of microservice life cycle, is convenient for users to connect with heterogeneous RPC framework
 ├── femas-benchmark
-├── femas-common
-├── femas-config
-├── femas-config-impl
-│   ├── femas-config-consul
-│   ├── femas-config-nacos
-│   └── femas-config-paas
-├── femas-console
-│   └── femas-admin
-├── femas-dependencies-bom
-├── femas-example
-│   ├── feams-example-springcloud-hoxton
-│   ├── femas-example-alibaba-dubbo-consumer
-│   ├── femas-example-alibaba-dubbo-provider
-│   ├── femas-example-springcloud-2020-consumer
-│   ├── femas-example-springcloud-2020-provider
-│   ├── femas-example-springcloud-greenwich-consumer
-│   ├── femas-example-springcloud-greenwich-gateway
-│   ├── femas-example-springcloud-greenwich-provider
-│   └── femas-example-springcloud-greenwich-zuul
-├── femas-extensions
-│   ├── femas-extension-dubbo
-│   └── femas-extension-springcloud
-├── femas-governance
-├── femas-governance-impl
+├── femas-common # toolkit
+├── femas-config #  abstraction layer of configuration module
+├── femas-config-impl # implementation layer of configuration module
+│   ├── femas-config-consul # consul for femas-config
+│   ├── femas-config-nacos # nacos for femas-config
+│   └── femas-config-paas # pass for femas-config
+├── femas-dependencies-bom # Unified management of femas dependent versions
+├── femas-example # demo
+│   ├── feams-example-springcloud-hoxton
+│      ├── femas-example-alibaba-dubbo-consumer
+│      ├── femas-example-alibaba-dubbo-provider
+│      ├── femas-example-springcloud-2020-consumer
+│      ├── femas-example-springcloud-2020-provider
+│      ├── femas-example-springcloud-greenwich-consumer
+│      ├── femas-example-springcloud-greenwich-gateway
+│      ├── femas-example-springcloud-greenwich-provider
+│      └── femas-example-springcloud-greenwich-zuul
+├── femas-extensions # rpc layer docking framework SDK
+│   ├── femas-c-dubbo # extension for dubbo
+│   └── femas-extension-springcloud #  extension for springcloud
+├── femas-governance # abstraction layer of governance module
+├── femas-governance-impl # implementation layer of governance module
 ├── femas-helm
-├── femas-registry
-├── femas-registry-impl
-│   ├── femas-registry-consul
-│   ├── femas-registry-etcd
-│   ├── femas-registry-eureka
-│   ├── femas-registry-k8s
-│   ├── femas-registry-nacos
-│   └── femas-registry-polaris
-├── femas-starters
-│   ├── femas-dubbo-starters
-│   └── femas-springcloud-starters
+├── femas-registry # abstraction layer of registry module
+├── femas-registry-impl # implementation layer of registry module
+│   ├── femas-registry-consul
+│      ├── femas-registry-etcd
+│      ├── femas-registry-eureka
+│      ├── femas-registry-k8s
+│      ├── femas-registry-nacos
+│      └── femas-registry-polaris
+├── femas-starters # Starter dependency of user's SDK
+│   ├── femas-dubbo-starters
+│   └── femas-springcloud-starters
 └── jacoco-aggregate
 ```
 
