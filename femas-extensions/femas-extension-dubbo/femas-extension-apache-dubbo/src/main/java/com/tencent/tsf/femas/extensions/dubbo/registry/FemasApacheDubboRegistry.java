@@ -42,9 +42,10 @@ public class FemasApacheDubboRegistry extends FailbackRegistry {
 
     public FemasApacheDubboRegistry(URL url) {
         super(url);
-        Service service = new Service(namespace, url.getParameter("application"));
-        extensionLayer.init(service, url.getPort());
         ServiceInstance instance = createServiceInstance(url);
+        Service service = CommonUtils.buildService(url);
+//        Service service = new Service(namespace, url.getParameter("application"));
+        extensionLayer.init(service, url.getPort());
         instance.setPort(url.getPort());
         instance.setService(service);
         extensionLayer.register(instance);
@@ -67,12 +68,11 @@ public class FemasApacheDubboRegistry extends FailbackRegistry {
 
     public List<URL> convert(List<ServiceInstance> services, URL consumerURL) {
         return services.stream()
-                .map(serviceInstance -> {
-                    return new URL(serviceInstance.getAllMetadata().get(CommonConstants.PROTOCOL_KEY),
+                .map(serviceInstance -> new URL(serviceInstance.getAllMetadata().get(CommonConstants.PROTOCOL_KEY),
                             serviceInstance.getHost(),
                             serviceInstance.getPort(),
-                            serviceInstance.getAllMetadata());
-                }).filter(url -> UrlUtils.isMatch(consumerURL, url))
+                            serviceInstance.getAllMetadata())
+                ).filter(url -> UrlUtils.isMatch(consumerURL, url))
                 .collect(Collectors.toList());
     }
 

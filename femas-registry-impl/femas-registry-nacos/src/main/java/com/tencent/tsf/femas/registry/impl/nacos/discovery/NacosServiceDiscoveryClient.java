@@ -14,6 +14,7 @@ import com.tencent.tsf.femas.common.discovery.ServerUpdater;
 import com.tencent.tsf.femas.common.entity.EndpointStatus;
 import com.tencent.tsf.femas.common.entity.Service;
 import com.tencent.tsf.femas.common.entity.ServiceInstance;
+import com.tencent.tsf.femas.common.util.CollectionUtil;
 import com.tencent.tsf.femas.registry.impl.nacos.NacosRegistryBuilder;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -137,9 +138,10 @@ public class NacosServiceDiscoveryClient extends AbstractServiceDiscoveryClient 
         } catch (NacosException e) {
             throw new RuntimeException(e.getCause());
         }
-        instancesList = convert(service, instances);
-
-        refreshServiceCache(service, instancesList);
+        if (CollectionUtil.isNotEmpty(instances)) {
+            instancesList = convert(service, instances);
+            refreshServiceCache(service, instancesList);
+        }
         return instancesList;
     }
 

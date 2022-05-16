@@ -7,6 +7,7 @@ import com.tencent.tsf.femas.common.context.ContextConstant;
 import com.tencent.tsf.femas.common.context.factory.ContextFactory;
 import com.tencent.tsf.femas.common.entity.EndpointStatus;
 import com.tencent.tsf.femas.common.entity.Service;
+import com.tencent.tsf.femas.common.util.CollectionUtil;
 import org.apache.dubbo.common.URL;
 import org.apache.dubbo.common.constants.CommonConstants;
 import org.apache.dubbo.common.function.ThrowableFunction;
@@ -69,7 +70,7 @@ public class FemasServiceDiscovery extends AbstractServiceDiscovery {
     public List<ServiceInstance> getInstances(String serviceName) throws NullPointerException {
         return ThrowableFunction.execute(extensionLayer, service -> {
             List<com.tencent.tsf.femas.common.entity.ServiceInstance> serviceInstances = service.getInstance(serviceName, namespace);
-            if (!serviceInstances.isEmpty()) {
+            if (CollectionUtil.isNotEmpty(serviceInstances)) {
                 return serviceInstances
                         .stream()
                         .map(instance -> toServiceInstance(this.registryURL, instance))
