@@ -89,14 +89,14 @@ Femas implements the management of open source registries (currently supports `C
 ├── femas-dependencies-bom # Unified management of femas dependent versions
 ├── femas-example # demo
 │   ├── feams-example-springcloud-hoxton
-│      ├── femas-example-alibaba-dubbo-consumer
-│      ├── femas-example-alibaba-dubbo-provider
-│      ├── femas-example-springcloud-2020-consumer
-│      ├── femas-example-springcloud-2020-provider
-│      ├── femas-example-springcloud-greenwich-consumer
-│      ├── femas-example-springcloud-greenwich-gateway
-│      ├── femas-example-springcloud-greenwich-provider
-│      └── femas-example-springcloud-greenwich-zuul
+│   ├── femas-example-alibaba-dubbo-consumer
+│   ├── femas-example-alibaba-dubbo-provider
+│   ├── femas-example-springcloud-2020-consumer
+│   ├── femas-example-springcloud-2020-provider
+│   ├── femas-example-springcloud-greenwich-consumer
+│   ├── femas-example-springcloud-greenwich-gateway
+│   ├── femas-example-springcloud-greenwich-provider
+│   └── femas-example-springcloud-greenwich-zuul
 ├── femas-extensions # rpc layer docking framework SDK
 │   ├── femas-c-dubbo # extension for dubbo
 │   └── femas-extension-springcloud #  extension for springcloud
@@ -106,11 +106,11 @@ Femas implements the management of open source registries (currently supports `C
 ├── femas-registry # abstraction layer of registry module
 ├── femas-registry-impl # implementation layer of registry module
 │   ├── femas-registry-consul
-│      ├── femas-registry-etcd
-│      ├── femas-registry-eureka
-│      ├── femas-registry-k8s
-│      ├── femas-registry-nacos
-│      └── femas-registry-polaris
+│   ├── femas-registry-etcd
+│   ├── femas-registry-eureka
+│   ├── femas-registry-k8s
+│   ├── femas-registry-nacos
+│   └── femas-registry-polaris
 ├── femas-starters # Starter dependency of user's SDK
 │   ├── femas-dubbo-starters
 │   └── femas-springcloud-starters
