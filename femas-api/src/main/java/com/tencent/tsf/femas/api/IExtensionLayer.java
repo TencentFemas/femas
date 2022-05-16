@@ -70,6 +70,19 @@ public interface IExtensionLayer {
      */
     ServiceInstance chooseServiceInstance(Request request, List<ServiceInstance> instances);
 
+    /**
+     *
+     * @param serviceName
+     * @return
+     */
+    List<ServiceInstance> getInstance(String serviceName, String namespace);
+
+    /**
+     *
+     * @return
+     */
+    List<String> getAllServices();
+
 
     /**
      * 封装

@@ -81,12 +81,14 @@ public class CommonExtensionLayer implements IExtensionLayer {
      *
      * @param service
      */
+    @Override
     public void init(Service service, Integer port) {
         String registryUrl = commonContext.getRegistryConfigMap().get(REGISTRY_HOST)
                 + ":" + commonContext.getRegistryConfigMap().get(REGISTRY_PORT);
         this.init(service, port, registryUrl);
     }
 
+    @Override
     public void init(Service service, Integer port, String registryUrl) {
         commonContext.init(service.getName(), port);
         manager.initNamespace(registryUrl, service.getNamespace());
@@ -232,6 +234,16 @@ public class CommonExtensionLayer implements IExtensionLayer {
         request.setTargetServiceInstance(instance);
 
         return instance;
+    }
+
+    @Override
+    public List<ServiceInstance> getInstance(String serviceName, String namespace) {
+        return serviceDiscoveryClient.getInstances(new Service(namespace, serviceName));
+    }
+
+    @Override
+    public List<String> getAllServices() {
+        return serviceDiscoveryClient.getAllServices();
     }
 
     @Override

@@ -4,11 +4,15 @@ spring:
   cloud:
     nacos:
       config:
+<<<<<<< Updated upstream:femas-admin/src/main/resources/bootstrap.yaml
         refresh-enabled: false
+=======
+        server-addr: 218.78.55.64:8848
+>>>>>>> Stashed changes:femas-console/femas-admin/conf/bootstrap.yaml
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/adminDb?useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true&useSSL=false&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://192.168.22.81:3306/adminDb?useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true&useSSL=false&serverTimezone=Asia/Shanghai
     username: root
-    password: root
+    password: Ljhy2016!
     hikari:
       driver-class-name: com.mysql.cj.jdbc.Driver
 

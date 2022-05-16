@@ -2,6 +2,7 @@ package com.tencent.tsf.femas.registry.impl.eureka.discovery;
 
 
 import com.netflix.appinfo.InstanceInfo;
+import com.netflix.discovery.shared.Application;
 import com.tencent.tsf.femas.common.discovery.AbstractServiceDiscoveryClient;
 import com.tencent.tsf.femas.common.discovery.SchedulePollingServerListUpdater;
 import com.tencent.tsf.femas.common.discovery.ServerUpdater;
@@ -17,6 +18,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 import static com.tencent.tsf.femas.common.RegistryConstants.*;
 import static com.tencent.tsf.femas.common.RegistryConstants.REGISTRY_PORT;
@@ -132,6 +134,24 @@ public class EurekaServiceDiscoveryClient extends AbstractServiceDiscoveryClient
         instancesList = convert(service, instances);
         refreshServiceCache(service, instancesList);
         return instancesList;
+    }
+
+    @Override
+    public List<String> getAllServices() {
+        List<Application> applications = eurekaNamingService.getAllApplications();
+        if (!applications.isEmpty()) {
+            List<InstanceInfo> instanceInfos = new ArrayList<>();
+
+            applications.forEach(application-> {
+                 instanceInfos.addAll(application.getInstances());
+             });
+
+             return instanceInfos
+                     .stream()
+                     .map(InstanceInfo::getAppName)
+                     .collect(Collectors.toList());
+        }
+        return Collections.emptyList();
     }
 
     class Action implements ServerUpdater.UpdateAction {

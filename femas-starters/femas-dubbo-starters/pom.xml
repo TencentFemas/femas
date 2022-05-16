@@ -16,6 +16,7 @@
 
     <modules>
         <module>femas-alibaba-dubbo-starter</module>
+        <module>femas-apache-dubbo-starter</module>
     </modules>
 
     <build>
