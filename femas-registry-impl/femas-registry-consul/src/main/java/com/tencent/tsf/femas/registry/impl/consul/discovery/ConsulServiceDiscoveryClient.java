@@ -97,6 +97,12 @@ public class ConsulServiceDiscoveryClient extends AbstractServiceDiscoveryClient
         return instancesList;
     }
 
+    @Override
+    public List<String> getAllServices() {
+        Response<List<String>> catalogDatacenters = client.getCatalogDatacenters();
+        return catalogDatacenters.getValue();
+    }
+
     /**
      * TODO 考虑加上TAG
      *
