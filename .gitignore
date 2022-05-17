@@ -39,3 +39,6 @@ Thumbs.db
 node_modules
 dist
 .vscode
+
+# femas-agent jar file
+femas-agent/femas-agent

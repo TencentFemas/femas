@@ -1,7 +1,6 @@
 package com.tencent.tsf.femas.agent.tools;
 
 import org.apache.commons.lang3.StringUtils;
-import sun.management.resources.agent;
 
 import java.io.*;
 import java.text.MessageFormat;
@@ -14,10 +13,9 @@ public class AgentLogger {
 
     private static final AgentLogger LOG = AgentLogger.getLogger(AgentLogger.class);
     static Logger logger = Logger.getLogger("AgentLogger");
-//    private static final String AGENT_LOG_LINUX = "/opt/logs/femas/agent.log";
-//    private static final String AGENT_LOG_WINDOWS = "${user.home}/log/femas/agent.log";
     private static final String DEFAULT_AGENT_LOG = System.getProperty("user.home")+ File.separator+"log"+ File.separator+"femas"+ File.separator+"agent.log";
     private static final String AGENT_LOG_PATH_KEY = "femas_agent_log_path";
+
     private static PrintStream printStream;
     private final String messagePattern;
 
@@ -25,7 +23,6 @@ public class AgentLogger {
         FileHandler fh;
         try {
             printStream = System.out;
-
             String filePath = System.getProperty(AGENT_LOG_PATH_KEY);
             if(StringUtils.isBlank(filePath)){
                 filePath = DEFAULT_AGENT_LOG;
@@ -147,7 +144,4 @@ public class AgentLogger {
         WARN, INFO, ERROR;
     }
 
-//    public static void main(String[]x){
-//
-//    }
 }
