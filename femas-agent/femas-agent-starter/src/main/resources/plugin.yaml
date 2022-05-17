@@ -46,3 +46,8 @@ femas:
           className: org.springframework.cloud.consul.serviceregistry.ConsulServiceRegistry
           methodName: register
           interceptorClass: com.tencent.tsf.femas.agent.consul.instrument.ConsulServiceRegistryInterceptor
+      # eureka
+      - plugin:
+          className: org.springframework.cloud.netflix.eureka.serviceregistry.EurekaServiceRegistry
+          methodName: register
+          interceptorClass: com.tencent.tsf.femas.agent.eureka.instrument.EurekaServiceRegistryInterceptor
