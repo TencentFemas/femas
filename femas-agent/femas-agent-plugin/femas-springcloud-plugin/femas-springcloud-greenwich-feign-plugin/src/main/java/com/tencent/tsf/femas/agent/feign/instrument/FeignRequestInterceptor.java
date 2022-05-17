@@ -58,7 +58,7 @@ public class FeignRequestInterceptor implements StaticMethodsAroundInterceptor<I
                             Arrays.asList(URLEncoder.encode(entry.getValue(), "UTF-8")));
                 } catch (UnsupportedEncodingException e) {
                     LOG.error("[UnsupportedEncodingException] name:" + entry.getKey() + ", value:" +
-                            entry.getValue(),e);
+                            entry.getValue(), e);
                     temp.put(entry.getKey(), Arrays.asList(entry.getValue()));
                 }
             }
@@ -74,7 +74,7 @@ public class FeignRequestInterceptor implements StaticMethodsAroundInterceptor<I
 
     @Override
     public void handleMethodException(Class clazz, Method method, Object[] allArguments, Class<?>[] parameterTypes, Throwable t) {
-
+        LOG.error("[femas-agent] Feign Request  beforeMethod  Intercept error,", t);
     }
 
 //    public void afterConstructorInvocation(Object[] allArguments) throws Throwable {

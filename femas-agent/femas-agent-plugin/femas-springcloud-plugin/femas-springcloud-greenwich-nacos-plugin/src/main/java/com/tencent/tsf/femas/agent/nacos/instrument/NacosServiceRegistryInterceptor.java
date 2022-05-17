@@ -21,6 +21,7 @@ import com.tencent.tsf.femas.agent.interceptor.InstanceMethodsAroundInterceptor;
 import com.tencent.tsf.femas.agent.interceptor.wrapper.InterceptResult;
 import com.tencent.tsf.femas.api.ExtensionManager;
 import com.tencent.tsf.femas.api.IExtensionLayer;
+import com.tencent.tsf.femas.common.RegistryEnum;
 import com.tencent.tsf.femas.common.context.Context;
 import com.tencent.tsf.femas.common.context.ContextConstant;
 import com.tencent.tsf.femas.common.context.factory.ContextFactory;
@@ -33,6 +34,8 @@ import org.apache.commons.lang.math.NumberUtils;
 import java.lang.reflect.Method;
 import java.util.Map;
 
+import static com.tencent.tsf.femas.common.context.ContextConstant.AGENT_REGISTER_TYPE_KEY;
+
 /**
  * @Author leoziltong@tencent.com
  * @Date: 2022/4/8 16:04
@@ -44,11 +47,11 @@ public class NacosServiceRegistryInterceptor implements InstanceMethodsAroundInt
     private IExtensionLayer extensionLayer = ExtensionManager.getExtensionLayer();
     private volatile ContextConstant contextConstant = ContextFactory.getContextConstantInstance();
 
-
     @Override
     public InterceptResult beforeMethod(Method method, Object[] allArguments, Class[] argumentsTypes) throws Throwable {
         com.alibaba.cloud.nacos.registry.NacosRegistration registration = (com.alibaba.cloud.nacos.registry.NacosRegistration) allArguments[0];
         NacosDiscoveryProperties properties = registration.getNacosDiscoveryProperties();
+        Context.putSystemTag(AGENT_REGISTER_TYPE_KEY, RegistryEnum.NACOS.getAlias());
         String namespace = Context.getSystemTag(contextConstant.getNamespaceId());
         properties.setNamespace(namespace);
         Service service = new Service(namespace, properties.getService());

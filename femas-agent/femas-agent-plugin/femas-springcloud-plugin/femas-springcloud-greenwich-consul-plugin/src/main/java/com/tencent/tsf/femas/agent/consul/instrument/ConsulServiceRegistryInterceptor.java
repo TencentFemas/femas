@@ -5,6 +5,7 @@ import com.tencent.tsf.femas.agent.interceptor.wrapper.InterceptResult;
 import com.tencent.tsf.femas.agent.tools.ReflectionUtils;
 import com.tencent.tsf.femas.api.ExtensionManager;
 import com.tencent.tsf.femas.api.IExtensionLayer;
+import com.tencent.tsf.femas.common.RegistryEnum;
 import com.tencent.tsf.femas.common.context.Context;
 import com.tencent.tsf.femas.common.context.ContextConstant;
 import com.tencent.tsf.femas.common.context.factory.ContextFactory;
@@ -19,6 +20,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import static com.tencent.tsf.femas.common.context.ContextConstant.AGENT_REGISTER_TYPE_KEY;
 
 /**
  * @author huyuanxin
@@ -35,6 +38,7 @@ public class ConsulServiceRegistryInterceptor implements InstanceMethodsAroundIn
     public InterceptResult beforeMethod(Method method, Object[] allArguments, Class<?>[] argumentsTypes) throws Throwable {
         ConsulRegistration consulRegistration = (ConsulRegistration) allArguments[0];
         ConsulDiscoveryProperties consulDiscoveryProperties = getConsulDiscoveryProperties(consulRegistration);
+        Context.putSystemTag(AGENT_REGISTER_TYPE_KEY, RegistryEnum.CONSUL.getAlias());
         String namespace = Context.getSystemTag(contextConstant.getNamespaceId());
         Service service = new Service(namespace, consulDiscoveryProperties.getServiceName());
         if (StringUtils.isNotEmpty(consulDiscoveryProperties.getIpAddress()) && consulDiscoveryProperties.getPort() != null) {

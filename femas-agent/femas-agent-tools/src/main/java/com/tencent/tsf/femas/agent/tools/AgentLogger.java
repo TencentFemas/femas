@@ -79,8 +79,9 @@ public class AgentLogger {
     }
 
     public void error(String msg, Throwable throwable) {
+        String exceptionMessage = toString(throwable);
         String stackTrace = getStackTraceString(throwable);
-        String formatMessage = format(LogLevel.INFO.name(), msg, stackTrace);
+        String formatMessage = format(LogLevel.INFO.name(), msg, exceptionMessage);
         printStream.println(formatMessage);
         logger.log(Level.SEVERE, formatMessage);
     }
