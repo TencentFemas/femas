@@ -147,6 +147,12 @@ public class K8sServiceDiscoveryClient extends AbstractServiceDiscoveryClient {
         return instancesList;
     }
 
+    @Override
+    public List<String> getAllServices() {
+        //TODO
+        return Collections.emptyList();
+    }
+
     class Action implements ServerUpdater.UpdateAction {
 
         private final Service service;

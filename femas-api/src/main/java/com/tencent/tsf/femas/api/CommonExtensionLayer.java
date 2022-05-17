@@ -235,6 +235,16 @@ public class CommonExtensionLayer implements IExtensionLayer {
     }
 
     @Override
+    public List<ServiceInstance> getInstance(String serviceName, String namespace) {
+        return serviceDiscoveryClient.getInstances(new Service(namespace, serviceName));
+    }
+
+    @Override
+    public List<String> getAllServices() {
+        return serviceDiscoveryClient.getAllServices();
+    }
+
+    @Override
     public RpcContext beforeServerInvoke(Request request,
                                          AbstractRequestMetaUtils headerUtils) {
         //重置上下文
