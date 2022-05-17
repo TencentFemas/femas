@@ -37,6 +37,8 @@ import java.util.concurrent.Callable;
  */
 public class StaticMethodsInterceptorWrapper {
 
+    private static final AgentLogger LOG = AgentLogger.getLogger(StaticMethodsInterceptorWrapper.class);
+
     private String interceptorClassName;
 
     public StaticMethodsInterceptorWrapper(String interceptorClassName) {
@@ -61,7 +63,7 @@ public class StaticMethodsInterceptorWrapper {
         try {
             result = interceptor.beforeMethod(clazz, method, allArguments, method.getParameterTypes());
         } catch (Throwable t) {
-            AgentLogger.getLogger().info("[femas-agent] error  class:" + clazz + " before method:" + method.getName() + "intercept failure"+ AgentLogger.getStackTraceString(t));
+            LOG.error("[femas-agent] error  class:" + clazz + " before method:" + method.getName() + "intercept failure", t);
         }
 
         Object ret = null;
@@ -75,14 +77,14 @@ public class StaticMethodsInterceptorWrapper {
             try {
                 interceptor.handleMethodException(clazz, method, allArguments, method.getParameterTypes(), t);
             } catch (Throwable t2) {
-                AgentLogger.getLogger().info("[femas-agent] error  class:" + clazz + " before method:" + method.getName() + "intercept failure"+ AgentLogger.getStackTraceString(t));
+                LOG.error("[femas-agent] error  class:" + clazz + " handleMethodException:" + method.getName() + "intercept failure", t);
             }
             throw t;
         } finally {
             try {
                 ret = interceptor.afterMethod(clazz, method, allArguments, method.getParameterTypes(), ret);
             } catch (Throwable t) {
-                AgentLogger.getLogger().info("[femas-agent] error  class:" + clazz + " before method:" + method.getName() + "intercept failure"+ AgentLogger.getStackTraceString(t));
+                LOG.error("[femas-agent] error  class:" + clazz + " after method:" + method.getName() + "intercept failure", t);
             }
         }
         return ret;

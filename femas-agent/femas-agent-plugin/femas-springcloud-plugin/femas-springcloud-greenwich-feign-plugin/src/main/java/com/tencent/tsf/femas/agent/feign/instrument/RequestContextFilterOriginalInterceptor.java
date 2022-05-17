@@ -17,7 +17,7 @@
 package com.tencent.tsf.femas.agent.feign.instrument;
 
 import com.tencent.tsf.femas.agent.common.HttpServletHeaderUtils;
-import com.tencent.tsf.femas.agent.interceptor.Interceptor;
+import com.tencent.tsf.femas.agent.interceptor.OriginalInterceptor;
 import com.tencent.tsf.femas.api.ExtensionManager;
 import com.tencent.tsf.femas.api.IExtensionLayer;
 import com.tencent.tsf.femas.common.context.Context;
@@ -41,7 +41,7 @@ import javax.servlet.http.HttpServletResponse;
  * @Author leoziltong@tencent.com
  * @Date: 2022/4/26 15:50
  */
-public class RequestContextFilterInterceptor implements Interceptor {
+public class RequestContextFilterOriginalInterceptor implements OriginalInterceptor {
 
 
     private volatile Context commonContext = ExtensionManager.getExtensionLayer().getCommonContext();

@@ -9,6 +9,8 @@ import java.util.Set;
  * @Author leoziltong@tencent.com
  */
 public class CacheProxy {
+    private static final AgentLogger LOG = AgentLogger.getLogger(CacheProxy.class);
+
     private static final String CrossClassLoaderCacheClassName = "com.tencent.tsf.femas.agent.classloader.CrossClassLoaderCache.CrossClassLoaderCache";
 
     public static Map<String, Object> getCache(String cacheKey) {
@@ -43,7 +45,7 @@ public class CacheProxy {
             }
             addMethod.invoke(null, cacheKey, value);
         } catch (Exception e) {
-            AgentLogger.getLogger().info(AgentLogger.getStackTraceString(e));
+            LOG.error("add Cache failed ", e);
         }
     }
 
@@ -55,7 +57,7 @@ public class CacheProxy {
             }
             removeMethod.invoke(null, cacheKey, value);
         } catch (Exception e) {
-            AgentLogger.getLogger().info(AgentLogger.getStackTraceString(e));
+            LOG.error("remove Cache failed ", e);
         }
     }
 
@@ -68,7 +70,7 @@ public class CacheProxy {
             }
             contains = (boolean) containsMethod.invoke(null, cacheKey, value);
         } catch (Exception e) {
-            AgentLogger.getLogger().info(AgentLogger.getStackTraceString(e));
+            LOG.error("check Set Contains failed", e);
         }
         return contains;
     }

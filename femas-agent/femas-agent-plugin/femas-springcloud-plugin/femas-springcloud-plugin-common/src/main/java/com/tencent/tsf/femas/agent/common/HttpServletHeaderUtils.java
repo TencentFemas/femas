@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HttpServletHeaderUtils extends AbstractRequestMetaUtils {
+    private static final AgentLogger LOG = AgentLogger.getLogger(HttpServletHeaderUtils.class);
 
 
     private volatile ContextConstant contextConstant = ContextFactory.getContextConstantInstance();
@@ -32,7 +33,7 @@ public class HttpServletHeaderUtils extends AbstractRequestMetaUtils {
             try {
                 value = URLDecoder.decode(value, "UTF-8");
             } catch (UnsupportedEncodingException e) {
-                AgentLogger.getLogger().info("[UnsupportedEncodingException] getHeader, name:{}, value:{}" + name + value);
+                LOG.info("[UnsupportedEncodingException] getHeader, name:{}, value:{}" + name + value);
             }
         }
         return value;

@@ -18,6 +18,12 @@ public interface ServiceDiscoveryClient {
     List<ServiceInstance> getInstances(Service service);
 
     /**
+     * Get all Service name
+     * @return
+     */
+    List<String> getAllServices();
+
+    /**
      * 订阅服务
      */
     void subscribe(Service service);

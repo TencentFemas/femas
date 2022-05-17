@@ -32,6 +32,7 @@ import net.bytebuddy.implementation.bind.annotation.This;
  * @Author leoziltong@tencent.com
  */
 public class ConstructorInterceptorWrapper {
+    private static final AgentLogger LOG = AgentLogger.getLogger(ConstructorInterceptorWrapper.class);
 
     private ConstructorInterceptor interceptor;
 
@@ -39,6 +40,7 @@ public class ConstructorInterceptorWrapper {
         try {
             interceptor = InterceptorClassLoaderCache.load(constructorInterceptorClassName, classLoader);
         } catch (Throwable t) {
+            LOG.error("[femas-agent] create constructorInterceptorClassName:" + constructorInterceptorClassName + "failed.", t);
             throw new InterceptorWrapperException("[femas-agent] create constructorInterceptorClassName:" + constructorInterceptorClassName + "failed.", t);
         }
     }
@@ -54,7 +56,7 @@ public class ConstructorInterceptorWrapper {
         try {
             interceptor.afterConstructorInvocation(allArguments);
         } catch (Throwable t) {
-            AgentLogger.getLogger().severe("ConstructorInterceptorWrapper failure." + AgentLogger.getStackTraceString(t));
+            LOG.error("ConstructorInterceptorWrapper failure.", t);
         }
 
     }

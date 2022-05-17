@@ -11,7 +11,7 @@ import java.util.concurrent.Callable;
 public class RunnableWrapper {
 
     public static Runnable wrapRunnable(Runnable runnable) {
-//        AgentLogger.getLogger().info("AgentRunnable.wrapRunnable");
+//        LOG.info("AgentRunnable.wrapRunnable");
         if (runnable instanceof AgentRunnable) {
             return runnable;
         } else {
@@ -20,7 +20,7 @@ public class RunnableWrapper {
     }
 
     public static Callable wrapCallable(Callable callable) {
-//        AgentLogger.getLogger().info("AgentRunnable.wrapCallable");
+//        LOG.info("AgentRunnable.wrapCallable");
         if (callable instanceof AgentCallable) {
             return callable;
         } else {

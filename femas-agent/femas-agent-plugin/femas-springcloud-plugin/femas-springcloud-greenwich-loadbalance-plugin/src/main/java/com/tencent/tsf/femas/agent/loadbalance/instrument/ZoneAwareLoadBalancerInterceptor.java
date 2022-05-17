@@ -14,40 +14,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.tencent.tsf.femas.agent.nacos.instrument;
+package com.tencent.tsf.femas.agent.loadbalance.instrument;
 
-import com.tencent.tsf.femas.agent.common.AgentLoadBalancerInterceptor;
 import com.tencent.tsf.femas.agent.interceptor.InstanceMethodsAroundInterceptor;
-import com.tencent.tsf.femas.agent.interceptor.Interceptor;
-import com.netflix.loadbalancer.Server;
 import com.tencent.tsf.femas.agent.interceptor.wrapper.InterceptResult;
+import com.tencent.tsf.femas.agent.tools.AgentLogger;
+import com.tencent.tsf.femas.api.ExtensionManager;
+import com.tencent.tsf.femas.common.context.Context;
 
 import java.lang.reflect.Method;
-import java.util.concurrent.Callable;
 
 /**
  * @Author leoziltong@tencent.com
  * @Date: 2022/4/8 11:35
  */
-public class ZoneAwareLoadBalancerInterceptor extends AgentLoadBalancerInterceptor implements InstanceMethodsAroundInterceptor<InterceptResult> {
-
+public class ZoneAwareLoadBalancerInterceptor implements InstanceMethodsAroundInterceptor<InterceptResult> {
+    private static final AgentLogger LOG = AgentLogger.getLogger(ZoneAwareLoadBalancerInterceptor.class);
 
     @Override
     public InterceptResult beforeMethod(Method method, Object[] allArguments, Class<?>[] argumentsTypes) throws Throwable {
-        nacosLoadBalancerList.forEach(femasZoneAwareLoadBalancer -> femasZoneAwareLoadBalancer.beforeChooseServer(allArguments[0]));
+        RibbonRouteLoadbalancerFactory.getLoadBalancerList().forEach(femasZoneAwareLoadBalancer -> femasZoneAwareLoadBalancer.beforeChooseServer(allArguments[0]));
         return new InterceptResult();
     }
 
     @Override
     public Object afterMethod(Method method, Object[] allArguments, Class<?>[] argumentsTypes, Object ret) throws Throwable {
-        nacosLoadBalancerList
-                .forEach(femasZoneAwareLoadBalancer -> femasZoneAwareLoadBalancer.afterChooseServer((com.netflix.loadbalancer.Server) ret, allArguments[0]));
+        RibbonRouteLoadbalancerFactory.getLoadBalancerList().forEach(femasZoneAwareLoadBalancer -> femasZoneAwareLoadBalancer.afterChooseServer((com.netflix.loadbalancer.Server) ret, allArguments[0]));
         return ret;
     }
 
     @Override
     public void handleMethodException(Method method, Object[] allArguments, Class<?>[] argumentsTypes, Throwable t) {
-
+        LOG.error("[femas-agent] ZoneAwareLoadBalancer  beforeMethod  Intercept error,", t);
     }
 
 //    /**

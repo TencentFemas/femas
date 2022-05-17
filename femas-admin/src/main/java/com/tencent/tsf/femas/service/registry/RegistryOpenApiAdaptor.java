@@ -33,6 +33,7 @@ import com.tencent.tsf.femas.entity.registry.RegistryConfig;
 import com.tencent.tsf.femas.entity.registry.RegistryPageService;
 import java.io.Closeable;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -197,6 +198,11 @@ public abstract class RegistryOpenApiAdaptor implements RegistryOpenApiInterface
     @Override
     public boolean deleteNamespace(RegistryConfig config, Namespace namespace) {
         return true;
+    }
+
+    @Override
+    public List<Namespace> allNamespaces(RegistryConfig config) {
+        return Collections.EMPTY_LIST;
     }
 
     private static class LazyHolder {

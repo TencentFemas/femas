@@ -17,6 +17,7 @@ import java.util.Set;
  * @Author leoziltong@tencent.com
  */
 public class ForkJoinTransformer extends AbstractTransformer {
+    private static final AgentLogger LOG = AgentLogger.getLogger(ForkJoinTransformer.class);
 
     private static Set<String> EXECUTOR_CLASS_NAMES = new HashSet<>();
 
@@ -42,21 +43,21 @@ public class ForkJoinTransformer extends AbstractTransformer {
                 afterCode += String.format("com.tencent.tsf.femas.agent.transformer.async.AgentContext.clearContext();");
                 if (beforeCode.length() > 0) {
                     ctMethod.insertBefore(beforeCode);
-//                    AgentLogger.getLogger().severe("insert code before method " + signatureOfMethod(ctMethod) + " of class " + ctMethod.getDeclaringClass().getName() + ": " + beforeCode);
+//                    LOG.error("insert code before method " + signatureOfMethod(ctMethod) + " of class " + ctMethod.getDeclaringClass().getName() + ": " + beforeCode);
                 }
                 if (afterCode.length() > 0) {
                     ctMethod.insertAfter(afterCode);
-//                    AgentLogger.getLogger().severe("insert code after method " + signatureOfMethod(ctMethod) + " of class " + ctMethod.getDeclaringClass().getName() + ": " + afterCode);
+//                    LOG.error("insert code after method " + signatureOfMethod(ctMethod) + " of class " + ctMethod.getDeclaringClass().getName() + ": " + afterCode);
                 }
                 classInfo.getCtClass().detach();
                 return classInfo.getCtClass().toBytecode();
             }
         } catch (IOException e) {
-            AgentLogger.getLogger().severe("ExecutorTransformer.transform error: " + AgentLogger.getStackTraceString(e));
+            LOG.error("ExecutorTransformer.transform error: ", e);
         } catch (NotFoundException e) {
-            AgentLogger.getLogger().severe("ExecutorTransformer.transform error: " + AgentLogger.getStackTraceString(e));
+            LOG.error("ExecutorTransformer.transform error: ", e);
         } catch (CannotCompileException e) {
-            AgentLogger.getLogger().severe("ExecutorTransformer.transform error: " + AgentLogger.getStackTraceString(e));
+            LOG.error("ExecutorTransformer.transform error: ", e);
         }
 
         return EMPTY_BYTE_ARRAY;

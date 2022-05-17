@@ -272,6 +272,10 @@ public class MysqlDataOperation implements DataOperation {
         }
         String[] addresses = registryAddress.split(",");
         for(RegistryConfig config : registryConfigs){
+            //获取注册中心信息
+            RegistryOpenApiInterface registryOpenApiInterface = factory.select(config.getRegistryType());
+            List<Namespace> namespaces = registryOpenApiInterface.allNamespaces(config);
+            Namespace remoteNamespace = namespaces.stream().filter(namespace -> namespace.getNamespaceId().equals(namespaceId)).findFirst().orElse(null);
             for(String address : addresses){
                 // 对 localhost 进行转换
                 String registryCluster = config.getRegistryCluster();
@@ -282,10 +286,18 @@ public class MysqlDataOperation implements DataOperation {
                     address = address.replace("localhost", "127.0.0.1");
                 }
                 if(registryCluster.contains(address)){
+                    Namespace namespace = new Namespace();
+                    namespace.setNamespaceId(namespaceId);
+                    String namespaceName =DEFAULT_NAME;
+                    if(remoteNamespace!=null){
+                        namespaceName =StringUtils.isBlank(remoteNamespace.getName())?namespaceId: remoteNamespace.getName();
+                    }
+                    namespace.setName(namespaceName);
                     ArrayList<String> registryId = new ArrayList<>();
                     registryId.add(config.getRegistryId());
-                    manager.update("insert into namespace(namespace_id,registry_id,namespace.name,namespace.desc) values(?,?,?,?)",
-                            namespaceId, JSONSerializer.serializeStr(registryId) , DEFAULT_NAME, DEFAULT_DESC);
+                    namespace.setRegistryId(registryId);
+                    namespace.setDesc(DEFAULT_DESC);
+                    createNamespace(namespace);
                     return;
                 }
             }

@@ -20,14 +20,21 @@ package com.tencent.tsf.femas.springcloud.gateway.config;
 import com.tencent.tsf.femas.springcloud.gateway.discovery.DiscoveryServerConverter;
 import com.tencent.tsf.femas.springcloud.gateway.filter.FemasGatewayGovernanceFilter;
 import com.tencent.tsf.femas.springcloud.gateway.filter.FemasReactiveLoadBalancerClientFilter;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.cloud.gateway.config.LoadBalancerProperties;
+import org.springframework.cloud.gateway.filter.LoadBalancerClientFilter;
 import org.springframework.cloud.loadbalancer.support.LoadBalancerClientFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class GatewayAutoConfiguration {
+public class GatewayAutoConfiguration implements BeanPostProcessor, ApplicationContextAware {
+
+    private ApplicationContext context;
 
     @Bean
     @ConditionalOnMissingBean
@@ -35,9 +42,25 @@ public class GatewayAutoConfiguration {
         return new FemasGatewayGovernanceFilter();
     }
 
-    @Bean
-    @ConditionalOnMissingBean({FemasReactiveLoadBalancerClientFilter.class})
-    public FemasReactiveLoadBalancerClientFilter reactiveLoadBalancerClientFilter(DiscoveryServerConverter converter, LoadBalancerClientFactory clientFactory, LoadBalancerProperties properties) {
-        return new FemasReactiveLoadBalancerClientFilter(converter, clientFactory, properties);
+//    @Bean
+//    @ConditionalOnMissingBean({FemasReactiveLoadBalancerClientFilter.class})
+//    public FemasReactiveLoadBalancerClientFilter reactiveLoadBalancerClientFilter(DiscoveryServerConverter converter, LoadBalancerClientFactory clientFactory, LoadBalancerProperties properties) {
+//        return new FemasReactiveLoadBalancerClientFilter(converter, clientFactory, properties);
+//    }
+
+    @Override
+    public Object postProcessBeforeInitialization(Object bean, String beanName) {
+        if(bean instanceof LoadBalancerClientFilter){
+            DiscoveryServerConverter converter = context.getBean(DiscoveryServerConverter.class);
+            LoadBalancerClientFactory clientFactory= context.getBean(LoadBalancerClientFactory.class);
+            LoadBalancerProperties properties =context.getBean(LoadBalancerProperties.class);
+            return new FemasReactiveLoadBalancerClientFilter(converter, clientFactory, properties);
+        }
+        return bean;
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        context = applicationContext;
     }
 }

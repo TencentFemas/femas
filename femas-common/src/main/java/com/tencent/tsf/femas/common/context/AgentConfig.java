@@ -17,7 +17,7 @@ public class AgentConfig {
 
     private final static String filePath = "/config/femas.yaml";
 
-    private static Map<String, Object> conf = new ConcurrentHashMap();
+    private static Map<String, Object> conf = new ConcurrentHashMap<>();
 
     static {
         Yaml yml = new Yaml();
@@ -27,8 +27,10 @@ public class AgentConfig {
             BufferedReader buffer = new BufferedReader(reader);
             conf = yml.load(buffer);
         } catch (FileNotFoundException e) {
-            logger.error("load agent Config failed...");
-        } finally {
+            logger.info("load agent Config failed, 'femas.yaml' file not found");
+        }catch (Exception e){
+            logger.info("load agent Config failed...");
+        }finally {
             try {
                 if (reader != null) {
                     reader.close();

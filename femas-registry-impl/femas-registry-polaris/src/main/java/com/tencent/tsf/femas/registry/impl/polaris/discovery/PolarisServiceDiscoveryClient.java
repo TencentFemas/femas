@@ -27,13 +27,11 @@ import com.tencent.tsf.femas.common.discovery.ServerUpdater;
 import com.tencent.tsf.femas.common.entity.EndpointStatus;
 import com.tencent.tsf.femas.common.entity.Service;
 import com.tencent.tsf.femas.common.entity.ServiceInstance;
+import com.tencent.tsf.femas.common.util.CollectionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -77,6 +75,20 @@ public class PolarisServiceDiscoveryClient extends AbstractServiceDiscoveryClien
         instancesList = convert(service, instances);
         refreshServiceCache(service, instancesList);
         return instancesList;
+    }
+
+    @Override
+    public List<String> getAllServices() {
+        List<Instance> instances = Arrays.stream(consumerAPI.getAllInstance(new GetAllInstancesRequest()).getInstances())
+                .collect(Collectors.toList());
+        if (CollectionUtil.isNotEmpty(instances)) {
+            return Collections.emptyList();
+        }
+
+        return instances
+                .stream()
+                .map(Instance::getService)
+                .collect(Collectors.toList());
     }
 
     /** 

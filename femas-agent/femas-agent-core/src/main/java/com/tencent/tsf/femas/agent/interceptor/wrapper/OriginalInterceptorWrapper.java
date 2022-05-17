@@ -16,7 +16,6 @@
  */
 package com.tencent.tsf.femas.agent.interceptor.wrapper;
 
-import com.tencent.tsf.femas.agent.classloader.AgentClassLoader;
 import com.tencent.tsf.femas.agent.classloader.InterceptorClassLoaderCache;
 import com.tencent.tsf.femas.agent.tools.AgentLogger;
 import net.bytebuddy.implementation.bind.annotation.*;
@@ -34,14 +33,16 @@ import java.util.concurrent.Callable;
  * @Author leoziltong@tencent.com
  * @Date: 2022/3/29 15:55
  */
-public class InterceptorWrapper {
+public class OriginalInterceptorWrapper {
+
+    private static final AgentLogger LOG = AgentLogger.getLogger(OriginalInterceptorWrapper.class);
 
     private String className;
     private Object classInterceptor = null;
     private Method interceptorMethod = null;
     private ClassLoader classLoader;
 
-    public InterceptorWrapper(String className, ClassLoader classLoader) {
+    public OriginalInterceptorWrapper(String className, ClassLoader classLoader) {
         this.className = className;
         this.classLoader = classLoader;
     }
@@ -69,7 +70,7 @@ public class InterceptorWrapper {
             try {
                 classInterceptor = InterceptorClassLoaderCache.load(this.className, classLoader);
             } catch (Throwable throwable) {
-                AgentLogger.getLogger().severe("[femas-agent] initInterceptor error " + className + AgentLogger.getStackTraceString(throwable));
+                LOG.error(String.format("[femas-agent] initInterceptor error %s ", className), throwable);
             }
         }
     }
@@ -86,7 +87,7 @@ public class InterceptorWrapper {
                 }
             }
         } catch (Throwable throwable) {
-            AgentLogger.getLogger().severe("[femas-agent] findInterceptor error " + AgentLogger.getStackTraceString(throwable));
+            LOG.error("[femas-agent] findInterceptor error ", throwable);
         }
         return null;
     }
