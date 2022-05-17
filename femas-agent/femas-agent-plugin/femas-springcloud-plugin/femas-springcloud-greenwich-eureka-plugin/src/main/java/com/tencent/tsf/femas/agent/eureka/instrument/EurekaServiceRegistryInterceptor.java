@@ -6,6 +6,7 @@ import com.tencent.tsf.femas.agent.interceptor.InstanceMethodsAroundInterceptor;
 import com.tencent.tsf.femas.agent.interceptor.wrapper.InterceptResult;
 import com.tencent.tsf.femas.api.ExtensionManager;
 import com.tencent.tsf.femas.api.IExtensionLayer;
+import com.tencent.tsf.femas.common.RegistryEnum;
 import com.tencent.tsf.femas.common.context.Context;
 import com.tencent.tsf.femas.common.context.ContextConstant;
 import com.tencent.tsf.femas.common.context.factory.ContextFactory;
@@ -22,6 +23,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
+import static com.tencent.tsf.femas.common.context.ContextConstant.AGENT_REGISTER_TYPE_KEY;
 
 /**
  * @Author mentosL
@@ -41,6 +44,7 @@ public class EurekaServiceRegistryInterceptor implements InstanceMethodsAroundIn
     public InterceptResult beforeMethod(Method method, Object[] allArguments, Class[] argumentsTypes) throws Throwable {
         EurekaRegistration eurekaRegistration = (EurekaRegistration) allArguments[0];
         String namespace = Context.getSystemTag(contextConstant.getNamespaceId());
+        Context.putSystemTag(AGENT_REGISTER_TYPE_KEY, RegistryEnum.EUREKA.getAlias());
         EurekaClientConfig eurekaClientConfig = eurekaRegistration.getEurekaClient().getEurekaClientConfig();
         String region = eurekaClientConfig.getRegion();
         List<String> eurekaServerServiceUrls = eurekaClientConfig.getEurekaServerServiceUrls(region);
