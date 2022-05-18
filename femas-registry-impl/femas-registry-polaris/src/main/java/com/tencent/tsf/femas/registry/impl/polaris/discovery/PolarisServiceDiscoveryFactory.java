@@ -32,16 +32,16 @@ import com.tencent.tsf.femas.common.discovery.ServiceDiscoveryFactory;
 */
 public class PolarisServiceDiscoveryFactory implements ServiceDiscoveryFactory {
 
-    private static Map<String, ServiceDiscoveryClient> clientMap = new ConcurrentHashMap<>();
+    private static final Map<String, ServiceDiscoveryClient> CLIENT_MAP = new ConcurrentHashMap<>();
 
     @Override
     public ServiceDiscoveryClient getServiceDiscovery(Map<String, String> configMap) {
         String key = getKey(configMap);
-        if (!clientMap.containsKey(key)) {
+        if (!CLIENT_MAP.containsKey(key)) {
             ServiceDiscoveryClient client = new PolarisServiceDiscoveryClient(configMap);
-            clientMap.putIfAbsent(key, client);
+            CLIENT_MAP.putIfAbsent(key, client);
         }
-        return clientMap.get(key);
+        return CLIENT_MAP.get(key);
     }
 
     @Override
