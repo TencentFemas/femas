@@ -9,8 +9,10 @@ import com.tencent.tsf.femas.common.entity.ServiceInstance;
 import org.apache.dubbo.common.URL;
 import org.apache.dubbo.common.logger.Logger;
 import org.apache.dubbo.common.logger.LoggerFactory;
+import org.apache.dubbo.registry.client.InstanceAddressURL;
 import org.apache.dubbo.rpc.Invocation;
 import org.apache.dubbo.rpc.Invoker;
+import org.apache.dubbo.rpc.listener.ListenerInvokerWrapper;
 
 import java.util.HashMap;
 import java.util.List;
@@ -43,7 +45,12 @@ public class CommonUtils {
     }
 
     public static Request getFemasRequest(URL url, Invocation invocation) {
-        Service service = new Service(namespace, url.getServiceInterface());
+        String serviceName = null;
+        if (url instanceof InstanceAddressURL){
+            InstanceAddressURL instanceAddressURL = (InstanceAddressURL) url;
+            serviceName = instanceAddressURL.getInstance().getServiceName();
+        }
+        Service service = new Service(namespace, serviceName);
         Request femasRequest = new Request();
         femasRequest.setTargetMethodName(invocation.getMethodName());
         femasRequest.setInterfaceName(invocation.getMethodName());
