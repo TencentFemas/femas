@@ -39,4 +39,27 @@ public class DiscoveryService {
 
         return discoveryFactory.getServiceDiscovery(configs);
     }
+
+    /**
+     * 创建新的Discovery然后返回
+     *
+     * @param type    类型 {@link RegistryEnum}
+     * @param configs 配置
+     * @return DiscoveryClient
+     * @see ServiceDiscoveryFactory
+     */
+    public static synchronized ServiceDiscoveryClient createDiscoveryClient(RegistryEnum type, Map<String, String> configs) {
+        if (DISCOVERY_FACTORIES == null) {
+            DISCOVERY_FACTORIES = SpiService.init(ServiceDiscoveryFactory.class);
+        }
+
+        ServiceDiscoveryFactory discoveryFactory = DISCOVERY_FACTORIES.get(type.getAlias().toUpperCase());
+        if (discoveryFactory == null) {
+            throw new IllegalArgumentException(
+                    "Invalid type " + type + ". ServiceDiscoveryFactory : Type not registered.");
+        }
+
+        return discoveryFactory.getServiceDiscovery(configs);
+    }
+
 }
