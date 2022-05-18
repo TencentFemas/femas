@@ -329,6 +329,18 @@
 
             <dependency>
                 <groupId>com.tencent.tsf</groupId>
+                <artifactId>femas-extension-apache-dubbo3</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.tencent.tsf</groupId>
+                <artifactId>femas-apache-dubbo3-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.tencent.tsf</groupId>
                 <artifactId>femas-springcloud-plugin-common</artifactId>
                 <version>${project.version}</version>
             </dependency>
