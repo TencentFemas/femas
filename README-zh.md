@@ -71,7 +71,6 @@ Femas实现了对主流开源注册中心(目前支持`Consul、nacos、eureka`)
 
 ### 代码结构
 
-代码结构:
 ```
 .
 ├── femas-adaptor # paas平台插件化适配层
@@ -92,17 +91,17 @@ Femas实现了对主流开源注册中心(目前支持`Consul、nacos、eureka`)
 │   ├── femas-config-consul #consul配置实现
 │   ├── femas-config-nacos #nacos配置实现层
 │   └── femas-config-paas #开源控制台的配置实现层，开源数据面和控制面的治理规则交互
-├── femas-dependencies-bom #统一管理femas依赖版本
+├── femas-dependencies-bom # 统一管理femas依赖版本
 ├── femas-example #示例
 │   ├── feams-example-springcloud-hoxton
-│   ├── femas-example-alibaba-dubbo-consumer
-│   ├── femas-example-alibaba-dubbo-provider
-│   ├── femas-example-springcloud-2020-consumer
-│   ├── femas-example-springcloud-2020-provider
-│   ├── femas-example-springcloud-greenwich-consumer
-│   ├── femas-example-springcloud-greenwich-gateway
-│   ├── femas-example-springcloud-greenwich-provider
-│   └── femas-example-springcloud-greenwich-zuul
+│   ├── femas-example-alibaba-dubbo-consumer
+│   ├── femas-example-alibaba-dubbo-provider
+│   ├── femas-example-springcloud-2020-consumer
+│   ├── femas-example-springcloud-2020-provider
+│   ├── femas-example-springcloud-greenwich-consumer
+│   ├── femas-example-springcloud-greenwich-gateway
+│   ├── femas-example-springcloud-greenwich-provider
+│   └── femas-example-springcloud-greenwich-zuul
 ├── femas-extensions #sdk对接RPC框架层
 │   ├── femas-extension-dubbo #对接dubbo
 │   └── femas-extension-springcloud #对接springcloud
@@ -112,14 +111,14 @@ Femas实现了对主流开源注册中心(目前支持`Consul、nacos、eureka`)
 ├── femas-registry #注册中心插件化抽象层
 ├── femas-registry-impl #注册中心插件化的实现层
 │   ├── femas-registry-consul
-│   ├── femas-registry-etcd
-│   ├── femas-registry-eureka
-│   ├── femas-registry-k8s
-│   ├── femas-registry-nacos
-│   └── femas-registry-polaris
+│   ├── femas-registry-etcd
+│   ├── femas-registry-eureka
+│   ├── femas-registry-k8s
+│   ├── femas-registry-nacos
+│   └── femas-registry-polaris
 ├── femas-starters #用户的sdk的starter依赖
 │   ├── femas-dubbo-starters
-│   └── femas-springcloud-starters
+│   └── femas-springcloud-starters
 └── jacoco-aggregate
 ```
 

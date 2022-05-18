@@ -57,7 +57,7 @@ public abstract class Context {
      * @param key
      * @param value
      */
-    protected synchronized static void putSystemTag(String key, String value) {
+    public synchronized static void putSystemTag(String key, String value) {
         SYSTEM_TAGS.put(key, value);
 
         // 重新生成不可变MAP

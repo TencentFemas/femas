@@ -10,8 +10,12 @@ import com.tencent.tsf.femas.common.discovery.ServerUpdater;
 import com.tencent.tsf.femas.common.entity.EndpointStatus;
 import com.tencent.tsf.femas.common.entity.Service;
 import com.tencent.tsf.femas.common.entity.ServiceInstance;
-import com.tencent.tsf.femas.common.kubernetes.*;
+import com.tencent.tsf.femas.common.kubernetes.EndpointSubsetNS;
+import com.tencent.tsf.femas.common.kubernetes.KubernetesDiscoveryProperties;
+import com.tencent.tsf.femas.common.kubernetes.KubernetesServiceInstance;
+import com.tencent.tsf.femas.common.kubernetes.ServicePortSecureResolver;
 import com.tencent.tsf.femas.common.serialize.JSONSerializer;
+import com.tencent.tsf.femas.common.util.StringUtils;
 import com.tencent.tsf.femas.registry.impl.k8s.K8sRegistryBuilder;
 import io.fabric8.kubernetes.api.model.*;
 import io.fabric8.kubernetes.client.KubernetesClient;
@@ -19,12 +23,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toMap;
@@ -37,14 +41,14 @@ import static java.util.stream.Collectors.toMap;
  */
 public class K8sServiceDiscoveryClient extends AbstractServiceDiscoveryClient {
 
-    private static final  Logger LOGGER = LoggerFactory.getLogger(K8sServiceDiscoveryClient.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(K8sServiceDiscoveryClient.class);
     private final KubernetesClient client;
     private static volatile ContextConstant contextConstant = ContextFactory.getContextConstantInstance();
-    private static final  String default_namespace = "public";
+
+    private static final String DEFAULT_NAMESPACE = "public";
     protected volatile ServerUpdater serverListUpdater;
     private final Map<Service, List<ServiceInstance>> instances = new ConcurrentHashMap<>();
     protected AtomicBoolean serverListUpdateInProgress;
-    private final K8sRegistryBuilder builder;
 
     public static final String FEMAS_META_K8S_KEY = "femas-service-metadata";
 
@@ -58,31 +62,31 @@ public class K8sServiceDiscoveryClient extends AbstractServiceDiscoveryClient {
 
     private final KubernetesDiscoveryProperties properties;
 
-    private ServicePortSecureResolver servicePortSecureResolver;
+    private final ServicePortSecureResolver servicePortSecureResolver;
 
     private final KubernetesServerList serverListImpl;
 
-    private Map<Service, Notifier> notifiers = new ConcurrentHashMap<>();
+    private final Map<Service, Notifier> notifiers = new ConcurrentHashMap<>();
 
     public K8sServiceDiscoveryClient(Map<String, String> configMap) {
         this.serverListUpdateInProgress = new AtomicBoolean(false);
-        this.builder = new K8sRegistryBuilder();
+        K8sRegistryBuilder builder = new K8sRegistryBuilder();
         String namespace = Context.getSystemTag(contextConstant.getNamespaceId());
         this.client = builder.build(null, namespace);
         this.serverListUpdater = new SchedulePollingServerListUpdater();
         this.serverListImpl = new KubernetesServerList();
-        this.properties = builder.getKubernetesDiscoveryProperties();
+        this.properties = K8sRegistryBuilder.getKubernetesDiscoveryProperties();
         this.servicePortSecureResolver = new ServicePortSecureResolver(properties);
     }
 
     public void updateListOfServers(Service service) {
-        List<org.springframework.cloud.client.ServiceInstance> instances = new ArrayList();
-        if (this.serverListImpl != null) {
-            instances = this.serverListImpl.getUpdatedListOfServers(Optional.ofNullable(service).map(s -> s.getName()).get());
-//            LOGGER.debug("List of Servers for {} obtained from Discovery client: {}", this.getIdentifier(), servers);
+        AtomicReference<List<org.springframework.cloud.client.ServiceInstance>> listAtomicReference=new AtomicReference<>(new ArrayList<>());
+        if (this.serverListImpl != null){
+            Optional.ofNullable(service)
+                    .map(Service::getName)
+                    .ifPresent(it-> listAtomicReference.set(this.serverListImpl.getUpdatedListOfServers(it)));
         }
-
-        this.updateAllServerList(service, instances);
+        this.updateAllServerList(service, listAtomicReference.get());
     }
 
     protected void updateAllServerList(Service service, List<org.springframework.cloud.client.ServiceInstance> ls) {
@@ -103,23 +107,22 @@ public class K8sServiceDiscoveryClient extends AbstractServiceDiscoveryClient {
     }
 
     List<ServiceInstance> convert(Service service, List<org.springframework.cloud.client.ServiceInstance> ls) {
-        List<ServiceInstance> instances = new ArrayList<>();
-        ls.stream().forEach(i -> {
+        List<ServiceInstance> serviceInstanceList = new ArrayList<>();
+        ls.forEach(i -> {
             ServiceInstance instance = new ServiceInstance();
             instance.setAllMetadata(i.getMetadata());
             instance.setHost(i.getHost());
             instance.setPort(i.getPort());
             instance.setService(service);
             instance.setStatus(EndpointStatus.UP);
-            instances.add(instance);
+            serviceInstanceList.add(instance);
         });
-        return instances;
+        return serviceInstanceList;
     }
 
-    public ScheduledFuture enableAndInitLearnNewServersFeature(Service service) {
+    public ScheduledFuture<?> enableAndInitLearnNewServersFeature(Service service) {
         LOGGER.info("Using serverListUpdater {}", this.serverListUpdater.getClass().getSimpleName());
-        ScheduledFuture scheduledFuture = this.serverListUpdater.start(new Action(service));
-        return scheduledFuture;
+        return this.serverListUpdater.start(new Action(service));
     }
 
     @Override
@@ -141,8 +144,8 @@ public class K8sServiceDiscoveryClient extends AbstractServiceDiscoveryClient {
         if (instancesList != null) {
             return instancesList;
         }
-        List<org.springframework.cloud.client.ServiceInstance> instances = serverListImpl.getInitialListOfServers(service.getName());
-        instancesList = convert(service, instances);
+        List<org.springframework.cloud.client.ServiceInstance> serviceInstanceList = serverListImpl.getInitialListOfServers(service.getName());
+        instancesList = convert(service, serviceInstanceList);
         refreshServiceCache(service, instancesList);
         return instancesList;
     }
@@ -161,6 +164,7 @@ public class K8sServiceDiscoveryClient extends AbstractServiceDiscoveryClient {
             this.service = service;
         }
 
+        @Override
         public void doUpdate() {
             K8sServiceDiscoveryClient.this.updateListOfServers(service);
         }
@@ -182,15 +186,15 @@ public class K8sServiceDiscoveryClient extends AbstractServiceDiscoveryClient {
         private List<org.springframework.cloud.client.ServiceInstance> getServers(String serviceId) {
             try {
                 Assert.notNull(serviceId, "[Assertion failed] - the object argument must not be null");
-                List<EndpointSubsetNS> subsetsNS = this.getEndPointsList(serviceId).stream().map(this::getSubsetsFromEndpoints)
+                List<EndpointSubsetNS> endpointSubsetNS = this.getEndPointsList(serviceId).stream().map(this::getSubsetsFromEndpoints)
                         .collect(Collectors.toList());
-                List<org.springframework.cloud.client.ServiceInstance> instances = new ArrayList<>();
-                if (!subsetsNS.isEmpty()) {
-                    for (EndpointSubsetNS es : subsetsNS) {
-                        instances.addAll(this.getNamespaceServiceInstances(es, serviceId));
+                List<org.springframework.cloud.client.ServiceInstance> serviceInstanceList = new ArrayList<>();
+                if (!endpointSubsetNS.isEmpty()) {
+                    for (EndpointSubsetNS es : endpointSubsetNS) {
+                        serviceInstanceList.addAll(this.getNamespaceServiceInstances(es, serviceId));
                     }
                 }
-                return instances;
+                return serviceInstanceList;
             } catch (Exception e) {
                 throw new IllegalStateException(
                         "Can not get service instances from nacos, serviceId=" + serviceId,
@@ -222,16 +226,14 @@ public class K8sServiceDiscoveryClient extends AbstractServiceDiscoveryClient {
         private List<org.springframework.cloud.client.ServiceInstance> getNamespaceServiceInstances(EndpointSubsetNS es, String serviceId) {
             String namespace = es.getNamespace();
             List<EndpointSubset> subsets = es.getEndpointSubset();
-            List<org.springframework.cloud.client.ServiceInstance> instances = new ArrayList<>();
+            List<org.springframework.cloud.client.ServiceInstance> serviceInstanceList = new ArrayList<>();
             if (!subsets.isEmpty()) {
                 final io.fabric8.kubernetes.api.model.Service service = client.services().inNamespace(namespace).withName(serviceId).get();
                 final Map<String, String> serviceMetadata = this.getServiceMetadata(service);
                 KubernetesDiscoveryProperties.Metadata metadataProps = properties.getMetadata();
                 //补齐endpoint的元数据
                 ListOptions options = new ListOptions();
-                StringBuffer label = new StringBuffer(FEMAS_K8S_SELECT_LABEL_KEY);
-                label.append(serviceId);
-                options.setLabelSelector(label.toString());
+                options.setLabelSelector(FEMAS_K8S_SELECT_LABEL_KEY + serviceId);
                 final PodList podList = client.pods().list(options);
                 String primaryPortName = properties.getPrimaryPortName();
                 Map<String, String> labels = service.getMetadata().getLabels();
@@ -248,7 +250,7 @@ public class K8sServiceDiscoveryClient extends AbstractServiceDiscoveryClient {
                                 .collect(toMap(EndpointPort::getName, port -> Integer.toString(port.getPort())));
                         Map<String, String> portMetadata = getMapWithPrefixedKeys(ports, metadataProps.getPortsPrefix());
                         if (log.isDebugEnabled()) {
-                            log.debug("Adding port metadata: " + portMetadata);
+                            log.debug("Adding port metadata: {}", portMetadata);
                         }
                         endpointMetadata.putAll(portMetadata);
                     }
@@ -270,23 +272,26 @@ public class K8sServiceDiscoveryClient extends AbstractServiceDiscoveryClient {
                             instanceId = endpointAddress.getTargetRef().getUid();
                         }
                         final Map<String, String> metadata = new HashMap<>();
-                        if (Optional.of(podList).map(p -> p.getItems()).isPresent()) {
+                        if (Optional.of(podList).map(PodList::getItems).isPresent()) {
                             List<Pod> pods = podList.getItems();
-                            pods.stream().forEach(p -> {
-                                String podId = Optional.of(p.getStatus()).map(sa -> sa.getPodIP()).get();
-                                if (!StringUtils.isEmpty(podId) && podId.equalsIgnoreCase(endpointAddress.getIp())) {
-                                    ObjectMeta objectMeta = p.getMetadata();
-                                    Map<String, String> metaMap = objectMeta.getAnnotations();
-                                    String metaStr = metaMap.get(FEMAS_META_K8S_KEY);
-                                    if (!StringUtils.isEmpty(metaStr)) {
-                                        Map<String, String> stringMap = JSONSerializer.deserializeStr(Map.class, metaStr);
-                                        metadata.putAll(stringMap);
-                                    }
-                                    metadata.putAll(endpointMetadata);
-                                }
-                            });
+                            pods.forEach(p -> Optional.of(p.getStatus())
+                                    .map(PodStatus::getPodIP)
+                                    .filter(StringUtils::isNotEmpty)
+                                    .filter(podId -> podId.equalsIgnoreCase(endpointAddress.getIp()))
+                                    .ifPresent(podId -> {
+                                        ObjectMeta objectMeta = p.getMetadata();
+                                        Map<String, String> metaMap = objectMeta.getAnnotations();
+                                        String metaStr = metaMap.get(FEMAS_META_K8S_KEY);
+                                        if (!StringUtils.isEmpty(metaStr)) {
+                                            Map<String, String> stringMap = JSONSerializer.deserializeStr(Map.class, metaStr);
+                                            if (stringMap != null) {
+                                                metadata.putAll(stringMap);
+                                            }
+                                        }
+                                        metadata.putAll(endpointMetadata);
+                                    }));
                         }
-                        instances.add(new KubernetesServiceInstance(instanceId, serviceId, endpointAddress.getIp(),
+                        serviceInstanceList.add(new KubernetesServiceInstance(instanceId, serviceId, endpointAddress.getIp(),
                                 endpointPort, metadata,
                                 servicePortSecureResolver.resolve(new ServicePortSecureResolver.Input(endpointPort,
                                         service.getMetadata().getName(), service.getMetadata().getLabels(),
@@ -295,7 +300,7 @@ public class K8sServiceDiscoveryClient extends AbstractServiceDiscoveryClient {
                 }
             }
 
-            return instances;
+            return serviceInstanceList;
         }
 
         private Map<String, String> getMapWithPrefixedKeys(Map<String, String> map, String prefix) {
@@ -322,7 +327,7 @@ public class K8sServiceDiscoveryClient extends AbstractServiceDiscoveryClient {
                 Map<String, String> labelMetadata = getMapWithPrefixedKeys(service.getMetadata().getLabels(),
                         metadataProps.getLabelsPrefix());
                 if (log.isDebugEnabled()) {
-                    log.debug("Adding label metadata: " + labelMetadata);
+                    log.debug("Adding label metadata: {}", labelMetadata);
                 }
                 serviceMetadata.putAll(labelMetadata);
             }
@@ -330,7 +335,7 @@ public class K8sServiceDiscoveryClient extends AbstractServiceDiscoveryClient {
                 Map<String, String> annotationMetadata = getMapWithPrefixedKeys(service.getMetadata().getAnnotations(),
                         metadataProps.getAnnotationsPrefix());
                 if (log.isDebugEnabled()) {
-                    log.debug("Adding annotation metadata: " + annotationMetadata);
+                    log.debug("Adding annotation metadata: {}", annotationMetadata);
                 }
                 serviceMetadata.putAll(annotationMetadata);
             }
@@ -356,10 +361,9 @@ public class K8sServiceDiscoveryClient extends AbstractServiceDiscoveryClient {
 
                 if (discoveredPort == -1) {
                     if (StringUtils.hasText(primaryPortName)) {
-                        log.warn("Could not find a port named '" + primaryPortName + "', 'https', or 'http' for service '"
-                                + serviceId + "'.");
+                        log.warn("Could not find a port named '{}', 'https', or 'http' for service '{}'.", primaryPortName, serviceId);
                     } else {
-                        log.warn("Could not find a port named 'https' or 'http' for service '" + serviceId + "'.");
+                        log.warn("Could not find a port named 'https' or 'http' for service '{}'.", serviceId);
                     }
                     log.warn(
                             "Make sure that either the primary-port-name label has been added to the service, or that spring.cloud.kubernetes.discovery.primary-port-name has been configured.");
@@ -384,7 +388,6 @@ public class K8sServiceDiscoveryClient extends AbstractServiceDiscoveryClient {
 
         public void run() {
             this.scheduledFuture = enableAndInitLearnNewServersFeature(service);
-
         }
     }
 }

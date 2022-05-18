@@ -14,11 +14,7 @@ import com.tencent.tsf.femas.common.util.TimeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 
@@ -34,23 +30,29 @@ import static java.util.concurrent.Executors.newCachedThreadPool;
 public class ConsulServiceDiscoveryClient extends AbstractServiceDiscoveryClient {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ConsulServiceDiscoveryClient.class);
+
     /**
      * default watch timeout in second
      */
     private static final int DEFAULT_WATCH_TIMEOUT = 55;
+
     private final ConsulClient client;
+
     private final String token;
-    private ExecutorService notifierExecutor = newCachedThreadPool(
+
+    private final ExecutorService notifierExecutor = newCachedThreadPool(
             new NamedThreadFactory("femas-service-com.tencent.tsf.femas.registry.impl.nacos.discovery-consul-notifier",
                     true));
+
     private volatile Map<Service, ConsulNotifier> notifiers = new ConcurrentHashMap<>();
+
     private volatile Map<Service, List<ServiceInstance>> instances = new ConcurrentHashMap<>();
 
     public ConsulServiceDiscoveryClient(Map<String, String> configMap) {
 
         String host = checkNotNull(REGISTRY_HOST, configMap.get(REGISTRY_HOST));
         String portString = checkNotNull(REGISTRY_PORT, configMap.get(REGISTRY_PORT));
-        Integer port = Integer.parseInt(portString);
+        int port = Integer.parseInt(portString);
 
         this.token = configMap.get(CONSUL_ACCESS_TOKEN);
         this.client = new ConsulClient(host, port);
@@ -62,7 +64,7 @@ public class ConsulServiceDiscoveryClient extends AbstractServiceDiscoveryClient
         notifierExecutor.submit(notifier);
         notifiers.put(service, notifier);
 
-        LOGGER.info("Successfully subscribe Service : " + service);
+        LOGGER.info("Successfully subscribe Service : {}", service);
     }
 
     @Override
@@ -70,7 +72,7 @@ public class ConsulServiceDiscoveryClient extends AbstractServiceDiscoveryClient
         ConsulNotifier notifier = notifiers.remove(service);
         notifier.stop();
 
-        LOGGER.info("Successfully unsubscribe Service : " + service);
+        LOGGER.info("Successfully unsubscribe Service : {}", service);
     }
 
     @Override
@@ -80,9 +82,7 @@ public class ConsulServiceDiscoveryClient extends AbstractServiceDiscoveryClient
             return instancesList;
         }
 
-        /**
-         * 可能consul初始化较慢，这个时候可以避免每次都从consul那边读取数据
-         */
+        // 可能consul初始化较慢，这个时候可以避免每次都从consul那边读取数据
         if (subscribed.contains(service) && initialized.contains(service)) {
             return Collections.emptyList();
         }
@@ -169,11 +169,13 @@ public class ConsulServiceDiscoveryClient extends AbstractServiceDiscoveryClient
 
     private class ConsulNotifier implements Runnable {
 
-        private Service service;
-        private long consulIndex = -1;
-        private volatile boolean running;
-        private ConsulServiceDiscoveryClient consulServiceDiscoveryClient;
+        private final Service service;
 
+        private long consulIndex = -1;
+
+        private volatile boolean running;
+
+        private final ConsulServiceDiscoveryClient consulServiceDiscoveryClient;
 
         ConsulNotifier(Service service, ConsulServiceDiscoveryClient consulServiceDiscoveryClient) {
             this.service = service;
@@ -188,20 +190,16 @@ public class ConsulServiceDiscoveryClient extends AbstractServiceDiscoveryClient
                     processService();
                     TimeUtil.silentlySleep(500);
                 } catch (Exception e) {
-                    LOGGER.error("Process Consul service com.tencent.tsf.femas.registry.impl.nacos.discovery failed.",
-                            e);
+                    LOGGER.error("Process Consul service com.tencent.tsf.femas.registry.impl.nacos.discovery failed.", e);
                 }
             }
         }
 
         private void processService() {
-            Response<List<HealthService>> response = getHealthServices(service.getName(), consulIndex,
-                    DEFAULT_WATCH_TIMEOUT);
+            Response<List<HealthService>> response = getHealthServices(service.getName(), consulIndex, DEFAULT_WATCH_TIMEOUT);
             Long currentIndex = response.getConsulIndex();
             if (currentIndex != null && currentIndex != consulIndex) {
-                LOGGER.info(
-                        "Consul service com.tencent.tsf.femas.registry.impl.nacos.discovery client index changed. Current index = "
-                                + currentIndex + ", last index = " + consulIndex);
+                LOGGER.info("Consul service com.tencent.tsf.femas.registry.impl.nacos.discovery client index changed. Current index = {}, last index ={} ", currentIndex, consulIndex);
 
                 consulIndex = currentIndex;
                 List<HealthService> healthServices = response.getValue();
@@ -217,16 +215,10 @@ public class ConsulServiceDiscoveryClient extends AbstractServiceDiscoveryClient
                 List<ServiceInstance> oldServiceInstances = instances.get(service);
                 consulServiceDiscoveryClient.refreshServiceCache(service, serviceInstances);
                 consulServiceDiscoveryClient.notifyListeners(service, serviceInstances, oldServiceInstances);
-                LOGGER.info(
-                        "Consul service com.tencent.tsf.femas.registry.impl.nacos.discovery client instances changed. Current instances = "
-                                + serviceInstances + ", old instances = " + oldServiceInstances);
+                LOGGER.info("Consul service com.tencent.tsf.femas.registry.impl.nacos.discovery client instances changed. Current instances = {}, old instances = {}", serviceInstances, oldServiceInstances);
 
-                /**
-                 * 第一次需要设置初始化成功标志位
-                 */
-                if (!initialized.contains(service)) {
-                    initialized.add(service);
-                }
+                //第一次需要设置初始化成功标志位
+                initialized.add(service);
             }
         }
 

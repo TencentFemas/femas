@@ -50,16 +50,16 @@ public class PolarisServiceDiscoveryClient extends AbstractServiceDiscoveryClien
     protected volatile ServerUpdater serverListUpdater;
     private final PolarisServerList serverListImpl;
     private final Map<Service, List<ServiceInstance>> instances = new ConcurrentHashMap<>();
-    private Map<Service, Notifier> notifiers = new ConcurrentHashMap<>();
+    private final Map<Service, Notifier> notifiers = new ConcurrentHashMap<>();
     protected AtomicBoolean serverListUpdateInProgress;
-    private ConsumerAPI consumerAPI = null;
+    private final ConsumerAPI consumerApi;
     
     public PolarisServiceDiscoveryClient(Map<String, String> configMap) {
         //TODO Builder?
         this.serverListUpdateInProgress = new AtomicBoolean(false);
         this.serverListUpdater = new SchedulePollingServerListUpdater();
         this.serverListImpl = new PolarisServerList();
-        consumerAPI = DiscoveryAPIFactory.createConsumerAPI();
+        consumerApi = DiscoveryAPIFactory.createConsumerAPI();
     }
     
     /** 
@@ -71,21 +71,20 @@ public class PolarisServiceDiscoveryClient extends AbstractServiceDiscoveryClien
         if (instancesList != null) {
             return instancesList;
         }
-        List<Instance> instances = serverListImpl.getInitialListOfServers(service.getNamespace(), service.getName());
-        instancesList = convert(service, instances);
+        List<Instance> instanceList = serverListImpl.getInitialListOfServers(service.getNamespace(), service.getName());
+        instancesList = convert(service, instanceList);
         refreshServiceCache(service, instancesList);
         return instancesList;
     }
 
     @Override
     public List<String> getAllServices() {
-        List<Instance> instances = Arrays.stream(consumerAPI.getAllInstance(new GetAllInstancesRequest()).getInstances())
+        List<Instance> instanceList = Arrays.stream(consumerApi.getAllInstance(new GetAllInstancesRequest()).getInstances())
                 .collect(Collectors.toList());
-        if (CollectionUtil.isNotEmpty(instances)) {
+        if (CollectionUtil.isNotEmpty(instanceList)) {
             return Collections.emptyList();
         }
-
-        return instances
+        return instanceList
                 .stream()
                 .map(Instance::getService)
                 .collect(Collectors.toList());
@@ -110,20 +109,19 @@ public class PolarisServiceDiscoveryClient extends AbstractServiceDiscoveryClien
         notifiers.remove(service);
     }
     
-    public ScheduledFuture enableAndInitLearnNewServersFeature(Service service) {
+    public ScheduledFuture<?> enableAndInitLearnNewServersFeature(Service service) {
         LOGGER.info("Using serverListUpdater {}", this.serverListUpdater.getClass().getSimpleName());
-        ScheduledFuture scheduledFuture = this.serverListUpdater.start(new Action(service));
-        return scheduledFuture;
+        return this.serverListUpdater.start(new Action(service));
     }
     
     public void updateListOfServers(Service service) {
-        List<Instance> instances = new ArrayList<>();
+        List<Instance> instanceList = new ArrayList<>();
         if (this.serverListImpl != null) {
-            instances = this.serverListImpl.getUpdatedListOfServers(service.getNamespace(), service.getName());
+            instanceList = this.serverListImpl.getUpdatedListOfServers(service.getNamespace(), service.getName());
 //            LOGGER.debug("List of Servers for {} obtained from Discovery client: {}", this.getIdentifier(), servers);
         }
 
-        this.updateAllServerList(service, instances);
+        this.updateAllServerList(service, instanceList);
     }
     
     protected void updateAllServerList(Service service, List<Instance> ls) {
@@ -144,20 +142,22 @@ public class PolarisServiceDiscoveryClient extends AbstractServiceDiscoveryClien
     }
     
     List<ServiceInstance> convert(Service service, List<Instance> ls) {
-        List<ServiceInstance> instances = new ArrayList<>();
-        ls.stream().forEach(i -> {
+        List<ServiceInstance> serviceInstanceList = new ArrayList<>();
+        ls.forEach(i -> {
             ServiceInstance instance = new ServiceInstance();
             instance.setAllMetadata(i.getMetadata());
             instance.setHost(i.getHost());
             instance.setPort(i.getPort());
             instance.setService(service);
             instance.setStatus(EndpointStatus.UP);
-            instances.add(instance);
+            serviceInstanceList.add(instance);
         });
-        return instances;
+        return serviceInstanceList;
     }
-    
-    //server级别监听
+
+    /**
+     * server级别监听
+     */
     class PolarisServerList {
         
         public List<Instance> getInitialListOfServers(String namespace, String serviceName) {
@@ -174,9 +174,9 @@ public class PolarisServiceDiscoveryClient extends AbstractServiceDiscoveryClien
                 GetAllInstancesRequest request = new GetAllInstancesRequest();
                 request.setNamespace(namespace);
                 request.setService(serviceName);
-                InstancesResponse instancesResponse = consumerAPI.getAllInstance(request);
-                Instance[] instances = instancesResponse.getInstances();
-                return Arrays.stream(instances).collect(Collectors.toList());
+                InstancesResponse instancesResponse = consumerApi.getAllInstance(request);
+                Instance[] instanceArray = instancesResponse.getInstances();
+                return Arrays.stream(instanceArray).collect(Collectors.toList());
             } catch (Exception e) {
                 throw new IllegalStateException(
                         "Can not get service instances from polaris, namespace="+namespace+",serviceName="+serviceName, e);
@@ -192,6 +192,7 @@ public class PolarisServiceDiscoveryClient extends AbstractServiceDiscoveryClien
             this.service = service;
         }
 
+        @Override
         public void doUpdate() {
             PolarisServiceDiscoveryClient.this.updateListOfServers(service);
         }

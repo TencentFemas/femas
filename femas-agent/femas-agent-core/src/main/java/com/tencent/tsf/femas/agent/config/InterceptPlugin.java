@@ -19,6 +19,7 @@ package com.tencent.tsf.femas.agent.config;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tencent.tsf.femas.agent.exception.InterceptorWrapperException;
+import com.tencent.tsf.femas.agent.tools.AgentLogger;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.matcher.ElementMatchers;
@@ -32,6 +33,7 @@ import static net.bytebuddy.matcher.ElementMatchers.*;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class InterceptPlugin {
+    private static final AgentLogger LOG = AgentLogger.getLogger(InterceptPlugin.class);
 
     /**
      * 类名
@@ -178,6 +180,7 @@ public class InterceptPlugin {
             junction = nameContainsIgnoreCase(methodName);
         }
         if (junction == null) {
+            LOG.info("get Plugin Matcher failed,illegal plugin config...");
             throw new InterceptorWrapperException("get Plugin Matcher failed,illegal plugin config...");
         }
         if (takesArguments != null) {

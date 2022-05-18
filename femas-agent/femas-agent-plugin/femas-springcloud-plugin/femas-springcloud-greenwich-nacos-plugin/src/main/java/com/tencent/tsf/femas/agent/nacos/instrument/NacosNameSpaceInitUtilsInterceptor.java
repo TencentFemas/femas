@@ -34,7 +34,6 @@ public class NacosNameSpaceInitUtilsInterceptor implements StaticMethodsAroundIn
 
     private volatile ContextConstant contextConstant = ContextFactory.getContextConstantInstance();
 
-
     @Override
     public InterceptResult beforeMethod(Class clazz, Method method, Object[] allArguments, Class[] parameterTypes) throws Throwable {
         InterceptResult result = new InterceptResult();

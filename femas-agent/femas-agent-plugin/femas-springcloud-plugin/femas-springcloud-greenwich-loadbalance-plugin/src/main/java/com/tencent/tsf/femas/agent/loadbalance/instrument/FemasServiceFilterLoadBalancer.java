@@ -1,4 +1,4 @@
-package com.tencent.tsf.femas.agent.common;
+package com.tencent.tsf.femas.agent.loadbalance.instrument;
 
 import com.netflix.loadbalancer.Server;
 

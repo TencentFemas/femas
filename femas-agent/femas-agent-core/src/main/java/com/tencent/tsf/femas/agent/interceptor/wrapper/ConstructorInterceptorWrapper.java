@@ -40,6 +40,7 @@ public class ConstructorInterceptorWrapper {
         try {
             interceptor = InterceptorClassLoaderCache.load(constructorInterceptorClassName, classLoader);
         } catch (Throwable t) {
+            LOG.error("[femas-agent] create constructorInterceptorClassName:" + constructorInterceptorClassName + "failed.", t);
             throw new InterceptorWrapperException("[femas-agent] create constructorInterceptorClassName:" + constructorInterceptorClassName + "failed.", t);
         }
     }

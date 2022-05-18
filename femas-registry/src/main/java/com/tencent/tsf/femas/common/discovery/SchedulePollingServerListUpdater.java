@@ -1,14 +1,15 @@
 package com.tencent.tsf.femas.common.discovery;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Date;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @Author leoziltong
@@ -24,18 +25,23 @@ public class SchedulePollingServerListUpdater implements ServerUpdater {
     /**
      * 默认更新延迟
      */
-    private static long LISTOFSERVERS_CACHE_UPDATE_DELAY = 1000L;
+    private static final long LIST_OF_SERVERS_CACHE_UPDATE_DELAY = 1000L;
+
     /**
      * 默认更新间隔
      */
-    private static long LISTOFSERVERS_CACHE_REPEAT_INTERVAL = 30000L;
+    private static final long LIST_OF_SERVERS_CACHE_REPEAT_INTERVAL = 30000L;
+
     private final AtomicBoolean isActive;
+
     private final long initialDelayMs;
+
     private final long refreshIntervalMs;
+
     private volatile long lastUpdated;
 
     public SchedulePollingServerListUpdater() {
-        this(LISTOFSERVERS_CACHE_UPDATE_DELAY, LISTOFSERVERS_CACHE_REPEAT_INTERVAL);
+        this(LIST_OF_SERVERS_CACHE_UPDATE_DELAY, LIST_OF_SERVERS_CACHE_REPEAT_INTERVAL);
     }
 
     public SchedulePollingServerListUpdater(long initialDelayMs, long refreshIntervalMs) {
@@ -48,25 +54,23 @@ public class SchedulePollingServerListUpdater implements ServerUpdater {
     /**
      * lazy init executor
      *
-     * @return
+     * @return ScheduledThreadPoolExecutor
      */
     private static ScheduledThreadPoolExecutor getRefreshExecutor() {
-        return SchedulePollingServerListUpdater.LazyHolder._serverListRefreshExecutor;
+        return SchedulePollingServerListUpdater.LazyHolder.serverListRefreshExecutor;
     }
 
     @Override
     public synchronized ScheduledFuture<?> start(final UpdateAction updateAction) {
 
         if (this.isActive.compareAndSet(false, true)) {
-            Runnable wrapperRunnable = new Runnable() {
-                public void run() {
-                    if (SchedulePollingServerListUpdater.this.isActive.get()) {
-                        try {
-                            updateAction.doUpdate();
-                            SchedulePollingServerListUpdater.this.lastUpdated = System.currentTimeMillis();
-                        } catch (Exception var) {
-                            logger.warn("Failed one update cycle", var);
-                        }
+            Runnable wrapperRunnable = () -> {
+                if (SchedulePollingServerListUpdater.this.isActive.get()) {
+                    try {
+                        updateAction.doUpdate();
+                        SchedulePollingServerListUpdater.this.lastUpdated = System.currentTimeMillis();
+                    } catch (Exception exception) {
+                        logger.warn("Failed one update cycle", exception);
                     }
                 }
             };
@@ -74,19 +78,19 @@ public class SchedulePollingServerListUpdater implements ServerUpdater {
                     .scheduleWithFixedDelay(wrapperRunnable, this.initialDelayMs, this.refreshIntervalMs,
                             TimeUnit.MILLISECONDS);
         } else {
-            logger.info("Already active");
+            logger.info("SchedulePollingServerListUpdater already active");
         }
         return null;
     }
 
     @Override
-    public synchronized void stop(ScheduledFuture scheduledFuture) {
+    public synchronized void stop(ScheduledFuture<?> scheduledFuture) {
         if (this.isActive.compareAndSet(true, false)) {
             if (scheduledFuture != null) {
                 scheduledFuture.cancel(true);
             }
         } else {
-            logger.info("Not active");
+            logger.info("SchedulePollingServerListUpdater is not active");
         }
 
     }
@@ -108,37 +112,37 @@ public class SchedulePollingServerListUpdater implements ServerUpdater {
 
     private static class LazyHolder {
 
-        static ScheduledThreadPoolExecutor _serverListRefreshExecutor = null;
-        private static Thread _shutdownThread;
+        static ScheduledThreadPoolExecutor serverListRefreshExecutor;
+
+        private static final Thread SHUTDOWN_THREAD;
 
         static {
             int coreSize = Runtime.getRuntime().availableProcessors();
             ThreadFactory factory = (new ThreadFactoryBuilder()).setNameFormat("PollingServerListUpdater-%d")
                     .setDaemon(true).build();
-            _serverListRefreshExecutor = new ScheduledThreadPoolExecutor(coreSize, factory);
-            _shutdownThread = new Thread(new Runnable() {
-                public void run() {
-                    logger.info("Shutting down the Executor Pool for PollingServerListUpdater");
-                    SchedulePollingServerListUpdater.LazyHolder.shutdownExecutorPool();
-                }
+            serverListRefreshExecutor = new ScheduledThreadPoolExecutor(coreSize, factory);
+            SHUTDOWN_THREAD = new Thread(() -> {
+                logger.info("Shutting down the Executor Pool for PollingServerListUpdater");
+                LazyHolder.shutdownExecutorPool();
             });
-            Runtime.getRuntime().addShutdownHook(_shutdownThread);
+            Runtime.getRuntime().addShutdownHook(SHUTDOWN_THREAD);
         }
 
         private LazyHolder() {
         }
 
         private static void shutdownExecutorPool() {
-            if (_serverListRefreshExecutor != null) {
-                _serverListRefreshExecutor.shutdown();
-                if (_shutdownThread != null) {
+            if (serverListRefreshExecutor != null) {
+                serverListRefreshExecutor.shutdown();
+                if (SHUTDOWN_THREAD != null) {
                     try {
-                        Runtime.getRuntime().removeShutdownHook(_shutdownThread);
-                    } catch (IllegalStateException var1) {
+                        Runtime.getRuntime().removeShutdownHook(SHUTDOWN_THREAD);
+                    } catch (IllegalStateException exception) {
+                        logger.warn("shutdownExecutorPool error", exception);
                     }
                 }
             }
-
         }
     }
+
 }
