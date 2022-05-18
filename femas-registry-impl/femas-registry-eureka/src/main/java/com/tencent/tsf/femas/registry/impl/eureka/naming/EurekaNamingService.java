@@ -18,6 +18,7 @@ import com.netflix.discovery.shared.transport.EurekaHttpClient;
 import com.netflix.discovery.shared.transport.EurekaHttpResponse;
 import com.tencent.tsf.femas.common.httpclient.HttpStatus;
 import com.tencent.tsf.femas.registry.impl.eureka.serviceregistry.EurekaBeatReactor;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -26,8 +27,9 @@ import java.util.Objects;
  */
 public class EurekaNamingService {
 
-    private EurekaHttpClient eurekaHttpClient;
-    private EurekaBeatReactor beatReactor;
+    private final EurekaHttpClient eurekaHttpClient;
+
+    private final EurekaBeatReactor beatReactor;
 
 
     public EurekaNamingService(EurekaHttpClient eurekaHttpClient) {
@@ -56,7 +58,7 @@ public class EurekaNamingService {
         if (Objects.requireNonNull(HttpStatus.resolve(eurekaHttpResponse.getStatusCode())).is2xxSuccessful()) {
             return eurekaHttpResponse.getEntity().getInstances();
         }
-        return null;
+        return Collections.emptyList();
     }
 
     public List<Application> getAllApplications() {
@@ -65,7 +67,7 @@ public class EurekaNamingService {
                 .is2xxSuccessful()) {
             return applicationsEurekaHttpResponse.getEntity().getRegisteredApplications();
         }
-        return null;
+        return Collections.emptyList();
     }
 
     public EurekaBeatReactor getBeatReactor() {
