@@ -19,9 +19,10 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
-import static com.tencent.tsf.femas.common.RegistryConstants.*;
+import static com.tencent.tsf.femas.common.RegistryConstants.REGISTRY_HOST;
 import static com.tencent.tsf.femas.common.RegistryConstants.REGISTRY_PORT;
 import static com.tencent.tsf.femas.common.util.CommonUtils.checkNotNull;
 
@@ -33,11 +34,9 @@ import static com.tencent.tsf.femas.common.util.CommonUtils.checkNotNull;
  */
 public class EurekaServiceDiscoveryClient extends AbstractServiceDiscoveryClient {
 
-    private static final  Logger LOGGER = LoggerFactory.getLogger(EurekaServiceDiscoveryClient.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(EurekaServiceDiscoveryClient.class);
 
     private final EurekaNamingService eurekaNamingService;
-
-    private final EurekaRegistryBuilder builder;
 
     protected volatile ServerUpdater serverListUpdater;
 
@@ -47,29 +46,28 @@ public class EurekaServiceDiscoveryClient extends AbstractServiceDiscoveryClient
 
     private final EurekaServerList serverListImpl;
 
-    private Map<Service, Notifier> notifiers = new ConcurrentHashMap<>();
+    private final Map<Service, Notifier> notifiers = new ConcurrentHashMap<>();
 
     public EurekaServiceDiscoveryClient(Map<String, String> configMap) {
         String host = checkNotNull(REGISTRY_HOST, configMap.get(REGISTRY_HOST));
         String portString = checkNotNull(REGISTRY_PORT, configMap.get(REGISTRY_PORT));
         Integer port = Integer.parseInt(portString);
         this.serverListUpdateInProgress = new AtomicBoolean(false);
-        this.builder = new EurekaRegistryBuilder();
+        EurekaRegistryBuilder builder = new EurekaRegistryBuilder();
         this.eurekaNamingService = builder.describeClient(() -> host.concat(":").concat(String.valueOf(port)), "application", false, null);
         this.serverListUpdater = new SchedulePollingServerListUpdater();
         this.serverListImpl = new EurekaServerList();
     }
 
     public void updateListOfServers(Service service) {
-        List<InstanceInfo> instances = new ArrayList();
+        AtomicReference<List<InstanceInfo>> instancesReference = new AtomicReference<>();
         if (this.serverListImpl != null) {
-            instances = this.serverListImpl.getUpdatedListOfServers(Optional.ofNullable(service).map(s -> s.getName()).get());
-//            LOGGER.debug("List of Servers for {} obtained from Discovery client: {}", this.getIdentifier(), servers);
+            Optional.ofNullable(service)
+                    .map(Service::getName)
+                    .ifPresent(it -> instancesReference.set(this.serverListImpl.getUpdatedListOfServers(it)));
         }
-        if (instances == null) {
-            instances = new ArrayList<>();
-        }
-        this.updateAllServerList(service, instances);
+        instancesReference.compareAndSet(null, new ArrayList<>());
+        this.updateAllServerList(service, instancesReference.get());
     }
 
     protected void updateAllServerList(Service service, List<InstanceInfo> ls) {
@@ -90,23 +88,22 @@ public class EurekaServiceDiscoveryClient extends AbstractServiceDiscoveryClient
     }
 
     List<ServiceInstance> convert(Service service, List<InstanceInfo> ls) {
-        List<ServiceInstance> instances = new ArrayList<>();
-        ls.stream().forEach(i -> {
+        List<ServiceInstance> serviceInstances = new ArrayList<>();
+        ls.forEach(i -> {
             ServiceInstance instance = new ServiceInstance();
             instance.setAllMetadata(i.getMetadata());
             instance.setHost(i.getIPAddr());
             instance.setPort(i.getPort());
             instance.setService(service);
             instance.setStatus(EndpointStatus.getTypeByName(i.getStatus().name()));
-            instances.add(instance);
+            serviceInstances.add(instance);
         });
-        return instances;
+        return serviceInstances;
     }
 
-    public ScheduledFuture enableAndInitLearnNewServersFeature(Service service) {
+    public ScheduledFuture<?> enableAndInitLearnNewServersFeature(Service service) {
         LOGGER.info("Using serverListUpdater {}", this.serverListUpdater.getClass().getSimpleName());
-        ScheduledFuture scheduledFuture = this.serverListUpdater.start(new Action(service));
-        return scheduledFuture;
+        return this.serverListUpdater.start(new Action(service));
     }
 
     @Override
@@ -128,11 +125,11 @@ public class EurekaServiceDiscoveryClient extends AbstractServiceDiscoveryClient
         if (instancesList != null) {
             return instancesList;
         }
-        List<InstanceInfo> instances = serverListImpl.getInitialListOfServers(service.getName());
-        if (instances == null) {
-            instances = new ArrayList<>();
+        List<InstanceInfo> instanceInfoList = serverListImpl.getInitialListOfServers(service.getName());
+        if (instanceInfoList == null) {
+            instanceInfoList = new ArrayList<>();
         }
-        instancesList = convert(service, instances);
+        instancesList = convert(service, instanceInfoList);
         refreshServiceCache(service, instancesList);
         return instancesList;
     }
@@ -143,9 +140,7 @@ public class EurekaServiceDiscoveryClient extends AbstractServiceDiscoveryClient
         if (CollectionUtil.isNotEmpty(applications)) {
             List<InstanceInfo> instanceInfos = new ArrayList<>();
 
-            applications.forEach(application-> {
-                instanceInfos.addAll(application.getInstances());
-            });
+            applications.forEach(application -> instanceInfos.addAll(application.getInstances()));
 
             return instanceInfos
                     .stream()
@@ -163,12 +158,15 @@ public class EurekaServiceDiscoveryClient extends AbstractServiceDiscoveryClient
             this.service = service;
         }
 
+        @Override
         public void doUpdate() {
             EurekaServiceDiscoveryClient.this.updateListOfServers(service);
         }
     }
 
-    //server级别监听
+    /**
+     * server级别监听
+     */
     class EurekaServerList {
         public List<InstanceInfo> getInitialListOfServers(String serviceId) {
             return getServers(serviceId);
@@ -180,9 +178,7 @@ public class EurekaServiceDiscoveryClient extends AbstractServiceDiscoveryClient
 
         private List<InstanceInfo> getServers(String serviceId) {
             try {
-                List<InstanceInfo> instances = eurekaNamingService
-                        .getApplications(serviceId);
-                return instances;
+                return eurekaNamingService.getApplications(serviceId);
             } catch (Exception e) {
                 throw new IllegalStateException(
                         "Can not get service instances from eureka, serviceId=" + serviceId,
