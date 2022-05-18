@@ -139,9 +139,7 @@ public class EurekaServiceDiscoveryClient extends AbstractServiceDiscoveryClient
         List<Application> applications = eurekaNamingService.getAllApplications();
         if (CollectionUtil.isNotEmpty(applications)) {
             List<InstanceInfo> instanceInfos = new ArrayList<>();
-
             applications.forEach(application -> instanceInfos.addAll(application.getInstances()));
-
             return instanceInfos
                     .stream()
                     .map(InstanceInfo::getAppName)

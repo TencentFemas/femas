@@ -84,7 +84,6 @@ public class PolarisServiceDiscoveryClient extends AbstractServiceDiscoveryClien
         if (CollectionUtil.isNotEmpty(instanceList)) {
             return Collections.emptyList();
         }
-
         return instanceList
                 .stream()
                 .map(Instance::getService)
