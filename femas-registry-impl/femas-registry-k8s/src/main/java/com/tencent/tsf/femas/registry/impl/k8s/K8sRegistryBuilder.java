@@ -26,9 +26,12 @@ public class K8sRegistryBuilder extends AbstractRegistryBuilder<KubernetesClient
 
     private static final  Logger log = LoggerFactory.getLogger(K8sRegistryBuilder.class);
 
-    private static KubernetesClientProperties kubernetesClientProperties;
-    private static KubernetesDiscoveryProperties kubernetesDiscoveryProperties;
-    private static KubernetesClient kubernetesClient;
+    private static final KubernetesClientProperties kubernetesClientProperties;
+
+    private static final KubernetesDiscoveryProperties kubernetesDiscoveryProperties;
+
+    private static final KubernetesClient kubernetesClient;
+
     private static Config config;
 
 
@@ -41,7 +44,7 @@ public class K8sRegistryBuilder extends AbstractRegistryBuilder<KubernetesClient
     }
 
     @Override
-    public KubernetesClient build(Supplier serverAddressSupplier, String namespace) {
+    public KubernetesClient build(Supplier<String> serverAddressSupplier, String namespace) {
         return kubernetesClient;
     }
 
