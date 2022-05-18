@@ -1,0 +1,1 @@
+femasRouterFactory=com.tencent.tsf.femas.extensions.dubbo.router.FemasApacheDubboRouterFactory
