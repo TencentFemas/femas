@@ -1,35 +1,30 @@
 package com.tencent.tsf.femas.registry.impl.consul.config;
 
-import static com.tencent.tsf.femas.common.util.CommonUtils.checkNotNull;
-import static com.tencent.tsf.femas.common.util.CommonUtils.getOrDefault;
-import static com.tencent.tsf.femas.registry.impl.consul.ConsulConstants.CONSUL_ACCESS_TOKEN;
-import static com.tencent.tsf.femas.registry.impl.consul.ConsulConstants.CONSUL_ENABLE_TTL;
-import static com.tencent.tsf.femas.registry.impl.consul.ConsulConstants.CONSUL_FAIL_FAST;
-import static com.tencent.tsf.femas.registry.impl.consul.ConsulConstants.CONSUL_TTL;
-import static com.tencent.tsf.femas.registry.impl.consul.ConsulConstants.DEFAULT_CONSUL_ENABLE_TTL;
-import static com.tencent.tsf.femas.registry.impl.consul.ConsulConstants.DEFAULT_CONSUL_FAIL_FAST;
-import static com.tencent.tsf.femas.registry.impl.consul.ConsulConstants.DEFAULT_CONSUL_TTL;
-
 import com.tencent.tsf.femas.common.RegistryConstants;
 import com.tencent.tsf.femas.common.util.StringUtils;
-import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Map;
+
+import static com.tencent.tsf.femas.common.util.CommonUtils.checkNotNull;
+import static com.tencent.tsf.femas.common.util.CommonUtils.getOrDefault;
+import static com.tencent.tsf.femas.registry.impl.consul.ConsulConstants.*;
 
 
 public class ConsulConfig {
 
     private static final Logger logger = LoggerFactory.getLogger(ConsulConfig.class);
 
-    private String token;
-    private String host;
-    private int port;
-    private boolean enableTtl;
-    private String ttl;
-    private boolean failFast;
+    private final String token;
+    private final String host;
+    private final int port;
+    private final boolean enableTtl;
+    private final String ttl;
+    private final boolean failFast;
 
-    private Map<String, String> properties;
-    private ConsulHealthCheckConfig healthCheckConfig;
+    private final Map<String, String> properties;
+    private final ConsulHealthCheckConfig healthCheckConfig;
 
     public ConsulConfig(Map<String, String> configMap) {
         this.host = checkNotNull("CONSUL_HOST", configMap.get(RegistryConstants.REGISTRY_HOST));
@@ -48,6 +43,7 @@ public class ConsulConfig {
                 consulEnableTtl = Boolean.parseBoolean(configMap.get(CONSUL_ENABLE_TTL));
             }
         } catch (Exception e) {
+            logger.error("Error with config consul heartbeats: {0}", e);
         }
         this.enableTtl = getOrDefault(consulEnableTtl, DEFAULT_CONSUL_ENABLE_TTL);
 
@@ -59,6 +55,7 @@ public class ConsulConfig {
                 enableFailFast = Boolean.parseBoolean(configMap.get(CONSUL_FAIL_FAST));
             }
         } catch (Exception e) {
+            logger.error("Error with config consul failFast: {0}", e);
         }
         this.failFast = getOrDefault(enableFailFast, DEFAULT_CONSUL_FAIL_FAST);
 
@@ -67,7 +64,7 @@ public class ConsulConfig {
         this.properties = configMap;
         this.healthCheckConfig = new ConsulHealthCheckConfig(configMap);
 
-        logger.info("Import config : " + this);
+        logger.info("Import config : {}", this);
     }
 
     public String getToken() {
