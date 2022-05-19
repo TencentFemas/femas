@@ -1,53 +1,38 @@
 package com.tencent.tsf.femas.agent.tools;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.io.*;
 import java.text.MessageFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.logging.*;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class AgentLogger {
 
     private static final AgentLogger LOG = AgentLogger.getLogger(AgentLogger.class);
     static Logger logger = Logger.getLogger("AgentLogger");
-    private static final String DEFAULT_AGENT_LOG = System.getProperty("user.home")+ File.separator+"log"+ File.separator+"femas"+ File.separator+"agent.log";
+    private static final String DEFAULT_AGENT_LOG = System.getProperty("user.home") + File.separator + "log" + File.separator + "femas" + File.separator + "agent.log";
     private static final String AGENT_LOG_PATH_KEY = "femas_agent_log_path";
 
-    private static PrintStream printStream;
+    private static PrintStream printStream = System.out;
+
     private final String messagePattern;
 
     static {
-        FileHandler fh;
         try {
-            printStream = System.out;
-            String filePath = System.getProperty(AGENT_LOG_PATH_KEY);
-            if(StringUtils.isBlank(filePath)){
-                filePath = DEFAULT_AGENT_LOG;
-            }
-            fh = new FileHandler(filePath);
-            logger.addHandler(fh);
-            fh.setFormatter(new Formatter() {
-                @Override
-                public String format(LogRecord record) {
-                    StringBuilder builder = new StringBuilder();
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS");
-                    Date now = new Date();
-                    String dateStr = sdf.format(now);
-                    builder.append(dateStr).append(" - ");
-                    builder.append(record.getLevel()).append(" - ");
-                    builder.append(record.getMessage());
-                    builder.append("\r\n");
-                    return builder.toString();
-                }
-            });
+            loggerStrategy();
         } catch (SecurityException e) {
             LOG.error("Initialize logger error:", e);
         } catch (IOException e) {
             LOG.error("Initialize logger error:", e);
         }
+    }
+
+    private static void loggerStrategy() throws IOException {
+        //FileHandlerBuilder.timeSplitFileHandlerBuilder().setLogger(logger).setDelay(10L).build();
+//        FileHandlerBuilder.defaultBuilder().build();
+        FileHandler fileHandler = FileHandlerBuilder.sizeSpiltLoggerFileHandlerBuilder().setByteNum(0).setByteNum(1).build();
+        logger.addHandler(fileHandler);
     }
 
     public static AgentLogger getLogger(Class<?> clazz) {
