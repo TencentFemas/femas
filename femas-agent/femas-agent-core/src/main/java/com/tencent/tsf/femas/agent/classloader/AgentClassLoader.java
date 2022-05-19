@@ -86,8 +86,6 @@ public class AgentClassLoader extends ClassLoader {
         classpath = new LinkedList<File>();
         classpath.add(new File(AgentPackagePathScanner.getPath(), "plugins"));
         classpath.add(new File(AgentPackagePathScanner.getPath(), "plugins/libs"));
-        //classpath.add(new File(agentDictionary, "activations"));
-        //classpath.add(agentDictionary);
     }
 
     @Override
