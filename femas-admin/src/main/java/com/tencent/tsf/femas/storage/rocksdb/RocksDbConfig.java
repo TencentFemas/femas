@@ -28,7 +28,7 @@ public class RocksDbConfig {
     private boolean asyncSnapshot = false;
     private boolean sync = false;
 
-    private boolean disableWAL = true;
+    private boolean disableWAL = false;
     private String dbPath;
 
     public static RocksDbConfig.RocksDbConfigBuilder builder() {
