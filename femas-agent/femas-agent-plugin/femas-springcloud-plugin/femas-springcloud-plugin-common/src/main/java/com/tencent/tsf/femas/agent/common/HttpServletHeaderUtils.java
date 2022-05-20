@@ -1,5 +1,6 @@
 package com.tencent.tsf.femas.agent.common;
 
+import com.tencent.tsf.femas.agent.tools.AbstractAgentLogger;
 import com.tencent.tsf.femas.agent.tools.AgentLogger;
 import com.tencent.tsf.femas.common.context.Context;
 import com.tencent.tsf.femas.common.context.ContextConstant;
@@ -15,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HttpServletHeaderUtils extends AbstractRequestMetaUtils {
-    private static final AgentLogger LOG = AgentLogger.getLogger(HttpServletHeaderUtils.class);
+    private static final AbstractAgentLogger LOG = AgentLogger.getLogger(HttpServletHeaderUtils.class);
 
 
     private volatile ContextConstant contextConstant = ContextFactory.getContextConstantInstance();

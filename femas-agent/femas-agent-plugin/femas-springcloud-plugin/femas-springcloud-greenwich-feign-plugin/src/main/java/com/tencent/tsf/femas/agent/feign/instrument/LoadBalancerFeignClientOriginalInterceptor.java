@@ -1,6 +1,7 @@
 package com.tencent.tsf.femas.agent.feign.instrument;
 
 import com.tencent.tsf.femas.agent.interceptor.OriginalInterceptor;
+import com.tencent.tsf.femas.agent.tools.AbstractAgentLogger;
 import com.tencent.tsf.femas.agent.tools.AgentLogger;
 import com.tencent.tsf.femas.api.ExtensionManager;
 import com.tencent.tsf.femas.api.IExtensionLayer;
@@ -28,7 +29,7 @@ import java.util.concurrent.Callable;
  * @Date: 2022/4/7 16:26
  */
 public class LoadBalancerFeignClientOriginalInterceptor implements OriginalInterceptor {
-    private static final AgentLogger LOG = AgentLogger.getLogger(LoadBalancerFeignClientOriginalInterceptor.class);
+    private static final AbstractAgentLogger LOG = AgentLogger.getLogger(LoadBalancerFeignClientOriginalInterceptor.class);
 
     private volatile ContextConstant contextConstant = ContextFactory.getContextConstantInstance();
     private String namespace = Context.getSystemTag(contextConstant.getNamespaceId());

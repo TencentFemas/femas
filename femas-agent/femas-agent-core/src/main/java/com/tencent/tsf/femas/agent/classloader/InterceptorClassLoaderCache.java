@@ -1,5 +1,6 @@
 package com.tencent.tsf.femas.agent.classloader;
 
+import com.tencent.tsf.femas.agent.tools.AbstractAgentLogger;
 import com.tencent.tsf.femas.agent.tools.AgentLogger;
 
 import java.util.Map;
@@ -21,7 +22,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * @Author leoziltong@tencent.com
  */
 public class InterceptorClassLoaderCache {
-    private static final AgentLogger LOG = AgentLogger.getLogger(InterceptorClassLoaderCache.class);
+    private static final AbstractAgentLogger LOG = AgentLogger.getLogger(InterceptorClassLoaderCache.class);
 
     private static volatile Map<ClassLoader, AgentClassLoader> agentClassLoaderMap = new ConcurrentHashMap<>();
     private static ConcurrentHashMap<String, Object> INSTANCE_CACHE = new ConcurrentHashMap<>();

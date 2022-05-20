@@ -21,6 +21,7 @@ package com.tencent.tsf.femas.agent.interceptor.wrapper;
 import com.tencent.tsf.femas.agent.classloader.InterceptorClassLoaderCache;
 import com.tencent.tsf.femas.agent.exception.InterceptorWrapperException;
 import com.tencent.tsf.femas.agent.interceptor.InstanceMethodsAroundInterceptor;
+import com.tencent.tsf.femas.agent.tools.AbstractAgentLogger;
 import com.tencent.tsf.femas.agent.tools.AgentLogger;
 import net.bytebuddy.implementation.bind.annotation.*;
 
@@ -34,7 +35,7 @@ import java.util.concurrent.Callable;
  */
 public class InstanceMethodsInterceptorWrapper {
 
-    private static final AgentLogger LOG = AgentLogger.getLogger(InstanceMethodsInterceptorWrapper.class);
+    private static final AbstractAgentLogger LOG = AgentLogger.getLogger(InstanceMethodsInterceptorWrapper.class);
 
     private InstanceMethodsAroundInterceptor<InterceptResult> interceptor;
 
@@ -75,14 +76,14 @@ public class InstanceMethodsInterceptorWrapper {
             try {
                 interceptor.handleMethodException(method, allArguments, method.getParameterTypes(), t);
             } catch (Throwable t2) {
-                LOG.error("[femas-agent] error  class:" + obj.getClass() + " handleMethodException:" + method.getName() + "intercept failure" ,t);
+                LOG.error("[femas-agent] error  class:" + obj.getClass() + " handleMethodException:" + method.getName() + "intercept failure", t);
             }
             throw t;
         } finally {
             try {
                 ret = interceptor.afterMethod(method, allArguments, method.getParameterTypes(), ret);
             } catch (Throwable t) {
-                LOG.error("[femas-agent] error  class:" + obj.getClass() + " afterMethod:" + method.getName() + "intercept failure" ,t);
+                LOG.error("[femas-agent] error  class:" + obj.getClass() + " afterMethod:" + method.getName() + "intercept failure", t);
             }
         }
         return ret;

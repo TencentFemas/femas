@@ -19,10 +19,9 @@ package com.tencent.tsf.femas.agent.loadbalance.instrument;
 import com.tencent.tsf.femas.agent.common.discovery.ConsulServerConverter;
 import com.tencent.tsf.femas.agent.common.discovery.EurekaServerConverter;
 import com.tencent.tsf.femas.agent.common.discovery.NacosServerConverter;
-import com.tencent.tsf.femas.agent.exception.InterceptorWrapperException;
+import com.tencent.tsf.femas.agent.tools.AbstractAgentLogger;
 import com.tencent.tsf.femas.agent.tools.AgentLogger;
 import com.tencent.tsf.femas.api.ExtensionManager;
-import com.tencent.tsf.femas.common.RegistryEnum;
 import com.tencent.tsf.femas.common.context.Context;
 import org.apache.commons.collections.CollectionUtils;
 
@@ -40,7 +39,7 @@ import static com.tencent.tsf.femas.common.context.ContextConstant.AGENT_REGISTE
  */
 public class RibbonRouteLoadbalancerFactory {
 
-    private static final AgentLogger LOG = AgentLogger.getLogger(RibbonRouteLoadbalancerFactory.class);
+    private static final AbstractAgentLogger LOG = AgentLogger.getLogger(RibbonRouteLoadbalancerFactory.class);
 
     private final static Context commonContext = ExtensionManager.getExtensionLayer().getCommonContext();
 

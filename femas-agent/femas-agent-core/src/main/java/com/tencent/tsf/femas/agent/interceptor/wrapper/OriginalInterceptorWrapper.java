@@ -17,6 +17,7 @@
 package com.tencent.tsf.femas.agent.interceptor.wrapper;
 
 import com.tencent.tsf.femas.agent.classloader.InterceptorClassLoaderCache;
+import com.tencent.tsf.femas.agent.tools.AbstractAgentLogger;
 import com.tencent.tsf.femas.agent.tools.AgentLogger;
 import net.bytebuddy.implementation.bind.annotation.*;
 
@@ -35,7 +36,7 @@ import java.util.concurrent.Callable;
  */
 public class OriginalInterceptorWrapper {
 
-    private static final AgentLogger LOG = AgentLogger.getLogger(OriginalInterceptorWrapper.class);
+    private static final AbstractAgentLogger LOG = AgentLogger.getLogger(OriginalInterceptorWrapper.class);
 
     private String className;
     private Object classInterceptor = null;

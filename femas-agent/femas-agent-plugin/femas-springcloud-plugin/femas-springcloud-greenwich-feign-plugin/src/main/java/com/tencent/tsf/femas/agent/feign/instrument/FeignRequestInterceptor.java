@@ -16,12 +16,10 @@
  */
 package com.tencent.tsf.femas.agent.feign.instrument;
 
-import com.tencent.tsf.femas.agent.classloader.InterceptorClassLoaderCache;
-import com.tencent.tsf.femas.agent.interceptor.ConstructorInterceptor;
 import com.tencent.tsf.femas.agent.interceptor.StaticMethodsAroundInterceptor;
 import com.tencent.tsf.femas.agent.interceptor.wrapper.InterceptResult;
+import com.tencent.tsf.femas.agent.tools.AbstractAgentLogger;
 import com.tencent.tsf.femas.agent.tools.AgentLogger;
-import com.tencent.tsf.femas.api.CommonExtensionLayer;
 import com.tencent.tsf.femas.api.ExtensionManager;
 import com.tencent.tsf.femas.common.context.Context;
 import com.tencent.tsf.femas.common.util.StringUtils;
@@ -40,7 +38,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Date: 2022/4/26 15:10
  */
 public class FeignRequestInterceptor implements StaticMethodsAroundInterceptor<InterceptResult> {
-    private static final AgentLogger LOG = AgentLogger.getLogger(FeignRequestInterceptor.class);
+    private static final AbstractAgentLogger LOG = AgentLogger.getLogger(FeignRequestInterceptor.class);
 
     private volatile Context commonContext = ExtensionManager.getExtensionLayer().getCommonContext();
 

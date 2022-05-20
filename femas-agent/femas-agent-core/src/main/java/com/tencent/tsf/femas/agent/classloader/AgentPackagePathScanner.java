@@ -17,6 +17,7 @@
  */
 package com.tencent.tsf.femas.agent.classloader;
 
+import com.tencent.tsf.femas.agent.tools.AbstractAgentLogger;
 import com.tencent.tsf.femas.agent.tools.AgentLogger;
 
 import java.io.File;
@@ -29,7 +30,7 @@ import java.net.URL;
  * agent classloader path scanner
  */
 public class AgentPackagePathScanner {
-    private static final AgentLogger LOG = AgentLogger.getLogger(AgentPackagePathScanner.class);
+    private static final AbstractAgentLogger LOG = AgentLogger.getLogger(AgentPackagePathScanner.class);
 
     private static File AGENT_PACKAGE_PATH;
 

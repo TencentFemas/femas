@@ -9,7 +9,7 @@ import java.util.Set;
  * @Author leoziltong@tencent.com
  */
 public class CacheProxy {
-    private static final AgentLogger LOG = AgentLogger.getLogger(CacheProxy.class);
+    private static final AbstractAgentLogger LOG = AgentLogger.getLogger(CacheProxy.class);
 
     private static final String CrossClassLoaderCacheClassName = "com.tencent.tsf.femas.agent.classloader.CrossClassLoaderCache.CrossClassLoaderCache";
 

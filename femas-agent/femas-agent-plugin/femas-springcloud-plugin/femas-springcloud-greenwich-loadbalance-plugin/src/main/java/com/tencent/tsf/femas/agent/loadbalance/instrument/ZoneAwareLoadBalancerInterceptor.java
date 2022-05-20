@@ -18,9 +18,8 @@ package com.tencent.tsf.femas.agent.loadbalance.instrument;
 
 import com.tencent.tsf.femas.agent.interceptor.InstanceMethodsAroundInterceptor;
 import com.tencent.tsf.femas.agent.interceptor.wrapper.InterceptResult;
+import com.tencent.tsf.femas.agent.tools.AbstractAgentLogger;
 import com.tencent.tsf.femas.agent.tools.AgentLogger;
-import com.tencent.tsf.femas.api.ExtensionManager;
-import com.tencent.tsf.femas.common.context.Context;
 
 import java.lang.reflect.Method;
 
@@ -29,7 +28,7 @@ import java.lang.reflect.Method;
  * @Date: 2022/4/8 11:35
  */
 public class ZoneAwareLoadBalancerInterceptor implements InstanceMethodsAroundInterceptor<InterceptResult> {
-    private static final AgentLogger LOG = AgentLogger.getLogger(ZoneAwareLoadBalancerInterceptor.class);
+    private static final AbstractAgentLogger LOG = AgentLogger.getLogger(ZoneAwareLoadBalancerInterceptor.class);
 
     @Override
     public InterceptResult beforeMethod(Method method, Object[] allArguments, Class<?>[] argumentsTypes) throws Throwable {

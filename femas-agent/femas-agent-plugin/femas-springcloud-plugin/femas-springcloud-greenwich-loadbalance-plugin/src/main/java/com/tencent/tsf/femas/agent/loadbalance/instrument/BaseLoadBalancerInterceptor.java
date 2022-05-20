@@ -18,11 +18,9 @@ package com.tencent.tsf.femas.agent.loadbalance.instrument;
 
 import com.netflix.loadbalancer.Server;
 import com.tencent.tsf.femas.agent.interceptor.InstanceMethodsAroundInterceptor;
-import com.tencent.tsf.femas.agent.interceptor.wrapper.ConstructorInterceptorWrapper;
 import com.tencent.tsf.femas.agent.interceptor.wrapper.InterceptResult;
+import com.tencent.tsf.femas.agent.tools.AbstractAgentLogger;
 import com.tencent.tsf.femas.agent.tools.AgentLogger;
-import com.tencent.tsf.femas.api.ExtensionManager;
-import com.tencent.tsf.femas.common.context.Context;
 
 import java.lang.reflect.Method;
 import java.util.List;
@@ -33,7 +31,7 @@ import java.util.List;
  */
 public class BaseLoadBalancerInterceptor implements InstanceMethodsAroundInterceptor<InterceptResult> {
 
-    private static final AgentLogger LOG = AgentLogger.getLogger(BaseLoadBalancerInterceptor.class);
+    private static final AbstractAgentLogger LOG = AgentLogger.getLogger(BaseLoadBalancerInterceptor.class);
 
     @Override
     public InterceptResult beforeMethod(Method method, Object[] allArguments, Class<?>[] argumentsTypes) throws Throwable {

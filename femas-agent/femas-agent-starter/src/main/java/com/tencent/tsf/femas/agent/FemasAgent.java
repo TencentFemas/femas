@@ -16,16 +16,12 @@
  */
 package com.tencent.tsf.femas.agent;
 
-import java.lang.instrument.Instrumentation;
-import java.security.AllPermission;
-import java.util.Optional;
-
 import com.tencent.tsf.femas.agent.config.AgentPluginLoader;
 import com.tencent.tsf.femas.agent.config.GlobalInterceptPluginConfig;
 import com.tencent.tsf.femas.agent.config.InterceptPlugin;
 import com.tencent.tsf.femas.agent.config.MethodType;
 import com.tencent.tsf.femas.agent.interceptor.wrapper.*;
-
+import com.tencent.tsf.femas.agent.tools.AbstractAgentLogger;
 import com.tencent.tsf.femas.agent.tools.AgentLogger;
 import com.tencent.tsf.femas.agent.tools.JvmRuntimeInfo;
 import net.bytebuddy.ByteBuddy;
@@ -44,6 +40,10 @@ import net.bytebuddy.matcher.ElementMatchers;
 import net.bytebuddy.utility.JavaModule;
 import org.apache.commons.lang3.StringUtils;
 
+import java.lang.instrument.Instrumentation;
+import java.security.AllPermission;
+import java.util.Optional;
+
 import static net.bytebuddy.matcher.ElementMatchers.*;
 
 /**
@@ -52,7 +52,7 @@ import static net.bytebuddy.matcher.ElementMatchers.*;
  */
 public class FemasAgent {
 
-    private static final AgentLogger LOG = AgentLogger.getLogger(FemasAgent.class);
+    private static final AbstractAgentLogger LOG = AgentLogger.getLogger(FemasAgent.class);
 
 
     public static void premain(String agentArgs, Instrumentation inst) {

@@ -21,6 +21,7 @@ package com.tencent.tsf.femas.agent.interceptor.wrapper;
 import com.tencent.tsf.femas.agent.classloader.InterceptorClassLoaderCache;
 import com.tencent.tsf.femas.agent.exception.InterceptorWrapperException;
 import com.tencent.tsf.femas.agent.interceptor.InstanceMethodsAroundInterceptor;
+import com.tencent.tsf.femas.agent.tools.AbstractAgentLogger;
 import com.tencent.tsf.femas.agent.tools.AgentLogger;
 import net.bytebuddy.implementation.bind.annotation.*;
 
@@ -33,7 +34,7 @@ import java.lang.reflect.Method;
  */
 public class InstanceMethodsInterceptOverrideArgsWrapper {
 
-    private static final AgentLogger LOG = AgentLogger.getLogger(InstanceMethodsInterceptOverrideArgsWrapper.class);
+    private static final AbstractAgentLogger LOG = AgentLogger.getLogger(InstanceMethodsInterceptOverrideArgsWrapper.class);
 
     private InstanceMethodsAroundInterceptor<InterceptResult> interceptor;
 

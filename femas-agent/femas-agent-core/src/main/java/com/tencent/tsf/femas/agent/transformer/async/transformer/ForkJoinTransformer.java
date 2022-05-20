@@ -1,5 +1,6 @@
 package com.tencent.tsf.femas.agent.transformer.async.transformer;
 
+import com.tencent.tsf.femas.agent.tools.AbstractAgentLogger;
 import com.tencent.tsf.femas.agent.tools.AgentLogger;
 import com.tencent.tsf.femas.agent.transformer.async.ClassInfo;
 import javassist.CannotCompileException;
@@ -17,7 +18,7 @@ import java.util.Set;
  * @Author leoziltong@tencent.com
  */
 public class ForkJoinTransformer extends AbstractTransformer {
-    private static final AgentLogger LOG = AgentLogger.getLogger(ForkJoinTransformer.class);
+    private static final AbstractAgentLogger LOG = AgentLogger.getLogger(ForkJoinTransformer.class);
 
     private static Set<String> EXECUTOR_CLASS_NAMES = new HashSet<>();
 

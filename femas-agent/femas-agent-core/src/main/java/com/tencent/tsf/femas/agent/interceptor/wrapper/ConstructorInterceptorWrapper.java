@@ -21,6 +21,7 @@ package com.tencent.tsf.femas.agent.interceptor.wrapper;
 import com.tencent.tsf.femas.agent.classloader.InterceptorClassLoaderCache;
 import com.tencent.tsf.femas.agent.exception.InterceptorWrapperException;
 import com.tencent.tsf.femas.agent.interceptor.ConstructorInterceptor;
+import com.tencent.tsf.femas.agent.tools.AbstractAgentLogger;
 import com.tencent.tsf.femas.agent.tools.AgentLogger;
 import net.bytebuddy.implementation.bind.annotation.AllArguments;
 import net.bytebuddy.implementation.bind.annotation.RuntimeType;
@@ -32,7 +33,7 @@ import net.bytebuddy.implementation.bind.annotation.This;
  * @Author leoziltong@tencent.com
  */
 public class ConstructorInterceptorWrapper {
-    private static final AgentLogger LOG = AgentLogger.getLogger(ConstructorInterceptorWrapper.class);
+    private static final AbstractAgentLogger LOG = AgentLogger.getLogger(ConstructorInterceptorWrapper.class);
 
     private ConstructorInterceptor interceptor;
 
