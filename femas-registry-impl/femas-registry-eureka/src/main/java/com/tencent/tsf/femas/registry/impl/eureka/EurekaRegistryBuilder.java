@@ -21,17 +21,18 @@ public class EurekaRegistryBuilder extends AbstractRegistryBuilder<EurekaNamingS
 
     private static final  Logger log = LoggerFactory.getLogger(EurekaRegistryBuilder.class);
 
-    private static final  String eureka_suffix = "/eureka";
-    private static final  String eureka_prefix = "http://";
+    private static final  String EUREKA_SUFFIX = "/eureka";
+
+    private static final  String EUREKA_PREFIX = "http://";
 
     @Override
-    public EurekaNamingService build(Supplier serverAddressSupplier, String namespace)
+    public EurekaNamingService build(Supplier<String> serverAddressSupplier, String namespace)
             throws FemasRegisterDescribeException {
         try {
             RestTemplateTransportClientFactory restTemplateTransportClientFactory =
                     new RestTemplateTransportClientFactory();
             EurekaEndpoint eurekaEndpoint = new DefaultEndpoint(
-                    eureka_prefix.concat(String.valueOf(serverAddressSupplier.get()).concat(eureka_suffix)));
+                    EUREKA_PREFIX.concat(serverAddressSupplier.get().concat(EUREKA_SUFFIX)));
             EurekaHttpClient eurekaHttpClient = restTemplateTransportClientFactory.newClient(eurekaEndpoint);
             return new EurekaNamingService(eurekaHttpClient);
         } catch (Exception e) {

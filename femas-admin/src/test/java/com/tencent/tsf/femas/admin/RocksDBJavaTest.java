@@ -1,6 +1,7 @@
-package com.tencent.tsf.femas.storage.rocksdb;
+package com.tencent.tsf.femas.admin;
 
 import com.tencent.tsf.femas.storage.StorageResult;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -8,6 +9,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.tencent.tsf.femas.storage.rocksdb.StringRawKVStoreManager;
+import org.junit.Test;
 import org.rocksdb.ColumnFamilyDescriptor;
 import org.rocksdb.ColumnFamilyHandle;
 import org.rocksdb.ColumnFamilyOptions;
@@ -34,7 +38,8 @@ public class RocksDBJavaTest {
 
     RocksDB rocksDB;
 
-    public static void main(String[] args) throws Exception {
+    @Test
+    public void test() throws Exception {
         StringRawKVStoreManager rocksDbKvStore = new StringRawKVStoreManager();
         StorageResult<List<Map<String, String>>> sr = rocksDbKvStore.scanAll();
 

@@ -104,7 +104,7 @@ public class EtcdServiceDiscoveryClient extends AbstractServiceDiscoveryClient {
             }
 
         } catch (InterruptedException | ExecutionException | JsonProcessingException e) {
-            e.printStackTrace();
+            logger.error("Error with getAllServices: {0}", e);
         }
 
         return services;
@@ -131,6 +131,7 @@ public class EtcdServiceDiscoveryClient extends AbstractServiceDiscoveryClient {
             this.service = service;
         }
 
+        @Override
         public void doUpdate() {
             EtcdServiceDiscoveryClient.this.updateListOfServers(service);
         }

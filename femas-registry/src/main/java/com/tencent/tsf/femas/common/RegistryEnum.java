@@ -7,15 +7,40 @@ package com.tencent.tsf.femas.common;
  * @Version 1.0
  */
 public enum RegistryEnum {
+    /**
+     * consul
+     */
     CONSUL("CONSUL"),
+
+    /**
+     * Eureka
+     */
     EUREKA("EUREKA"),
+
+    /**
+     * Nacos
+     */
     NACOS("NACOS"),
+
+    /**
+     * k8s
+     */
     KUBERNETES("K8S"),
+
+    /**
+     * polaris
+     */
     POLARIS("POLARIS"),
+
+    /**
+     * etcd
+     */
     ETCD("ETCD");
 
-
-    String alias;
+    /**
+     * alias
+     */
+    private final String alias;
 
     RegistryEnum(String alias) {
         this.alias = alias;
@@ -24,4 +49,5 @@ public enum RegistryEnum {
     public String getAlias() {
         return alias;
     }
+
 }

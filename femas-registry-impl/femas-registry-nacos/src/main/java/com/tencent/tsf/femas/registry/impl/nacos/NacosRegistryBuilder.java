@@ -21,9 +21,9 @@ public class NacosRegistryBuilder extends AbstractRegistryBuilder<NamingService>
     private static final  Logger log = LoggerFactory.getLogger(NacosRegistryBuilder.class);
 
     @Override
-    public NamingService build(Supplier serverAddressSupplier, String namespace) throws FemasRegisterDescribeException {
+    public NamingService build(Supplier<String> serverAddressSupplier, String namespace) throws FemasRegisterDescribeException {
         Properties properties = new Properties();
-        properties.setProperty(PropertyKeyConst.SERVER_ADDR, (String) serverAddressSupplier.get());
+        properties.setProperty(PropertyKeyConst.SERVER_ADDR, serverAddressSupplier.get());
         properties.setProperty(PropertyKeyConst.NAMESPACE, namespace);
         properties.setProperty("namingClientBeatThreadCount", String.valueOf(Runtime.getRuntime().availableProcessors()));
         try {

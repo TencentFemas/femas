@@ -11,6 +11,7 @@
         <module>femas-example-springcloud-greenwich-zuul</module>
         <module>femas-example-springcloud-greenwich-gateway</module>
         <module>feams-example-springcloud-hoxton</module>
+        <module>femas-example-apache-dubbo3</module>
     </modules>
 
     <parent>
