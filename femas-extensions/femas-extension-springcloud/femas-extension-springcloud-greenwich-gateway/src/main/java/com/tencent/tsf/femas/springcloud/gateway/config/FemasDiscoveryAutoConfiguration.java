@@ -25,22 +25,83 @@ import com.tencent.tsf.femas.common.serviceregistry.AbstractServiceRegistryMetad
 import com.tencent.tsf.femas.common.serviceregistry.AbstractServiceRegistryMetadataFactory;
 import com.tencent.tsf.femas.springcloud.gateway.discovery.DiscoveryServerConverter;
 import com.tencent.tsf.femas.springcloud.gateway.discovery.nacos.NacosServerConverter;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.BeansException;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
 import org.springframework.cloud.client.ConditionalOnDiscoveryEnabled;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import com.alibaba.cloud.nacos.discovery.NacosDiscoveryAutoConfiguration;
 
+import java.lang.reflect.Constructor;
+
 
 @Configuration
 @AutoConfigureBefore(NacosDiscoveryAutoConfiguration.class)
 public class FemasDiscoveryAutoConfiguration {
-
+    private static final Log log = LogFactory.getLog(FemasDiscoveryAutoConfiguration.class);
     @Configuration
     @ConditionalOnDiscoveryEnabled
     @ConditionalOnNacosDiscoveryEnabled
     static class FemasNacosConfiguration {
+        @Bean("converterAdapter")
+        public DiscoveryServerConverter nacosConverterAdapter() {
+            return new NacosServerConverter();
+        }
+    }
+
+
+    @Configuration
+    @ConditionalOnDiscoveryEnabled
+    @ConditionalOnNacosDiscoveryEnabled
+    @ConditionalOnClass(name = "com.alibaba.cloud.nacos.NacosServiceManager")
+    static class FemasNacosAlibabaHighConfiguration implements ApplicationContextAware {
+
+        private ApplicationContext context;
+
+        private volatile AbstractServiceRegistryMetadata serviceRegistryMetadata = AbstractServiceRegistryMetadataFactory
+                .getServiceRegistryMetadata();
+
+        @Bean
+        @Primary
+        public NacosDiscoveryProperties nacosProperties() {
+            NacosDiscoveryProperties nacosDiscoveryProperties = new NacosDiscoveryProperties();
+            nacosDiscoveryProperties.getMetadata().putAll(serviceRegistryMetadata.getRegisterMetadataMap());
+            return nacosDiscoveryProperties;
+        }
+
+        @Bean
+        @Primary
+        public NacosServiceDiscovery nacosServiceDiscovery(NacosDiscoveryProperties nacosDiscoveryProperties) {
+            nacosDiscoveryProperties.getMetadata().putAll(serviceRegistryMetadata.getRegisterMetadataMap());
+            Object nacosServiceManager = context.getBean("nacosServiceManager");
+            try {
+                Constructor<NacosServiceDiscovery> constructor = NacosServiceDiscovery.class.getConstructor(NacosDiscoveryProperties.class,nacosServiceManager.getClass());
+                return constructor.newInstance(nacosDiscoveryProperties,nacosServiceManager);
+            } catch (Exception e) {
+                log.error("create NacosServiceDiscovery error.",e);
+            }
+            return null;
+        }
+
+        @Override
+        public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+            context = applicationContext;
+        }
+    }
+
+
+    @Configuration
+    @ConditionalOnDiscoveryEnabled
+    @ConditionalOnNacosDiscoveryEnabled
+    @ConditionalOnMissingClass("com.alibaba.cloud.nacos.NacosServiceManager")
+    static class FemasNacosAlibabaLowConfiguration {
 
         private volatile AbstractServiceRegistryMetadata serviceRegistryMetadata = AbstractServiceRegistryMetadataFactory
                 .getServiceRegistryMetadata();
@@ -59,12 +120,8 @@ public class FemasDiscoveryAutoConfiguration {
             nacosDiscoveryProperties.getMetadata().putAll(serviceRegistryMetadata.getRegisterMetadataMap());
             return new NacosServiceDiscovery(nacosDiscoveryProperties);
         }
-
-        @Bean("converterAdapter")
-        public DiscoveryServerConverter nacosConverterAdapter() {
-            return new NacosServerConverter();
-        }
     }
+
 
     @Bean("registryUrl")
     public String registryUrl(NacosDiscoveryProperties nacosDiscoveryProperties) {
