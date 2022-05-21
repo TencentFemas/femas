@@ -1,10 +1,18 @@
 package com.tencent.tsf.femas.agent.tools;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.FileHandler;
+import java.util.logging.Formatter;
+import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 /**
@@ -18,9 +26,19 @@ public class DateRollingLogger {
     private Logger logger;
 
     /**
-     * 先前的handler
+     * 先前的handler,用于更新FileHandler时进行移除
      */
     private FileHandler pre;
+
+    /**
+     * 保证第一次不需要更换fileHandler
+     */
+    private final AtomicBoolean startUp = new AtomicBoolean(false);
+
+    /**
+     * 生成日志的路径
+     */
+    private final String logFileLocationFormat = System.getProperty("user.home") + File.separator + "log" + File.separator + "femas" + File.separator + "agent-%s.log";
 
     private final ScheduledThreadPoolExecutor scheduledThreadPoolExecutor = new ScheduledThreadPoolExecutor(1, r -> {
         Thread thread = new Thread(r);
@@ -29,37 +47,94 @@ public class DateRollingLogger {
         return thread;
     });
 
+    /**
+     * 获得今天剩余时间
+     *
+     * @return 今天剩余的时间
+     */
     public static long getTodayLeft() {
         LocalDateTime midnight = LocalDateTime.now().plusDays(1).withHour(0).withMinute(0).withSecond(0).withNano(0);
         return ChronoUnit.SECONDS.between(LocalDateTime.now(), midnight);
     }
 
-    public DateRollingLogger() {
-
+    @SuppressWarnings("unused")
+    private DateRollingLogger() {
+        // private
     }
 
-    private FileHandler newFileHandler() {
-        return null;
+    public DateRollingLogger(Logger logger) {
+        this.logger = logger;
     }
 
+    /**
+     * 创建新的FileHandler
+     *
+     * @return 新的FileHandler
+     * @throws IOException 创建异常
+     */
+    private FileHandler newFileHandler() throws IOException {
+        // 每次new一次,避免线程安全
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        FileHandler fileHandler = new FileHandler(String.format(logFileLocationFormat, dateFormat.format(new Date())), true);
+
+        // 每次new一次,避免使用的DateFormat出现线程安全的问题
+        fileHandler.setFormatter(new Formatter() {
+            @Override
+            public String format(LogRecord logRecord) {
+                StringBuilder builder = new StringBuilder();
+                DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS");
+                Date now = new Date();
+                String dateStr = dateFormat.format(now);
+                builder.append(dateStr).append(" - ");
+                builder.append(logRecord.getLevel()).append(" - ");
+                builder.append(logRecord.getMessage());
+                builder.append("\r\n");
+                return builder.toString();
+            }
+        });
+        return fileHandler;
+    }
+
+    /**
+     * 开始定时更新
+     */
     public void start() {
-        scheduledThreadPoolExecutor.execute();
+        if (this.logger == null) {
+            throw new NullPointerException("logger can't be null");
+        }
+        try {
+            pre = newFileHandler();
+            logger.addHandler(pre);
+            scheduledThreadPoolExecutor.execute(new RefreshFileHandler());
+        } catch (Exception e) {
+            logger.warning(e.getMessage());
+        }
     }
 
-
-    class Fresh implements Runnable {
+    class RefreshFileHandler implements Runnable {
         @Override
         public void run() {
             try {
-                updateFileHandler(newFileHandler());
+                if (Boolean.TRUE.equals(startUp.get())) {
+                    updateFileHandler(newFileHandler());
+                    return;
+                }
+                startUp.compareAndSet(false, true);
+            } catch (Exception e) {
+                logger.warning(e.getMessage());
             } finally {
                 scheduledThreadPoolExecutor.schedule(this, getTodayLeft(), TimeUnit.SECONDS);
             }
         }
 
+        /**
+         * 更新FileHandler
+         *
+         * @param fileHandler 新的FileHandler
+         */
         private void updateFileHandler(FileHandler fileHandler) {
-            this.logger.addHandler(fileHandler);
-            this.logger.removeHandler(pre);
+            logger.addHandler(fileHandler);
+            logger.removeHandler(pre);
             pre.close();
             pre = fileHandler;
         }
