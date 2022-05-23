@@ -7,11 +7,12 @@ import com.tencent.tsf.femas.entity.rule.FemasCircuitBreakerRule;
 import com.tencent.tsf.femas.entity.rule.RuleModel;
 import com.tencent.tsf.femas.entity.rule.RuleSearch;
 import com.tencent.tsf.femas.entity.rule.breaker.CircuitBreakerModel;
-import com.tencent.tsf.femas.enums.ServiceInvokeEnum;
+import com.tencent.tsf.femas.service.rule.BreakerService;
 import com.tencent.tsf.femas.storage.DataOperation;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +29,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class BreakerEndpoint extends AbstractBaseEndpoint {
 
     private final DataOperation dataOperation;
+
+    @Autowired
+    BreakerService breakerService;
 
     public BreakerEndpoint(DataOperation dataOperation) {
         this.dataOperation = dataOperation;
@@ -48,21 +52,20 @@ public class BreakerEndpoint extends AbstractBaseEndpoint {
 
     @PostMapping("fetchBreakerRule")
     @ApiOperation("查询服务熔断规则")
-    public Result<PageService<List<FemasCircuitBreakerRule>>> fetchBreakerRule(
-            @RequestBody CircuitBreakerModel serviceModel) {
-        return executor.invoke(ServiceInvokeEnum.ApiInvokeEnum.SERVICE_BREAK_FETCH, serviceModel);
+    public Result<PageService<FemasCircuitBreakerRule>> fetchBreakerRule(@RequestBody CircuitBreakerModel serviceModel) {
+        return executor.process(()->breakerService.fetchBreakerRule(serviceModel));
     }
 
     @PostMapping("deleteBreakerRule")
     @ApiOperation("删除服务熔断规则")
     public Result deleteBreakerRule(@RequestBody RuleModel ruleModel) {
-        return executor.invoke(ServiceInvokeEnum.ApiInvokeEnum.SERVICE_BREAK_DELETE, ruleModel);
+        return executor.process(()->breakerService.deleteBreakerRule(ruleModel));
     }
 
     @PostMapping("configureBreakerRule")
     @ApiOperation("修改、新建熔断规则")
     public Result configureBreakerRule(@RequestBody FemasCircuitBreakerRule breakerRule) {
-        return executor.invoke(ServiceInvokeEnum.ApiInvokeEnum.SERVICE_BREAK_CONFIG, breakerRule);
+        return executor.process(()->breakerService.configureBreakerRule(breakerRule));
     }
 
 }

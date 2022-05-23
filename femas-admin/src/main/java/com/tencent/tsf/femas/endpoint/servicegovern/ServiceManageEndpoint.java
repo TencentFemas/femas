@@ -32,13 +32,14 @@ import com.tencent.tsf.femas.entity.registry.ServiceOverview;
 import com.tencent.tsf.femas.entity.service.EventTypeEnum;
 import com.tencent.tsf.femas.entity.service.ServiceEventModel;
 import com.tencent.tsf.femas.entity.service.ServiceEventView;
-import com.tencent.tsf.femas.enums.ServiceInvokeEnum;
+import com.tencent.tsf.femas.service.registry.RegistryManagerService;
 import com.tencent.tsf.femas.service.registry.ServiceManagerService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -56,6 +57,9 @@ public class ServiceManageEndpoint extends AbstractBaseEndpoint {
 
     private final ServiceManagerService serviceManagerService;
 
+    @Autowired
+    RegistryManagerService registryManagerService;
+
 
     public ServiceManageEndpoint(ServiceManagerService serviceManagerService) {
         this.serviceManagerService = serviceManagerService;
@@ -64,43 +68,34 @@ public class ServiceManageEndpoint extends AbstractBaseEndpoint {
     @ApiOperation(value = "获取服务列表", notes = "根据命名空间获取服务列表")
     @PostMapping("/describeRegisterService")
     public Result<RegistryPageService> describeRegisterService(@RequestBody RegistryServiceParam param) {
-        return executor
-                .invoke(ServiceInvokeEnum.ApiInvokeEnum.REGISTRY_MANAGER_DESCRIBE_SERVICES, param.getNamespaceId(),
-                        param.getStatus(), param.getPageNo() == null ? 1 : param.getPageNo(),
-                        param.getPageSize() == null ? 10 : param.getPageSize(), param.getKeyword());
+        return executor.process(()->registryManagerService.describeRegisterService(param.getNamespaceId(),
+                param.getStatus(), param.getPageNo() == null ? 1 : param.getPageNo(),
+                param.getPageSize() == null ? 10 : param.getPageSize(), param.getKeyword()));
     }
 
     @ApiOperation(value = "获取服务实例列表", notes = "根据命名空间和服务名获取服务实例列表")
     @PostMapping("/describeServiceInstance")
     public Result<PageService<ServiceInstance>> describeServiceInstance(@RequestBody InstanceVersionParam param) {
-        return executor.process(() -> {
-            return serviceManagerService.describeServiceInstance(param);
-        });
+        return executor.process(() -> serviceManagerService.describeServiceInstance(param));
     }
 
     @ApiOperation(value = "获取服务概览", notes = "通过命名空间和服务名查询服务概览")
     @PostMapping("/describeServiceOverview")
     public Result<ServiceOverview> describeServiceOverview(@RequestBody RegistryInstanceParam param) {
-        return executor.process(() -> {
-            return serviceManagerService.describeServiceOverview(param);
-        });
+        return executor.process(() -> serviceManagerService.describeServiceOverview(param));
     }
 
     @ApiOperation(value = "获取服务接口", notes = "获取服务接口")
     @PostMapping("/describeServiceApi")
     public Result<PageService<ServiceApi>> describeServiceApi(@RequestBody ApiModel apiModel) {
-        return executor.process(() -> {
-            return serviceManagerService.describeServiceApi(apiModel);
-        });
+        return executor.process(() -> serviceManagerService.describeServiceApi(apiModel));
     }
 
     @ApiOperation(value = "获取服务事件", notes = "获取服务事件")
     @PostMapping("/describeServiceEvent")
     public Result<PageService<ServiceEventView>> describeServiceEvent(
             @RequestBody ServiceEventModel serviceEventModel) {
-        return executor.process(() -> {
-            return serviceManagerService.describeServiceEvent(serviceEventModel);
-        });
+        return executor.process(() -> serviceManagerService.describeServiceEvent(serviceEventModel));
     }
 
     @RequestMapping("fetchEventType")
