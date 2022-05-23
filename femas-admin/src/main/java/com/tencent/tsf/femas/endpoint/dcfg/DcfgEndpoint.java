@@ -30,12 +30,12 @@ public class DcfgEndpoint extends AbstractBaseEndpoint {
     @Autowired
     ConfigService configService;
 
+    @Autowired
+    ConfigVersionService configVersionService;
+
     public DcfgEndpoint(DataOperation dataOperation) {
         this.dataOperation = dataOperation;
     }
-
-    @Autowired
-    ConfigVersionService configVersionService;
 
     @PostMapping("configureConfig")
     @ApiOperation("创建或更新配置")
@@ -81,7 +81,6 @@ public class DcfgEndpoint extends AbstractBaseEndpoint {
     @ApiOperation("删除版本")
     public Result<Config> deleteConfigVersions(@RequestBody ConfigRequest configRequest) {
         return executor.process(()->configVersionService.deleteConfigVersions(configRequest));
-//        return executor.invoke(ServiceInvokeEnum.ApiInvokeEnum.DCFG_CONFIG_VERSION_DELETE, configRequest);
     }
 
 
