@@ -26,6 +26,11 @@ public class DateRollingLogger {
     private Logger logger;
 
     /**
+     * 发生异常时打印异常的logger
+     */
+    private static final Logger LOGGER_FOR_EXCEPTION = Logger.getLogger("DateRollingLogger");
+
+    /**
      * 先前的handler,用于更新FileHandler时进行移除
      */
     private FileHandler pre;
@@ -107,10 +112,13 @@ public class DateRollingLogger {
             logger.addHandler(pre);
             scheduledThreadPoolExecutor.execute(new RefreshFileHandler());
         } catch (Exception e) {
-            logger.warning(e.getMessage());
+            LOGGER_FOR_EXCEPTION.warning(e.getMessage());
         }
     }
 
+    /**
+     * 刷新的FileHandler的方法
+     */
     class RefreshFileHandler implements Runnable {
         @Override
         public void run() {
@@ -121,7 +129,7 @@ public class DateRollingLogger {
                 }
                 startUp.compareAndSet(false, true);
             } catch (Exception e) {
-                logger.warning(e.getMessage());
+                LOGGER_FOR_EXCEPTION.warning(e.getMessage());
             } finally {
                 scheduledThreadPoolExecutor.schedule(this, getTodayLeft(), TimeUnit.SECONDS);
             }
