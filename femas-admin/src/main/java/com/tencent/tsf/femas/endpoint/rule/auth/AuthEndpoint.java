@@ -7,11 +7,12 @@ import com.tencent.tsf.femas.entity.rule.FemasAuthRule;
 import com.tencent.tsf.femas.entity.rule.RuleSearch;
 import com.tencent.tsf.femas.entity.rule.auth.AuthRuleModel;
 import com.tencent.tsf.femas.entity.rule.auth.ServiceAuthRuleModel;
-import com.tencent.tsf.femas.enums.ServiceInvokeEnum;
+import com.tencent.tsf.femas.service.rule.AuthService;
 import com.tencent.tsf.femas.storage.DataOperation;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +29,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthEndpoint extends AbstractBaseEndpoint {
 
     private final DataOperation dataOperation;
+
+    @Autowired
+    AuthService authService;
 
     public AuthEndpoint(DataOperation dataOperation) {
         this.dataOperation = dataOperation;
@@ -47,19 +51,19 @@ public class AuthEndpoint extends AbstractBaseEndpoint {
 
     @PostMapping("fetchAuthRule")
     @ApiOperation("查询服务鉴权规则")
-    public Result<PageService<List<FemasAuthRule>>> fetchAuthRule(@RequestBody AuthRuleModel serviceModel) {
-        return executor.invoke(ServiceInvokeEnum.ApiInvokeEnum.SERVICE_AUTH_FETCH, serviceModel);
+    public Result<PageService<FemasAuthRule>> fetchAuthRule(@RequestBody AuthRuleModel serviceModel) {
+        return executor.process(()->authService.fetchAuthRule(serviceModel));
     }
 
     @PostMapping("deleteAuthRule")
     @ApiOperation("删除服务鉴权规则")
     public Result deleteAuthRule(@RequestBody ServiceAuthRuleModel serviceAuthRuleModel) {
-        return executor.invoke(ServiceInvokeEnum.ApiInvokeEnum.SERVICE_AUTH_DELETE, serviceAuthRuleModel);
+        return executor.process(()->authService.deleteAuthRule(serviceAuthRuleModel));
     }
 
     @PostMapping("configureAuthRule")
     @ApiOperation("新建、修改服务鉴权规则")
     public Result configureAuthRule(@RequestBody FemasAuthRule authRule) {
-        return executor.invoke(ServiceInvokeEnum.ApiInvokeEnum.SERVICE_AUTH_CONFIG, authRule);
+        return executor.process(()->authService.configureAuthRule(authRule));
     }
 }

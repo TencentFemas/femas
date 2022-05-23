@@ -24,7 +24,7 @@ import com.tencent.tsf.femas.entity.registry.RegistryIdModel;
 import com.tencent.tsf.femas.entity.registry.RegistryInfo;
 import com.tencent.tsf.femas.entity.registry.RegistryModel;
 import com.tencent.tsf.femas.entity.registry.RegistrySearch;
-import com.tencent.tsf.femas.enums.ServiceInvokeEnum;
+import com.tencent.tsf.femas.service.registry.RegistryManagerService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import java.util.List;
@@ -32,6 +32,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
 
 
 /**
@@ -43,34 +45,37 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(value = "/atom/v1/registry", tags = "注册中心操作")
 public class RegistryManageEndpoint extends AbstractBaseEndpoint {
 
+    @Resource
+    RegistryManagerService registryManageService;
+
     @ApiOperation(value = "配置注册中心")
     @PostMapping("/configureRegistry")
     public Result<Boolean> configureRegistry(@RequestBody RegistryModel registryModel) {
-        return executor.invoke(ServiceInvokeEnum.ApiInvokeEnum.REGISTRY_MANAGER_CONFIG, registryModel);
+        return executor.process(()->registryManageService.configureRegistry(registryModel));
     }
 
     @ApiOperation(value = "验证k8s认证配置")
     @PostMapping("/checkCertificateConf")
     public Result<Boolean> checkCertificateConf(@RequestBody RegistryModel registryModel) {
-        return executor.invoke(ServiceInvokeEnum.ApiInvokeEnum.CHECK_CERTIFICATE_CONF, registryModel);
+        return executor.process(()->registryManageService.checkCertificateConf(registryModel));
     }
 
     @ApiOperation(value = "获取注册中心列表")
     @PostMapping("/describeRegistryClusters")
     public Result<List<RegistryConfig>> describeRegistryClusters(@RequestBody RegistrySearch registrySearch) {
-        return executor.invoke(ServiceInvokeEnum.ApiInvokeEnum.REGISTRY_MANAGER_DESCRIBE, registrySearch);
+        return executor.process(()->registryManageService.describeRegistryClusters(registrySearch));
     }
 
     @ApiOperation(value = "删除注册中心")
     @PostMapping("/deleteRegistryCluster")
     public Result deleteRegistryCluster(@RequestBody RegistryIdModel idModel) {
-        return executor.invoke(ServiceInvokeEnum.ApiInvokeEnum.REGISTRY_MANAGER_DELETE, idModel.getRegistryId());
+        return executor.process(()->registryManageService.deleteRegistryCluster(idModel.getRegistryId()));
     }
 
     @ApiOperation(value = "获取注册中心集群信息")
     @PostMapping("/describeRegistryCluster")
     public Result<RegistryInfo> describeRegistryCluster(@RequestBody RegistryIdModel idModel) {
-        return executor.invoke(ServiceInvokeEnum.ApiInvokeEnum.FETCH_REGISTRY_CLUSTER, idModel.getRegistryId());
+        return executor.process(()->registryManageService.describeRegistryCluster(idModel.getRegistryId()));
     }
 
 }

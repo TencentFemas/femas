@@ -20,10 +20,11 @@ import com.tencent.tsf.femas.common.util.Result;
 import com.tencent.tsf.femas.endpoint.adaptor.AbstractBaseEndpoint;
 import com.tencent.tsf.femas.entity.PageService;
 import com.tencent.tsf.femas.entity.namespace.*;
-import com.tencent.tsf.femas.enums.ServiceInvokeEnum;
+import com.tencent.tsf.femas.service.namespace.NamespaceMangerService;
 import io.swagger.annotations.Api;
 
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -38,33 +39,36 @@ import org.springframework.web.bind.annotation.*;
 @Api(tags = "命名空间模块")
 public class NamespaceManageEndpoint extends AbstractBaseEndpoint {
 
+    @Autowired
+    NamespaceMangerService namespaceMangerService;
+
     @PostMapping("fetchNamespaces")
     @ApiOperation("查询命名空间列表")
     public Result<PageService<NamespaceVo>> fetchNamespaces(@RequestBody NamespacePageModel pageModel){
-        return executor.invoke(ServiceInvokeEnum.ApiInvokeEnum.NAMESPACE_MANGER_FETCH,pageModel);
+        return executor.process(()->namespaceMangerService.fetchNamespaces(pageModel));
     }
 
     @PostMapping("deleteNamespace")
     @ApiOperation("通过命名空间的id删除命名空间")
     public Result deleteNamespace(@RequestBody NamespaceIdModel id){
-        return executor.invoke(ServiceInvokeEnum.ApiInvokeEnum.NAMESPACE_MANGER_DELETE,id.getNamespaceId());
+        return executor.process(()->namespaceMangerService.deleteNamespace(id.getNamespaceId()));
     }
 
     @PostMapping("fetchNamespaceById")
     @ApiOperation("通过命名空间id查询命名空间列表")
     public Result<Namespace> fetchNamespaceById(@RequestBody NamespaceIdModel idModel){
-        return executor.invoke(ServiceInvokeEnum.ApiInvokeEnum.NAMESPACE_MANGER_FETCH_BY_ID,idModel.getNamespaceId());
+        return executor.process(()->namespaceMangerService.fetchNamespaceById(idModel.getNamespaceId()));
     }
 
     @PostMapping("modifyNamespace")
     @ApiOperation("修改命名空间 id必传")
     public Result modifyNamespace(@RequestBody Namespace namespace){
-        return executor.invoke(ServiceInvokeEnum.ApiInvokeEnum.NAMESPACE_MANGER_MODIFY,namespace);
+        return executor.process(()->namespaceMangerService.modifyNamespace(namespace));
     }
 
     @PostMapping("createNamespace")
     @ApiOperation("创建命名空间")
     public Result createNamespace(@RequestBody Namespace namespace){
-        return executor.invoke(ServiceInvokeEnum.ApiInvokeEnum.NAMESPACE_MANGER_CREATE,namespace);
+        return executor.process(()->namespaceMangerService.createNamespace(namespace));
     }
 }
