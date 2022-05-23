@@ -23,6 +23,7 @@ import io.grpc.stub.StreamObserver;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -41,7 +42,9 @@ public class EtcdServiceRegistry extends AbstractServiceRegistry {
     private final ObjectMapper objectMapper;
 
     public EtcdServiceRegistry(Map<String, String> configMap) {
-        Client client = Client.builder().endpoints(configMap.get(RegistryConstants.REGISTRY_HOST)).build();
+        String host = Objects.requireNonNull(configMap.get(RegistryConstants.REGISTRY_HOST));
+        String port = Objects.requireNonNull(configMap.get(RegistryConstants.REGISTRY_PORT));
+        Client client = Client.builder().endpoints(host + ":" + port).build();
         this.kvClient = client.getKVClient();
         this.leaseClient = client.getLeaseClient();
         this.objectMapper = new ObjectMapper();

@@ -22,6 +22,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
@@ -52,7 +53,9 @@ public class EtcdServiceDiscoveryClient extends AbstractServiceDiscoveryClient {
     protected final ServerUpdater serverListUpdater;
 
     public EtcdServiceDiscoveryClient(Map<String, String> configMap) {
-        Client client = Client.builder().endpoints(configMap.get(RegistryConstants.REGISTRY_HOST)).build();
+        String host = Objects.requireNonNull(configMap.get(RegistryConstants.REGISTRY_HOST));
+        String port = Objects.requireNonNull(configMap.get(RegistryConstants.REGISTRY_PORT));
+        Client client = Client.builder().endpoints(host + ":" + port).build();
         this.kvClient = client.getKVClient();
         this.objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
