@@ -56,17 +56,13 @@ public class MetricEndpoint extends AbstractBaseEndpoint {
     @PostMapping("fetchRouteMetric")
     @ApiOperation("查询路由指标")
     public Result<RouteMetricVo> fetchRouteMetric(@RequestBody MetricModel metricModel) {
-        return executor.process(() -> {
-            return metricService.fetchRouteMetric(metricModel);
-        });
+        return executor.process(() -> metricService.fetchRouteMetric(metricModel));
     }
 
     @PostMapping("fetchRateLimitMetric")
     @ApiOperation("查询限流指标")
     public Result<RateLimitMetricVo> fetchRateLimitMetric(@RequestBody MetricModel metricModel) {
-        return executor.process(() -> {
-            return metricService.fetchRateLimitMetric(metricModel);
-        });
+        return executor.process(() -> metricService.fetchRateLimitMetric(metricModel));
     }
 
     @RequestMapping("fetchMetricGrafanaAddress")

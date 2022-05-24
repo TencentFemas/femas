@@ -9,12 +9,12 @@ import com.tencent.tsf.femas.entity.rule.RuleModel;
 import com.tencent.tsf.femas.entity.rule.RuleSearch;
 import com.tencent.tsf.femas.entity.rule.route.Tolerate;
 import com.tencent.tsf.femas.entity.rule.route.TolerateModel;
-import com.tencent.tsf.femas.enums.ServiceInvokeEnum;
+import com.tencent.tsf.femas.service.rule.RouteService;
 import com.tencent.tsf.femas.storage.DataOperation;
-import com.tencent.tsf.femas.util.ResultCheck;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +31,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class RouteEndpoint extends AbstractBaseEndpoint {
 
     private final DataOperation dataOperation;
+
+    @Autowired
+    RouteService routeService;
 
     public RouteEndpoint(DataOperation dataOperation) {
         this.dataOperation = dataOperation;
@@ -50,20 +53,20 @@ public class RouteEndpoint extends AbstractBaseEndpoint {
 
     @PostMapping("fetchRouteRule")
     @ApiOperation("查询服务路由规则")
-    public Result<PageService<List<FemasRouteRule>>> fetchRouteRule(@RequestBody ServiceModel serviceModel) {
-        return executor.invoke(ServiceInvokeEnum.ApiInvokeEnum.SERVICE_ROUTE_FETCH, serviceModel);
+    public Result<PageService<FemasRouteRule>> fetchRouteRule(@RequestBody ServiceModel serviceModel) {
+        return executor.process(()-> routeService.fetchRouteRule(serviceModel));
     }
 
     @PostMapping("deleteRouteRule")
     @ApiOperation("删除服务路由规则")
     public Result deleteRouteRule(@RequestBody RuleModel ruleModel) {
-        return executor.invoke(ServiceInvokeEnum.ApiInvokeEnum.SERVICE_ROUTE_DELETE, ruleModel);
+        return executor.process(()-> routeService.deleteRouteRule(ruleModel));
     }
 
     @PostMapping("configureRouteRule")
     @ApiOperation("新建、修改服务路由规则")
     public Result configureRouteRule(@RequestBody FemasRouteRule routeRule) {
-        return executor.invoke(ServiceInvokeEnum.ApiInvokeEnum.SERVICE_ROUTE_CONFIG, routeRule);
+        return executor.process(()-> routeService.configureRouteRule(routeRule));
     }
 
     @PostMapping("fetchTolerant")
@@ -79,6 +82,6 @@ public class RouteEndpoint extends AbstractBaseEndpoint {
     @PostMapping("configureTolerant")
     @ApiOperation("修改服务路由容错")
     public Result configureTolerant(@RequestBody Tolerate tolerate) {
-        return executor.invoke(ServiceInvokeEnum.ApiInvokeEnum.SERVICE_ROUTE_TOLERANT, tolerate);
+        return executor.process(()-> routeService.configureTolerant(tolerate));
     }
 }
