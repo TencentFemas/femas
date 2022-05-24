@@ -28,6 +28,10 @@ import com.tencent.tsf.femas.agent.interceptor.wrapper.*;
 
 import com.tencent.tsf.femas.agent.tools.AgentLogger;
 import com.tencent.tsf.femas.agent.tools.JvmRuntimeInfo;
+import com.tencent.tsf.femas.agent.transformer.CompositeTransformer;
+import com.tencent.tsf.femas.agent.transformer.async.transformer.ExecutorTransformer;
+import com.tencent.tsf.femas.agent.transformer.async.transformer.ForkJoinTransformer;
+import com.tencent.tsf.femas.agent.transformer.async.transformer.TimerTaskTransformer;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.agent.builder.ResettableClassFileTransformer;
@@ -53,6 +57,8 @@ import static net.bytebuddy.matcher.ElementMatchers.*;
 public class FemasAgent {
 
     private static final AgentLogger LOG = AgentLogger.getLogger(FemasAgent.class);
+
+    private static ResettableClassFileTransformer rct;
 
 
     public static void premain(String agentArgs, Instrumentation inst) {
@@ -181,13 +187,11 @@ public class FemasAgent {
             for (GlobalInterceptPluginConfig plugin : AgentPluginLoader.getInterceptConfig()) {
                 InterceptPlugin interceptPlugin = plugin.getPlugin();
                 agentBuilder = pluginAgentBuilder(agentBuilder, interceptPlugin);
-
             }
-            //此处添加javasist Transformer
-//            if(agentArgs == null || Boolean.valueOf(agentArgs)) {
-//                inst.addTransformer(new FemasTransformer(), true);
-//            }
-            ResettableClassFileTransformer rct = agentBuilder.with(new Listener()).installOn(instrumentation);
+            if (agentArguments == null || Boolean.valueOf(agentArguments)) {
+                instrumentation.addTransformer(new CompositeTransformer(new ExecutorTransformer(), new TimerTaskTransformer(), new ForkJoinTransformer()), true);
+            }
+            rct = agentBuilder.with(new Listener()).installOn(instrumentation);
 //            rft.reset(instrumentation, AgentBuilder.RedefinitionStrategy.RETRANSFORMATION);
         } catch (Throwable throwable) {
             LOG.error("[femas-agent] install agent exception: ", throwable);
@@ -286,7 +290,7 @@ public class FemasAgent {
     }
 
     private static ElementMatcher.Junction<NamedElement> agentIgnoreElement() {
-        //可以放在一个公共配置里面，拼接Junction，暂时懒得写
+        //可以放在一个公共配置里面，拼接Junction
         return nameStartsWith("net.bytebuddy.")
                 .or(nameContains("javassist"));
     }
