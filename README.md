@@ -36,7 +36,7 @@
 
 ## Introduction
 **Femas is an open source product form of Tencent Cloud's microservice platform [TSF](https://cloud.tencent.com/product/tsf) . It focuses on the running state of microservices and provides one-stop microservice management and control capabilities such as multi-frame unified service discovery, north-south and east-west traffic management, service observability, and configuration management. In the service architecture transformation, the core issues are difficult to reuse heterogeneous frameworks, difficult to manage and control surge traffic, and time-consuming for troubleshooting and recovery.**
-> - data plane: Femas uses the multi-runtime architecture design to standardize and modularize the underlying core capabilities of microservices, and assemble the basic components split in the microservice field through a reasonable architecture to meet diversified microservice scenarios. , lightweight, portable, low-cost, cloud-free vendor binding.
+> - data plane: Femas uses the multi-runtime architecture design to standardize and modularize the underlying core capabilities of microservices, and assemble the basic components split in the microservice field through a reasonable architecture to meet diversified microservice scenarios. , lightweight, portable, low-cost, cloud-free vendor binding,Currently, the community provides governance data planes in two proxyLess modes: `SDK` and business-agnostic `JVM TI Agent`.
 > - control plane: Femas provides a unified control plane standard protocol, a set of governance protocols, and multi-language and multi-data plane distribution.
 ### ability
 ![image](https://user-images.githubusercontent.com/22976760/153156369-6fa5626e-f0a5-452b-8519-fe84013b5186.png)
@@ -59,8 +59,8 @@ Femas implements the management of open source registries (currently supports `C
 - Femas is not bound to any specific components, as long as the components that conform to the Femas standardized protocol can be managed on the Femas platform, it is convenient for users at all levels to learn, use and develop secondary.
 ![image](https://user-images.githubusercontent.com/22976760/158731778-0005ff57-433b-4001-b135-b6879cd7ede8.png)
 - **Sink-type non-intrusive access, zero cost for user transformation**.
-> - `Agent` bytecode injection (`TODO`)
-> - `ServiceMesh` service mesh
+> - `Java Agent` bytecode injection
+> - `ServiceMesh` service mesh(TODO)
 - Femas hopes to summarize Tencent's microservice product center's understanding of microservices into a platform to help users quickly build an enterprise-level microservice ecosystem.
 - Femas supports Tencent's internal ecosystem of billions of users.
 ## Quick start
