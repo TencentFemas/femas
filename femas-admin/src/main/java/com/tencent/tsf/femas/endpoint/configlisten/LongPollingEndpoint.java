@@ -4,6 +4,7 @@ import com.tencent.tsf.femas.constant.IgnorePrefix;
 import com.tencent.tsf.femas.endpoint.adaptor.AbstractBaseEndpoint;
 import com.tencent.tsf.femas.entity.registry.ServiceApiRequest;
 import com.tencent.tsf.femas.enums.ServiceInvokeEnum;
+import com.tencent.tsf.femas.service.namespace.NamespaceMangerService;
 import com.tencent.tsf.femas.service.registry.ServiceManagerService;
 import com.tencent.tsf.femas.service.rule.ConvertService;
 import com.tencent.tsf.femas.storage.StorageResult;
@@ -38,11 +39,14 @@ public class LongPollingEndpoint extends AbstractBaseEndpoint {
 
     private final ServiceManagerService serviceManagerService;
 
+    private final NamespaceMangerService namespaceMangerService;
+
     public LongPollingEndpoint(ConvertService convertService,
-                               ServiceManagerService serviceManagerService) {
+                               ServiceManagerService serviceManagerService,NamespaceMangerService namespaceMangerService) {
 //        this.kvStoreManager = kvStoreManager;
         this.convertService = convertService;
         this.serviceManagerService = serviceManagerService;
+        this.namespaceMangerService = namespaceMangerService;
     }
 
     @GetMapping("fetchData")
@@ -87,6 +91,7 @@ public class LongPollingEndpoint extends AbstractBaseEndpoint {
      */
     @PostMapping("initNamespace")
     public void initNamespace(String registryAddress, String namespaceId) {
-        executor.invoke(ServiceInvokeEnum.ApiInvokeEnum.NAMESPACE_MANGER_INIT, registryAddress, namespaceId);
+        namespaceMangerService.initNamespace(registryAddress,namespaceId);
+//        executor.invoke(ServiceInvokeEnum.ApiInvokeEnum.NAMESPACE_MANGER_INIT, registryAddress, namespaceId);
     }
 }

@@ -19,8 +19,10 @@ package com.tencent.tsf.femas.config;
 
 import com.tencent.tsf.femas.agent.classloader.AgentClassLoader;
 import com.tencent.tsf.femas.agent.classloader.InterceptorClassLoaderCache;
+import com.tencent.tsf.femas.common.constant.FemasConstant;
 import com.tencent.tsf.femas.common.context.AgentConfig;
 import com.tencent.tsf.femas.common.context.factory.ContextFactory;
+import com.tencent.tsf.femas.common.util.StringUtils;
 
 import java.util.Iterator;
 import java.util.ServiceLoader;
@@ -60,9 +62,16 @@ public class AbstractConfigHttpClientManagerFactory {
                     .load(AbstractConfigHttpClientManager.class);
             Iterator<AbstractConfigHttpClientManager> configHttpClientManagerIterator = configHttpClientManagerServiceLoader
                     .iterator();
-            // 一般就一个实现类，如果有多个，那么加载的是最后一个
+
+            String pollingType = FemasConfig.getProperty(FemasConstant.FEMAS_PAAS_POLLING_TYPE);
+            if(StringUtils.isEmpty(pollingType)){
+                pollingType = AbstractConfigHttpClientManager.PollingType.grpc.name();
+            }
             while (configHttpClientManagerIterator.hasNext()) {
                 configHttpClientManager = configHttpClientManagerIterator.next();
+                if(StringUtils.equals(configHttpClientManager.getType(),pollingType)){
+                    break;
+                }
             }
         }
     }

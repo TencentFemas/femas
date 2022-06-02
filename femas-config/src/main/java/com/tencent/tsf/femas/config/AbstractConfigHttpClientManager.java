@@ -28,6 +28,8 @@ import com.tencent.tsf.femas.common.entity.Service;
  */
 public abstract class AbstractConfigHttpClientManager {
 
+    public static final String HTTP ="http";
+
     public abstract void reportApis(String namespaceId, String serviceName, String applicationVersion, String data);
 
     public abstract String fetchKVValue(String key, String namespaceId);
@@ -35,6 +37,12 @@ public abstract class AbstractConfigHttpClientManager {
     public abstract void initNamespace(String registryAddress, String namespaceId);
 
     public abstract void reportEvent(Service service, String eventId, String data);
+
+    public abstract String getType();
+
+    public enum PollingType{
+        http,grpc
+    }
 
 }
   
