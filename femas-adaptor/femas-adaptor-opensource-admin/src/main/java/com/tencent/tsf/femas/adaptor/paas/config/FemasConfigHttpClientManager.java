@@ -35,6 +35,7 @@ import java.util.Properties;
 public class FemasConfigHttpClientManager extends AbstractConfigHttpClientManager {
 
     private static final  Logger log = LoggerFactory.getLogger(FemasConfigHttpClientManager.class);
+
     private static final  String webContext = "/atom";
     private static final  String fetchKeyUrl = "/v1/sdk/fetchData";
     private static final  String reportCircuitEvent = "/v1/sdk/reportServiceEvent";
@@ -77,6 +78,12 @@ public class FemasConfigHttpClientManager extends AbstractConfigHttpClientManage
         this.httpClient = ApacheHttpClientHolder.getHttpClient(httpClientFactory);
     }
 
+    @Override
+    public String getType() {
+        return PollingType.http.name();
+    }
+
+    @Override
     public void reportEvent(Service service, String eventId, String data) {
         if (context.isEmptyPaasServer()) {
             log.debug("reportEvent failed, could not find the paas address profile");
@@ -94,6 +101,7 @@ public class FemasConfigHttpClientManager extends AbstractConfigHttpClientManage
         }
     }
 
+    @Override
     public void reportApis(String namespaceId, String serviceName, String applicationVersion, String data) {
         if (context.isEmptyPaasServer()) {
             log.debug("reportApis failed ,could not find the paas address profile");
@@ -119,6 +127,7 @@ public class FemasConfigHttpClientManager extends AbstractConfigHttpClientManage
         }
     }
 
+    @Override
     public String fetchKVValue(String key, String namespaceId) {
 
         final Map<String, Object> params = new HashMap<>(3);
@@ -173,6 +182,7 @@ public class FemasConfigHttpClientManager extends AbstractConfigHttpClientManage
         return header;
     }
 
+    @Override
     public void initNamespace(String registryAddress, String namespaceId) {
         if (StringUtils.isEmpty(namespaceId)) {
             log.error("namespace is empty");
