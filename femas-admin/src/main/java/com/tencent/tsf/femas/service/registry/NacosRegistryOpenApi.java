@@ -17,11 +17,13 @@
 
 package com.tencent.tsf.femas.service.registry;
 
+import com.tencent.tsf.femas.common.constant.FemasConstant;
 import com.tencent.tsf.femas.common.entity.EndpointStatus;
 import com.tencent.tsf.femas.common.entity.Service;
 import com.tencent.tsf.femas.common.entity.ServiceInstance;
 import com.tencent.tsf.femas.common.serialize.JSONSerializer;
 import com.tencent.tsf.femas.common.util.HttpResult;
+import com.tencent.tsf.femas.common.util.StringUtils;
 import com.tencent.tsf.femas.entity.namespace.Namespace;
 import com.tencent.tsf.femas.entity.param.RegistryInstanceParam;
 import com.tencent.tsf.femas.entity.registry.ClusterServer;
@@ -172,7 +174,14 @@ public class NacosRegistryOpenApi extends RegistryOpenApiAdaptor {
                     instance.setAllMetadata(i.getMetadata());
                     instance.setHost(i.getIp());
                     instance.setPort(NumberUtils.toInt(i.getPort()));
-                    instance.setId(i.getInstanceId());
+                    String nacosInstanceId = i.getInstanceId();
+                    //某些版本的nacos返回的字段不包含InstanceId，使用femas的InstanceId兜底
+                    if(StringUtils.isNotBlank(nacosInstanceId)){
+                        instance.setId(nacosInstanceId);
+                    }else{
+                        String femasInstanceId = i.getMetadata().get(FemasConstant.FEMAS_META_INSTANCE_ID_KEY);
+                        instance.setId(femasInstanceId);
+                    }
                     instance.setStatus(i.isEnabled() && i.isHealthy() ? EndpointStatus.UP : EndpointStatus.DOWN);
                     instance.setLastUpdateTime(i.getLastBeat());
                     instance.setService(new Service(i.getClusterName(), i.getServiceName()));
