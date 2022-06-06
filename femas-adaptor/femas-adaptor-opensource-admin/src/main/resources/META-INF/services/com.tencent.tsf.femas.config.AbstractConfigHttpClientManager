@@ -1,1 +1,2 @@
 com.tencent.tsf.femas.adaptor.paas.config.FemasConfigHttpClientManager
+com.tencent.tsf.femas.adaptor.paas.config.FemasConfigGrpcClientManager
