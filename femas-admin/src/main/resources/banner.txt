@@ -10,5 +10,5 @@
      Use ${dbType} memory
      Pid: ${pid}
      Web Console: http://${local.ip}:${server.port}/
-     Website: https://femas.io
+     Website: http://femas.io
 
