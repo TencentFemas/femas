@@ -33,6 +33,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 如果想要单测成功执行,需要设置eureka的刷新时间为0,否则会存在缓存问题导致单测失效
+ *
  * @author huyuanxin
  */
 public class EurekaRegistryTest {
