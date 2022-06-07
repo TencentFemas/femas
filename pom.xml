@@ -31,7 +31,7 @@
 
     <properties>
         <!-- femas 版本 -->
-        <revision>1.0.0-SNAPSHOT</revision>
+        <revision>1.1.0</revision>
         <!-- Build -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.source.version>1.8</java.source.version>

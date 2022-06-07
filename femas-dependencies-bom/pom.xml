@@ -13,7 +13,7 @@
     <description>femas dependencies BOM</description>
 
     <properties>
-        <revision>1.0.0-SNAPSHOT</revision>
+        <revision>1.1.0</revision>
 
         <commons-lang3.version>3.8.1</commons-lang3.version>
         <gson.version>2.8.6</gson.version>
