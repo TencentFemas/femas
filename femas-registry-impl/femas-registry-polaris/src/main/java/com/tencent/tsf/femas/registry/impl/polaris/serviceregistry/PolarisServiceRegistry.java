@@ -16,13 +16,18 @@
  */
 package com.tencent.tsf.femas.registry.impl.polaris.serviceregistry;
 
+import com.google.common.collect.Lists;
+import com.tencent.polaris.api.config.Configuration;
 import com.tencent.polaris.api.core.ProviderAPI;
 import com.tencent.polaris.api.exception.ErrorCode;
 import com.tencent.polaris.api.exception.PolarisException;
 import com.tencent.polaris.api.rpc.InstanceDeregisterRequest;
 import com.tencent.polaris.api.rpc.InstanceRegisterRequest;
 import com.tencent.polaris.api.rpc.InstanceRegisterResponse;
+import com.tencent.polaris.factory.ConfigAPIFactory;
 import com.tencent.polaris.factory.api.DiscoveryAPIFactory;
+import com.tencent.polaris.factory.config.global.ServerConnectorConfigImpl;
+import com.tencent.tsf.femas.common.RegistryConstants;
 import com.tencent.tsf.femas.common.entity.EndpointStatus;
 import com.tencent.tsf.femas.common.entity.Service;
 import com.tencent.tsf.femas.common.entity.ServiceInstance;
@@ -43,7 +48,10 @@ public class PolarisServiceRegistry extends AbstractServiceRegistry {
     private final PolarisBeatReactor polarisBeatReactor;
 
     public PolarisServiceRegistry(Map<String, String> configMap) {
-        providerApi = DiscoveryAPIFactory.createProviderAPI();
+        Configuration configuration = ConfigAPIFactory.defaultConfig();
+        ServerConnectorConfigImpl serverConnector = (ServerConnectorConfigImpl) configuration.getGlobal().getServerConnector();
+        serverConnector.setAddresses(Lists.newArrayList(configMap.get(RegistryConstants.REGISTRY_HOST) + ":" + configMap.get(RegistryConstants.REGISTRY_PORT)));
+        providerApi = DiscoveryAPIFactory.createProviderAPIByConfig(configuration);
         polarisBeatReactor = new PolarisBeatReactor(providerApi);
     }
 
