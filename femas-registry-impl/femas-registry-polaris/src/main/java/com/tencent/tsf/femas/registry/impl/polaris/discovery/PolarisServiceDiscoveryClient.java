@@ -16,11 +16,16 @@
  */   
 package com.tencent.tsf.femas.registry.impl.polaris.discovery;
 
+import com.google.common.collect.Lists;
+import com.tencent.polaris.api.config.Configuration;
 import com.tencent.polaris.api.core.ConsumerAPI;
 import com.tencent.polaris.api.pojo.Instance;
 import com.tencent.polaris.api.rpc.GetAllInstancesRequest;
 import com.tencent.polaris.api.rpc.InstancesResponse;
+import com.tencent.polaris.factory.ConfigAPIFactory;
 import com.tencent.polaris.factory.api.DiscoveryAPIFactory;
+import com.tencent.polaris.factory.config.global.ServerConnectorConfigImpl;
+import com.tencent.tsf.femas.common.RegistryConstants;
 import com.tencent.tsf.femas.common.discovery.AbstractServiceDiscoveryClient;
 import com.tencent.tsf.femas.common.discovery.SchedulePollingServerListUpdater;
 import com.tencent.tsf.femas.common.discovery.ServerUpdater;
@@ -59,7 +64,10 @@ public class PolarisServiceDiscoveryClient extends AbstractServiceDiscoveryClien
         this.serverListUpdateInProgress = new AtomicBoolean(false);
         this.serverListUpdater = new SchedulePollingServerListUpdater();
         this.serverListImpl = new PolarisServerList();
-        consumerApi = DiscoveryAPIFactory.createConsumerAPI();
+        Configuration configuration = ConfigAPIFactory.defaultConfig();
+        ServerConnectorConfigImpl serverConnector = (ServerConnectorConfigImpl) configuration.getGlobal().getServerConnector();
+        serverConnector.setAddresses(Lists.newArrayList(configMap.get(RegistryConstants.REGISTRY_HOST) + ":" + configMap.get(RegistryConstants.REGISTRY_PORT)));
+        consumerApi = DiscoveryAPIFactory.createConsumerAPIByConfig(configuration);
     }
     
     /** 
