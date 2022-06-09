@@ -25,6 +25,7 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.cloud.gateway.config.LoadBalancerProperties;
 import org.springframework.cloud.gateway.filter.LoadBalancerClientFilter;
+import org.springframework.cloud.gateway.filter.ReactiveLoadBalancerClientFilter;
 import org.springframework.cloud.loadbalancer.support.LoadBalancerClientFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -42,15 +43,9 @@ public class GatewayAutoConfiguration implements BeanPostProcessor, ApplicationC
         return new FemasGatewayGovernanceFilter();
     }
 
-//    @Bean
-//    @ConditionalOnMissingBean({FemasReactiveLoadBalancerClientFilter.class})
-//    public FemasReactiveLoadBalancerClientFilter reactiveLoadBalancerClientFilter(DiscoveryServerConverter converter, LoadBalancerClientFactory clientFactory, LoadBalancerProperties properties) {
-//        return new FemasReactiveLoadBalancerClientFilter(converter, clientFactory, properties);
-//    }
-
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) {
-        if(bean instanceof LoadBalancerClientFilter){
+        if(bean instanceof LoadBalancerClientFilter || bean instanceof ReactiveLoadBalancerClientFilter){
             DiscoveryServerConverter converter = context.getBean(DiscoveryServerConverter.class);
             LoadBalancerClientFactory clientFactory= context.getBean(LoadBalancerClientFactory.class);
             LoadBalancerProperties properties =context.getBean(LoadBalancerProperties.class);
