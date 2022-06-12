@@ -1,0 +1,63 @@
+{
+  "properties": [
+    {
+      "name": "spring.cloud.femas.discovery.serverAddr",
+      "type": "java.lang.String",
+      "description": "femas discovery server address."
+    },
+    {
+      "name": "spring.cloud.femas.discovery.ip",
+      "type": "java.lang.String",
+      "description": "femas discovery server ip."
+    },
+    {
+      "name": "spring.cloud.femas.discovery.port",
+      "type": "java.lang.Integer",
+      "description": "femas discovery server port."
+    },
+    {
+      "name": "spring.cloud.femas.discovery.username",
+      "type": "java.lang.String",
+      "description": "femas discovery service's username to authenticate."
+    },
+    {
+      "name": "spring.cloud.femas.discovery.password",
+      "type": "java.lang.String",
+      "description": "femas discovery service's password to authenticate."
+    },
+    {
+      "name": "spring.cloud.femas.discovery.token",
+      "type": "java.lang.String",
+      "description": "femas discovery service's token to authenticate."
+    },
+    {
+      "name": "spring.cloud.femas.discovery.registryType",
+      "type": "java.lang.String",
+      "description": "femas discovery registry type."
+    },
+    {
+      "name": "spring.cloud.femas.discovery.namespace",
+      "type": "java.lang.String",
+      "defaultValue": "default",
+      "description": "femas discovery namespace."
+    },
+    {
+      "name": "spring.cloud.femas.discovery.service",
+      "type": "java.lang.String",
+      "defaultValue": "${spring.application.name}",
+      "description": "the service name to register, default value is ${spring.application.name}."
+    },
+    {
+      "name": "spring.cloud.femas.discovery.register.enabled",
+      "type": "java.lang.Boolean",
+      "defaultValue": true,
+      "description": "enable femas discovery or not."
+    },
+    {
+      "name": "spring.cloud.femas.discovery.register.secure",
+      "type": "java.lang.Boolean",
+      "defaultValue": false,
+      "description": "secure or not."
+    }
+  ]
+}
