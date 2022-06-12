@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.tencent.tsf.femas.springcloud.discovery.starter.discovery.discovery.FemasDiscoveryAutoConfiguration,\
+  com.tencent.tsf.femas.springcloud.discovery.starter.discovery.registry.FemasServiceRegistryAutoConfiguration

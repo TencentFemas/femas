@@ -20,6 +20,7 @@
         <module>femas-springcloud-greenwich-zuul-starter</module>
         <module>femas-springcloud-greenwich-gateway-starter</module>
         <module>femas-springcloud-hoxton-starter</module>
+        <module>femas-springcloud-discovery-starter</module>
     </modules>
 
     <build>
