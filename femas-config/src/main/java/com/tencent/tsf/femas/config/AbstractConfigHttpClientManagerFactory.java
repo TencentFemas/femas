@@ -65,7 +65,7 @@ public class AbstractConfigHttpClientManagerFactory {
 
             String pollingType = FemasConfig.getProperty(FemasConstant.FEMAS_PAAS_POLLING_TYPE);
             if(StringUtils.isEmpty(pollingType)){
-                pollingType = AbstractConfigHttpClientManager.PollingType.grpc.name();
+                pollingType = AbstractConfigHttpClientManager.PollingType.http.name();
             }
             while (configHttpClientManagerIterator.hasNext()) {
                 configHttpClientManager = configHttpClientManagerIterator.next();
