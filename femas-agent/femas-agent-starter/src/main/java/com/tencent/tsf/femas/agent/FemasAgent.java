@@ -60,6 +60,9 @@ public class FemasAgent {
 
     private static ResettableClassFileTransformer rct;
 
+    private static final String ACTIVATE_CROSS_THREAD_TRANSFORMER = "activateCrossThread";
+
+
 
     public static void premain(String agentArgs, Instrumentation inst) {
         init(agentArgs, inst, true);
@@ -188,7 +191,7 @@ public class FemasAgent {
                 InterceptPlugin interceptPlugin = plugin.getPlugin();
                 agentBuilder = pluginAgentBuilder(agentBuilder, interceptPlugin);
             }
-            if (agentArguments == null || Boolean.valueOf(agentArguments)) {
+            if (ACTIVATE_CROSS_THREAD_TRANSFORMER.equalsIgnoreCase(agentArguments)) {
                 instrumentation.addTransformer(new CompositeTransformer(new ExecutorTransformer(), new TimerTaskTransformer(), new ForkJoinTransformer()), true);
             }
             rct = agentBuilder.with(new Listener()).installOn(instrumentation);
