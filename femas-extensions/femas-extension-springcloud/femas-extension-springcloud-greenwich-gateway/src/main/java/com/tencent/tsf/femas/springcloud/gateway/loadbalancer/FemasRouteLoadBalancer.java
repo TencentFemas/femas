@@ -29,6 +29,7 @@ import com.tencent.tsf.femas.common.entity.Service;
 import com.tencent.tsf.femas.common.util.StringUtils;
 import com.tencent.tsf.femas.springcloud.gateway.discovery.DiscoveryServerConverter;
 import com.tencent.tsf.femas.springcloud.gateway.filter.GatewayHeaderUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
@@ -102,7 +103,7 @@ public class FemasRouteLoadBalancer implements ReactorServiceInstanceLoadBalance
     }
 
     private Response<ServiceInstance> getInstanceResponse(List<ServiceInstance> instances) {
-        if (instances.isEmpty()) {
+        if (CollectionUtils.isEmpty(instances)) {
             if (log.isWarnEnabled()) {
                 log.warn("No servers available for service: " + serviceId);
             }
