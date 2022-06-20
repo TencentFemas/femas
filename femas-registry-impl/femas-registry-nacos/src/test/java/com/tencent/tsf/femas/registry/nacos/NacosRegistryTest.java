@@ -79,7 +79,7 @@ public class NacosRegistryTest {
         abstractServiceRegistry = new NacosServiceRegistry(configMap);
     }
 
-    @Test
+    @Test(timeout = 30000)
     public void testRegistryAndDeregistry() throws InterruptedException {
         abstractServiceRegistry.register(getServiceInstance("registry-test-1", 8080));
         AbstractServiceDiscoveryClient discoveryClient = getDiscoveryClient();
@@ -93,7 +93,7 @@ public class NacosRegistryTest {
         Assert.assertEquals(0, serviceInstanceList.size());
     }
 
-    @Test
+    @Test(timeout = 30000)
     public void testRegistryAndDeregistryMany() throws InterruptedException {
         // 注册第一个
         abstractServiceRegistry.register(getServiceInstance("registry-test-1", 8080));

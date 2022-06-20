@@ -21,7 +21,7 @@ public class ConsulServiceRegistryFactoryTest {
         consulServiceRegistryFactory = new ConsulServiceRegistryFactory();
     }
 
-    @Test
+    @Test(timeout = 30000)
     public void testGetServiceRegistry() {
         configMap = new ConcurrentHashMap<>();
         configMap.put(RegistryConstants.REGISTRY_HOST, "test.net");
@@ -30,7 +30,7 @@ public class ConsulServiceRegistryFactoryTest {
         Assert.assertTrue(consulServiceRegistryFactory.getServiceRegistry(configMap) != null);
     }
 
-    @Test
+    @Test(timeout = 30000)
     public void testGetType() {
         Assert.assertEquals(consulServiceRegistryFactory.getType(), RegistryEnum.CONSUL.name());
     }

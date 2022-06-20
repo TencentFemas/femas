@@ -26,7 +26,7 @@ public class ConsulServiceDiscoveryClientTest {
         discoveryClient = new ConsulServiceDiscoveryClient(configMap);
     }
 
-    @Test
+    @Test(timeout = 30000)
     public void testSubscribeSuccess() throws Exception {
         Service service = new Service("12312", "123123");
         discoveryClient.subscribe(service);

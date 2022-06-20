@@ -26,7 +26,7 @@ public class ConsulServiceRegistryTest {
         consulServiceRegistry = new ConsulServiceRegistry(configMap);
     }
 
-    @Test
+    @Test(timeout = 30000)
     public void doRegister() {
         ServiceInstance serviceInstance = new ServiceInstance();
         serviceInstance.setId("id1000");

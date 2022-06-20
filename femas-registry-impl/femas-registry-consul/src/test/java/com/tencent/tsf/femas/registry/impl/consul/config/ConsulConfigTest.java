@@ -23,7 +23,7 @@ public class ConsulConfigTest {
         configMap.put(ConsulConstants.CONSUL_ACCESS_TOKEN, "token");
     }
 
-    @Test
+    @Test(timeout = 30000)
     public void testConstructSuccess() {
         consulConfig = new ConsulConfig(configMap);
         Assert.assertEquals(consulConfig.getHost(), "test.net");
@@ -31,13 +31,13 @@ public class ConsulConfigTest {
         Assert.assertEquals(consulConfig.getToken(), "token");
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(timeout = 30000,expected = IllegalArgumentException.class)
     public void testRegistryHostIsNull() {
         configMap.remove(RegistryConstants.REGISTRY_HOST);
         consulConfig = new ConsulConfig(configMap);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(timeout = 30000,expected = IllegalArgumentException.class)
     public void testRegistryPortIsNull() {
         configMap.remove(RegistryConstants.REGISTRY_PORT);
         consulConfig = new ConsulConfig(configMap);

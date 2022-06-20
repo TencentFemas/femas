@@ -22,12 +22,12 @@ public class ConsulServiceDiscoveryFactoryTest {
         consulServiceDiscoveryFactory = new ConsulServiceDiscoveryFactory();
     }
 
-    @Test
+    @Test(timeout = 30000)
     public void testGetType() {
         Assert.assertEquals(consulServiceDiscoveryFactory.getType(), RegistryEnum.CONSUL.name());
     }
 
-    @Test
+    @Test(timeout = 30000)
     public void tetGetServiceDiscovery() {
         configMap = new ConcurrentHashMap<>();
         configMap.put(RegistryConstants.REGISTRY_HOST, "test.net");

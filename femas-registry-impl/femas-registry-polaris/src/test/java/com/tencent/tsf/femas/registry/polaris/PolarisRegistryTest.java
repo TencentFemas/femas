@@ -79,7 +79,7 @@ public class PolarisRegistryTest {
         abstractServiceRegistry = new PolarisServiceRegistry(configMap);
     }
 
-    @Test
+    @Test(timeout = 30000)
     public void testRegistryAndDeregistry() {
         abstractServiceRegistry.register(getServiceInstance("registry-test-1", 8080));
         AbstractServiceDiscoveryClient discoveryClient = getDiscoveryClient();
@@ -91,7 +91,7 @@ public class PolarisRegistryTest {
         Assert.assertEquals(0, serviceInstanceList.size());
     }
 
-    @Test
+    @Test(timeout = 30000)
     public void testRegistryAndDeregistryMany() {
         // 注册第一个
         abstractServiceRegistry.register(getServiceInstance("registry-test-1", 8080));
