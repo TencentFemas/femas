@@ -22,7 +22,7 @@ public class ConsulHealthCheckConfigTest {
         configMap.put(ConsulConstants.CONSUL_HEALTH_CHECK_TIMEOUT, "6s");
     }
 
-    @Test
+    @Test(timeout = 30000)
     public void testConstructSuccess() {
         consulHealthCheckConfig = new ConsulHealthCheckConfig(configMap);
         Assert.assertEquals(consulHealthCheckConfig.getHealthCheckUrl(), "/health/check");
