@@ -218,78 +218,97 @@ public class FemasConstant extends ContextConstant {
 
     public static final String CONSUL_ACCESS_TOKEN = "consulAccessToken";
 
+    @Override
     public String getInterface() {
         return FEMAS_INTERFACE;
     }
 
+    @Override
     public String getNamespaceId() {
         return FEMAS_NAMESPACE_ID;
     }
 
+    @Override
     public String getNamespaceIdKey() {
         return FEMAS_NAMESPACE_ID_KEY;
     }
 
+    @Override
     public String getDestinationInterface() {
         return DESTINATION_INTERFACE;
     }
 
+    @Override
     public String getDestinationServiceName() {
         return DESTINATION_SERVICE_NAME;
     }
 
+    @Override
     public String getDestinationNamespaceId() {
         return DESTINATION_NAMESPACE_ID;
     }
 
+    @Override
     public String getInstanceId() {
         return FEMAS_INSTANCE_ID;
     }
 
+    @Override
     public String getSourceInterface() {
         return SOURCE_INTERFACE;
     }
 
+    @Override
     public String getGroupId() {
         return FEMAS_GROUP_ID;
     }
 
+    @Override
     public String getApplicationVersion() {
         return FEMAS_APPLICATION_VERSION;
     }
 
+    @Override
     public String getMetaApplicationVersionKey() {
         return FEMAS_META_APPLICATION_VERSION_KEY;
     }
 
+    @Override
     public String getServiceName() {
         return FEMAS_SERVICE_NAME;
     }
 
+    @Override
     public String getApiMetas() {
         return FEMAS_API_METAS;
     }
 
+    @Override
     public String getRequestHttpMethod() {
         return REQUEST_HTTP_METHOD;
     }
 
+    @Override
     public String getLocalIp() {
         return FEMAS_LOCAL_IP;
     }
 
+    @Override
     public String getLocalPort() {
         return FEMAS_SERVICE_PORT;
     }
 
+    @Override
     public String getMetaInstanceIdKey() {
         return FEMAS_META_INSTANCE_ID_KEY;
     }
 
+    @Override
     public String getMetaGroupIdKey() {
         return FEMAS_META_GROUP_ID_KEY;
     }
 
+    @Override
     public String getMetaNamespaceIdKey() {
         return FEMAS_META_NAMESPACE_ID_KEY;
     }
