@@ -80,36 +80,42 @@ public class PolarisRegistryTest {
     }
 
     @Test(timeout = 30000)
-    public void testRegistryAndDeregistry() {
+    public void testRegistryAndDeregistry() throws InterruptedException {
         abstractServiceRegistry.register(getServiceInstance("registry-test-1", 8080));
+        Thread.sleep(3000L);
         AbstractServiceDiscoveryClient discoveryClient = getDiscoveryClient();
         List<ServiceInstance> serviceInstanceList = discoveryClient.getInstances(getService());
         Assert.assertEquals(1, serviceInstanceList.size());
         abstractServiceRegistry.deregister(getServiceInstance("registry-test-1", 8080));
+        Thread.sleep(3000L);
         discoveryClient = getDiscoveryClient();
         serviceInstanceList = discoveryClient.getInstances(getService());
         Assert.assertEquals(0, serviceInstanceList.size());
     }
 
     @Test(timeout = 30000)
-    public void testRegistryAndDeregistryMany() {
+    public void testRegistryAndDeregistryMany() throws InterruptedException {
         // 注册第一个
         abstractServiceRegistry.register(getServiceInstance("registry-test-1", 8080));
+        Thread.sleep(3000L);
         AbstractServiceDiscoveryClient discoveryClient = getDiscoveryClient();
         List<ServiceInstance> serviceInstanceList = discoveryClient.getInstances(getService());
         Assert.assertEquals(1, serviceInstanceList.size());
         // 注册第二个
         abstractServiceRegistry.register(getServiceInstance("registry-test-2", 8081));
+        Thread.sleep(3000L);
         discoveryClient = getDiscoveryClient();
         serviceInstanceList = discoveryClient.getInstances(getService());
         Assert.assertEquals(2, serviceInstanceList.size());
         // 反注册一个
         abstractServiceRegistry.deregister(getServiceInstance("registry-test-1", 8080));
+        Thread.sleep(3000L);
         discoveryClient = getDiscoveryClient();
         serviceInstanceList = discoveryClient.getInstances(getService());
         Assert.assertEquals(1, serviceInstanceList.size());
         // 反注册第二个
         abstractServiceRegistry.deregister(getServiceInstance("registry-test-2", 8081));
+        Thread.sleep(3000L);
         discoveryClient = getDiscoveryClient();
         serviceInstanceList = discoveryClient.getInstances(getService());
         Assert.assertEquals(0, serviceInstanceList.size());
