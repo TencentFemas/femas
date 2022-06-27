@@ -34,6 +34,7 @@ public class Request extends RequestBase {
      */
     private transient Integer timeout;
 
+    @Override
     public Service getTargetService() {
         return targetService;
     }

@@ -69,6 +69,7 @@ public class SlidingTimeWindowMetrics implements Metrics {
         return new SnapshotImpl(totalAggregation);
     }
 
+    @Override
     public Snapshot getSnapshot() {
         moveWindowToCurrentEpoch(getLatestPartialAggregation());
         return new SnapshotImpl(totalAggregation);
