@@ -172,6 +172,7 @@ public enum HttpStatus {
         return HttpStatus.Series.valueOf(this);
     }
 
+    @Override
     public String toString() {
         return Integer.toString(this.value);
     }

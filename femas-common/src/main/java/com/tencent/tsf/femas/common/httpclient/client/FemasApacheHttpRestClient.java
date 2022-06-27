@@ -95,35 +95,42 @@ public class FemasApacheHttpRestClient extends AbstractHttpClient {
         }
     }
 
+    @Override
     public <T> HttpResult<T> get(String url, Map<String, String> header, Map<String, Object> query) throws Exception {
         return execute(new HttpRequestEntity(url, HttpElement.HttpMethod.GET, header, query), null);
     }
 
+    @Override
     public <T> HttpResult<T> get(String url, Map<String, String> header, Map<String, Object> query, String wrapper)
             throws Exception {
         return execute(new HttpRequestEntity(url, HttpElement.HttpMethod.GET, header, query), wrapper);
     }
 
+    @Override
     public <T> HttpResult<T> delete(String url, Map<String, String> header, Map<String, Object> query)
             throws Exception {
         return execute(new HttpRequestEntity(url, HttpElement.HttpMethod.DELETE, header, query), null);
     }
 
+    @Override
     public <T> HttpResult<T> put(String url, Map<String, String> header, Map<String, Object> query) throws Exception {
         return execute(new HttpRequestEntity(url, HttpElement.HttpMethod.PUT, header, query), null);
     }
 
+    @Override
     public <T> HttpResult<T> post(String url, Map<String, String> header, Map<String, Object> query, Object body)
             throws Exception {
         return execute(new HttpRequestEntity(url, HttpElement.HttpMethod.POST, header, query, body), null);
     }
 
+    @Override
     public <T> HttpResult<T> post(String url, Map<String, String> header, Map<String, Object> query, Object body,
                                   String wrapper)
             throws Exception {
         return execute(new HttpRequestEntity(url, HttpElement.HttpMethod.POST, header, query, body), wrapper);
     }
 
+    @Override
     public <T> HttpResult<T> postJson(String url, Map<String, String> header, Map<String, Object> query, Object body,
                                       String wrapper)
             throws Exception {
@@ -133,6 +140,7 @@ public class FemasApacheHttpRestClient extends AbstractHttpClient {
         return execute(requestHttpEntity, wrapper);
     }
 
+    @Override
     public <T> HttpResult<T> postJson(String url, Map<String, String> header, Object body, String wrapper)
             throws Exception {
         HttpRequestEntity requestHttpEntity = new HttpRequestEntity(url, HttpElement.HttpMethod.POST, header, body);
@@ -140,6 +148,7 @@ public class FemasApacheHttpRestClient extends AbstractHttpClient {
         return execute(requestHttpEntity, wrapper);
     }
 
+    @Override
     public <T> HttpResult<T> postForm(String url, Map<String, String> header, Map<String, Object> query,
                                       Map<String, String> body,
                                       String wrapper) throws Exception {
@@ -150,6 +159,7 @@ public class FemasApacheHttpRestClient extends AbstractHttpClient {
 
     }
 
+    @Override
     public <T> HttpResult<T> postForm(String url, Map<String, String> header, Map<String, String> body, String wrapper)
             throws Exception {
         HttpRequestEntity requestHttpEntity = new HttpRequestEntity(url, HttpElement.HttpMethod.POST, header, body);

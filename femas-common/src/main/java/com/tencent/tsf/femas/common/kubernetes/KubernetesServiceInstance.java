@@ -133,6 +133,7 @@ public class KubernetesServiceInstance implements ServiceInstance {
 		return uri;
 	}
 
+	@Override
 	public Map<String, String> getMetadata() {
 		return this.metadata;
 	}

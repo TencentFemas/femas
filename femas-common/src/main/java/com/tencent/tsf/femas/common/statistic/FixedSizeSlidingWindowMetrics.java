@@ -47,6 +47,7 @@ public class FixedSizeSlidingWindowMetrics implements Metrics {
         return new SnapshotImpl(totalAggregation);
     }
 
+    @Override
     public synchronized Snapshot getSnapshot() {
         return new SnapshotImpl(totalAggregation);
     }
