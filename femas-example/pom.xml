@@ -12,6 +12,7 @@
         <module>femas-example-springcloud-greenwich-gateway</module>
         <module>feams-example-springcloud-hoxton</module>
         <module>femas-example-apache-dubbo3</module>
+        <module>femas-example-springcloud-discovery</module>
     </modules>
 
     <parent>
