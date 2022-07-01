@@ -1,7 +1,5 @@
 package com.tencent.tsf.femas.springcloud.discovery.starter.discovery.registry;
 
-import com.tencent.cloud.polaris.discovery.ConditionalOnPolarisDiscoveryEnabled;
-import com.tencent.cloud.polaris.discovery.PolarisDiscoveryAutoConfiguration;
 import com.tencent.tsf.femas.springcloud.discovery.starter.discovery.FemasDiscoveryProperties;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -12,6 +10,7 @@ import org.springframework.cloud.client.serviceregistry.AutoServiceRegistrationC
 import org.springframework.cloud.client.serviceregistry.AutoServiceRegistrationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
 /**
  * 描述：
@@ -23,13 +22,12 @@ import org.springframework.context.annotation.Configuration;
         proxyBeanMethods = false
 )
 @EnableConfigurationProperties
-@ConditionalOnPolarisDiscoveryEnabled
 @ConditionalOnProperty(
         value = {"spring.cloud.service-registry.auto-registration.enabled"},
         matchIfMissing = true
 )
 @AutoConfigureAfter({AutoServiceRegistrationConfiguration.class,
-        AutoServiceRegistrationAutoConfiguration.class, PolarisDiscoveryAutoConfiguration.class})
+        AutoServiceRegistrationAutoConfiguration.class})
 public class FemasServiceRegistryAutoConfiguration {
     @Bean
     public FemasServiceRegistry femasServiceRegistry(FemasDiscoveryProperties femasDiscoveryProperties) {
@@ -43,6 +41,7 @@ public class FemasServiceRegistryAutoConfiguration {
     }
 
     @Bean
+    @Primary
     @ConditionalOnBean(AutoServiceRegistrationProperties.class)
     public FemasAutoServiceRegistration femasAutoServiceRegistration(
             FemasServiceRegistry registry,

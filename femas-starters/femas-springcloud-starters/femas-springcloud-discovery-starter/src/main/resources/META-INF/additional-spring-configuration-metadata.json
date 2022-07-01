@@ -32,7 +32,7 @@
     },
     {
       "name": "spring.cloud.femas.discovery.registryType",
-      "type": "java.lang.String",
+      "type": "com.tencent.tsf.femas.common.RegistryEnum",
       "description": "femas discovery registry type."
     },
     {
