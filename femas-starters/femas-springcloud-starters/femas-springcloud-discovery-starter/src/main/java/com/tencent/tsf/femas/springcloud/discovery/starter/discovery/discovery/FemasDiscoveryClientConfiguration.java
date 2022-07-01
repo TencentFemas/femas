@@ -1,6 +1,5 @@
 package com.tencent.tsf.femas.springcloud.discovery.starter.discovery.discovery;
 
-import com.tencent.tsf.femas.common.discovery.ServiceDiscoveryClient;
 import com.tencent.tsf.femas.springcloud.discovery.starter.discovery.FemasDiscoveryProperties;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.cloud.client.CommonsClientAutoConfiguration;
@@ -27,7 +26,7 @@ public class FemasDiscoveryClientConfiguration {
         return new FemasDiscoveryClient(femasServiceDiscovery, femasDiscoveryProperties);
     }
 
-   /**
-    * 从这里通过配置参数，构造一个合适的 serviceDiscoveryClient
-    */
+    /**
+     * 从这里通过配置参数，构造一个合适的 serviceDiscoveryClient
+     */
 }

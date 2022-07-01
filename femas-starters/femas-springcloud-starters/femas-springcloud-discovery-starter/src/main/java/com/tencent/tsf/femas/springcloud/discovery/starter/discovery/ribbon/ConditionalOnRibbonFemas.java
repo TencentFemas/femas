@@ -30,7 +30,7 @@ import java.lang.annotation.Target;
  * @author gong zhao
  **/
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.TYPE, ElementType.METHOD })
+@Target({ElementType.TYPE, ElementType.METHOD})
 @ConditionalOnProperty(value = "ribbon.femas.enabled", matchIfMissing = true)
 public @interface ConditionalOnRibbonFemas {
 

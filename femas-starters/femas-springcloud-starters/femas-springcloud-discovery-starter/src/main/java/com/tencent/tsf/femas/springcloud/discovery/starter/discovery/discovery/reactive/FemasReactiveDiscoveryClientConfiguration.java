@@ -1,7 +1,7 @@
 package com.tencent.tsf.femas.springcloud.discovery.starter.discovery.discovery.reactive;
 
 import com.tencent.tsf.femas.common.discovery.ServiceDiscoveryClient;
-import com.tencent.tsf.femas.extension.springcloud.discovery.FemasDiscoveryAutoConfiguration;
+import com.tencent.tsf.femas.springcloud.discovery.starter.discovery.discovery.FemasDiscoveryAutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -25,10 +25,10 @@ import org.springframework.context.annotation.Configuration;
 @AutoConfigureBefore({ReactiveCommonsClientAutoConfiguration.class})
 public class FemasReactiveDiscoveryClientConfiguration {
 
-   @Bean
-   @ConditionalOnMissingBean
-   public FemasReactiveDiscoveryClient femasReactiveDiscoveryClient(
-           ServiceDiscoveryClient serviceDiscoveryClient) {
-      return new FemasReactiveDiscoveryClient(serviceDiscoveryClient);
-   }
+    @Bean
+    @ConditionalOnMissingBean
+    public FemasReactiveDiscoveryClient femasReactiveDiscoveryClient(
+            ServiceDiscoveryClient serviceDiscoveryClient) {
+        return new FemasReactiveDiscoveryClient(serviceDiscoveryClient);
+    }
 }

@@ -1,10 +1,12 @@
 package com.tencent.tsf.femas.springcloud.discovery.starter.discovery;
 
 import com.tencent.tsf.femas.common.RegistryConstants;
+import com.tencent.tsf.femas.common.RegistryEnum;
 import com.tencent.tsf.femas.common.context.Context;
 import com.tencent.tsf.femas.common.context.factory.ContextFactory;
 import com.tencent.tsf.femas.common.discovery.DiscoveryService;
 import com.tencent.tsf.femas.common.serviceregistry.RegistryService;
+import com.tencent.tsf.femas.common.util.AddressUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +32,11 @@ public class FemasDiscoveryProperties {
 
     private volatile static Context commonContext = ContextFactory.getContextInstance();
 
+    @Value("${server.port}")
+    private Integer serverPort;
+
+    private String serverHost;
+
     @Value("${spring.cloud.femas.discovery.serverAddr:")
     private String serverAddr;
 
@@ -48,8 +55,8 @@ public class FemasDiscoveryProperties {
     @Value("${spring.cloud.femas.discovery.token:")
     private String token;
 
-    @Value("${spring.cloud.femas.discovery.registryType:")
-    private String registryType;
+    @Value("${spring.cloud.femas.discovery.registryType}")
+    private RegistryEnum registryType;
 
     @Value("${spring.cloud.femas.discovery.namespace:#{'default'}}")
     private String namespace;
@@ -82,8 +89,8 @@ public class FemasDiscoveryProperties {
         if (this.getPort() != -1) {
             confMap.put(RegistryConstants.REGISTRY_PORT, this.getPort() + "");
         }
-        if (StringUtils.isNotEmpty(this.getRegistryType())) {
-            confMap.put(RegistryConstants.REGISTRY_TYPE, this.getRegistryType());
+        if (this.getRegistryType() != null) {
+            confMap.put(RegistryConstants.REGISTRY_TYPE, this.getRegistryType().getAlias());
         }
         if (StringUtils.isNotEmpty(this.getNamespace())) {
             confMap.put(NAMESPACE_ID, this.getNamespace());
@@ -91,6 +98,7 @@ public class FemasDiscoveryProperties {
         if (StringUtils.isNotEmpty(this.getService())) {
             confMap.put(SERVICE_NAME, this.getService());
         }
+        setServerHost(AddressUtils.getValidLocalHost());
         //todo username、password、token、enabled参数暂时忽略
     }
 
@@ -99,7 +107,7 @@ public class FemasDiscoveryProperties {
             synchronized (this) {
                 if (serviceRegistry == null) {
                     serviceRegistry = RegistryService
-                            .createRegistry(registryType, commonContext.getRegistryConfigMap());
+                            .createRegistry(registryType.getAlias(), commonContext.getRegistryConfigMap());
                 }
             }
         }
@@ -190,11 +198,11 @@ public class FemasDiscoveryProperties {
         this.registerEnabled = registerEnabled;
     }
 
-    public String getRegistryType() {
+    public RegistryEnum getRegistryType() {
         return registryType;
     }
 
-    public void setRegistryType(String registryType) {
+    public void setRegistryType(RegistryEnum registryType) {
         this.registryType = registryType;
     }
 
@@ -204,5 +212,21 @@ public class FemasDiscoveryProperties {
 
     public void setSecure(Boolean secure) {
         this.secure = secure;
+    }
+
+    public Integer getServerPort() {
+        return serverPort;
+    }
+
+    public void setServerPort(Integer serverPort) {
+        this.serverPort = serverPort;
+    }
+
+    public String getServerHost() {
+        return serverHost;
+    }
+
+    public void setServerHost(String serverHost) {
+        this.serverHost = serverHost;
     }
 }

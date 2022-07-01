@@ -98,11 +98,15 @@ public class FemasServiceRegistry implements ServiceRegistry<Registration> {
 
     private com.tencent.tsf.femas.common.entity.ServiceInstance getFemasInstanceFromRegistration(Registration registration) {
         com.tencent.tsf.femas.common.entity.ServiceInstance instance = new ServiceInstance();
-        instance.setService(new Service(registration.getServiceId(), femasDiscoveryProperties.getNamespace()));
-        instance.setHost(registration.getHost());
-        instance.setPort(registration.getPort());
+        String serviceId = registration.getServiceId();
+        instance.setService(new Service(serviceId, femasDiscoveryProperties.getNamespace()));
+        String serverHost = femasDiscoveryProperties.getServerHost();
+        Integer serverPort = femasDiscoveryProperties.getServerPort();
+        instance.setHost(serverHost);
+        instance.setPort(serverPort);
         instance.setAllMetadata(registration.getMetadata());
         instance.setStatus(EndpointStatus.UP);
+        instance.setId(serviceId + "-" + serverHost + ":" + serverPort);
         return instance;
     }
 

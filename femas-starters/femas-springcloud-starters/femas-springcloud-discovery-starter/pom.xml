@@ -22,74 +22,108 @@
         <eureka.client.verison>2.0.2.RELEASE</eureka.client.verison>
     </properties>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <version>${spring-boot-dependencies.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-dependencies</artifactId>
-                <version>${spring-cloud-dependencies.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>com.alibaba.cloud</groupId>
-                <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
-                <version>${spring.cloud.alibaba.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-                <version>${eureka.client.verison}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.ecwid.consul</groupId>
-                <artifactId>consul-api</artifactId>
-                <version>${consul.version}</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
     <dependencies>
+
         <dependency>
             <groupId>com.tencent.tsf</groupId>
             <artifactId>femas-adaptor-opensource-admin</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.tencent.tsf</groupId>
-            <artifactId>femas-extension-springcloud-greenwich</artifactId>
-        </dependency>
+
         <dependency>
             <groupId>com.tencent.cloud</groupId>
-            <artifactId>spring-cloud-starter-tencent-polaris-discovery</artifactId>
+            <artifactId>spring-cloud-tencent-metadata</artifactId>
             <version>1.0.0.2020-SNAPSHOT</version>
-            <scope>compile</scope>
         </dependency>
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
-            <version>5.2.15.RELEASE</version>
+            <version>5.3.20</version>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-commons</artifactId>
-            <version>2.2.9.RELEASE</version>
+            <version>3.1.3</version>
         </dependency>
+
         <dependency>
             <groupId>io.projectreactor</groupId>
             <artifactId>reactor-core</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-ribbon</artifactId>
             <version>2.2.9.RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.tencent.tsf</groupId>
+            <artifactId>femas-registry-nacos</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.tencent.tsf</groupId>
+            <artifactId>femas-registry-polaris</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.tencent.tsf</groupId>
+            <artifactId>femas-registry-consul</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.tencent.tsf</groupId>
+            <artifactId>femas-registry-eureka</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.cloud</groupId>
+                    <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>com.tencent.tsf</groupId>
+            <artifactId>femas-registry-k8s</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.tencent.tsf</groupId>
+            <artifactId>femas-registry-etcd</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.tencent.tsf</groupId>
+            <artifactId>femas-extension-springcloud-common</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.netflix.ribbon</groupId>
+            <artifactId>ribbon-eureka</artifactId>
+            <version>2.3.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-consul-discovery</artifactId>
+            <version>2.1.5.RELEASE</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+            <version>2.1.4.RELEASE</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
