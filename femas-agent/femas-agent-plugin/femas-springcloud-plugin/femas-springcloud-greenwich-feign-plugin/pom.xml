@@ -10,7 +10,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>femas-springcloud-greenwich-feign</artifactId>
+    <artifactId>femas-springcloud-greenwich-feign-plugin</artifactId>
 
     <dependencies>
         <dependency>

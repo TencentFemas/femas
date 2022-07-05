@@ -1,6 +1,7 @@
 package com.tencent.tsf.femas.extension.springcloud.ilford.discovery;
 
 
+import com.tencent.cloud.common.pojo.PolarisServiceInstance;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -15,7 +16,7 @@ import org.springframework.context.annotation.Primary;
 
 import com.alibaba.cloud.nacos.NacosServiceInstance;
 import com.alibaba.cloud.nacos.registry.NacosRegistrationCustomizer;
-import com.tencent.cloud.polaris.pojo.PolarisServiceInstance;
+
 import com.tencent.tsf.femas.extension.springcloud.ilford.discovery.consul.ConsulServerConverter;
 import com.tencent.tsf.femas.extension.springcloud.ilford.discovery.kubernetes.FemasKubernetesDiscoveryClient;
 import com.tencent.tsf.femas.extension.springcloud.ilford.discovery.kubernetes.KubernetesServerConverter;

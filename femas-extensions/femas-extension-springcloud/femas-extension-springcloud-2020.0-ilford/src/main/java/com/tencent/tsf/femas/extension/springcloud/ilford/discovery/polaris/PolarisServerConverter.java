@@ -17,7 +17,8 @@
 
 package com.tencent.tsf.femas.extension.springcloud.ilford.discovery.polaris;
 
-import com.tencent.cloud.polaris.pojo.PolarisServiceInstance;
+
+import com.tencent.cloud.common.pojo.PolarisServiceInstance;
 import com.tencent.tsf.femas.common.context.ContextConstant;
 import com.tencent.tsf.femas.common.context.factory.ContextFactory;
 import com.tencent.tsf.femas.common.entity.EndpointStatus;

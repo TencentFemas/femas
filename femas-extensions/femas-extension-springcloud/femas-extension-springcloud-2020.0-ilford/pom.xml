@@ -24,7 +24,7 @@
         <consul.version>1.4.5</consul.version>
         <eureka.client.verison>3.0.2</eureka.client.verison>
         <feign-reactor.version>3.1.1</feign-reactor.version>
-        <spring.cloud.tencent.version>1.0.0.2020-SNAPSHOT</spring.cloud.tencent.version>
+        <spring.cloud.tencent.version>1.5.3-2020.0.5</spring.cloud.tencent.version>
     </properties>
 
     <dependencyManagement>
