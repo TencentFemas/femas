@@ -32,7 +32,7 @@
         <dependency>
             <groupId>com.tencent.cloud</groupId>
             <artifactId>spring-cloud-tencent-metadata</artifactId>
-            <version>1.0.0.2020-SNAPSHOT</version>
+            <version>1.1.4.Hoxton.SR9</version>
         </dependency>
 
         <dependency>
