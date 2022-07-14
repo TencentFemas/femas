@@ -19,10 +19,7 @@ package com.tencent.tsf.femas.agent.classloader;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -41,6 +38,7 @@ public class AgentClassLoader extends ClassLoader {
      * The default class loader for the agent.
      */
     private static AgentClassLoader DEFAULT_LOADER;
+    private static final String PARENT_DIR = "plugins/";
 
     private List<File> classpath;
     private List<Jar> allJars;
@@ -66,7 +64,6 @@ public class AgentClassLoader extends ClassLoader {
 //            }
 //        }
 //    }
-
     public static AgentClassLoader getDefault() {
         return DEFAULT_LOADER;
     }
@@ -81,11 +78,15 @@ public class AgentClassLoader extends ClassLoader {
         }
     }
 
-    public AgentClassLoader(ClassLoader parent) {
+    public AgentClassLoader(ClassLoader parent, String... modules) {
         super(parent);
         classpath = new LinkedList<File>();
-        classpath.add(new File(AgentPackagePathScanner.getPath(), "plugins"));
-        classpath.add(new File(AgentPackagePathScanner.getPath(), "plugins/libs"));
+        if (modules != null && modules.length > 0) {
+            Arrays.asList(modules).stream().forEach(e -> {
+                classpath.add(new File(AgentPackagePathScanner.getPath(), PARENT_DIR.concat(e)));
+            });
+        }
+        classpath.add(new File(AgentPackagePathScanner.getPath(), PARENT_DIR));
     }
 
     @Override

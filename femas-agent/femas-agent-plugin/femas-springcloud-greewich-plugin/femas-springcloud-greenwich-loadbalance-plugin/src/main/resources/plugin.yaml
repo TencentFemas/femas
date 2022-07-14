@@ -1,0 +1,11 @@
+femas:
+  agent:
+    interceptors:
+      - plugin:
+          className: com.netflix.loadbalancer.ZoneAwareLoadBalancer
+          methodName: chooseServer
+          interceptorClass: com.tencent.tsf.femas.agent.loadbalance.instrument.ZoneAwareLoadBalancerInterceptor
+      - plugin:
+          className: com.netflix.loadbalancer.BaseLoadBalancer
+          methodName: getAllServers
+          interceptorClass: com.tencent.tsf.femas.agent.loadbalance.instrument.BaseLoadBalancerInterceptor

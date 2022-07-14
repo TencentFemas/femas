@@ -18,12 +18,10 @@ package com.tencent.tsf.femas.agent;
 
 import java.lang.instrument.Instrumentation;
 import java.security.AllPermission;
-import java.util.Optional;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
-import com.tencent.tsf.femas.agent.config.AgentPluginLoader;
-import com.tencent.tsf.femas.agent.config.GlobalInterceptPluginConfig;
-import com.tencent.tsf.femas.agent.config.InterceptPlugin;
-import com.tencent.tsf.femas.agent.config.MethodType;
+import com.tencent.tsf.femas.agent.config.*;
 import com.tencent.tsf.femas.agent.interceptor.wrapper.*;
 
 import com.tencent.tsf.femas.agent.tools.AgentLogger;
@@ -59,14 +57,12 @@ public class FemasAgent {
     private static final AgentLogger LOG = AgentLogger.getLogger(FemasAgent.class);
 
     private static ResettableClassFileTransformer rct;
-
+    private static final String TARGET_JAR = "targetJar";
     private static final String ACTIVATE_CROSS_THREAD_TRANSFORMER = "activateCrossThread";
-
 
     public static void premain(String agentArgs, Instrumentation inst) {
         init(agentArgs, inst, true);
     }
-
 
     /**
      * agent 监听器
@@ -95,8 +91,19 @@ public class FemasAgent {
         }
     }
 
-    public synchronized static void init(String agentArguments, Instrumentation instrumentation, boolean premain) {
+    public synchronized static void init(String agentArg, Instrumentation instrumentation, boolean premain) {
         securityManagerCheck();
+        List<Map<String, String>> mapList = parseArgs(agentArg);
+        AtomicReference<String> crossThread = new AtomicReference<>();
+        if (mapList != null && mapList.size() > 0) {
+            mapList.stream().forEach(m -> {
+                String targetJarPath = m.get(TARGET_JAR);
+                if (StringUtils.isNotEmpty(targetJarPath)) {
+                    setAgentContext(targetJarPath);
+                }
+                crossThread.set(m.get(ACTIVATE_CROSS_THREAD_TRANSFORMER));
+            });
+        }
         long delayInitMs = -1L;
         String delayAgentInitMsProperty = System.getProperty("delay_agent_premain_ms");
         if (delayAgentInitMsProperty != null) {
@@ -110,13 +117,13 @@ public class FemasAgent {
             delayInitMs = Math.max(delayInitMs, 3000L);
         }
         if (delayInitMs > 0) {
-            delayInitAgentAsync(agentArguments, instrumentation, premain, delayInitMs);
+            delayInitAgentAsync(crossThread.get(), instrumentation, premain, delayInitMs);
         } else {
             String startAgentAsyncProperty = System.getProperty("agent.start.async");
             if (startAgentAsyncProperty != null) {
-                delayInitAgentAsync(agentArguments, instrumentation, premain, 0);
+                delayInitAgentAsync(crossThread.get(), instrumentation, premain, 0);
             } else {
-                initializeAgent(agentArguments, instrumentation, premain);
+                initializeAgent(crossThread.get(), instrumentation, premain);
             }
         }
     }
@@ -172,6 +179,34 @@ public class FemasAgent {
         initThread.start();
     }
 
+    static void setAgentContext(String arg) {
+        String dirs = MechaRuntimeModule.getPluginModuleByTag(arg);
+        AgentContext.setAvailablePluginsDir(dirs);
+    }
+
+    static List<Map<String, String>> parseArgs(String arg) {
+        List<Map<String, String>> mapList = new ArrayList<>();
+        if (StringUtils.isEmpty(arg)) {
+            LOG.warn("[femas-agent-starter] no agent starter args present...");
+            return mapList;
+        }
+
+        try {
+            String[] pairs = arg.split(",");
+            for (String a :
+                    pairs) {
+                String[] pairsKeys = a.split("=");
+                Map<String, String> map = new HashMap<String, String>(2);
+                map.put(pairsKeys[0], pairsKeys[1]);
+                mapList.add(map);
+            }
+        } catch (Exception e) {
+            LOG.error("[femas-agent-starter] parse premain Args failed", e);
+        }
+
+        return mapList;
+    }
+
     /**
      * 初始化agent
      *
@@ -186,7 +221,7 @@ public class FemasAgent {
                     .ignore(agentIgnoreElement()
                             //忽略编译器自动生成的方法
                             .or(ElementMatchers.isSynthetic()));
-            for (GlobalInterceptPluginConfig plugin : AgentPluginLoader.getInterceptConfig()) {
+            for (InterceptPluginConfig plugin : MechaRuntimePluginsSniffer.sniffRuntimeAvailablePlugins()) {
                 InterceptPlugin interceptPlugin = plugin.getPlugin();
                 agentBuilder = pluginAgentBuilder(agentBuilder, interceptPlugin);
             }

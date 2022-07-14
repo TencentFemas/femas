@@ -16,45 +16,26 @@
  */
 package com.tencent.tsf.femas.agent.config;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 
 /**
- * 用于组装各种配套的插件组合，比如帮助用户配套spring cloud G版所需插件
- * TODO
- *
  * @Author leoziltong@tencent.com
- * @Date: 2022/4/14 11:09
+ * @Date: 2022/7/12 16:56
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class MechaRuntimeConfiguration implements Configuration{
+public class AgentContext {
 
-    @JsonProperty
-    private List<InterceptPluginConfig> interceptors;
+    public static String AVAILABLE_PLUGINS_DIR;
 
-    @Override
-    public void verify() throws IllegalArgumentException {
-
+    public static String getAvailablePluginsDir() {
+        return AVAILABLE_PLUGINS_DIR;
     }
 
-    @Override
-    public void setDefault() {
-
+    public static String getAvailablePluginsDirWithDefault() {
+        return StringUtils.isEmpty(AVAILABLE_PLUGINS_DIR) ? MechaRuntimeModule.GREENWICH.getModule() : AVAILABLE_PLUGINS_DIR;
     }
 
-    public void setInterceptors(List<InterceptPluginConfig> interceptors) {
-        this.interceptors = interceptors;
-    }
-
-    @Override
-    public List<InterceptPluginConfig> getInterceptors() {
-        return interceptors;
-    }
-
-    @Override
-    public boolean hasEmpty() {
-        return false;
+    public static void setAvailablePluginsDir(String availablePlugins) {
+        AVAILABLE_PLUGINS_DIR = availablePlugins;
     }
 }

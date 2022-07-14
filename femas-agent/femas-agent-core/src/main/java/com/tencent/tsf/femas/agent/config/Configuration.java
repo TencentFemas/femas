@@ -28,9 +28,9 @@ public interface Configuration extends Verifier {
     /**
      * 获取全量插件
      *
-     * @return GlobalInterceptPluginConfig
+     * @return InterceptPluginConfig
      */
-    List<GlobalInterceptPluginConfig> getInterceptors();
+    List<InterceptPluginConfig> getInterceptors();
 
     boolean hasEmpty();
 }

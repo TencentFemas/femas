@@ -1,0 +1,9 @@
+#选择agent要加载的plugin，减少premain对启动速度的影响，在这里统一简单标注每个plugin的作用
+#配置逻辑参见InterceptPlugin，非常重要，不要瞎配
+femas:
+  agent:
+    interceptors:
+      - plugin:
+          className: org.springframework.cloud.consul.serviceregistry.ConsulServiceRegistry
+          methodName: register
+          interceptorClass: com.tencent.tsf.femas.agent.consul.instrument.ConsulServiceRegistryInterceptor

@@ -1,0 +1,19 @@
+femas:
+  agent:
+    interceptors:
+      - plugin:
+          className: org.springframework.cloud.openfeign.ribbon.LoadBalancerFeignClient
+          methodName: execute
+          originAround: true
+          interceptorClass: com.tencent.tsf.femas.agent.feign.instrument.LoadBalancerFeignClientOriginalInterceptor
+      - plugin:
+          className: feign.Request
+          methodName: create
+          methodType: static
+          overrideArgs: true
+          interceptorClass: com.tencent.tsf.femas.agent.feign.instrument.FeignRequestInterceptor
+      - plugin:
+          className: org.springframework.web.filter.RequestContextFilter
+          methodName: doFilterInternal
+          originAround: true
+          interceptorClass: com.tencent.tsf.femas.agent.feign.instrument.RequestContextFilterOriginalInterceptor

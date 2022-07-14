@@ -1,5 +1,6 @@
 package com.tencent.tsf.femas.agent.classloader;
 
+import com.tencent.tsf.femas.agent.config.AgentContext;
 import com.tencent.tsf.femas.agent.tools.AgentLogger;
 
 import java.util.Map;
@@ -31,7 +32,8 @@ public class InterceptorClassLoaderCache {
         cacheLock.lock();
         try {
             if (!agentClassLoaderMap.containsKey(classLoader)) {
-                AgentClassLoader agentClassLoader = new AgentClassLoader(classLoader);
+                String availablePluginsDir = AgentContext.getAvailablePluginsDirWithDefault();
+                AgentClassLoader agentClassLoader = new AgentClassLoader(classLoader,availablePluginsDir);
                 agentClassLoaderMap.put(classLoader, agentClassLoader);
             }
         } finally {
