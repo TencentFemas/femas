@@ -97,7 +97,11 @@ public class ServiceManagerService {
         HashSet<String> versions = new HashSet<>();
         for (ServiceInstance serviceInstance : serviceInstances) {
             if (serviceInstance.getAllMetadata() != null) {
-                versions.add(serviceInstance.getMetadata(FEMAS_META_APPLICATION_VERSION_KEY));
+                String version = serviceInstance.getMetadata(FEMAS_META_APPLICATION_VERSION_KEY);
+                if(version!=null && StringUtils.isBlank(version)){
+                    version = null;
+                }
+                versions.add(version);
             }
             if (serviceInstance.getStatus() == EndpointStatus.UP) {
                 liveInstanceCount++;
