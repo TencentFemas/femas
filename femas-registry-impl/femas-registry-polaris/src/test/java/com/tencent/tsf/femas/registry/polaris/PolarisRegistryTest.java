@@ -79,7 +79,7 @@ public class PolarisRegistryTest {
         abstractServiceRegistry = new PolarisServiceRegistry(configMap);
     }
 
-    @Test(timeout = 30000)
+    @Test
     public void testRegistryAndDeregistry() throws InterruptedException {
         abstractServiceRegistry.register(getServiceInstance("registry-test-1", 8080));
         Thread.sleep(10000L);
@@ -93,7 +93,7 @@ public class PolarisRegistryTest {
         Assert.assertEquals(0, serviceInstanceList.size());
     }
 
-    @Test(timeout = 30000)
+    @Test
     public void testRegistryAndDeregistryMany() throws InterruptedException {
         // 注册第一个
         abstractServiceRegistry.register(getServiceInstance("registry-test-1", 8080));
