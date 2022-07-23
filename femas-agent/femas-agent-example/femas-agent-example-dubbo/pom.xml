@@ -9,7 +9,7 @@
     <parent>
         <artifactId>femas-agent-example</artifactId>
         <groupId>com.tencent.tsf</groupId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
 
 
