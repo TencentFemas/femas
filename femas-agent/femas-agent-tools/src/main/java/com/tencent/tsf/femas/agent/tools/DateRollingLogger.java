@@ -2,6 +2,7 @@ package com.tencent.tsf.femas.agent.tools;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -43,7 +44,7 @@ public class DateRollingLogger {
     /**
      * 生成日志的路径
      */
-    private final String logFileLocationFormat = System.getProperty("user.home") + File.separator + "log" + File.separator + "femas" + File.separator + "agent-%s.log";
+    private final String logFileLocationFormat = System.getProperty("user.home") + File.separator + "log" + File.separator + "femas" + File.separator + "agent-" + getPid() + "-%s.log";
 
     private final ScheduledThreadPoolExecutor scheduledThreadPoolExecutor = new ScheduledThreadPoolExecutor(1, r -> {
         Thread thread = new Thread(r);
@@ -147,4 +148,20 @@ public class DateRollingLogger {
             pre = fileHandler;
         }
     }
+
+    /**
+     * 获取程序pid
+     *
+     * @return pid
+     */
+    private String getPid() {
+        try {
+            String jvmName = ManagementFactory.getRuntimeMXBean().getName();
+            return jvmName.split("@")[0];
+        } catch (Exception exception) {
+            LOGGER_FOR_EXCEPTION.warning("获取pid失败");
+            throw exception;
+        }
+    }
+
 }
