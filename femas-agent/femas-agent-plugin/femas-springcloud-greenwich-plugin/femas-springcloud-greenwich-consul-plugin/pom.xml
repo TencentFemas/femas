@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
     <parent>
-        <artifactId>femas-springcloud-plugin</artifactId>
+        <artifactId>femas-springcloud-greenwich-plugin</artifactId>
         <groupId>com.tencent.tsf</groupId>
         <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>femas-springcloud-greenwich-feign-plugin</artifactId>
+    <artifactId>femas-springcloud-greenwich-consul-plugin</artifactId>
+    <name>femas-springcloud-greenwich-consul-plugin</name>
+    <description>femas-springcloud-greenwich-consul-plugin</description>
+
 
     <dependencies>
         <dependency>
