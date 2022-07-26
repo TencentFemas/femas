@@ -42,9 +42,14 @@ public class DateRollingLogger {
     private final AtomicBoolean startUp = new AtomicBoolean(false);
 
     /**
+     * 生成日志的文件夹路径
+     */
+    private static final String LOG_FILE_FOLDER_PATH = System.getProperty("user.home") + File.separator + "log" + File.separator + "femas";
+
+    /**
      * 生成日志的路径
      */
-    private final String logFileLocationFormat = System.getProperty("user.home") + File.separator + "log" + File.separator + "femas" + File.separator + "agent-" + getPid() + "-%s.log";
+    private static final String LOG_FILE_LOCATION_FORMAT = LOG_FILE_FOLDER_PATH + File.separator + "agent-" + getPid() + "-%s.log";
 
     private final ScheduledThreadPoolExecutor scheduledThreadPoolExecutor = new ScheduledThreadPoolExecutor(1, r -> {
         Thread thread = new Thread(r);
@@ -69,6 +74,11 @@ public class DateRollingLogger {
     }
 
     public DateRollingLogger(Logger logger) {
+        // init folder
+        File file = new File(LOG_FILE_FOLDER_PATH);
+        if (!file.exists() && !file.isDirectory() && !file.mkdirs()) {
+            LOGGER_FOR_EXCEPTION.warning("Create log folder failed!");
+        }
         this.logger = logger;
     }
 
@@ -81,7 +91,7 @@ public class DateRollingLogger {
     private FileHandler newFileHandler() throws IOException {
         // 每次new一次,避免线程安全
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        FileHandler fileHandler = new FileHandler(String.format(logFileLocationFormat, dateFormat.format(new Date())), true);
+        FileHandler fileHandler = new FileHandler(String.format(LOG_FILE_LOCATION_FORMAT, dateFormat.format(new Date())), true);
 
         // 每次new一次,避免使用的DateFormat出现线程安全的问题
         fileHandler.setFormatter(new Formatter() {
@@ -154,7 +164,7 @@ public class DateRollingLogger {
      *
      * @return pid
      */
-    private String getPid() {
+    private static String getPid() {
         try {
             String jvmName = ManagementFactory.getRuntimeMXBean().getName();
             return jvmName.split("@")[0];
