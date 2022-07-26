@@ -72,7 +72,7 @@ public abstract class RegistryOpenApiAdaptor implements RegistryOpenApiInterface
 
 
     public RegistryOpenApiAdaptor() {
-        this.httpClient = ApacheHttpClientHolder.getHttpClient(5000,1000);
+        this.httpClient = ApacheHttpClientHolder.getHttpClient(1000,1000);
     }
 
     private static ScheduledThreadPoolExecutor getListenerExecutor() {
