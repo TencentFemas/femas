@@ -43,6 +43,12 @@ public class ApacheHttpClientHolder {
         return getHttpClient(new ApacheDefaultHttpClientFactory());
     }
 
+    public static AbstractHttpClient getHttpClient(int conTimeOutMillis, int readTimeOutMillis) {
+        return getHttpClient(new ApacheDefaultHttpClientFactory(conTimeOutMillis, readTimeOutMillis));
+    }
+
+
+
     public static AbstractHttpClient getHttpClient(HttpClientFactory httpClientFactory) {
         if (httpClientFactory == null) {
             throw new NullPointerException("httpClientFactory is null");
