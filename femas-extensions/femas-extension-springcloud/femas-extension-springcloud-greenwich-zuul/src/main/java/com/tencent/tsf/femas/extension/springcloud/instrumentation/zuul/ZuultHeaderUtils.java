@@ -10,18 +10,21 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.tencent.tsf.femas.common.constant.FemasConstant.SOURCE_CONNECTION_IP;
+
 public class ZuultHeaderUtils extends AbstractRequestMetaUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(ZuultHeaderUtils.class);
 
     private volatile ContextConstant contextConstant = ContextFactory.getContextConstantInstance();
-
+    private static final String UNKNOWN = "unknown";
     private RequestContext requestContext;
 
     private volatile Context commonContext = ContextFactory.getContextInstance();
@@ -66,7 +69,7 @@ public class ZuultHeaderUtils extends AbstractRequestMetaUtils {
     }
 
     @Override
-    public Map<String, String> getPrefixRequestMetas(String prefix){
+    public Map<String, String> getPrefixRequestMetas(String prefix) {
         Map<String, String> result = new HashMap<>();
         Map<String, String> headersMap = requestContext.getZuulRequestHeaders();
         for (Map.Entry<String, String> entry : headersMap.entrySet()) {
@@ -81,8 +84,38 @@ public class ZuultHeaderUtils extends AbstractRequestMetaUtils {
     @Override
     public void getUniqueInfo() {
         // clean at client interceptor#fillTracingContext
+        if (StringUtils.isEmpty(Context.getRpcInfo().get(SOURCE_CONNECTION_IP))) {
+            Context.getRpcInfo().put(SOURCE_CONNECTION_IP, getIpAddr(requestContext.getRequest()));
+        }
         Context.getRpcInfo().put(contextConstant.getInterface(), requestContext.getRequest().getRequestURI());
         Context.getRpcInfo().put(contextConstant.getRequestHttpMethod(), requestContext.getRequest().getMethod());
+
+    }
+
+
+    public static String getIpAddr(HttpServletRequest request) {
+        String ip = null;
+        try {
+            ip = request.getHeader("x-forwarded-for");
+            if (StringUtils.isEmpty(ip) || UNKNOWN.equalsIgnoreCase(ip)) {
+                ip = request.getHeader("Proxy-Client-IP");
+            }
+            if (StringUtils.isEmpty(ip) || ip.length() == 0 || UNKNOWN.equalsIgnoreCase(ip)) {
+                ip = request.getHeader("WL-Proxy-Client-IP");
+            }
+            if (StringUtils.isEmpty(ip) || UNKNOWN.equalsIgnoreCase(ip)) {
+                ip = request.getHeader("HTTP_CLIENT_IP");
+            }
+            if (StringUtils.isEmpty(ip) || UNKNOWN.equalsIgnoreCase(ip)) {
+                ip = request.getHeader("HTTP_X_FORWARDED_FOR");
+            }
+            if (StringUtils.isEmpty(ip) || UNKNOWN.equalsIgnoreCase(ip)) {
+                ip = request.getRemoteAddr();
+            }
+        } catch (Exception e) {
+            logger.error("IPUtils ERROR ", e);
+        }
+        return ip;
     }
 
 }
