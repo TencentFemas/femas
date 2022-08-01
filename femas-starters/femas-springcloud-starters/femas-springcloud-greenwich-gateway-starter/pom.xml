@@ -18,6 +18,10 @@
             <groupId>com.tencent.tsf</groupId>
             <artifactId>femas-extension-springcloud-greenwich-gateway</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.tencent.tsf</groupId>
+            <artifactId>femas-extension-springcloud-common</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
