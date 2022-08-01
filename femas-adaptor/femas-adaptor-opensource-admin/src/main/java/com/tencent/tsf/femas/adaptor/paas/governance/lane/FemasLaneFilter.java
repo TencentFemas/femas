@@ -4,16 +4,19 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.tencent.tsf.femas.common.constant.FemasConstant;
 import com.tencent.tsf.femas.common.context.Context;
+import com.tencent.tsf.femas.common.context.ContextConstant;
 import com.tencent.tsf.femas.common.context.FemasContext;
+import com.tencent.tsf.femas.common.context.factory.ContextFactory;
 import com.tencent.tsf.femas.common.entity.Service;
 import com.tencent.tsf.femas.common.entity.ServiceInstance;
+import com.tencent.tsf.femas.governance.lane.entity.LaneRule;
 import com.tencent.tsf.femas.common.exception.FemasRuntimeException;
 import com.tencent.tsf.femas.common.tag.engine.TagEngine;
 import com.tencent.tsf.femas.common.util.CollectionUtil;
 import com.tencent.tsf.femas.common.util.StringUtils;
 import com.tencent.tsf.femas.governance.lane.LaneFilter;
-import com.tencent.tsf.femas.governance.lane.entity.LaneRule;
 import com.tencent.tsf.femas.governance.plugin.context.ConfigContext;
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,11 +58,26 @@ public class FemasLaneFilter implements LaneFilter {
      */
     private static volatile  Map<String, LaneInfo> LANE_ID_LANE_INFO_MAP = new ConcurrentHashMap<>();
 
+
+
+
+    private volatile static List<String> currentGroupLaneIds = null;
+
+    // 所有泳道涉及的部署组id列表
+    private volatile static Map<String, Boolean> allLaneConfiguredGroupsIds = new ConcurrentHashMap<>();
+    // laneId -> 对应泳道配置过泳道的服务列表（applicationId#namespaceId），便于快速判断当前服务是否配置过对应的泳道
+    private volatile static Map<String, Set<String>> laneConfiguredServicesMap = new ConcurrentHashMap<>();
+    // laneId -> 对应泳道配置的 groupIds，便于快速判断当前节点是否属于该泳道
+    private volatile static Map<String, Set<String>> laneConfiguredGroupIdsMap = new ConcurrentHashMap<>();
+
     /**
      * 命名空间-landIds 映射map
      */
     private static volatile  Map<String, Set<String>> NAMESPACE_LANE_INFO_MAP = new ConcurrentHashMap<>();
 
+    private volatile static ContextConstant contextConstant = ContextFactory.getContextConstantInstance();
+
+    private static String groupId = Context.getSystemTag(contextConstant.getGroupId());
     /**
      * 部署组id-landIds 映射map
      * 供colorless逻辑使用
@@ -373,7 +391,7 @@ public class FemasLaneFilter implements LaneFilter {
 
     @Override
     public String getName() {
-        return "tsfLane";
+        return "femasLane";
     }
 
     @Override
@@ -389,5 +407,79 @@ public class FemasLaneFilter implements LaneFilter {
     @Override
     public void destroy() {
 
+    }
+
+    public static LaneInfo getTsfLaneInfo(String laneId) {
+        return LANE_ID_LANE_INFO_MAP.get(laneId);
+    }
+
+    public static Map<String, LaneInfo> getTsfLaneInfoMap() {
+        return LANE_ID_LANE_INFO_MAP;
+    }
+
+    public static List<String> getCurrentGroupLaneIds() {
+        return currentGroupLaneIds;
+    }
+
+    /**
+     *  从 LANE_ID_LANE_INFO_MAP 更新 currentGroupLaneId
+     * @return
+     */
+    public static void updateLaneShortCutInfo() {
+        List<String> laneIds =  Collections.synchronizedList(new ArrayList());
+        Map<String, Boolean> groupIds = new ConcurrentHashMap<>();
+
+        Map<String, Set<String>> tempLaneConfiguredServicesMap = new ConcurrentHashMap<>();
+        Map<String, Set<String>> tempLaneConfiguredGroupIdsMap = new ConcurrentHashMap<>();
+
+        if (StringUtils.isNotEmpty(groupId) || LANE_ID_LANE_INFO_MAP != null || LANE_ID_LANE_INFO_MAP.size() > 0) {
+            for (Map.Entry<String, LaneInfo> entry : LANE_ID_LANE_INFO_MAP.entrySet()) {
+                List<LaneGroup> laneGroupList = entry.getValue().getLaneGroupList();
+                Set<String> tempLaneConfiguredServices = new HashSet<>();
+                Set<String> tempLaneConfiguredGroupIds = new HashSet<>();
+
+                if (CollectionUtils.isNotEmpty(laneGroupList)) {
+                    for (LaneGroup group : laneGroupList) {
+                        // 理论上 groupId、applicationId、nsId 都不为空，但端云联调等自己注册的可能会有缺失
+                        if (StringUtils.isNotEmpty(group.getGroupId())) {
+                            groupIds.put(group.getGroupId(), true);
+                            tempLaneConfiguredGroupIds.add(group.getGroupId());
+                        }
+                        if (StringUtils.isNotEmpty(group.getNamespaceId())
+                                && StringUtils.isNotEmpty(group.getApplicationId())) {
+                            tempLaneConfiguredServices.add(getLaneConfiguredServiceKey(group.getApplicationId(), group.getNamespaceId()));
+                        }
+
+                        if (groupId.equals(group.getGroupId())) {
+                            laneIds.add(entry.getKey());
+                        }
+                    }
+                    tempLaneConfiguredServicesMap.put(entry.getKey(), tempLaneConfiguredServices);
+                    tempLaneConfiguredGroupIdsMap.put(entry.getKey(), tempLaneConfiguredGroupIds);
+                }
+            }
+        }
+
+        currentGroupLaneIds = laneIds;
+        allLaneConfiguredGroupsIds = groupIds;
+        laneConfiguredServicesMap = tempLaneConfiguredServicesMap;
+        laneConfiguredGroupIdsMap = tempLaneConfiguredGroupIdsMap;
+    }
+
+    public static Set<String> getAllLaneConfiguredGroupsIds() {
+        return allLaneConfiguredGroupsIds.keySet();
+    }
+
+    public static Set<String> getLaneConfiguredServices(String laneId) {
+        return laneConfiguredServicesMap.get(laneId);
+    }
+
+    public static Set<String> getLaneConfiguredGroupIds(String laneId) {
+        return laneConfiguredGroupIdsMap.get(laneId);
+    }
+
+    // 根据 applicationId 和 namespaceId 判断一个服务是否配置过泳道
+    public static String getLaneConfiguredServiceKey(String applicationId, String namespaceId) {
+        return String.format("%s#%s", applicationId, namespaceId);
     }
 }
