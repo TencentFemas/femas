@@ -26,6 +26,10 @@ import com.tencent.tsf.femas.entity.rule.*;
 import com.tencent.tsf.femas.entity.rule.auth.AuthRuleModel;
 import com.tencent.tsf.femas.entity.rule.auth.ServiceAuthRuleModel;
 import com.tencent.tsf.femas.entity.rule.breaker.CircuitBreakerModel;
+import com.tencent.tsf.femas.entity.rule.lane.LaneInfo;
+import com.tencent.tsf.femas.entity.rule.lane.LaneInfoModel;
+import com.tencent.tsf.femas.entity.rule.lane.LaneRule;
+import com.tencent.tsf.femas.entity.rule.lane.LaneRuleModel;
 import com.tencent.tsf.femas.entity.rule.limit.LimitModel;
 import com.tencent.tsf.femas.entity.rule.route.Tolerate;
 import com.tencent.tsf.femas.entity.rule.route.TolerateModel;
@@ -1258,6 +1262,45 @@ public class RocksDbDataOperation implements DataOperation {
         return new PageService<FemasRouteRule>(data,routeRules.size());
     }
 
+    @Override
+    public Integer configureLane(LaneInfo laneInfo) {
+        return null;
+    }
+
+    @Override
+    public LaneInfo fetchLaneById(String laneId) {
+        return null;
+    }
+
+    @Override
+    public PageService<LaneInfo> fetchLaneInfoPages(LaneInfoModel laneInfoModel) {
+        return null;
+    }
+
+    @Override
+    public Integer deleteLane(String laneId) {
+        return null;
+    }
+
+    @Override
+    public Integer configureLaneRule(LaneRule laneRule) {
+        return null;
+    }
+
+    @Override
+    public LaneRule fetchLaneRuleById(String laneRuleId) {
+        return null;
+    }
+
+    @Override
+    public PageService<LaneRule> fetchLaneRulePages(LaneRuleModel laneRuleModel) {
+        return null;
+    }
+
+    @Override
+    public Integer deleteLaneRule(String laneRuleId) {
+        return null;
+    }
 
     public static enum OptionType{
         ADD,
