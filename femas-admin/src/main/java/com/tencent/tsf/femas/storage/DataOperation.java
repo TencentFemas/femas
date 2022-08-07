@@ -381,6 +381,13 @@ public interface DataOperation {
      */
     PageService<LaneInfo> fetchLaneInfoPages(LaneInfoModel laneInfoModel);
 
+    /**
+     * 查询泳道(全量)
+     * @param
+     * @return
+     */
+    List<LaneInfo> fetchLaneInfo();
+
 
     /**
      * 删除泳道
@@ -410,6 +417,14 @@ public interface DataOperation {
      * @return
      */
     PageService<LaneRule> fetchLaneRulePages(LaneRuleModel laneRuleModel);
+
+
+    /**
+     * 查询泳道规则(全量)
+     * @param
+     * @return
+     */
+    List<LaneRule> fetchLaneRule();
 
     /**
      * 删除泳道规则

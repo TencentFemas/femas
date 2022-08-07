@@ -1208,4 +1208,16 @@ public class MysqlDataOperation implements DataOperation {
         return manager.deleteById("lane_rule", "rule_id", laneRuleId);
     }
 
+    @Override
+    public List<LaneInfo> fetchLaneInfo() {
+        RowMapper rowMapper = RowMapperFactory.getMapper(LANE_INFO);
+        return manager.selectListPojoByMapper(rowMapper, "select * from lane_info");
+    }
+
+    @Override
+    public List<LaneRule> fetchLaneRule() {
+        RowMapper rowMapper = RowMapperFactory.getMapper(LANE_RULE);
+        return manager.selectListPojoByMapper(rowMapper, "select * from lane_rule");
+    }
+
 }
