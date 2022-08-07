@@ -3,3 +3,4 @@ com.tencent.tsf.femas.adaptor.paas.governance.circuitbreaker.FemasCircuitBreaker
 com.tencent.tsf.femas.adaptor.paas.governance.loadbalance.FemasLoadBalancerHandler
 com.tencent.tsf.femas.adaptor.paas.governance.ratelimiter.FemasRateLimiterHandler
 com.tencent.tsf.femas.adaptor.paas.governance.router.FemasRouterHandler
+com.tencent.tsf.femas.adaptor.paas.governance.lane.FemasLaneHandler

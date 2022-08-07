@@ -21,18 +21,17 @@ import com.tencent.tsf.femas.common.context.Context;
 import com.tencent.tsf.femas.common.context.ContextConstant;
 import com.tencent.tsf.femas.common.context.factory.ContextFactory;
 import com.tencent.tsf.femas.common.header.AbstractRequestMetaUtils;
-import com.tencent.tsf.femas.common.util.StringUtils;
-import com.tencent.tsf.femas.governance.lane.LaneService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
+
+import static com.tencent.tsf.femas.common.constant.FemasConstant.SOURCE_CONNECTION_IP;
 
 /**
  * @Author leoziltong
@@ -80,7 +79,7 @@ public class GatewayHeaderUtils extends AbstractRequestMetaUtils {
     public Map<String, String> getPrefixRequestMetas(String prefix) {
         Map<String, String> result = new HashMap<>();
         Set<Map.Entry<String, List<String>>> headersSet = builder.build().getHeaders().entrySet();
-        for (Map.Entry<String, List<String>> map: headersSet) {
+        for (Map.Entry<String, List<String>> map : headersSet) {
             String key = map.getKey();
             if (key.startsWith(prefix)) {
                 result.put(key, map.getValue().get(0));
@@ -92,7 +91,10 @@ public class GatewayHeaderUtils extends AbstractRequestMetaUtils {
     @Override
     public void getUniqueInfo() {
         // clean at client interceptor#fillTracingContext
-        Context.getRpcInfo().put(contextConstant.getInterface(), serverHttpRequest.getURI().toString());
+        if (StringUtils.isEmpty(Context.getRpcInfo().get(SOURCE_CONNECTION_IP))) {
+            Context.getRpcInfo().put(SOURCE_CONNECTION_IP, serverHttpRequest.getURI().getHost());
+        }
+        Context.getRpcInfo().put(contextConstant.getRequestHttpMethod(), serverHttpRequest.getURI().toString());
         Context.getRpcInfo().put(contextConstant.getRequestHttpMethod(), serverHttpRequest.getMethodValue());
     }
 }

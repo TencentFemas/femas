@@ -19,6 +19,7 @@ package com.tencent.tsf.femas.springcloud.gateway.config;
 
 import com.tencent.tsf.femas.springcloud.gateway.discovery.DiscoveryServerConverter;
 import com.tencent.tsf.femas.springcloud.gateway.filter.FemasGatewayGovernanceFilter;
+import com.tencent.tsf.femas.springcloud.gateway.filter.FemasGatewayMetricsFilter;
 import com.tencent.tsf.femas.springcloud.gateway.filter.FemasReactiveLoadBalancerClientFilter;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
@@ -26,11 +27,15 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.cloud.gateway.config.LoadBalancerProperties;
 import org.springframework.cloud.gateway.filter.LoadBalancerClientFilter;
 import org.springframework.cloud.gateway.filter.ReactiveLoadBalancerClientFilter;
+import org.springframework.cloud.gateway.route.RouteLocator;
+import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.cloud.loadbalancer.support.LoadBalancerClientFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.concurrent.TimeUnit;
 
 @Configuration
 public class GatewayAutoConfiguration implements BeanPostProcessor, ApplicationContextAware {
@@ -43,12 +48,27 @@ public class GatewayAutoConfiguration implements BeanPostProcessor, ApplicationC
         return new FemasGatewayGovernanceFilter();
     }
 
+    @Bean
+    public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
+        return builder.routes()
+                .route("femasMetrics", r -> r.path("/femas/actuator/prometheus")
+                        .uri("http://femas.io"))
+                .build();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public FemasGatewayMetricsFilter femasGatewayMetricsFilter() {
+        return new FemasGatewayMetricsFilter();
+    }
+
+
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) {
-        if(bean instanceof LoadBalancerClientFilter || bean instanceof ReactiveLoadBalancerClientFilter){
+        if (bean instanceof LoadBalancerClientFilter || bean instanceof ReactiveLoadBalancerClientFilter) {
             DiscoveryServerConverter converter = context.getBean(DiscoveryServerConverter.class);
-            LoadBalancerClientFactory clientFactory= context.getBean(LoadBalancerClientFactory.class);
-            LoadBalancerProperties properties =context.getBean(LoadBalancerProperties.class);
+            LoadBalancerClientFactory clientFactory = context.getBean(LoadBalancerClientFactory.class);
+            LoadBalancerProperties properties = context.getBean(LoadBalancerProperties.class);
             return new FemasReactiveLoadBalancerClientFilter(converter, clientFactory, properties);
         }
         return bean;
