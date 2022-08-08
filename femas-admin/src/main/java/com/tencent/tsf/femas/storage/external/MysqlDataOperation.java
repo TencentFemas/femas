@@ -952,7 +952,7 @@ public class MysqlDataOperation implements DataOperation {
         String join = configIdList.stream().map(str -> "'" + str + "'").collect(Collectors.joining(", "));
 //        String sql = "select config_id configId, count(1) versionCount , max(log.release_time) releaseTime from dcfg_config_version version left join dcfg_config_release_log log on version.config_version_id = log.config_version_id "
 //        +" where log.release_status = 'S' and version.config_id in( " + join + " )";
-        String sql = "select config_id configId, count(1) versionCount from dcfg_config_version where config_id in( " + join + " )";
+        String sql = "select config_id configId, count(1) versionCount from dcfg_config_version where config_id in( " + join + " ) group by config_id";
         return manager.selectListPojo(sql, Config.class);
     }
 

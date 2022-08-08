@@ -1,21 +1,22 @@
 FROM ubuntu:20.04
 
-LABEL maintainer "minghhou <minghhou>"
+#LABEL maintainer "minghhou <minghhou>"
+#
+#ENV BUILD_MODE="docker"
+#
+#RUN sed -i 's/archive.ubuntu.com/mirrors.tencent.com/g' /etc/apt/sources.list && \
+#    sed -i 's/security.ubuntu.com/mirrors.tencent.com/g' /etc/apt/sources.list
+#
+#RUN apt update && apt install openjdk-8-jdk maven iproute2 -y
 
-ENV BUILD_MODE="docker"
+COPY ./femas-admin-starter/target/femas-admin-starter-*/* /usr/local/src/femas
 
-RUN sed -i 's/archive.ubuntu.com/mirrors.tencent.com/g' /etc/apt/sources.list && \
-    sed -i 's/security.ubuntu.com/mirrors.tencent.com/g' /etc/apt/sources.list
+#RUN echo "start build docker" && cd /usr/local/src/femas && mvn -Dmaven.test.skip=true clean install -U
 
-RUN apt update && apt install openjdk-8-jdk maven iproute2 -y
+#COPY ./entrypoint.sh /entrypoint.sh
 
-COPY ./ /usr/local/src/femas
+#RUN chmod +x /entrypoint.sh
 
-RUN echo "start build docker" && cd /usr/local/src/femas && mvn -Dmaven.test.skip=true clean install -U
+RUN chmod +x /usr/local/src/femas/bin/startup.sh
 
-COPY ./entrypoint.sh /entrypoint.sh
-
-RUN chmod +x /entrypoint.sh
-
-ENTRYPOINT /entrypoint.sh
-
+ENTRYPOINT ["/usr/local/src/femas/bin/startup.sh"]

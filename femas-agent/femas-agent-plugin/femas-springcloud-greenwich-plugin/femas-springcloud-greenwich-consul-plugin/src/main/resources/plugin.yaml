@@ -1,0 +1,7 @@
+femas:
+  agent:
+    interceptors:
+      - plugin:
+          className: org.springframework.cloud.consul.serviceregistry.ConsulServiceRegistry
+          methodName: register
+          interceptorClass: com.tencent.tsf.femas.agent.consul.instrument.ConsulServiceRegistryInterceptor

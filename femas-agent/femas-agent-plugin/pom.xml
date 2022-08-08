@@ -23,7 +23,8 @@
 
     <modules>
         <module>femas-dubbo-2.6.x-plugin</module>
-        <module>femas-springcloud-greewich-plugin</module>
+        <module>femas-springcloud-greenwich-plugin</module>
+        <module>femas-core-dependency-bom-plugin</module>
         <module>femas-springcloud-2020-plugin</module>
         <module>femas-apache-dubbo3-plugin</module>
     </modules>
