@@ -1,6 +1,8 @@
 package com.tencent.tsf.femas.agent.transformer.async;
 
 
+import com.tencent.tsf.femas.agent.tools.ReflectionUtils;
+
 import java.util.TimerTask;
 import java.util.concurrent.Callable;
 
@@ -9,22 +11,26 @@ import java.util.concurrent.Callable;
  * @Author leoziltong@tencent.com
  */
 public class RunnableWrapper {
+    public static final String FEMAS_CONTEXT_CLASS_NAME = "com.tencent.tsf.femas.common.context.FemasContext";
+    public static final String CONTEXT_COPY_VALUE_METHOD_NAME = "getCopyRpcContext";
+    public static final String CONTEXT_SET_VALUE_METHOD_NAME = "restoreRpcContext";
+    public static final String CONTEXT_CLEAN_VALUE_METHOD_NAME = "reset";
 
     public static Runnable wrapRunnable(Runnable runnable) {
-//        LOG.info("AgentRunnable.wrapRunnable");
         if (runnable instanceof AgentRunnable) {
             return runnable;
         } else {
-            return new AgentRunnable(AgentContext.getAgentHead(), runnable);
+            Object rpcContext = ReflectionUtils.invokeStaticMethod(FEMAS_CONTEXT_CLASS_NAME, CONTEXT_COPY_VALUE_METHOD_NAME);
+            return new AgentRunnable(rpcContext, runnable);
         }
     }
 
     public static Callable wrapCallable(Callable callable) {
-//        LOG.info("AgentRunnable.wrapCallable");
         if (callable instanceof AgentCallable) {
             return callable;
         } else {
-            return new AgentCallable(AgentContext.getAgentHead(), callable);
+            Object rpcContext = ReflectionUtils.invokeStaticMethod(FEMAS_CONTEXT_CLASS_NAME, CONTEXT_COPY_VALUE_METHOD_NAME);
+            return new AgentCallable(rpcContext, callable);
         }
     }
 
@@ -32,11 +38,13 @@ public class RunnableWrapper {
         if (timerTask instanceof AgentTimerTask) {
             return timerTask;
         } else {
-            return new AgentTimerTask(AgentContext.getAgentHead(), timerTask);
+            Object rpcContext = ReflectionUtils.invokeStaticMethod(FEMAS_CONTEXT_CLASS_NAME, CONTEXT_COPY_VALUE_METHOD_NAME);
+            return new AgentTimerTask(rpcContext, timerTask);
         }
     }
 
     public static AgentSyncTask wrapAsync(Object target) {
-        return new AgentSyncTask(AgentContext.getAgentHead(), target);
+        Object rpcContext = ReflectionUtils.invokeStaticMethod(FEMAS_CONTEXT_CLASS_NAME, CONTEXT_COPY_VALUE_METHOD_NAME);
+        return new AgentSyncTask(rpcContext, target);
     }
 }
