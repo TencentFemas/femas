@@ -1,1 +1,2 @@
 com.tencent.tsf.femas.config.impl.paas.PaasConfigFactory
+com.tencent.tsf.femas.config.impl.paas.ThriftPaasConfigFactory

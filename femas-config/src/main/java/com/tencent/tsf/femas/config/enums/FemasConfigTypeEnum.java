@@ -28,7 +28,9 @@ public enum FemasConfigTypeEnum {
 
     CONSUL("consul"),
     PAAS("paas"),
-    NACOS("nacos");
+    NACOS("nacos"),
+
+    THRIFT_PAAS("thriftPaas");
 
     private String type;
 
