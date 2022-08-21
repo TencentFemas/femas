@@ -12,6 +12,7 @@ import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -21,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @Descriptioin
  */
 @RestController
-@RequestMapping("/lane")
+@RequestMapping("atom/v1//lane")
 @Api(tags = "泳道配置模块")
 public class LaneController extends AbstractBaseEndpoint {
 
@@ -29,44 +30,44 @@ public class LaneController extends AbstractBaseEndpoint {
     @Autowired
     LaneService laneService;
 
-    @RequestMapping("/configureLane")
+    @RequestMapping(value = "/configureLane", method = RequestMethod.POST)
     public Result configureLane(@RequestBody LaneInfo laneInfo) {
         return executor.process(()->laneService.configureLane(laneInfo));
     }
 
-    @RequestMapping("/fetchLaneById")
+    @RequestMapping(value = "/fetchLaneById", method = RequestMethod.POST)
     public Result<LaneInfo> fetchLaneById(@RequestBody String laneId) {
         return executor.process(()->laneService.fetchLaneById(laneId));
     }
 
-    @RequestMapping("/fetchLaneInfoPages")
+    @RequestMapping(value = "/fetchLaneInfoPages", method = RequestMethod.POST)
     public Result<PageService<LaneInfo>> fetchLaneInfoPages(@RequestBody LaneInfoModel laneInfoModel) {
         return executor.process(()->laneService.fetchLaneInfoPages(laneInfoModel));
     }
 
 
-    @RequestMapping("/delete")
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public Result deleteLane(@RequestBody String laneId) {
         return executor.process(()->laneService.deleteLane(laneId));
     }
 
 
-    @RequestMapping("/rule/configureLaneRule")
+    @RequestMapping(value = "/rule/configureLaneRule", method = RequestMethod.POST)
     public Result createLaneRule(@RequestBody LaneRule laneRule) {
         return executor.process(()->laneService.configureLaneRule(laneRule));
     }
 
-    @RequestMapping("/rule/fetchLaneRuleById")
-    public Result<LaneRule> findOneRule(@RequestBody String laneRuleId) {
+    @RequestMapping(value = "/rule/fetchLaneRuleById", method = RequestMethod.POST)
+    public Result<LaneRule> fetchLaneRuleById(@RequestBody String laneRuleId) {
         return executor.process(()->laneService.fetchLaneRuleById(laneRuleId));
     }
 
-    @RequestMapping("/rule/fetchLaneRulePages")
+    @RequestMapping(value = "/rule/fetchLaneRulePages", method = RequestMethod.POST)
     public Result<PageService<LaneRule>> fetchLaneRulePages(@RequestBody LaneRuleModel laneRuleModel) {
         return executor.process(()->laneService.fetchLaneRulePages(laneRuleModel));
     }
 
-    @RequestMapping("/rule/delete")
+    @RequestMapping(value = "/rule/delete", method = RequestMethod.POST)
     public Result deleteRule(@RequestBody String laneRuleId) {
         return executor.process(()->laneService.deleteLaneRule(laneRuleId));
     }

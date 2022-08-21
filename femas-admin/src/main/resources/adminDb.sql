@@ -228,16 +228,17 @@ CREATE TABLE `lane_info` (
 -- ----------------------------
 DROP TABLE IF EXISTS `lane_rule`;
 CREATE TABLE `lane_rule` (
-  `rule_id` varchar(50) NOT NULL COMMENT '泳道规则id',
-  `rule_name` varchar(2000) DEFAULT '' COMMENT '泳道规则名称',
-  `remark` varchar(5000) DEFAULT '' COMMENT '备注',
-  `rule_tag_list` text COMMENT '规则tag列表',
-  `rule_tag_relationship` text COMMENT 'tag聚会关系',
-  `lane_id` varchar(50) DEFAULT NULL COMMENT '关联泳道id',
-  `enable` int(5) DEFAULT NULL COMMENT '1：开启 0:关闭',
-  `create_time` bigint(20) DEFAULT NULL COMMENT '创建时间',
-  `update_time` bigint(20) DEFAULT NULL COMMENT '更新时间',
-                             PRIMARY KEY (`rule_id`)
+ `rule_id` varchar(50) NOT NULL COMMENT '泳道规则id',
+ `rule_name` varchar(2000) DEFAULT '' COMMENT '泳道规则名称',
+ `remark` varchar(5000) DEFAULT '' COMMENT '备注',
+ `rule_tag_list` text COMMENT '规则tag列表',
+ `rule_tag_relationship` text COMMENT 'tag聚会关系',
+ `relative_lane` varchar(5000) DEFAULT NULL COMMENT '关联泳道id',
+ `enable` int(5) DEFAULT NULL COMMENT '1：开启 0:关闭',
+ `create_time` bigint(20) DEFAULT NULL COMMENT '创建时间',
+ `update_time` bigint(20) DEFAULT NULL COMMENT '更新时间',
+ `gray_type` varchar(255) DEFAULT NULL COMMENT '灰度类型 tag，canary',
+ PRIMARY KEY (`rule_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 SET FOREIGN_KEY_CHECKS = 1;

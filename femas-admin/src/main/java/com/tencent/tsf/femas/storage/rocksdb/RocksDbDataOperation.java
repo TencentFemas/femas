@@ -1269,7 +1269,7 @@ public class RocksDbDataOperation implements DataOperation {
             laneInfo.setCreateTime(new Date().getTime());
         }
         laneInfo.setUpdateTime(new Date().getTime());
-        String routeKey = "lane/" + laneInfo.getLaneId();
+        String routeKey = "lane-info/" + laneInfo.getLaneId();
         StorageResult res = kvStoreManager.put(routeKey, JSONSerializer.serializeStr(laneInfo));
         if(res.getStatus().equalsIgnoreCase(StorageResult.SUCCESS)){
             return 1;
@@ -1279,7 +1279,7 @@ public class RocksDbDataOperation implements DataOperation {
 
     @Override
     public LaneInfo fetchLaneById(String laneId) {
-        StorageResult<String> stringStorageResult = kvStoreManager.get("lane/" + laneId);
+        StorageResult<String> stringStorageResult = kvStoreManager.get("lane-info/" + laneId);
         if(stringStorageResult.getData() == null)
             return null;
         LaneInfo res = JSONSerializer.deserializeStr(LaneInfo.class, stringStorageResult.getData());
@@ -1315,7 +1315,7 @@ public class RocksDbDataOperation implements DataOperation {
 
     @Override
     public Integer deleteLane(String laneId) {
-        String routeKey = "lane/" + laneId;
+        String routeKey = "lane-info/" + laneId;
         StorageResult res = kvStoreManager.delete(routeKey);
         if(res.getStatus().equalsIgnoreCase(StorageResult.SUCCESS)){
             return 1;
@@ -1326,12 +1326,12 @@ public class RocksDbDataOperation implements DataOperation {
     @Override
     public Integer configureLaneRule(LaneRule laneRule) {
         if (StringUtils.isEmpty(laneRule.getRuleId())) {
-            laneRule.setRuleId("lane-rule/" + iidGeneratorService.nextHashId());
+            laneRule.setRuleId("lane-rule-" + iidGeneratorService.nextHashId());
             laneRule.setCreateTime(new Date().getTime());
         }
         laneRule.setUpdateTime(new Date().getTime());
         String routeKey = "lane-rule/" + laneRule.getRuleId();
-        StorageResult res = kvStoreManager.put(routeKey, JSONSerializer.serializeStr(routeKey));
+        StorageResult res = kvStoreManager.put(routeKey, JSONSerializer.serializeStr(laneRule));
         if(res.getStatus().equalsIgnoreCase(StorageResult.SUCCESS)){
             return 1;
         }
@@ -1359,7 +1359,7 @@ public class RocksDbDataOperation implements DataOperation {
             if(!StringUtils.isEmpty(laneRuleModel.getRuleName()) && !laneRule.getRuleName().contains(laneRuleModel.getRuleName())){
                 continue;
             }
-            if(!StringUtils.isEmpty(laneRuleModel.getRemark()) && !laneRule.getRuleId().contains(laneRuleModel.getRemark())){
+            if(!StringUtils.isEmpty(laneRuleModel.getRemark()) && !laneRule.getRemark().contains(laneRuleModel.getRemark())){
                 continue;
             }
             laneRules.add(laneRule);
@@ -1386,7 +1386,7 @@ public class RocksDbDataOperation implements DataOperation {
 
     @Override
     public List<LaneInfo> fetchLaneInfo() {
-        String laneKey = "lane/";
+        String laneKey = "lane-info/";
         StorageResult<List<String>> storageResult = kvStoreManager.scanPrefix(laneKey);
         ArrayList<LaneInfo> laneInfos = new ArrayList<>();
         if (!CollectionUtil.isEmpty(storageResult.getData())) {

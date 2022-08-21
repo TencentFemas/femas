@@ -1110,12 +1110,16 @@ public class MysqlDataOperation implements DataOperation {
     public Integer configureLane(LaneInfo laneInfo) {
         if (StringUtils.isEmpty(laneInfo.getLaneId())) {
             laneInfo.setLaneId("lane-" + iidGeneratorService.nextHashId());
+            long time = new Date().getTime();
+            laneInfo.setCreateTime(time);
+            laneInfo.setUpdateTime(time);
             return manager.update("insert into lane_info(lane_id,lane_name,remark,create_time,update_time,lane_service_list) " +
                             "values(?,?,?,?,?,?)",
                     laneInfo.getLaneId(), laneInfo.getLaneName(),
                     laneInfo.getRemark(), laneInfo.getCreateTime(),
                     laneInfo.getUpdateTime(), JSONSerializer.serializeStr(laneInfo.getLaneServiceList()));
         }else {
+            laneInfo.setUpdateTime(new Date().getTime());
             return manager.update("update lane_info set lane_name=?, remark=?, create_time=?, update_time=?, lane_service_list=? where lane_id=?",
                     laneInfo.getLaneName(), laneInfo.getRemark(),
                     laneInfo.getCreateTime(), laneInfo.getUpdateTime(),
@@ -1158,21 +1162,25 @@ public class MysqlDataOperation implements DataOperation {
 
     @Override
     public Integer configureLaneRule(LaneRule laneRule) {
-        if (StringUtils.isEmpty(laneRule.getLaneId())) {
-            laneRule.setLaneId("laneRule-" + iidGeneratorService.nextHashId());
-            return manager.update("insert into lane_rule(rule_id,rule_name,remark,enable,create_time,update_time,lane_id,rule_tag_list,rule_tag_relationship) " +
-                            "values(?,?,?,?,?,?,?,?,?)",
+        if (StringUtils.isEmpty(laneRule.getRuleId())) {
+            laneRule.setRuleId("laneRule-" + iidGeneratorService.nextHashId());
+            long time = new Date().getTime();
+            laneRule.setCreateTime(time);
+            laneRule.setUpdateTime(time);
+            return manager.update("insert into lane_rule(rule_id,rule_name,remark,enable,create_time,update_time,relative_lane,rule_tag_list,rule_tag_relationship,gray_type) " +
+                            "values(?,?,?,?,?,?,?,?,?,?)",
                     laneRule.getRuleId(), laneRule.getRuleName(),
                     laneRule.getRemark(), laneRule.getEnable(),
-                    laneRule.getCreateTime(), laneRule.getUpdateTime(), laneRule.getLaneId(),
-                    JSONSerializer.serializeStr(laneRule.getRuleTagList()), laneRule.getRuleTagRelationship().toString());
+                    laneRule.getCreateTime(), laneRule.getUpdateTime(), JSONSerializer.serializeStr(laneRule.getRelativeLane()),
+                    JSONSerializer.serializeStr(laneRule.getRuleTagList()), laneRule.getRuleTagRelationship().toString(),laneRule.getGrayType().toString());
         }else {
-            return manager.update("update lane_info set lane_name=?, remark=?, enable=?, create_time=?, update_time=?, lane_id, rule_tag_list=? , rule_tag_relationship=? where rule_id=?",
+            laneRule.setUpdateTime(new Date().getTime());
+            return manager.update("update lane_info set lane_name=?, remark=?, enable=?, create_time=?, update_time=?, relative_lane, rule_tag_list=?, rule_tag_relationship=?, gray_type=? where rule_id=?",
                     laneRule.getRuleName(), laneRule.getRemark(),
                     laneRule.getEnable(), laneRule.getCreateTime(),
-                    laneRule.getUpdateTime(), laneRule.getLaneId(),
+                    laneRule.getUpdateTime(), JSONSerializer.serializeStr(laneRule.getRelativeLane()),
                     JSONSerializer.serializeStr(laneRule.getRuleTagList()),
-                    laneRule.getRuleTagRelationship().toString(),laneRule.getRuleId());
+                    laneRule.getRuleTagRelationship().toString(),laneRule.getGrayType().toString(), laneRule.getRuleId());
         }
     }
 

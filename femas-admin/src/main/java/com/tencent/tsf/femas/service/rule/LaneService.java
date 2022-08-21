@@ -1,11 +1,9 @@
 package com.tencent.tsf.femas.service.rule;
 
+import com.tencent.tsf.femas.common.util.CollectionUtil;
 import com.tencent.tsf.femas.common.util.Result;
 import com.tencent.tsf.femas.entity.PageService;
-import com.tencent.tsf.femas.entity.rule.lane.LaneInfo;
-import com.tencent.tsf.femas.entity.rule.lane.LaneInfoModel;
-import com.tencent.tsf.femas.entity.rule.lane.LaneRule;
-import com.tencent.tsf.femas.entity.rule.lane.LaneRuleModel;
+import com.tencent.tsf.femas.entity.rule.lane.*;
 import com.tencent.tsf.femas.service.ServiceExecutor;
 import com.tencent.tsf.femas.storage.DataOperation;
 import org.springframework.stereotype.Service;
@@ -54,6 +52,18 @@ public class LaneService implements ServiceExecutor {
 
 
     public Result configureLaneRule(LaneRule laneRule) {
+        if(laneRule.getGrayType() == GrayTypeEnum.TAG && CollectionUtil.isEmpty(laneRule.getRuleTagList())){
+            return Result.errorMessage("蓝绿灰度类型的tag至少需要一条");
+        }
+        if(laneRule.getGrayType() == GrayTypeEnum.CANARY){
+            Integer totalRate = 0;
+            for(Integer rate: laneRule.getRelativeLane().values()){
+                totalRate += rate;
+            }
+            if(totalRate != 100){
+                return Result.errorMessage("泳道百分比之和应为100");
+            }
+        }
         Integer res = dataOperation.configureLaneRule(laneRule);
         if(res == 1){
             return Result.successMessage("泳道规则编辑成功");

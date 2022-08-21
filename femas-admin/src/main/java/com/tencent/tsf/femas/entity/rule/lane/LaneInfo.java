@@ -2,6 +2,7 @@ package com.tencent.tsf.femas.entity.rule.lane;
 
 
 import com.tencent.tsf.femas.entity.ServiceInfo;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.List;
 
@@ -15,31 +16,37 @@ public class LaneInfo {
     /**
      * 泳道ID
      */
+    @ApiModelProperty("泳道ID")
     private String laneId;
 
     /**
      * 泳道名称
      */
+    @ApiModelProperty("泳道名称")
     private String laneName;
 
     /**
      * 备注
      */
+    @ApiModelProperty("备注")
     private String remark;
 
     /**
      * 规则创建时间
      */
+    @ApiModelProperty("规则创建时间(不需要前端传)")
     private Long createTime = System.currentTimeMillis();
 
     /**
      * 规则更新时间
      */
+    @ApiModelProperty("规则更新时间(不需要前端传)")
     private Long updateTime = System.currentTimeMillis();
 
     /**
      * 泳道服务列表
      */
+    @ApiModelProperty("")
     private List<ServiceInfo> laneServiceList;
 
 
