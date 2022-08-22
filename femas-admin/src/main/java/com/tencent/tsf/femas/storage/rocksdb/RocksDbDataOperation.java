@@ -26,6 +26,10 @@ import com.tencent.tsf.femas.entity.rule.*;
 import com.tencent.tsf.femas.entity.rule.auth.AuthRuleModel;
 import com.tencent.tsf.femas.entity.rule.auth.ServiceAuthRuleModel;
 import com.tencent.tsf.femas.entity.rule.breaker.CircuitBreakerModel;
+import com.tencent.tsf.femas.entity.rule.lane.LaneInfo;
+import com.tencent.tsf.femas.entity.rule.lane.LaneInfoModel;
+import com.tencent.tsf.femas.entity.rule.lane.LaneRule;
+import com.tencent.tsf.femas.entity.rule.lane.LaneRuleModel;
 import com.tencent.tsf.femas.entity.rule.limit.LimitModel;
 import com.tencent.tsf.femas.entity.rule.route.Tolerate;
 import com.tencent.tsf.femas.entity.rule.route.TolerateModel;
@@ -1258,6 +1262,159 @@ public class RocksDbDataOperation implements DataOperation {
         return new PageService<FemasRouteRule>(data,routeRules.size());
     }
 
+    @Override
+    public Integer configureLane(LaneInfo laneInfo) {
+        if (StringUtils.isEmpty(laneInfo.getLaneId())) {
+            laneInfo.setLaneId("lane-" + iidGeneratorService.nextHashId());
+            laneInfo.setCreateTime(new Date().getTime());
+        }
+        laneInfo.setUpdateTime(new Date().getTime());
+        String routeKey = "lane-info/" + laneInfo.getLaneId();
+        StorageResult res = kvStoreManager.put(routeKey, JSONSerializer.serializeStr(laneInfo));
+        if(res.getStatus().equalsIgnoreCase(StorageResult.SUCCESS)){
+            return 1;
+        }
+        return 0;
+    }
+
+    @Override
+    public LaneInfo fetchLaneById(String laneId) {
+        StorageResult<String> stringStorageResult = kvStoreManager.get("lane-info/" + laneId);
+        if(stringStorageResult.getData() == null)
+            return null;
+        LaneInfo res = JSONSerializer.deserializeStr(LaneInfo.class, stringStorageResult.getData());
+        return res;
+    }
+
+    @Override
+    public PageService<LaneInfo> fetchLaneInfoPages(LaneInfoModel laneInfoModel) {
+        List<LaneInfo> laneInfoTemp = fetchLaneInfo();
+        List<LaneInfo> laneInfos = new ArrayList<>();
+        // 条件过滤
+        for (LaneInfo laneInfo : laneInfoTemp){
+            if(!StringUtils.isEmpty(laneInfoModel.getLaneId()) && !laneInfo.getLaneId().contains(laneInfoModel.getLaneId())){
+                continue;
+            }
+            if(!StringUtils.isEmpty(laneInfoModel.getLaneName()) && !laneInfo.getLaneName().contains(laneInfoModel.getLaneName())){
+                continue;
+            }
+            if(!StringUtils.isEmpty(laneInfoModel.getRemark()) && !laneInfo.getRemark().contains(laneInfoModel.getRemark())){
+                continue;
+            }
+            laneInfos.add(laneInfo);
+        }
+        Comparator<LaneInfo> comparator = new Comparator<LaneInfo>() {
+            @Override
+            public int compare(LaneInfo o1, LaneInfo o2) {
+                return (int) (o2.getUpdateTime() - o1.getUpdateTime());
+            }
+        };
+        List<LaneInfo> data = PageUtil.pageList(laneInfos, laneInfoModel.getPageNo(), laneInfoModel.getPageSize(), comparator);
+        return new PageService<LaneInfo>(data,laneInfos.size());
+    }
+
+    @Override
+    public Integer deleteLane(String laneId) {
+        String routeKey = "lane-info/" + laneId;
+        StorageResult res = kvStoreManager.delete(routeKey);
+        if(res.getStatus().equalsIgnoreCase(StorageResult.SUCCESS)){
+            return 1;
+        }
+        return 0;
+    }
+
+    @Override
+    public Integer configureLaneRule(LaneRule laneRule) {
+        if (StringUtils.isEmpty(laneRule.getRuleId())) {
+            laneRule.setRuleId("lane-rule-" + iidGeneratorService.nextHashId());
+            laneRule.setCreateTime(new Date().getTime());
+        }
+        laneRule.setUpdateTime(new Date().getTime());
+        String routeKey = "lane-rule/" + laneRule.getRuleId();
+        StorageResult res = kvStoreManager.put(routeKey, JSONSerializer.serializeStr(laneRule));
+        if(res.getStatus().equalsIgnoreCase(StorageResult.SUCCESS)){
+            return 1;
+        }
+        return 0;
+    }
+
+    @Override
+    public LaneRule fetchLaneRuleById(String laneRuleId) {
+        StorageResult<String> stringStorageResult = kvStoreManager.get("lane-rule/" + laneRuleId);
+        if(stringStorageResult.getData() == null)
+            return null;
+        LaneRule res = JSONSerializer.deserializeStr(LaneRule.class, stringStorageResult.getData());
+        return res;
+    }
+
+    @Override
+    public PageService<LaneRule> fetchLaneRulePages(LaneRuleModel laneRuleModel) {
+        List<LaneRule> laneRulesTemp = fetchLaneRule();
+        List<LaneRule> laneRules = new ArrayList<>();
+        // 条件过滤
+        for (LaneRule laneRule : laneRulesTemp){
+            if(!StringUtils.isEmpty(laneRuleModel.getRuleId()) && !laneRule.getRuleId().contains(laneRuleModel.getRuleId())){
+                continue;
+            }
+            if(!StringUtils.isEmpty(laneRuleModel.getRuleName()) && !laneRule.getRuleName().contains(laneRuleModel.getRuleName())){
+                continue;
+            }
+            if(!StringUtils.isEmpty(laneRuleModel.getRemark()) && !laneRule.getRemark().contains(laneRuleModel.getRemark())){
+                continue;
+            }
+            laneRules.add(laneRule);
+        }
+        Comparator<LaneRule> comparator = new Comparator<LaneRule>() {
+            @Override
+            public int compare(LaneRule o1, LaneRule o2) {
+                return (int) (o2.getUpdateTime() - o1.getUpdateTime());
+            }
+        };
+        List<LaneRule> data = PageUtil.pageList(laneRules, laneRuleModel.getPageNo(), laneRuleModel.getPageSize(), comparator);
+        return new PageService<LaneRule>(data,laneRules.size());
+    }
+
+    @Override
+    public Integer deleteLaneRule(String laneRuleId) {
+        String routeKey = "lane-rule/" + laneRuleId;
+        StorageResult res = kvStoreManager.delete(routeKey);
+        if(res.getStatus().equalsIgnoreCase(StorageResult.SUCCESS)){
+            return 1;
+        }
+        return 0;
+    }
+
+    @Override
+    public List<LaneInfo> fetchLaneInfo() {
+        String laneKey = "lane-info/";
+        StorageResult<List<String>> storageResult = kvStoreManager.scanPrefix(laneKey);
+        ArrayList<LaneInfo> laneInfos = new ArrayList<>();
+        if (!CollectionUtil.isEmpty(storageResult.getData())) {
+            List<String> ids = storageResult.getData();
+            for(String id : ids){
+                StorageResult<String> result = kvStoreManager.get(id);
+                LaneInfo laneInfo = JSONSerializer.deserializeStr(LaneInfo.class, result.getData());
+                laneInfos.add(laneInfo);
+            }
+        }
+        return laneInfos;
+    }
+
+    @Override
+    public List<LaneRule> fetchLaneRule() {
+        String laneRuleKey = "lane-rule/";
+        StorageResult<List<String>> storageResult = kvStoreManager.scanPrefix(laneRuleKey);
+        ArrayList<LaneRule> laneRules = new ArrayList<>();
+        if (!CollectionUtil.isEmpty(storageResult.getData())) {
+            List<String> ids = storageResult.getData();
+            for(String id : ids){
+                StorageResult<String> result = kvStoreManager.get(id);
+                LaneRule laneRule = JSONSerializer.deserializeStr(LaneRule.class, result.getData());
+                laneRules.add(laneRule);
+            }
+        }
+        return laneRules;
+    }
 
     public static enum OptionType{
         ADD,

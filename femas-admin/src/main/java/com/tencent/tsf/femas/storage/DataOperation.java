@@ -20,6 +20,10 @@ import com.tencent.tsf.femas.entity.rule.*;
 import com.tencent.tsf.femas.entity.rule.auth.AuthRuleModel;
 import com.tencent.tsf.femas.entity.rule.auth.ServiceAuthRuleModel;
 import com.tencent.tsf.femas.entity.rule.breaker.CircuitBreakerModel;
+import com.tencent.tsf.femas.entity.rule.lane.LaneInfo;
+import com.tencent.tsf.femas.entity.rule.lane.LaneInfoModel;
+import com.tencent.tsf.femas.entity.rule.lane.LaneRule;
+import com.tencent.tsf.femas.entity.rule.lane.LaneRuleModel;
 import com.tencent.tsf.femas.entity.rule.limit.LimitModel;
 import com.tencent.tsf.femas.entity.rule.route.Tolerate;
 import com.tencent.tsf.femas.entity.rule.route.TolerateModel;
@@ -356,4 +360,76 @@ public interface DataOperation {
      */
     PageService<FemasRouteRule> fetchRouteRulePages(ServiceModel serviceModel);
 
+    /**
+     * 编辑泳道
+     * @param laneInfo
+     * @return
+     */
+    Integer configureLane(LaneInfo laneInfo);
+
+    /**
+     * 查询泳道详情
+     * @param laneId
+     * @return
+     */
+    LaneInfo fetchLaneById(String laneId);
+
+    /**
+     * 分页查询泳道
+     * @param laneInfoModel
+     * @return
+     */
+    PageService<LaneInfo> fetchLaneInfoPages(LaneInfoModel laneInfoModel);
+
+    /**
+     * 查询泳道(全量)
+     * @param
+     * @return
+     */
+    List<LaneInfo> fetchLaneInfo();
+
+
+    /**
+     * 删除泳道
+     * @param laneId
+     * @return
+     */
+    Integer deleteLane(String laneId);
+
+
+    /**
+     * 编辑泳道规则
+     * @param laneRule
+     * @return
+     */
+    Integer configureLaneRule(LaneRule laneRule);
+
+    /**
+     * 查询泳道规则详情
+     * @param laneRuleId
+     * @return
+     */
+    LaneRule fetchLaneRuleById(String laneRuleId);
+
+    /**
+     * 分页查询泳道规则
+     * @param laneRuleModel
+     * @return
+     */
+    PageService<LaneRule> fetchLaneRulePages(LaneRuleModel laneRuleModel);
+
+
+    /**
+     * 查询泳道规则(全量)
+     * @param
+     * @return
+     */
+    List<LaneRule> fetchLaneRule();
+
+    /**
+     * 删除泳道规则
+     * @param laneRuleId
+     * @return
+     */
+    Integer deleteLaneRule(String laneRuleId);
 }
