@@ -29,6 +29,10 @@ import com.tencent.tsf.femas.entity.rule.*;
 import com.tencent.tsf.femas.entity.rule.auth.AuthRuleModel;
 import com.tencent.tsf.femas.entity.rule.auth.ServiceAuthRuleModel;
 import com.tencent.tsf.femas.entity.rule.breaker.CircuitBreakerModel;
+import com.tencent.tsf.femas.entity.rule.lane.LaneInfo;
+import com.tencent.tsf.femas.entity.rule.lane.LaneInfoModel;
+import com.tencent.tsf.femas.entity.rule.lane.LaneRule;
+import com.tencent.tsf.femas.entity.rule.lane.LaneRuleModel;
 import com.tencent.tsf.femas.entity.rule.limit.LimitModel;
 import com.tencent.tsf.femas.entity.rule.route.RouteTag;
 import com.tencent.tsf.femas.entity.rule.route.Tolerate;
@@ -1101,4 +1105,127 @@ public class MysqlDataOperation implements DataOperation {
                 serviceModel.getPageNo(), serviceModel.getPageSize(),
                 serviceModel.getNamespaceId(), serviceModel.getServiceName());
     }
+
+    @Override
+    public Integer configureLane(LaneInfo laneInfo) {
+        if (StringUtils.isEmpty(laneInfo.getLaneId())) {
+            laneInfo.setLaneId("lane-" + iidGeneratorService.nextHashId());
+            long time = new Date().getTime();
+            laneInfo.setCreateTime(time);
+            laneInfo.setUpdateTime(time);
+            return manager.update("insert into lane_info(lane_id,lane_name,remark,create_time,update_time,lane_service_list) " +
+                            "values(?,?,?,?,?,?)",
+                    laneInfo.getLaneId(), laneInfo.getLaneName(),
+                    laneInfo.getRemark(), laneInfo.getCreateTime(),
+                    laneInfo.getUpdateTime(), JSONSerializer.serializeStr(laneInfo.getLaneServiceList()));
+        }else {
+            laneInfo.setUpdateTime(new Date().getTime());
+            return manager.update("update lane_info set lane_name=?, remark=?, create_time=?, update_time=?, lane_service_list=? where lane_id=?",
+                    laneInfo.getLaneName(), laneInfo.getRemark(),
+                    laneInfo.getCreateTime(), laneInfo.getUpdateTime(),
+                    JSONSerializer.serializeStr(laneInfo.getLaneServiceList()), laneInfo.getLaneId());
+        }
+    }
+
+    @Override
+    public LaneInfo fetchLaneById(String laneId) {
+        RowMapper<LaneInfo> mapper = RowMapperFactory.getMapper(LANE_INFO);
+        return manager.selectById(mapper,"lane_info", "lane_id", laneId);
+    }
+
+    @Override
+    public PageService<LaneInfo> fetchLaneInfoPages(LaneInfoModel laneInfoModel) {
+        RowMapper rowMapper = RowMapperFactory.getMapper(LANE_INFO);
+        PageService pageService;
+        String sql = "select * from lane_info";
+        if(StringUtils.isEmpty(laneInfoModel.getLaneId())){
+            sql += " and lane_info.lane_id like '%" + laneInfoModel.getLaneId() + "%'";
+        }
+        if(StringUtils.isEmpty(laneInfoModel.getLaneId())){
+            sql += " and lane_info.lane_name like '%" + laneInfoModel.getLaneName() + "%'";
+        }
+        if(StringUtils.isEmpty(laneInfoModel.getLaneId())){
+            sql += " and lane_info.remark like '%" + laneInfoModel.getRemark() + "%'";
+        }
+        sql = sql.replaceFirst("and", "where");
+        pageService = manager.selectByPagesOrdered(rowMapper, sql,
+                laneInfoModel.getPageNo(), laneInfoModel.getPageSize(),
+                DESC, "update_time");
+        return pageService;
+    }
+
+
+    @Override
+    public Integer deleteLane(String laneId) {
+        return manager.deleteById("lane_info", "lane_id", laneId);
+    }
+
+    @Override
+    public Integer configureLaneRule(LaneRule laneRule) {
+        if (StringUtils.isEmpty(laneRule.getRuleId())) {
+            laneRule.setRuleId("laneRule-" + iidGeneratorService.nextHashId());
+            long time = new Date().getTime();
+            laneRule.setCreateTime(time);
+            laneRule.setUpdateTime(time);
+            return manager.update("insert into lane_rule(rule_id,rule_name,remark,enable,create_time,update_time,relative_lane,rule_tag_list,rule_tag_relationship,gray_type) " +
+                            "values(?,?,?,?,?,?,?,?,?,?)",
+                    laneRule.getRuleId(), laneRule.getRuleName(),
+                    laneRule.getRemark(), laneRule.getEnable(),
+                    laneRule.getCreateTime(), laneRule.getUpdateTime(), JSONSerializer.serializeStr(laneRule.getRelativeLane()),
+                    JSONSerializer.serializeStr(laneRule.getRuleTagList()), laneRule.getRuleTagRelationship().toString(),laneRule.getGrayType().toString());
+        }else {
+            laneRule.setUpdateTime(new Date().getTime());
+            return manager.update("update lane_info set lane_name=?, remark=?, enable=?, create_time=?, update_time=?, relative_lane, rule_tag_list=?, rule_tag_relationship=?, gray_type=? where rule_id=?",
+                    laneRule.getRuleName(), laneRule.getRemark(),
+                    laneRule.getEnable(), laneRule.getCreateTime(),
+                    laneRule.getUpdateTime(), JSONSerializer.serializeStr(laneRule.getRelativeLane()),
+                    JSONSerializer.serializeStr(laneRule.getRuleTagList()),
+                    laneRule.getRuleTagRelationship().toString(),laneRule.getGrayType().toString(), laneRule.getRuleId());
+        }
+    }
+
+    @Override
+    public LaneRule fetchLaneRuleById(String laneRuleId) {
+        RowMapper<LaneRule> mapper = RowMapperFactory.getMapper(LANE_RULE);
+        return manager.selectById(mapper,"lane_rule", "rule_id", laneRuleId);
+    }
+
+    @Override
+    public PageService<LaneRule> fetchLaneRulePages(LaneRuleModel laneRuleModel) {
+        RowMapper rowMapper = RowMapperFactory.getMapper(LANE_RULE);
+        PageService pageService;
+        String sql = "select * from lane_rule";
+        if(StringUtils.isEmpty(laneRuleModel.getRuleId())){
+            sql += " and lane_rule.rule_id like '%" + laneRuleModel.getRuleId() + "%'";
+        }
+        if(StringUtils.isEmpty(laneRuleModel.getRemark())){
+            sql += " and lane_rule.remark like '%" + laneRuleModel.getRemark() + "%'";
+        }
+        if(StringUtils.isEmpty(laneRuleModel.getRuleName())){
+            sql += " and lane_rule.rule_name like '%" + laneRuleModel.getRuleName() + "%'";
+        }
+        sql = sql.replaceFirst("and", "where");
+        pageService = manager.selectByPagesOrdered(rowMapper, sql,
+                laneRuleModel.getPageNo(), laneRuleModel.getPageSize(),
+                DESC, "update_time");
+        return pageService;
+    }
+
+    @Override
+    public Integer deleteLaneRule(String laneRuleId) {
+        return manager.deleteById("lane_rule", "rule_id", laneRuleId);
+    }
+
+    @Override
+    public List<LaneInfo> fetchLaneInfo() {
+        RowMapper rowMapper = RowMapperFactory.getMapper(LANE_INFO);
+        return manager.selectListPojoByMapper(rowMapper, "select * from lane_info");
+    }
+
+    @Override
+    public List<LaneRule> fetchLaneRule() {
+        RowMapper rowMapper = RowMapperFactory.getMapper(LANE_RULE);
+        return manager.selectListPojoByMapper(rowMapper, "select * from lane_rule");
+    }
+
 }

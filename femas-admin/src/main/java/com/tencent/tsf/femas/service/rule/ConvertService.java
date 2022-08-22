@@ -13,6 +13,8 @@ import com.tencent.tsf.femas.entity.rule.FemasCircuitBreakerRule;
 import com.tencent.tsf.femas.entity.rule.FemasLimitRule;
 import com.tencent.tsf.femas.entity.rule.FemasRouteRule;
 import com.tencent.tsf.femas.entity.rule.breaker.CircuitBreakerModel;
+import com.tencent.tsf.femas.entity.rule.lane.LaneInfo;
+import com.tencent.tsf.femas.entity.rule.lane.LaneRule;
 import com.tencent.tsf.femas.entity.rule.limit.LimitModel;
 import com.tencent.tsf.femas.entity.rule.route.TolerateModel;
 import com.tencent.tsf.femas.storage.DataOperation;
@@ -44,7 +46,10 @@ public class ConvertService {
         }
         try {
             String[] split = key.split("/");
-            String namespaceId = split[1];
+            String namespaceId = null;
+            if(split.length > 1){
+                namespaceId = split[1];
+            }
             String serviceName = null;
             if (key.startsWith("authority")) {
                 serviceName = split[2];
@@ -57,12 +62,18 @@ public class ConvertService {
             } else if (key.startsWith("ratelimit")) {
                 serviceName = split[2];
                 return convertLimit(key, namespaceId, serviceName);
+            }else if(key.startsWith("lane-info")){
+                return convertLaneInfo(key);
+            }else if(key.startsWith("lane-rule")){
+                return convertLaneRule(key);
             }
         } catch (Exception e) {
             log.error("convert rule failed. convert key is {}", key);
         }
         return null;
     }
+
+
 
     public String convertAuthRule(String key, String namespaceId, String serviceName) {
         ArrayList<GetValue> res = new ArrayList<>();
@@ -185,5 +196,15 @@ public class ConvertService {
         getValue.setValue(JSONSerializer.serializeStr(map));
         res.add(getValue);
         return JSONSerializer.serializeStr(res);
+    }
+
+    private String convertLaneInfo(String key) {
+        List<LaneInfo> laneInfos = dataOperation.fetchLaneInfo();
+        return JSONSerializer.serializeStr(laneInfos);
+    }
+
+    private String convertLaneRule(String key) {
+        List<LaneRule> laneRules = dataOperation.fetchLaneRule();
+        return JSONSerializer.serializeStr(laneRules);
     }
 }

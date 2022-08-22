@@ -1,12 +1,8 @@
 package com.tencent.tsf.femas.storage.external;
 
 import com.tencent.tsf.femas.exception.FemasException;
-import com.tencent.tsf.femas.storage.external.rowmapper.AuthRowMapper;
-import com.tencent.tsf.femas.storage.external.rowmapper.CircuitBreakerRowMapper;
-import com.tencent.tsf.femas.storage.external.rowmapper.NamespaceRowMapper;
-import com.tencent.tsf.femas.storage.external.rowmapper.RateLimitRowMapper;
-import com.tencent.tsf.femas.storage.external.rowmapper.RouteRowMapper;
-import com.tencent.tsf.femas.storage.external.rowmapper.ServiceEventRowMapper;
+import com.tencent.tsf.femas.storage.external.rowmapper.*;
+
 import java.util.HashMap;
 import javax.annotation.PostConstruct;
 import org.springframework.jdbc.core.RowMapper;
@@ -37,12 +33,16 @@ public class RowMapperFactory {
         RouteRowMapper routeRowMapper = new RouteRowMapper();
         ServiceEventRowMapper serviceEventRowMapper = new ServiceEventRowMapper();
         NamespaceRowMapper namespaceRowMapper = new NamespaceRowMapper();
+        LaneRowMapper laneRowMapper = new LaneRowMapper();
+        LaneRuleRowMapper laneRuleRowMapper = new LaneRuleRowMapper();
         mapperContext.put(MapperType.AUTH, authRowMapper);
         mapperContext.put(MapperType.CIRCUIT_BREAKER, circuitBreakerRowMapper);
         mapperContext.put(MapperType.RATE_LIMIT, rateLimitRowMapper);
         mapperContext.put(MapperType.ROUTE, routeRowMapper);
         mapperContext.put(MapperType.SERVICE_EVENT, serviceEventRowMapper);
         mapperContext.put(MapperType.NAMESPACE, namespaceRowMapper);
+        mapperContext.put(MapperType.LANE_INFO, laneRowMapper);
+        mapperContext.put(MapperType.LANE_RULE, laneRuleRowMapper);
     }
 
 
@@ -53,5 +53,7 @@ public class RowMapperFactory {
         RATE_LIMIT,
         SERVICE_EVENT,
         NAMESPACE,
+        LANE_INFO,
+        LANE_RULE,
     }
 }
