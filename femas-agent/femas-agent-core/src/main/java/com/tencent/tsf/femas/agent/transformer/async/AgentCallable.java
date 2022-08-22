@@ -1,6 +1,8 @@
 package com.tencent.tsf.femas.agent.transformer.async;
 
 
+import com.tencent.tsf.femas.agent.tools.ReflectionUtils;
+
 import java.util.concurrent.Callable;
 
 
@@ -8,25 +10,25 @@ import java.util.concurrent.Callable;
  * @Author leoziltong@tencent.com
  */
 public class AgentCallable implements Callable {
-    private String tag;
+    private Object rpcContext;
     private Callable wrapCallable;
 
-    public AgentCallable(String tag, Callable wrapCallable) {
-        this.tag = tag;
+    public AgentCallable(Object rpcContext, Callable wrapCallable) {
+        this.rpcContext = rpcContext;
         this.wrapCallable = wrapCallable;
     }
 
     @Override
     public Object call() throws Exception {
         try {
-            AgentContext.setAgentHead(tag);
+            ReflectionUtils.invokeStaticMethod(RunnableWrapper.FEMAS_CONTEXT_CLASS_NAME,RunnableWrapper.CONTEXT_SET_VALUE_METHOD_NAME,rpcContext);
             if (wrapCallable != null) {
                 return this.wrapCallable.call();
             } else {
                 return null;
             }
         } finally {
-            AgentContext.clearContext();
+            ReflectionUtils.invokeStaticMethod(RunnableWrapper.FEMAS_CONTEXT_CLASS_NAME,RunnableWrapper.CONTEXT_CLEAN_VALUE_METHOD_NAME);
         }
     }
 

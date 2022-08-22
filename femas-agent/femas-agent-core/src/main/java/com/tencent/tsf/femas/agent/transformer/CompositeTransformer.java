@@ -56,7 +56,7 @@ public class CompositeTransformer extends AbstractTransformer {
 
     @Override
     public byte[] transform(ClassLoader loader, String classFile, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
-        if (classFile == null || classfileBuffer.length == 0) return EMPTY_BYTE_ARRAY;
+        if (classFile == null || classfileBuffer.length == 0 || loader == null) return EMPTY_BYTE_ARRAY;
         final String className = toClassName(classFile);
         if (EXECUTOR_CLASS_NAMES.contains(className)) {
             return executorTransformer.transform(loader, classFile, classBeingRedefined, protectionDomain, classfileBuffer);
