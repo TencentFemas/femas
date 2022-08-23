@@ -15,7 +15,7 @@ import com.tencent.tsf.femas.common.tag.engine.TagEngine;
 import com.tencent.tsf.femas.common.util.CollectionUtil;
 import com.tencent.tsf.femas.common.util.StringUtils;
 import com.tencent.tsf.femas.governance.lane.LaneFilter;
-import com.tencent.tsf.femas.governance.plugin.context.ConfigContext;
+import com.tencent.tsf.femas.plugin.context.ConfigContext;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

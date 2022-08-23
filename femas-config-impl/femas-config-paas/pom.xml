@@ -21,6 +21,14 @@
             <artifactId>femas-config</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.tencent.tsf</groupId>
+            <artifactId>femas-governance</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.tencent.tsf</groupId>
+            <artifactId>femas-plugin-impl</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpasyncclient</artifactId>
         </dependency>

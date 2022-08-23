@@ -1,6 +1,6 @@
 package com.tencent.tsf.femas.governance.metrics;
 
-import com.tencent.tsf.femas.governance.plugin.Plugin;
+import com.tencent.tsf.femas.plugin.Plugin;
 
 /**
  * @Author p_mtluo

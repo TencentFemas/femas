@@ -3,7 +3,7 @@ package com.tencent.tsf.femas.governance.lane;
 import com.tencent.tsf.femas.common.entity.Service;
 import com.tencent.tsf.femas.common.entity.ServiceInstance;
 import com.tencent.tsf.femas.common.exception.FemasRuntimeException;
-import com.tencent.tsf.femas.governance.plugin.context.ConfigContext;
+import com.tencent.tsf.femas.plugin.context.ConfigContext;
 import java.util.List;
 
 public class MockLaneFilter implements LaneFilter {

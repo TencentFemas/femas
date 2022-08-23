@@ -3,7 +3,7 @@ package com.tencent.tsf.femas.governance.circuitbreaker;
 import com.tencent.tsf.femas.common.entity.Request;
 import com.tencent.tsf.femas.common.entity.Service;
 import com.tencent.tsf.femas.common.entity.ServiceInstance;
-import com.tencent.tsf.femas.governance.plugin.Plugin;
+import com.tencent.tsf.femas.plugin.Plugin;
 import java.util.List;
 import java.util.Set;
 

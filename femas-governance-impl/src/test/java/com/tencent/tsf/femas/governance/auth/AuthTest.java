@@ -5,10 +5,11 @@ import com.tencent.tsf.femas.common.entity.Service;
 import com.tencent.tsf.femas.common.tag.Tag;
 import com.tencent.tsf.femas.common.tag.TagRule;
 import com.tencent.tsf.femas.common.tag.constant.TagConstant;
-import com.tencent.tsf.femas.governance.auth.constant.AuthConstant;
-import com.tencent.tsf.femas.governance.auth.entity.AuthRuleGroup;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.tencent.tsf.femas.plugin.impl.config.rule.auth.AuthConstant;
+import com.tencent.tsf.femas.plugin.impl.config.rule.auth.AuthRuleGroup;
 import org.junit.Assert;
 import org.junit.Test;
 

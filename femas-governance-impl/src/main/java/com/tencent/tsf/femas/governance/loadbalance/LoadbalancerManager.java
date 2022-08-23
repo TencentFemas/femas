@@ -1,7 +1,7 @@
 package com.tencent.tsf.femas.governance.loadbalance;
 
 import com.tencent.tsf.femas.common.entity.ServiceInstance;
-import com.tencent.tsf.femas.governance.config.FemasPluginContext;
+import com.tencent.tsf.femas.plugin.impl.FemasPluginContext;
 import java.util.List;
 
 /**

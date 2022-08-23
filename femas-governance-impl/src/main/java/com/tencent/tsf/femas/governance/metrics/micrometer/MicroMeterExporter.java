@@ -19,12 +19,14 @@ package com.tencent.tsf.femas.governance.metrics.micrometer;
 
 import com.tencent.tsf.femas.common.exception.FemasRuntimeException;
 import com.tencent.tsf.femas.governance.metrics.MetricsExporter;
-import com.tencent.tsf.femas.governance.plugin.context.ConfigContext;
+import com.tencent.tsf.femas.plugin.context.ConfigContext;
 import java.time.Duration;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import com.tencent.tsf.femas.plugin.context.ConfigContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

@@ -18,13 +18,14 @@
 package com.tencent.tsf.femas.governance.metrics.micrometer.exporter;
 
 import com.tencent.tsf.femas.common.exception.FemasRuntimeException;
-import com.tencent.tsf.femas.config.AbstractConfigHttpClientManager;
-import com.tencent.tsf.femas.config.AbstractConfigHttpClientManagerFactory;
+import com.tencent.tsf.femas.governance.connector.server.ServerConnectorManager;
 import com.tencent.tsf.femas.governance.metrics.micrometer.CompositeMetricsData;
 import com.tencent.tsf.femas.governance.metrics.micrometer.MicroMeterExporter;
-import com.tencent.tsf.femas.governance.plugin.config.gov.MetricsExporterConfig;
-import com.tencent.tsf.femas.governance.plugin.config.verify.DefaultValues;
-import com.tencent.tsf.femas.governance.plugin.context.ConfigContext;
+
+import com.tencent.tsf.femas.plugin.config.gov.MetricsExporterConfig;
+import com.tencent.tsf.femas.plugin.config.verify.DefaultValues;
+import com.tencent.tsf.femas.plugin.context.ConfigContext;
+import com.tencent.tsf.femas.plugin.impl.FemasPluginContext;
 
 /**
  * @Author leoziltong
@@ -32,8 +33,7 @@ import com.tencent.tsf.femas.governance.plugin.context.ConfigContext;
  */
 public class PaasMeterExporter extends MicroMeterExporter {
 
-    protected static AbstractConfigHttpClientManager manager = AbstractConfigHttpClientManagerFactory
-            .getConfigHttpClientManager();
+    protected static ServerConnectorManager manager = FemasPluginContext.getServerConnectorManager();
     private String exporterAddr;
 
     @Override

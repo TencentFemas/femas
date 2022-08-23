@@ -16,7 +16,7 @@
  */
 package com.tencent.tsf.femas.governance;
 
-import com.tencent.tsf.femas.governance.plugin.PluginDefinitionReader;
+import com.tencent.tsf.femas.plugin.PluginDefinitionReader;
 import org.junit.Test;
 
 /**

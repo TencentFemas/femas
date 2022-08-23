@@ -23,12 +23,13 @@ import com.tencent.tsf.femas.common.serviceregistry.ServiceRegistry;
 import com.tencent.tsf.femas.common.util.CollectionUtil;
 import com.tencent.tsf.femas.common.util.StringUtils;
 import com.tencent.tsf.femas.common.util.TimeUtil;
-import com.tencent.tsf.femas.config.AbstractConfigHttpClientManager;
-import com.tencent.tsf.femas.config.AbstractConfigHttpClientManagerFactory;
 import com.tencent.tsf.femas.governance.auth.AuthorizationManager;
 import com.tencent.tsf.femas.governance.circuitbreaker.FemasCircuitBreakerIsolationLevelEnum;
 import com.tencent.tsf.femas.governance.circuitbreaker.ICircuitBreakerService;
-import com.tencent.tsf.femas.governance.config.FemasPluginContext;
+import com.tencent.tsf.femas.governance.connector.server.ServerConnectorManager;
+import com.tencent.tsf.femas.plugin.config.ConfigHandlerUtils;
+import com.tencent.tsf.femas.plugin.config.enums.ConfigHandlerTypeEnum;
+import com.tencent.tsf.femas.plugin.impl.FemasPluginContext;
 import com.tencent.tsf.femas.governance.lane.LaneService;
 import com.tencent.tsf.femas.governance.loadbalance.LoadbalancerManager;
 import com.tencent.tsf.femas.governance.loadbalance.exception.FemasNoAvailableInstanceException;
@@ -36,8 +37,6 @@ import com.tencent.tsf.femas.governance.metrics.Counter;
 import com.tencent.tsf.femas.governance.metrics.IMeterRegistry;
 import com.tencent.tsf.femas.governance.metrics.MetricsConstant;
 import com.tencent.tsf.femas.governance.metrics.Timer;
-import com.tencent.tsf.femas.governance.plugin.config.ConfigHandlerUtils;
-import com.tencent.tsf.femas.governance.plugin.config.enums.ConfigHandlerTypeEnum;
 import com.tencent.tsf.femas.governance.ratelimit.RateLimiterManager;
 import com.tencent.tsf.femas.governance.route.RouterManager;
 import com.tencent.tsf.femas.governance.trace.TraceAdapter;
@@ -62,8 +61,7 @@ public class CommonExtensionLayer implements IExtensionLayer {
 
     private static IMeterRegistry meterRegistry = FemasPluginContext.getMeterRegistry().get(0);
 
-    private AbstractConfigHttpClientManager manager = AbstractConfigHttpClientManagerFactory
-            .getConfigHttpClientManager();
+    private ServerConnectorManager manager = FemasPluginContext.getServerConnectorManager();
 
     private volatile static Context commonContext = ContextFactory.getContextInstance();
     private volatile static ContextConstant contextConstant = ContextFactory.getContextConstantInstance();

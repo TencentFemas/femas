@@ -211,6 +211,18 @@
 
             <dependency>
                 <groupId>com.tencent.tsf</groupId>
+                <artifactId>femas-plugin</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.tencent.tsf</groupId>
+                <artifactId>femas-plugin-impl</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.tencent.tsf</groupId>
                 <artifactId>femas-registry-consul</artifactId>
                 <version>${project.version}</version>
             </dependency>

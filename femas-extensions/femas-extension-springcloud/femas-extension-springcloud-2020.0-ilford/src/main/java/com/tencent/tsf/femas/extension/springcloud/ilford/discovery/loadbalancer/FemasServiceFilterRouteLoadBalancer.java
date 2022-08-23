@@ -6,7 +6,7 @@ import com.tencent.tsf.femas.common.context.Context;
 import com.tencent.tsf.femas.common.entity.Request;
 import com.tencent.tsf.femas.governance.circuitbreaker.FemasCircuitBreakerIsolationLevelEnum;
 import com.tencent.tsf.femas.governance.circuitbreaker.ICircuitBreakerService;
-import com.tencent.tsf.femas.governance.config.FemasPluginContext;
+import com.tencent.tsf.femas.plugin.impl.FemasPluginContext;
 
 /**
  * @author juanyinyang

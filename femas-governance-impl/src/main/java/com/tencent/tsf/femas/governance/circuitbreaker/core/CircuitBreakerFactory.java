@@ -1,7 +1,8 @@
 package com.tencent.tsf.femas.governance.circuitbreaker.core;
 
-import com.tencent.tsf.femas.governance.circuitbreaker.rule.CircuitBreakerRule;
-import com.tencent.tsf.femas.governance.circuitbreaker.rule.CircuitBreakerStrategy;
+import com.tencent.tsf.femas.plugin.impl.config.rule.circuitbreaker.CircuitBreakerRule;
+import com.tencent.tsf.femas.plugin.impl.config.rule.circuitbreaker.CircuitBreakerStrategy;
+
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;

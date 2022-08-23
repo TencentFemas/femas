@@ -6,8 +6,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tencent.tsf.femas.common.util.*;
-import com.tencent.tsf.femas.config.AbstractConfigHttpClientManager;
-import com.tencent.tsf.femas.config.AbstractConfigHttpClientManagerFactory;
 import com.tencent.tsf.femas.config.enums.PropertyChangeType;
 import com.tencent.tsf.femas.config.internals.AbstractStringConfig;
 import com.tencent.tsf.femas.config.model.ConfigChangeEvent;
@@ -18,6 +16,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
+
+import com.tencent.tsf.femas.governance.connector.server.ServerConnectorManager;
+import com.tencent.tsf.femas.plugin.impl.FemasPluginContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,14 +30,14 @@ public class PaasConfig extends AbstractStringConfig {
      */
     private static final int DEFAULT_WATCH_TIMEOUT = 55;
     private static volatile  ObjectMapper mapper = new ObjectMapper();
-    private AbstractConfigHttpClientManager manager;
+    private ServerConnectorManager manager;
     private String token;
     private ExecutorService notifierExecutor = newCachedThreadPool(
             new NamedThreadFactory("femas-paas-config-notifier", true));
     private Map<String, Notifier> notifiers = new ConcurrentHashMap<>();
 
     public PaasConfig(Map<String, String> configMap) {
-        this.manager = AbstractConfigHttpClientManagerFactory.getConfigHttpClientManager();
+        this.manager = FemasPluginContext.getServerConnectorManager();
     }
 
     @Override

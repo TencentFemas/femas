@@ -1,6 +1,6 @@
 package com.tencent.tsf.femas.extension.springcloud.common.instrumentation.metrics;
 
-import com.tencent.tsf.femas.governance.config.FemasPluginContext;
+import com.tencent.tsf.femas.plugin.impl.FemasPluginContext;
 import com.tencent.tsf.femas.governance.metrics.MetricsExporter;
 import com.tencent.tsf.femas.governance.metrics.micrometer.exporter.PrometheusMeterExporter;
 import io.prometheus.client.CollectorRegistry;

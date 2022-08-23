@@ -5,7 +5,7 @@ import com.tencent.tsf.femas.common.exception.FemasRuntimeException;
 import com.tencent.tsf.femas.common.tag.Tag;
 import com.tencent.tsf.femas.common.tag.engine.TagEngine;
 import com.tencent.tsf.femas.governance.loadbalance.Loadbalancer;
-import com.tencent.tsf.femas.governance.plugin.context.ConfigContext;
+import com.tencent.tsf.femas.plugin.context.ConfigContext;
 import java.util.ArrayList;
 import java.util.List;
 

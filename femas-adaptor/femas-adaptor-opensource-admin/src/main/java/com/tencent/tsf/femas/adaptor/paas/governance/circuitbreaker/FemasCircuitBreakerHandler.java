@@ -16,9 +16,9 @@ import com.tencent.tsf.femas.governance.circuitbreaker.core.CircuitBreaker;
 import com.tencent.tsf.femas.governance.circuitbreaker.core.CircuitBreakerFactory;
 import com.tencent.tsf.femas.governance.circuitbreaker.core.StateTransitionCallback;
 import com.tencent.tsf.femas.governance.circuitbreaker.core.internal.CircuitBreakerMetrics;
-import com.tencent.tsf.femas.governance.config.FemasPluginContext;
-import com.tencent.tsf.femas.governance.plugin.config.ConfigHandler;
-import com.tencent.tsf.femas.governance.plugin.config.enums.ConfigHandlerTypeEnum;
+import com.tencent.tsf.femas.plugin.config.ConfigHandler;
+import com.tencent.tsf.femas.plugin.config.enums.ConfigHandlerTypeEnum;
+import com.tencent.tsf.femas.plugin.impl.FemasPluginContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,7 +40,7 @@ public class FemasCircuitBreakerHandler extends ConfigHandler {
             @Override
             public void onTransition(ICircuitBreakerService.State from, ICircuitBreakerService.State to,
                     Object circuitBreakerObject, CircuitBreakerMetrics metrics, CircuitBreaker circuitBreaker) {
-                com.tencent.tsf.femas.governance.circuitbreaker.rule.CircuitBreakerRule rule = circuitBreaker
+                com.tencent.tsf.femas.plugin.impl.config.rule.circuitbreaker.CircuitBreakerRule rule = circuitBreaker
                         .getCircuitBreakerConfig().getCircuitBreakerRule();
 
                 String circuitBreakerObjectString = circuitBreaker.getName();
@@ -68,9 +68,9 @@ public class FemasCircuitBreakerHandler extends ConfigHandler {
         return rate < 0 ? 0 : rate;
     }
 
-    private static com.tencent.tsf.femas.governance.circuitbreaker.rule.CircuitBreakerRule convertRule(
+    private static com.tencent.tsf.femas.plugin.impl.config.rule.circuitbreaker.CircuitBreakerRule convertRule(
             CircuitBreakerRule tsfRule) {
-        com.tencent.tsf.femas.governance.circuitbreaker.rule.CircuitBreakerRule femasRule = new com.tencent.tsf.femas.governance.circuitbreaker.rule.CircuitBreakerRule();
+        com.tencent.tsf.femas.plugin.impl.config.rule.circuitbreaker.CircuitBreakerRule femasRule = new com.tencent.tsf.femas.plugin.impl.config.rule.circuitbreaker.CircuitBreakerRule();
 
         Service service = new Service(tsfRule.getTargetNamespaceId(), tsfRule.getTargetServiceName());
         femasRule.setTargetService(service);
@@ -80,13 +80,13 @@ public class FemasCircuitBreakerHandler extends ConfigHandler {
         return femasRule;
     }
 
-    private static List<com.tencent.tsf.femas.governance.circuitbreaker.rule.CircuitBreakerStrategy> convertStrategies(
+    private static List<com.tencent.tsf.femas.plugin.impl.config.rule.circuitbreaker.CircuitBreakerStrategy> convertStrategies(
             List<CircuitBreakerStrategy> strategies) {
-        List<com.tencent.tsf.femas.governance.circuitbreaker.rule.CircuitBreakerStrategy> femasStrategies = new ArrayList<>();
+        List<com.tencent.tsf.femas.plugin.impl.config.rule.circuitbreaker.CircuitBreakerStrategy> femasStrategies = new ArrayList<>();
 
         if (strategies != null) {
             for (CircuitBreakerStrategy tsfStrategy : strategies) {
-                com.tencent.tsf.femas.governance.circuitbreaker.rule.CircuitBreakerStrategy femasStrategy = new com.tencent.tsf.femas.governance.circuitbreaker.rule.CircuitBreakerStrategy();
+                com.tencent.tsf.femas.plugin.impl.config.rule.circuitbreaker.CircuitBreakerStrategy femasStrategy = new com.tencent.tsf.femas.plugin.impl.config.rule.circuitbreaker.CircuitBreakerStrategy();
 
                 femasStrategy.setFailureRateThreshold(tsfStrategy.getFailureRateThreshold());
                 femasStrategy.setMinimumNumberOfCalls(tsfStrategy.getMinimumNumberOfCalls());
@@ -104,13 +104,13 @@ public class FemasCircuitBreakerHandler extends ConfigHandler {
         return femasStrategies;
     }
 
-    private static List<com.tencent.tsf.femas.governance.circuitbreaker.rule.CircuitBreakerApi> convertApis(
+    private static List<com.tencent.tsf.femas.plugin.impl.config.rule.circuitbreaker.CircuitBreakerApi> convertApis(
             List<CircuitBreakerApi> apis) {
-        List<com.tencent.tsf.femas.governance.circuitbreaker.rule.CircuitBreakerApi> femasApis = new ArrayList<>();
+        List<com.tencent.tsf.femas.plugin.impl.config.rule.circuitbreaker.CircuitBreakerApi> femasApis = new ArrayList<>();
 
         if (apis != null) {
             for (CircuitBreakerApi api : apis) {
-                com.tencent.tsf.femas.governance.circuitbreaker.rule.CircuitBreakerApi femasApi = new com.tencent.tsf.femas.governance.circuitbreaker.rule.CircuitBreakerApi();
+                com.tencent.tsf.femas.plugin.impl.config.rule.circuitbreaker.CircuitBreakerApi femasApi = new com.tencent.tsf.femas.plugin.impl.config.rule.circuitbreaker.CircuitBreakerApi();
 
                 femasApi.setMethod(api.getMethod() + "/" + api.getPath());
 

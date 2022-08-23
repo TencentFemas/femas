@@ -7,10 +7,11 @@ import com.tencent.tsf.femas.common.util.StringUtils;
 import com.tencent.tsf.femas.config.Config;
 import com.tencent.tsf.femas.config.ConfigChangeListener;
 import com.tencent.tsf.femas.config.model.ConfigChangeEvent;
-import com.tencent.tsf.femas.governance.plugin.config.ConfigHandler;
-import com.tencent.tsf.femas.governance.plugin.config.enums.ConfigHandlerTypeEnum;
 import java.util.List;
 import java.util.Set;
+
+import com.tencent.tsf.femas.plugin.config.ConfigHandler;
+import com.tencent.tsf.femas.plugin.config.enums.ConfigHandlerTypeEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

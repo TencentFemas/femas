@@ -20,7 +20,7 @@ package com.tencent.tsf.femas.springcloud.gateway.filter;
 
 import com.tencent.tsf.femas.agent.tools.FemasRuntimeException;
 import com.tencent.tsf.femas.common.serialize.JSONSerializer;
-import com.tencent.tsf.femas.governance.config.FemasPluginContext;
+import com.tencent.tsf.femas.plugin.impl.FemasPluginContext;
 import com.tencent.tsf.femas.governance.metrics.MetricsExporter;
 import com.tencent.tsf.femas.governance.metrics.micrometer.exporter.PrometheusMeterExporter;
 import io.prometheus.client.CollectorRegistry;

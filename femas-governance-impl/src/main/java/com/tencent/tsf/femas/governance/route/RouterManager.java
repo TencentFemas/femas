@@ -2,7 +2,7 @@ package com.tencent.tsf.femas.governance.route;
 
 import com.tencent.tsf.femas.common.entity.Service;
 import com.tencent.tsf.femas.common.entity.ServiceInstance;
-import com.tencent.tsf.femas.governance.config.FemasPluginContext;
+import com.tencent.tsf.femas.plugin.impl.FemasPluginContext;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
