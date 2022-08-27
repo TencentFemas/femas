@@ -238,6 +238,7 @@ CREATE TABLE `lane_rule` (
  `create_time` bigint(20) DEFAULT NULL COMMENT '创建时间',
  `update_time` bigint(20) DEFAULT NULL COMMENT '更新时间',
  `gray_type` varchar(255) DEFAULT NULL COMMENT '灰度类型 tag，canary',
+ `priority` int(11) NOT NULL COMMENT '规则优先级',
  PRIMARY KEY (`rule_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 

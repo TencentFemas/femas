@@ -15,6 +15,8 @@ public class ServiceInfo {
 
     private String namespaceName;
 
+    private Boolean entrance;
+
     public String getServiceName() {
         return serviceName;
     }
@@ -45,5 +47,13 @@ public class ServiceInfo {
 
     public void setNamespaceName(String namespaceName) {
         this.namespaceName = namespaceName;
+    }
+
+    public Boolean getEntrance() {
+        return entrance;
+    }
+
+    public void setEntrance(Boolean entrance) {
+        this.entrance = entrance;
     }
 }
