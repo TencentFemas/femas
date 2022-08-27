@@ -4,8 +4,9 @@ import com.tencent.tsf.femas.common.entity.Request;
 import com.tencent.tsf.femas.common.entity.ServiceInstance;
 import com.tencent.tsf.femas.common.exception.FemasRuntimeException;
 import com.tencent.tsf.femas.governance.circuitbreaker.ICircuitBreakerService;
-import com.tencent.tsf.femas.governance.circuitbreaker.rule.CircuitBreakerRule;
-import com.tencent.tsf.femas.governance.plugin.context.ConfigContext;
+
+import com.tencent.tsf.femas.plugin.context.ConfigContext;
+import com.tencent.tsf.femas.plugin.impl.config.rule.circuitbreaker.CircuitBreakerRule;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

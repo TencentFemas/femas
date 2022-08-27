@@ -1,9 +1,10 @@
 package com.tencent.tsf.femas.governance.event;
 
 
-import com.tencent.tsf.femas.governance.auth.entity.AuthRuleGroup;
 import java.util.Date;
 import java.util.Map;
+
+import com.tencent.tsf.femas.plugin.impl.config.rule.auth.AuthRuleGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

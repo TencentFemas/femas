@@ -12,8 +12,8 @@ import com.tencent.tsf.femas.config.ConfigChangeListener;
 import com.tencent.tsf.femas.config.enums.PropertyChangeType;
 import com.tencent.tsf.femas.config.model.ConfigChangeEvent;
 import com.tencent.tsf.femas.governance.auth.AuthorizationManager;
-import com.tencent.tsf.femas.governance.plugin.config.ConfigHandler;
-import com.tencent.tsf.femas.governance.plugin.config.enums.ConfigHandlerTypeEnum;
+import com.tencent.tsf.femas.plugin.config.ConfigHandler;
+import com.tencent.tsf.femas.plugin.config.enums.ConfigHandlerTypeEnum;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -27,9 +27,9 @@ public class FemasAuthHandler extends ConfigHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(FemasAuthHandler.class);
 
-    private static com.tencent.tsf.femas.governance.auth.entity.AuthRuleGroup convertAuthGroup(AuthRuleGroup
+    private static com.tencent.tsf.femas.plugin.impl.config.rule.auth.AuthRuleGroup convertAuthGroup(AuthRuleGroup
             authRuleGroup) throws Throwable {
-        com.tencent.tsf.femas.governance.auth.entity.AuthRuleGroup femasGroup = new com.tencent.tsf.femas.governance.auth.entity.AuthRuleGroup();
+        com.tencent.tsf.femas.plugin.impl.config.rule.auth.AuthRuleGroup femasGroup = new com.tencent.tsf.femas.plugin.impl.config.rule.auth.AuthRuleGroup();
 
         femasGroup.setType(authRuleGroup.getType());
         femasGroup.setRules(convertAuthRules(authRuleGroup.getRules()));

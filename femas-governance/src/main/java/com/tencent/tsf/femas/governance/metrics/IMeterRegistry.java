@@ -23,7 +23,7 @@ import com.tencent.tsf.femas.common.entity.ErrorStatus;
 import com.tencent.tsf.femas.common.entity.Request;
 import com.tencent.tsf.femas.common.entity.Response;
 import com.tencent.tsf.femas.common.util.StringUtils;
-import com.tencent.tsf.femas.governance.plugin.Plugin;
+import com.tencent.tsf.femas.plugin.Plugin;
 import java.util.ArrayList;
 import java.util.List;
 

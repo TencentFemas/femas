@@ -17,7 +17,7 @@ import com.tencent.tsf.femas.extension.springcloud.discovery.ribbon.DiscoverySer
 import com.tencent.tsf.femas.extension.springcloud.discovery.ribbon.FemasServiceFilterLoadBalancer;
 import com.tencent.tsf.femas.governance.circuitbreaker.FemasCircuitBreakerIsolationLevelEnum;
 import com.tencent.tsf.femas.governance.circuitbreaker.ICircuitBreakerService;
-import com.tencent.tsf.femas.governance.config.FemasPluginContext;
+import com.tencent.tsf.femas.plugin.impl.FemasPluginContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,6 +1,6 @@
 package com.tencent.tsf.femas.governance.metrics.micrometer.exporter.logger;
 
-import com.tencent.tsf.femas.governance.config.FemasPluginContext;
+import com.tencent.tsf.femas.plugin.impl.FemasPluginContext;
 import com.tencent.tsf.femas.governance.metrics.micrometer.MicroMeterExporter;
 import com.tencent.tsf.femas.governance.metrics.micrometer.MicrometerMeterRegistry;
 import java.time.Duration;

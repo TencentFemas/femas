@@ -21,17 +21,19 @@ import com.google.gson.Gson;
 import com.tencent.tsf.femas.common.context.Context;
 import com.tencent.tsf.femas.common.context.ContextConstant;
 import com.tencent.tsf.femas.common.context.factory.ContextFactory;
-import com.tencent.tsf.femas.config.AbstractConfigHttpClientManager;
-import com.tencent.tsf.femas.config.AbstractConfigHttpClientManagerFactory;
 import com.tencent.tsf.femas.governance.api.entity.ServiceApi;
+import com.tencent.tsf.femas.governance.connector.server.ServerConnectorManager;
+import com.tencent.tsf.femas.plugin.impl.FemasPluginContext;
 import io.swagger.models.HttpMethod;
 import io.swagger.models.Operation;
 import io.swagger.models.Path;
 import io.swagger.models.Swagger;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -52,11 +54,10 @@ public class FemasApiMetadataGrapher implements SmartLifecycle {
     private String groupName;
     private volatile ContextConstant contextConstant = ContextFactory.getContextConstantInstance();
     private volatile Context context = ContextFactory.getContextInstance();
-    private AbstractConfigHttpClientManager manager = AbstractConfigHttpClientManagerFactory
-            .getConfigHttpClientManager();
+    private ServerConnectorManager manager = FemasPluginContext.getServerConnectorManager();
 
     public FemasApiMetadataGrapher(DocumentationCache documentationCache, ServiceModelToSwagger2Mapper swagger2Mapper,
-            JsonSerializer jsonSerializer, String groupName, ApplicationContext applicationContext) {
+                                   JsonSerializer jsonSerializer, String groupName, ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
         this.swagger2Mapper = swagger2Mapper;
         this.documentationCache = documentationCache;

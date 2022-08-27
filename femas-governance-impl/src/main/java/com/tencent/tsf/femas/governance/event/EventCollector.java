@@ -5,8 +5,6 @@ import com.google.gson.GsonBuilder;
 import com.tencent.tsf.femas.common.context.Context;
 import com.tencent.tsf.femas.common.entity.Service;
 import com.tencent.tsf.femas.common.util.id.UIdGenerator;
-import com.tencent.tsf.femas.config.AbstractConfigHttpClientManager;
-import com.tencent.tsf.femas.config.AbstractConfigHttpClientManagerFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
@@ -14,6 +12,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
+import com.tencent.tsf.femas.governance.connector.server.ServerConnectorManager;
+import com.tencent.tsf.femas.plugin.impl.FemasPluginContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,8 +33,7 @@ public class EventCollector {
     protected static final String DOWNSTREAM_NAMESPACE_ID_KEY = "downstream_namespace";
     protected static final String DETAIL = "detail";
     private static final Logger LOGGER = LoggerFactory.getLogger(EventCollector.class);
-    protected static AbstractConfigHttpClientManager manager = AbstractConfigHttpClientManagerFactory
-            .getConfigHttpClientManager();
+    protected static ServerConnectorManager manager = FemasPluginContext.getServerConnectorManager();
     protected static ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
     protected static Gson gson = new GsonBuilder().disableHtmlEscaping().create();
     protected static String instanceId = Context.getSystemTag("instance.id");

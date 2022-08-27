@@ -24,16 +24,18 @@ import com.tencent.tsf.femas.common.exception.FemasRuntimeException;
 import com.tencent.tsf.femas.common.tag.TagRule;
 import com.tencent.tsf.femas.common.tag.engine.TagEngine;
 import com.tencent.tsf.femas.common.util.CollectionUtil;
-import com.tencent.tsf.femas.governance.auth.constant.AuthConstant;
-import com.tencent.tsf.femas.governance.auth.entity.AuthRuleConfig;
-import com.tencent.tsf.femas.governance.auth.entity.AuthRuleGroup;
-import com.tencent.tsf.femas.governance.config.impl.AuthenticateConfigImpl;
+
 import com.tencent.tsf.femas.governance.event.AuthEventCollector;
-import com.tencent.tsf.femas.governance.plugin.context.ConfigContext;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.tencent.tsf.femas.plugin.context.ConfigContext;
+
+import com.tencent.tsf.femas.plugin.impl.config.AuthenticateConfigImpl;
+import com.tencent.tsf.femas.plugin.impl.config.rule.auth.AuthConstant;
+import com.tencent.tsf.femas.plugin.impl.config.rule.auth.AuthRuleConfig;
+import com.tencent.tsf.femas.plugin.impl.config.rule.auth.AuthRuleGroup;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

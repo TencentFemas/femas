@@ -74,6 +74,8 @@
         <module>femas-agent</module>
         <module>femas-admin</module>
         <module>femas-admin-starter</module>
+        <module>femas-plugin</module>
+        <module>femas-plugin-impl</module>
     </modules>
 
     <dependencyManagement>

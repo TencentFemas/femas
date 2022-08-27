@@ -3,7 +3,7 @@ package com.tencent.tsf.femas.governance.metrics.micrometer.transformer;
 import com.tencent.tsf.femas.common.exception.FemasRuntimeException;
 import com.tencent.tsf.femas.governance.metrics.micrometer.exporter.logger.LoggerMeterRegistry;
 import com.tencent.tsf.femas.governance.metrics.micrometer.exporter.logger.LoggerRegistryConfig;
-import com.tencent.tsf.femas.governance.plugin.context.ConfigContext;
+import com.tencent.tsf.femas.plugin.context.ConfigContext;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.DistributionSummary;
 import io.micrometer.core.instrument.FunctionCounter;

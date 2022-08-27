@@ -4,14 +4,15 @@ import com.tencent.tsf.femas.common.context.Context;
 import com.tencent.tsf.femas.common.entity.Service;
 import com.tencent.tsf.femas.common.exception.FemasRuntimeException;
 import com.tencent.tsf.femas.common.util.CollectionUtil;
-import com.tencent.tsf.femas.governance.config.impl.RateLimitConfigImpl;
+
 import com.tencent.tsf.femas.governance.event.LimitEventCollector;
-import com.tencent.tsf.femas.governance.plugin.context.ConfigContext;
+import com.tencent.tsf.femas.plugin.context.ConfigContext;
 import com.tencent.tsf.femas.governance.ratelimit.RateLimiter;
 import com.tencent.tsf.femas.governance.ratelimit.RateLimiterManager;
-import com.tencent.tsf.femas.governance.ratelimit.entity.InitLimitRule;
-import com.tencent.tsf.femas.governance.ratelimit.entity.RateLimitRuleConfig;
-import com.tencent.tsf.femas.governance.ratelimit.entity.RateLimiterRule;
+import com.tencent.tsf.femas.plugin.impl.config.RateLimitConfigImpl;
+import com.tencent.tsf.femas.plugin.impl.config.rule.ratelimit.InitLimitRule;
+import com.tencent.tsf.femas.plugin.impl.config.rule.ratelimit.RateLimitRuleConfig;
+import com.tencent.tsf.femas.plugin.impl.config.rule.ratelimit.RateLimiterRule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -2,9 +2,10 @@ package com.tencent.tsf.femas.governance.ratelimit.impl;
 
 import com.tencent.tsf.femas.common.entity.Service;
 import com.tencent.tsf.femas.common.exception.FemasRuntimeException;
-import com.tencent.tsf.femas.governance.plugin.context.ConfigContext;
+import com.tencent.tsf.femas.plugin.context.ConfigContext;
 import com.tencent.tsf.femas.governance.ratelimit.RateLimiter;
-import com.tencent.tsf.femas.governance.ratelimit.entity.RateLimiterRule;
+import com.tencent.tsf.femas.plugin.context.ConfigContext;
+import com.tencent.tsf.femas.plugin.impl.config.rule.ratelimit.RateLimiterRule;
 
 public class TokenBucketRateLimiter implements RateLimiter<RateLimiterRule> {
 

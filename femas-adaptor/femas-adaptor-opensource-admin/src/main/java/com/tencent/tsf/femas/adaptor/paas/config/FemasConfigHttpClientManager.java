@@ -4,17 +4,22 @@ import com.google.gson.Gson;
 import com.tencent.tsf.femas.common.context.Context;
 import com.tencent.tsf.femas.common.context.factory.ContextFactory;
 import com.tencent.tsf.femas.common.entity.Service;
+import com.tencent.tsf.femas.common.exception.FemasRuntimeException;
 import com.tencent.tsf.femas.common.httpclient.ApacheHttpClientHolder;
 import com.tencent.tsf.femas.common.httpclient.client.AbstractHttpClient;
 import com.tencent.tsf.femas.common.httpclient.factory.ApacheDefaultHttpClientFactory;
 import com.tencent.tsf.femas.common.httpclient.factory.HttpClientFactory;
+import com.tencent.tsf.femas.common.util.CollectionUtil;
 import com.tencent.tsf.femas.common.util.HttpHeaderKeys;
 import com.tencent.tsf.femas.common.util.HttpResult;
 import com.tencent.tsf.femas.common.util.StringUtils;
 import com.tencent.tsf.femas.common.util.id.UIdGenerator;
-import com.tencent.tsf.femas.config.AbstractConfigHttpClientManager;
 import com.tencent.tsf.femas.config.FemasConfig;
 import com.tencent.tsf.femas.governance.api.entity.ServiceApiRequest;
+import com.tencent.tsf.femas.governance.connector.server.ServerConnectorManager;
+import com.tencent.tsf.femas.plugin.config.global.ServerConnectorEnum;
+import com.tencent.tsf.femas.plugin.context.ConfigContext;
+import com.tencent.tsf.femas.plugin.impl.config.ServerConnectorConfigImpl;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -31,23 +36,40 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.atomic.AtomicInteger;
 
-public class FemasConfigHttpClientManager extends AbstractConfigHttpClientManager {
+public class FemasConfigHttpClientManager implements ServerConnectorManager {
 
-    private static final  Logger log = LoggerFactory.getLogger(FemasConfigHttpClientManager.class);
+    private static final Logger log = LoggerFactory.getLogger(FemasConfigHttpClientManager.class);
 
-    private static final  String webContext = "/atom";
-    private static final  String fetchKeyUrl = "/v1/sdk/fetchData";
-    private static final  String reportCircuitEvent = "/v1/sdk/reportServiceEvent";
-    private static final  String reportApis = "/v1/sdk/reportServiceApi";
-    private static final  String intiNamespace = "/v1/sdk/initNamespace";
-    private static final  int DEFAULT_READ_TIME_OUT_MILLIS = Integer
+    private static final String webContext = "/atom";
+    private static final String fetchKeyUrl = "/v1/sdk/fetchData";
+    private static final String reportCircuitEvent = "/v1/sdk/reportServiceEvent";
+    private static final String reportApis = "/v1/sdk/reportServiceApi";
+    private static final String intiNamespace = "/v1/sdk/initNamespace";
+    private static final int DEFAULT_READ_TIME_OUT_MILLIS = Integer
             .getInteger("femas.paas.config.client.readTimeOut", 50000);
-    private static final  int DEFAULT_CON_TIME_OUT_MILLIS = Integer
+    private static final int DEFAULT_CON_TIME_OUT_MILLIS = Integer
             .getInteger("femas.paas.config.client.conTimeOut", 3000);
     private static Context commonContext = ContextFactory.getContextInstance();
     private static volatile FemasConfigHttpClientManager singleton = null;
     private volatile Context context = ContextFactory.getContextInstance();
+    private static AtomicInteger NEXT_SERVER_INDEX = new AtomicInteger(0);
+
+    @Override
+    public void init(ConfigContext conf) throws FemasRuntimeException {
+        ServerConnectorConfigImpl connectorConfig = (ServerConnectorConfigImpl) conf.getConfig().getGlobal().getServerConnector();
+        if (connectorConfig == null || CollectionUtil.isEmpty(connectorConfig.getAddresses()) || StringUtils.isEmpty(connectorConfig.getProtocol())) {
+            log.warn("server connector init failed,Lack of necessary configuration！！！");
+            return;
+        }
+    }
+
+    @Override
+    public void destroy() {
+
+    }
+
     /**
      * 链接地址，上层manager封装
      */
@@ -79,8 +101,13 @@ public class FemasConfigHttpClientManager extends AbstractConfigHttpClientManage
     }
 
     @Override
+    public String getName() {
+        return ServerConnectorEnum.HTTP.name();
+    }
+
+    @Override
     public String getType() {
-        return PollingType.http.name();
+        return ServerConnectorEnum.HTTP.name();
     }
 
     @Override

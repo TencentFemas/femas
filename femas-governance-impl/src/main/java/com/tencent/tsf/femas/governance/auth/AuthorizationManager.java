@@ -1,8 +1,8 @@
 package com.tencent.tsf.femas.governance.auth;
 
 import com.tencent.tsf.femas.common.entity.Service;
-import com.tencent.tsf.femas.governance.auth.entity.AuthRuleGroup;
-import com.tencent.tsf.femas.governance.config.FemasPluginContext;
+import com.tencent.tsf.femas.plugin.impl.FemasPluginContext;
+import com.tencent.tsf.femas.plugin.impl.config.rule.auth.AuthRuleGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

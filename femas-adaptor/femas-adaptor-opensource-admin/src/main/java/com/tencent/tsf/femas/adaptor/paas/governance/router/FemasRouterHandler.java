@@ -14,13 +14,14 @@ import com.tencent.tsf.femas.config.Config;
 import com.tencent.tsf.femas.config.ConfigChangeListener;
 import com.tencent.tsf.femas.config.enums.PropertyChangeType;
 import com.tencent.tsf.femas.config.model.ConfigChangeEvent;
-import com.tencent.tsf.femas.governance.plugin.config.ConfigHandler;
-import com.tencent.tsf.femas.governance.plugin.config.enums.ConfigHandlerTypeEnum;
 import com.tencent.tsf.femas.governance.route.RouterRuleManager;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import com.tencent.tsf.femas.plugin.config.ConfigHandler;
+import com.tencent.tsf.femas.plugin.config.enums.ConfigHandlerTypeEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,7 +62,7 @@ public class FemasRouterHandler extends ConfigHandler {
                             RouteRuleGroup routeRuleGroup = parseRouteRuleGroup(configChangeEvent.getNewValue());
                             Service service = new Service(routeRuleGroup.getNamespaceId(),
                                     routeRuleGroup.getMicroserviceName());
-                            com.tencent.tsf.femas.governance.route.entity.RouteRuleGroup femasRouteRuleGroup = transferFemasRouterRuleToFemas(
+                            com.tencent.tsf.femas.plugin.impl.config.rule.router.RouteRuleGroup femasRouteRuleGroup = transferFemasRouterRuleToFemas(
                                     routeRuleGroup);
                             RouterRuleManager.refreshRouteRule(service, femasRouteRuleGroup);
 
@@ -96,17 +97,17 @@ public class FemasRouterHandler extends ConfigHandler {
         }
     }
 
-    private static com.tencent.tsf.femas.governance.route.entity.RouteRuleGroup transferFemasRouterRuleToFemas(
+    private static com.tencent.tsf.femas.plugin.impl.config.rule.router.RouteRuleGroup transferFemasRouterRuleToFemas(
             RouteRuleGroup routeRuleGroup) {
-        com.tencent.tsf.femas.governance.route.entity.RouteRuleGroup femasRouteRuleGroup = new com.tencent.tsf.femas.governance.route.entity.RouteRuleGroup();
+        com.tencent.tsf.femas.plugin.impl.config.rule.router.RouteRuleGroup femasRouteRuleGroup = new com.tencent.tsf.femas.plugin.impl.config.rule.router.RouteRuleGroup();
 
         femasRouteRuleGroup.setServiceName(routeRuleGroup.getMicroserviceName());
         femasRouteRuleGroup.setNamespace(routeRuleGroup.getNamespaceId());
         femasRouteRuleGroup.setFallback(routeRuleGroup.getFallbackStatus());
 
-        List<com.tencent.tsf.femas.governance.route.entity.RouteRule> femasRouteRules = new ArrayList<>();
+        List<com.tencent.tsf.femas.plugin.impl.config.rule.router.RouteRule> femasRouteRules = new ArrayList<>();
         for (RouteRule routeRule : routeRuleGroup.getRuleList()) {
-            com.tencent.tsf.femas.governance.route.entity.RouteRule femasRouteRule = new com.tencent.tsf.femas.governance.route.entity.RouteRule();
+            com.tencent.tsf.femas.plugin.impl.config.rule.router.RouteRule femasRouteRule = new com.tencent.tsf.femas.plugin.impl.config.rule.router.RouteRule();
             femasRouteRule.setTagRule(transferFemasTagToFemasTag(routeRule.getTagList()));
             femasRouteRule.setDestList(transferFemasRouteDestToFemas(routeRule));
             femasRouteRules.add(femasRouteRule);
@@ -138,13 +139,13 @@ public class FemasRouterHandler extends ConfigHandler {
         return tagRule;
     }
 
-    private static List<com.tencent.tsf.femas.governance.route.entity.RouteDest> transferFemasRouteDestToFemas(
+    private static List<com.tencent.tsf.femas.plugin.impl.config.rule.router.RouteDest> transferFemasRouteDestToFemas(
             RouteRule routeRule) {
-        List<com.tencent.tsf.femas.governance.route.entity.RouteDest> femasRouteDestList = new ArrayList<>();
+        List<com.tencent.tsf.femas.plugin.impl.config.rule.router.RouteDest> femasRouteDestList = new ArrayList<>();
 
         if (!CollectionUtil.isEmpty(routeRule.getDestList())) {
             for (RouteDest routeDest : routeRule.getDestList()) {
-                com.tencent.tsf.femas.governance.route.entity.RouteDest femasRouteDest = new com.tencent.tsf.femas.governance.route.entity.RouteDest();
+                com.tencent.tsf.femas.plugin.impl.config.rule.router.RouteDest femasRouteDest = new com.tencent.tsf.femas.plugin.impl.config.rule.router.RouteDest();
                 femasRouteDest.setDestWeight(routeDest.getDestWeight());
 
                 TagRule femasTagRule = new TagRule();

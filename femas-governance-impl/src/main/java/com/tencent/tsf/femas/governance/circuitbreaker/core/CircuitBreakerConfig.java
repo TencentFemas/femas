@@ -19,7 +19,7 @@
 
 package com.tencent.tsf.femas.governance.circuitbreaker.core;
 
-import com.tencent.tsf.femas.governance.circuitbreaker.rule.CircuitBreakerRule;
+import com.tencent.tsf.femas.plugin.impl.config.rule.circuitbreaker.CircuitBreakerRule;
 import io.github.resilience4j.core.IntervalFunction;
 import io.github.resilience4j.core.lang.Nullable;
 import io.github.resilience4j.core.predicate.PredicateCreator;

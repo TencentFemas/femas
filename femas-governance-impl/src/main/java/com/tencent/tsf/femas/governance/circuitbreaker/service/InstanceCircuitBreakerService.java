@@ -9,9 +9,9 @@ import com.tencent.tsf.femas.governance.circuitbreaker.core.CircuitBreaker;
 import com.tencent.tsf.femas.governance.circuitbreaker.core.CircuitBreakerFactory;
 import com.tencent.tsf.femas.governance.circuitbreaker.core.StateTransitionCallback;
 import com.tencent.tsf.femas.governance.circuitbreaker.core.internal.CircuitBreakerMetrics;
-import com.tencent.tsf.femas.governance.circuitbreaker.rule.CircuitBreakerRule;
-import com.tencent.tsf.femas.governance.circuitbreaker.rule.CircuitBreakerStrategy;
-import com.tencent.tsf.femas.governance.plugin.context.ConfigContext;
+import com.tencent.tsf.femas.plugin.context.ConfigContext;
+import com.tencent.tsf.femas.plugin.impl.config.rule.circuitbreaker.CircuitBreakerRule;
+import com.tencent.tsf.femas.plugin.impl.config.rule.circuitbreaker.CircuitBreakerStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

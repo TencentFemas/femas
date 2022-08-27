@@ -5,7 +5,7 @@ import com.tencent.tsf.femas.common.entity.ServiceInstance;
 import com.tencent.tsf.femas.common.exception.FemasRuntimeException;
 import com.tencent.tsf.femas.governance.circuitbreaker.ICircuitBreakerService;
 import com.tencent.tsf.femas.governance.circuitbreaker.core.CircuitBreaker;
-import com.tencent.tsf.femas.governance.plugin.context.ConfigContext;
+import com.tencent.tsf.femas.plugin.context.ConfigContext;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 

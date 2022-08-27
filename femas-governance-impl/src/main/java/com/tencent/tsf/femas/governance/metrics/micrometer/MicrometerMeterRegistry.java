@@ -26,7 +26,7 @@ import com.tencent.tsf.femas.governance.metrics.micrometer.meter.MicroDistributi
 import com.tencent.tsf.femas.governance.metrics.micrometer.meter.MicroLongTaskTimer;
 import com.tencent.tsf.femas.governance.metrics.micrometer.meter.MicroMeter;
 import com.tencent.tsf.femas.governance.metrics.micrometer.meter.MicroTimer;
-import com.tencent.tsf.femas.governance.plugin.context.ConfigContext;
+import com.tencent.tsf.femas.plugin.context.ConfigContext;
 import io.micrometer.core.instrument.ImmutableTag;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Tag;

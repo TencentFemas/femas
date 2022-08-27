@@ -10,10 +10,11 @@ import com.tencent.tsf.femas.common.exception.FemasRuntimeException;
 import com.tencent.tsf.femas.governance.circuitbreaker.FemasCircuitBreakerIsolationLevelEnum;
 import com.tencent.tsf.femas.governance.circuitbreaker.ICircuitBreakerService;
 import com.tencent.tsf.femas.governance.circuitbreaker.core.CircuitBreakerFactory;
-import com.tencent.tsf.femas.governance.circuitbreaker.rule.CircuitBreakerRule;
-import com.tencent.tsf.femas.governance.circuitbreaker.rule.CircuitBreakerStrategy;
-import com.tencent.tsf.femas.governance.plugin.context.ConfigContext;
+import com.tencent.tsf.femas.plugin.context.ConfigContext;
 import java.util.Set;
+
+import com.tencent.tsf.femas.plugin.impl.config.rule.circuitbreaker.CircuitBreakerRule;
+import com.tencent.tsf.femas.plugin.impl.config.rule.circuitbreaker.CircuitBreakerStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

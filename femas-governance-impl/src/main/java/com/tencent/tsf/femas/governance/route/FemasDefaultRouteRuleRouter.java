@@ -8,18 +8,20 @@ import com.tencent.tsf.femas.common.exception.FemasRuntimeException;
 import com.tencent.tsf.femas.common.tag.TagRule;
 import com.tencent.tsf.femas.common.tag.engine.TagEngine;
 import com.tencent.tsf.femas.common.util.CollectionUtil;
-import com.tencent.tsf.femas.governance.config.impl.ServiceRouterConfigImpl;
 import com.tencent.tsf.femas.governance.event.RouterEventCollector;
-import com.tencent.tsf.femas.governance.plugin.context.ConfigContext;
-import com.tencent.tsf.femas.governance.route.entity.RouteDest;
-import com.tencent.tsf.femas.governance.route.entity.RouteRule;
-import com.tencent.tsf.femas.governance.route.entity.RouteRuleGroup;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+
+import com.tencent.tsf.femas.plugin.context.ConfigContext;
+import com.tencent.tsf.femas.plugin.impl.config.ServiceRouterConfigImpl;
+import com.tencent.tsf.femas.plugin.impl.config.rule.router.RouteDest;
+import com.tencent.tsf.femas.plugin.impl.config.rule.router.RouteRule;
+import com.tencent.tsf.femas.plugin.impl.config.rule.router.RouteRuleGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -18,7 +18,7 @@
 package com.tencent.tsf.femas.governance.auth;
 
 import com.tencent.tsf.femas.common.entity.Service;
-import com.tencent.tsf.femas.governance.plugin.Plugin;
+import com.tencent.tsf.femas.plugin.Plugin;
 
 /**
  * @Author leoziltong
