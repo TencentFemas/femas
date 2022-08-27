@@ -37,6 +37,7 @@ public class LaneRuleRowMapper implements RowMapper<LaneRule> {
         laneRule.setGrayType(GrayTypeEnum.valueOf(rs.getString("gray_type")));
         laneRule.setEnable(rs.getInt("enable"));
         laneRule.setRuleTagRelationship(RuleTagRelationship.valueOf(rs.getString("rule_tag_relationship")));
+        laneRule.setPriority(rs.getInt("priority"));
         String ruleTagListStr = rs.getString("rule_tag_list");
         List<LaneRuleTag> ruleTagList = mapper.readValue(ruleTagListStr, new TypeReference<List<LaneRuleTag>>() {});
         laneRule.setRuleTagList(ruleTagList);

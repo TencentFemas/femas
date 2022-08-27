@@ -1167,20 +1167,20 @@ public class MysqlDataOperation implements DataOperation {
             long time = new Date().getTime();
             laneRule.setCreateTime(time);
             laneRule.setUpdateTime(time);
-            return manager.update("insert into lane_rule(rule_id,rule_name,remark,enable,create_time,update_time,relative_lane,rule_tag_list,rule_tag_relationship,gray_type) " +
-                            "values(?,?,?,?,?,?,?,?,?,?)",
+            return manager.update("insert into lane_rule(rule_id,rule_name,remark,enable,create_time,update_time,relative_lane,rule_tag_list,rule_tag_relationship,gray_type,priority) " +
+                            "values(?,?,?,?,?,?,?,?,?,?,?)",
                     laneRule.getRuleId(), laneRule.getRuleName(),
                     laneRule.getRemark(), laneRule.getEnable(),
                     laneRule.getCreateTime(), laneRule.getUpdateTime(), JSONSerializer.serializeStr(laneRule.getRelativeLane()),
-                    JSONSerializer.serializeStr(laneRule.getRuleTagList()), laneRule.getRuleTagRelationship().toString(),laneRule.getGrayType().toString());
+                    JSONSerializer.serializeStr(laneRule.getRuleTagList()), laneRule.getRuleTagRelationship().toString(), laneRule.getGrayType().toString(), laneRule.getPriority());
         }else {
             laneRule.setUpdateTime(new Date().getTime());
-            return manager.update("update lane_info set lane_name=?, remark=?, enable=?, create_time=?, update_time=?, relative_lane, rule_tag_list=?, rule_tag_relationship=?, gray_type=? where rule_id=?",
+            return manager.update("update lane_info set lane_name=?, remark=?, enable=?, create_time=?, update_time=?, relative_lane, rule_tag_list=?, rule_tag_relationship=?, gray_type=?, priority=? where rule_id=?",
                     laneRule.getRuleName(), laneRule.getRemark(),
                     laneRule.getEnable(), laneRule.getCreateTime(),
                     laneRule.getUpdateTime(), JSONSerializer.serializeStr(laneRule.getRelativeLane()),
                     JSONSerializer.serializeStr(laneRule.getRuleTagList()),
-                    laneRule.getRuleTagRelationship().toString(),laneRule.getGrayType().toString(), laneRule.getRuleId());
+                    laneRule.getRuleTagRelationship().toString(),laneRule.getGrayType().toString(), laneRule.getPriority(), laneRule.getRuleId());
         }
     }
 

@@ -73,6 +73,13 @@ public class LaneRule{
     @ApiModelProperty("规则更新时间(不需要前端传)")
     private Long updateTime = System.currentTimeMillis();
 
+
+    /**
+     * 优先级
+     */
+    @ApiModelProperty("规则优先级")
+    private Integer priority;
+
     public String getRuleId() {
         return ruleId;
     }
@@ -155,5 +162,13 @@ public class LaneRule{
 
     public void setGrayType(GrayTypeEnum grayType) {
         this.grayType = grayType;
+    }
+
+    public Integer getPriority() {
+        return priority;
+    }
+
+    public void setPriority(Integer priority) {
+        this.priority = priority;
     }
 }
