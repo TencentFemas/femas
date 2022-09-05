@@ -78,7 +78,7 @@ public class LaneRule{
      * 优先级
      */
     @ApiModelProperty("规则优先级")
-    private Integer priority;
+    private Long priority;
 
     public String getRuleId() {
         return ruleId;
@@ -164,11 +164,11 @@ public class LaneRule{
         this.grayType = grayType;
     }
 
-    public Integer getPriority() {
+    public Long getPriority() {
         return priority;
     }
 
-    public void setPriority(Integer priority) {
+    public void setPriority(Long priority) {
         this.priority = priority;
     }
 }
