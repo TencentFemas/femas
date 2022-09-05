@@ -4,6 +4,7 @@ import { purify } from 'saga-duck';
 
 type WithLoadingTipProps = {
   loading: boolean;
+  children?: JSX.Element;
 };
 
 class WithLoadingTip extends React.Component<WithLoadingTipProps, Readonly<{}>> {
