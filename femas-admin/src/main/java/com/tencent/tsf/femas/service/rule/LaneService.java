@@ -88,4 +88,22 @@ public class LaneService implements ServiceExecutor {
         }
         return Result.successMessage("泳道规则删除成功");
     }
+
+
+    public Result adjustLaneRulePriority(PriorityModel priorityModel) {
+        Result<LaneRule> laneRuleResult = fetchLaneRuleById(priorityModel.getLaneId());
+        Result<LaneRule> targetLaneRuleResult = fetchLaneRuleById(priorityModel.getTargetLaneId());
+        if(!Result.SUCCESS.equals(laneRuleResult.getCode()) || !Result.SUCCESS.equals(targetLaneRuleResult.getCode()) ){
+            return Result.errorMessage("泳道不存在");
+        }
+        LaneRule laneRule = laneRuleResult.getData();
+        LaneRule targetLaneRule = targetLaneRuleResult.getData();
+        Long laneRulePriority = laneRule.getPriority();
+        laneRule.setPriority(targetLaneRule.getPriority());
+        targetLaneRule.setPriority(laneRulePriority);
+        if(!Result.SUCCESS.equals(configureLaneRule(laneRule).getCode()) || !Result.SUCCESS.equals(configureLaneRule(targetLaneRule).getCode()) ){
+            return Result.errorMessage("优先级调整失败");
+        }
+        return Result.successData("优先级调整成功");
+    }
 }

@@ -2,11 +2,9 @@ package com.tencent.tsf.femas.endpoint.rule.lane;
 
 import com.tencent.tsf.femas.common.util.Result;
 import com.tencent.tsf.femas.endpoint.adaptor.AbstractBaseEndpoint;
+import com.tencent.tsf.femas.entity.IdModel;
 import com.tencent.tsf.femas.entity.PageService;
-import com.tencent.tsf.femas.entity.rule.lane.LaneInfo;
-import com.tencent.tsf.femas.entity.rule.lane.LaneInfoModel;
-import com.tencent.tsf.femas.entity.rule.lane.LaneRule;
-import com.tencent.tsf.femas.entity.rule.lane.LaneRuleModel;
+import com.tencent.tsf.femas.entity.rule.lane.*;
 import com.tencent.tsf.femas.service.rule.LaneService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +34,8 @@ public class LaneController extends AbstractBaseEndpoint {
     }
 
     @RequestMapping(value = "/fetchLaneById", method = RequestMethod.POST)
-    public Result<LaneInfo> fetchLaneById(@RequestBody String laneId) {
-        return executor.process(()->laneService.fetchLaneById(laneId));
+    public Result<LaneInfo> fetchLaneById(@RequestBody IdModel laneId) {
+        return executor.process(()->laneService.fetchLaneById(laneId.getId()));
     }
 
     @RequestMapping(value = "/fetchLaneInfoPages", method = RequestMethod.POST)
@@ -47,8 +45,8 @@ public class LaneController extends AbstractBaseEndpoint {
 
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
-    public Result deleteLane(@RequestBody String laneId) {
-        return executor.process(()->laneService.deleteLane(laneId));
+    public Result deleteLane(@RequestBody IdModel laneId) {
+        return executor.process(()->laneService.deleteLane(laneId.getId()));
     }
 
 
@@ -58,8 +56,8 @@ public class LaneController extends AbstractBaseEndpoint {
     }
 
     @RequestMapping(value = "/rule/fetchLaneRuleById", method = RequestMethod.POST)
-    public Result<LaneRule> fetchLaneRuleById(@RequestBody String laneRuleId) {
-        return executor.process(()->laneService.fetchLaneRuleById(laneRuleId));
+    public Result<LaneRule> fetchLaneRuleById(@RequestBody IdModel laneRuleId) {
+        return executor.process(()->laneService.fetchLaneRuleById(laneRuleId.getId()));
     }
 
     @RequestMapping(value = "/rule/fetchLaneRulePages", method = RequestMethod.POST)
@@ -68,8 +66,12 @@ public class LaneController extends AbstractBaseEndpoint {
     }
 
     @RequestMapping(value = "/rule/delete", method = RequestMethod.POST)
-    public Result deleteRule(@RequestBody String laneRuleId) {
-        return executor.process(()->laneService.deleteLaneRule(laneRuleId));
+    public Result deleteRule(@RequestBody IdModel laneRuleId) {
+        return executor.process(()->laneService.deleteLaneRule(laneRuleId.getId()));
     }
 
+    @RequestMapping(value = "/rule/adjustLaneRulePriority", method = RequestMethod.POST)
+    public Result adjustLaneRulePriority(@RequestBody PriorityModel priorityModel){
+        return executor.process(()->laneService.adjustLaneRulePriority(priorityModel));
+    }
 }
