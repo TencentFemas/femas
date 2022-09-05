@@ -20,7 +20,7 @@ public class LocalConfig extends AbstractConfig<Object> {
     //默认加载顺序,很springboot保持一致，参见ConfigFileApplicationListener
     private static final String DEFAULT_SEARCH_LOCATIONS = "classpath:/,classpath:/config/";
     public static final String CLASSPATH_URL_PREFIX = "classpath:/";
-    private static final String YAML_DEFAULT_NAMES = "femas.conf";
+    private static final String YAML_DEFAULT_NAMES = "femas.yaml";
 
     public LocalConfig() {
         // 加载 classpath 配置文件
@@ -28,7 +28,10 @@ public class LocalConfig extends AbstractConfig<Object> {
         String[] locationAdds = DEFAULT_SEARCH_LOCATIONS.split(",");
         for (String location : locationAdds) {
             location = location.substring(CLASSPATH_URL_PREFIX.length()).concat(YAML_DEFAULT_NAMES);
-            this.conf.putAll(ConfigUtils.loadRelativeConfig(location));
+            Map<String, Object> map = ConfigUtils.loadRelativeYamlConfig(location);
+            if (MapUtils.isNotEmpty(map)) {
+                this.conf.putAll(ConfigUtils.loadRelativeYamlConfig(location));
+            }
         }
     }
 

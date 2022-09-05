@@ -89,13 +89,11 @@ public class FemasPluginContext {
         if (configuration == null) {
             configuration = new ConfigurationImpl();
         }
-        if (configuration.hasEmpty()) {
-            configuration.setDefault();
-            configuration.verify();
-        }
+        configuration.setDefault();
+        configuration.verify();
         serverConnectorManager =
                 (ServerConnectorManager) DefaultConfigurablePluginHolder.getSDKContext()
-                        .getPlugin(SPIPluginType.SERVER_CONNECTOR.getInterfaces(), configuration.getGlobal().getServerConnector().getProtocol());
+                        .getPlugin(SPIPluginType.SERVER_CONNECTOR.getInterfaces(), configuration.getGlobal().getServerConnector().getProtocol().toUpperCase());
         loadBalancer = (Loadbalancer) DefaultConfigurablePluginHolder.getSDKContext()
                 .getPlugin(SPIPluginType.LOAD_BALANCER.getInterfaces(), configuration.getLoadbalancer().getType());
         rateLimiter = (RateLimiter) DefaultConfigurablePluginHolder.getSDKContext()

@@ -1,8 +1,3 @@
-#控制台配置（治理规则从控制台拉取热更新，不配置此项，则插件治理规则从此文件加载）
-paas_server_address: http://localhost:8080
-femas_namespace_id: leo11111
-femas_prog_version: 22222
-#治理插件配置（插件类型，插件规则，不配置则加载Femas默认插件）
 rateLimit:
   type: femasRateLimit
 
@@ -12,7 +7,6 @@ authenticate:
 serviceRouter:
   chain:
     - FemasDefaultRoute
-
 
 loadbalancer:
   type: random
@@ -28,3 +22,10 @@ circuitBreaker:
 #      requestCountAfterHalfOpen: 3
 #      sleepWindow: 5s
 #      successCountAfterHalfOpen: 2
+femas_registry_ip: 106.53.127.164
+femas_registry_port: 8848
+femas_registry_type: nacos
+#paas_server_address: http://106.53.107.83:8080/
+paas_server_address: http://127.0.0.1:8080
+femas_namespace_id: leo11111
+femas_prog_version: 2

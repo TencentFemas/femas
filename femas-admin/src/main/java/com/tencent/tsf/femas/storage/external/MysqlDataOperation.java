@@ -1138,13 +1138,13 @@ public class MysqlDataOperation implements DataOperation {
         RowMapper rowMapper = RowMapperFactory.getMapper(LANE_INFO);
         PageService pageService;
         String sql = "select * from lane_info";
-        if(StringUtils.isEmpty(laneInfoModel.getLaneId())){
+        if(!StringUtils.isEmpty(laneInfoModel.getLaneId())){
             sql += " and lane_info.lane_id like '%" + laneInfoModel.getLaneId() + "%'";
         }
-        if(StringUtils.isEmpty(laneInfoModel.getLaneId())){
+        if(!StringUtils.isEmpty(laneInfoModel.getLaneName())){
             sql += " and lane_info.lane_name like '%" + laneInfoModel.getLaneName() + "%'";
         }
-        if(StringUtils.isEmpty(laneInfoModel.getLaneId())){
+        if(!StringUtils.isEmpty(laneInfoModel.getRemark())){
             sql += " and lane_info.remark like '%" + laneInfoModel.getRemark() + "%'";
         }
         sql = sql.replaceFirst("and", "where");
@@ -1167,6 +1167,7 @@ public class MysqlDataOperation implements DataOperation {
             long time = new Date().getTime();
             laneRule.setCreateTime(time);
             laneRule.setUpdateTime(time);
+            laneRule.setPriority(time);
             return manager.update("insert into lane_rule(rule_id,rule_name,remark,enable,create_time,update_time,relative_lane,rule_tag_list,rule_tag_relationship,gray_type,priority) " +
                             "values(?,?,?,?,?,?,?,?,?,?,?)",
                     laneRule.getRuleId(), laneRule.getRuleName(),
@@ -1175,7 +1176,7 @@ public class MysqlDataOperation implements DataOperation {
                     JSONSerializer.serializeStr(laneRule.getRuleTagList()), laneRule.getRuleTagRelationship().toString(), laneRule.getGrayType().toString(), laneRule.getPriority());
         }else {
             laneRule.setUpdateTime(new Date().getTime());
-            return manager.update("update lane_info set lane_name=?, remark=?, enable=?, create_time=?, update_time=?, relative_lane, rule_tag_list=?, rule_tag_relationship=?, gray_type=?, priority=? where rule_id=?",
+            return manager.update("update lane_rule set rule_name=?, remark=?, enable=?, create_time=?, update_time=?, relative_lane=?, rule_tag_list=?, rule_tag_relationship=?, gray_type=?, priority=? where rule_id=?",
                     laneRule.getRuleName(), laneRule.getRemark(),
                     laneRule.getEnable(), laneRule.getCreateTime(),
                     laneRule.getUpdateTime(), JSONSerializer.serializeStr(laneRule.getRelativeLane()),
@@ -1207,7 +1208,7 @@ public class MysqlDataOperation implements DataOperation {
         sql = sql.replaceFirst("and", "where");
         pageService = manager.selectByPagesOrdered(rowMapper, sql,
                 laneRuleModel.getPageNo(), laneRuleModel.getPageSize(),
-                DESC, "update_time");
+                DESC, "priority");
         return pageService;
     }
 

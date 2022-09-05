@@ -254,10 +254,12 @@ spring:
 # discovery:
 # server-addr: 127.0.0.1:8848
  ```
- ##### Femas component configuration file path: resources/femas.conf (Ymal format, used to configure femas-related local configuration, such as paas address, custom registry cluster, custom governance rules, etc.)
+ ##### Femas component configuration file path: resources/femas.yaml (Ymal format, used to configure femas-related local configuration, such as paas address, custom registry cluster, custom governance rules, etc.)
  ```
 # Configure the paas background address, if not configured, get the rules from the local configuration file
 paas_server_address: http://127.0.0.1:8080
+femas_namespace_id=Namespace ID
+femas_prog_version=Service version
  
 # Use the method provided by Femas to access the registration center, how to use dubbo or self-developed protocol
 femas_registry_ip: 127.0.0.1 //Registry center cluster address

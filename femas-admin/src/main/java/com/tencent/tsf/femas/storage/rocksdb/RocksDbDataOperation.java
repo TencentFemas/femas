@@ -1327,7 +1327,9 @@ public class RocksDbDataOperation implements DataOperation {
     public Integer configureLaneRule(LaneRule laneRule) {
         if (StringUtils.isEmpty(laneRule.getRuleId())) {
             laneRule.setRuleId("lane-rule-" + iidGeneratorService.nextHashId());
-            laneRule.setCreateTime(new Date().getTime());
+            long time = new Date().getTime();
+            laneRule.setCreateTime(time);
+            laneRule.setPriority(time);
         }
         laneRule.setUpdateTime(new Date().getTime());
         String routeKey = "lane-rule/" + laneRule.getRuleId();
