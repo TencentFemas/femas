@@ -67,7 +67,7 @@ public class ConfigurationImpl implements Configuration {
     @Override
     public boolean hasEmpty() {
         if (null == global || null == serviceRouter || null == loadbalancer ||
-                null == circuitBreaker || null == rateLimit || null == authenticate) {
+                null == circuitBreaker || null == rateLimit || null == authenticate || lane == null || metrics == null || metricsExporter == null || metricsTransformer == null) {
             return true;
         }
         return false;

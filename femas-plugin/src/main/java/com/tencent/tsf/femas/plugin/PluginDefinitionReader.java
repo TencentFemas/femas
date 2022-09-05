@@ -31,9 +31,9 @@ public class PluginDefinitionReader {
     //默认加载顺序，跟springboot保持一致，参见ConfigFileApplicationListener
     private static final String DEFAULT_SEARCH_LOCATIONS = "classpath:/,classpath:/config/";
     public static final String CLASSPATH_URL_PREFIX = "classpath:/";
-    private static final String YAML_DEFAULT_NAMES = "femas.conf";
+    private static final String YAML_DEFAULT_NAMES = "femas.yaml";
 
-    public static final String FEMAS_CONF_LOCATION_PROPERTY = "femas.conf";
+    public static final String FEMAS_CONF_LOCATION_PROPERTY = "femas.yaml";
 
     private static final Map<String, Object> conf;
     private static final JsonNode finalYamlLocations;
@@ -52,7 +52,7 @@ public class PluginDefinitionReader {
             String[] locationAdds = DEFAULT_SEARCH_LOCATIONS.split(",");
             for (String lo : locationAdds) {
                 lo = lo.substring(CLASSPATH_URL_PREFIX.length()).concat(YAML_DEFAULT_NAMES);
-                conf.putAll(ConfigUtils.loadRelativeConfig(lo));
+                conf.putAll(ConfigUtils.loadRelativeYamlConfig(lo));
             }
         }
         if (AgentConfig.doGetProperty(START_AGENT_FEMAS) != null && ((Boolean) AgentConfig.doGetProperty(START_AGENT_FEMAS))) {
