@@ -267,10 +267,12 @@ spring:
 #      discovery:
 #        server-addr: 127.0.0.1:8848
  ```
- ##### Femas组件配置文件路径：resources/femas.conf（Ymal格式，用于配置femas相关本地配置，如paas地址、自定义注册中心集群、自定义治理规则等）
+ ##### Femas组件配置文件路径：resources/femas.yaml（Ymal格式，用于配置femas相关本地配置，如paas地址、自定义注册中心集群、自定义治理规则等）
  ```
 # 配置paas后台地址，如果没有配置，则从本地配置文件获取规则
 paas_server_address: http://127.0.0.1:8080
+femas_namespace_id=命名空间ID  //服务需要指定所属命名空间
+femas_prog_version=服务版本   //指定服务所属的版本（部署组），配合sdk侧的实现服务治理，如流量分拨路由
  
 # 使用Femas提供的方式接入注册中心，dubbo或者自研协议的使用方式
 femas_registry_ip: 127.0.0.1  //注册中心集群地址
@@ -295,10 +297,6 @@ circuitBreaker:
 
 ##### 启动服务命令
 ```
-# 接入femas必须参数
--Dfemas_namespace_id=命名空间ID  //服务需要指定所属命名空间
--Dfemas_prog_version=服务版本   //指定服务所属的版本（部署组），配合sdk侧的实现服务治理，如流量分拨路由
-
 # 有监控需求的用户按需添加，非必须
 -javaagent:"{skywalking agent绝对路径}/agent/skywalking-agent.jar"  // 引用skywalking的agent探针
 -Dskywalking.agent.service_name=注册到skywalking上的服务名，需要跟注册中心名称一致,否则tracing链路观测会找不到相应服务。
