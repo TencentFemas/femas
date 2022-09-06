@@ -20,10 +20,10 @@ module.exports = Object.assign({}, base, {
       //   secure: false,
       //   changeOrigin: true,
       // },
-      "/": {
-        target: "http://106.53.107.83:8080",
-        pathRewrite: { "^/": "" },
-      },
+      // "/": {
+      //   target: "http://106.53.107.83:8080",
+      //   pathRewrite: { "^/": "" },
+      // },
     },
   },
   mode: "development",
