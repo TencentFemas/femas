@@ -1,12 +1,13 @@
 import Form from "@src/common/ducks/Form";
 import FormDialog from "@src/common/ducks/FormDialog";
 import { nameTipMessage } from "@src/common/types";
-import { put, select, takeLatest } from "redux-saga/effects";
+import { put, select } from "redux-saga/effects";
 import { createToPayload, reduceFromPayload } from "saga-duck";
 import { resolvePromise } from "saga-duck/build/helper";
 import { configureLane } from "../../model";
 import { LaneItem } from "../../types";
 import { STEPS, STEPS_LABLES } from "./types";
+import { takeLatest } from "redux-saga-catch";
 
 export enum EDIT_TYPE {
   create = "create",

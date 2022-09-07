@@ -1,6 +1,7 @@
 import NamespaceSelectDuck from "@src/app/namespace/components/NamespaceSelectDuck";
 import GridPageDuck, { Filter as BaseFilter } from "@src/common/ducks/GridPage";
-import { put, select, takeLatest } from "redux-saga/effects";
+import { put, select } from "redux-saga/effects";
+import { takeEvery, takeLatest } from "redux-saga-catch";
 import { createToPayload } from "saga-duck";
 import { resolvePromise } from "saga-duck/build/helper";
 import { Modal } from "tea-component";
@@ -9,6 +10,7 @@ import { LaneItem } from "./types";
 import { Action } from "@src/common/types";
 import create from "./operations/create";
 import { EDIT_TYPE } from "./operations/create/CreateDuck";
+import { TAB } from "../types";
 
 interface Filter extends BaseFilter {
   laneId: string;
@@ -25,7 +27,7 @@ export default class LaneRulePageDuck extends GridPageDuck {
   }
 
   get baseUrl() {
-    return "/publish";
+    return "/publish?tab=" + TAB.LANE;
   }
 
   get initialFetch() {
@@ -37,7 +39,8 @@ export default class LaneRulePageDuck extends GridPageDuck {
   }
 
   get params() {
-    return [...super.params];
+    // TODO 暂时不同步keyword
+    return [...super.params.filter(({ key }) => key !== "keyword")];
   }
 
   get quickTypes() {
@@ -78,14 +81,16 @@ export default class LaneRulePageDuck extends GridPageDuck {
     type State = this["State"];
     return {
       ...super.rawSelectors,
-      filter: (state: State) => ({
-        page: state.page,
-        count: state.count,
-        // keyword: state.keyword,
-        laneId: "",
-        laneName: state.keyword,
-        remark: "",
-      }),
+      filter: (state: State) => {
+        return {
+          page: state.page,
+          count: state.count,
+          // keyword: state.keyword,
+          laneId: "",
+          laneName: state.keyword,
+          remark: "",
+        };
+      },
     };
   }
 
@@ -116,7 +121,7 @@ export default class LaneRulePageDuck extends GridPageDuck {
   }
 
   async getData(filters: this["Filter"]) {
-    const { page, count, keyword, laneId, laneName, remark } = filters;
+    const { page, count, laneId, laneName, remark } = filters;
 
     const res = await fetchLaneInfoPages({
       pageNo: page,

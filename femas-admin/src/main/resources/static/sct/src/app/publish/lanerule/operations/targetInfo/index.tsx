@@ -118,6 +118,7 @@ export const TargetInfo = purify(function TargetInfo(
                     value={x.key}
                     appearance="button"
                     options={laneOptions.map((v) => {
+                      v.disabled = false;
                       if (
                         handlers
                           .getValue()
