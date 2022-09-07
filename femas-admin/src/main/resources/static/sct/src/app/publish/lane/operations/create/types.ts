@@ -5,5 +5,5 @@ export enum STEPS {
 }
 export const STEPS_LABLES = {
   [STEPS.BASE]: "基本配置",
-  [STEPS.NAMESPACE]: "选择部署组",
+  [STEPS.NAMESPACE]: "部署组配置",
 };

@@ -148,7 +148,12 @@ export default function Deploy(props: DuckCmpProps<DeployDuck> & Props) {
             dataSource={serviceList}
             targetKeys={targetData.map((v) => v.serviceName)}
             onChange={(keys, { selectedRecords }) => {
-              setTargetData(selectedRecords);
+              setTargetData((data) => {
+                const alredyData = selectedRecords.filter((v) => {
+                  return !data.find((j) => j.serviceName === v.serviceName);
+                });
+                return [...data, ...alredyData];
+              });
             }}
           />
         </Transfer.Cell>
@@ -158,12 +163,16 @@ export default function Deploy(props: DuckCmpProps<DeployDuck> & Props) {
           <TargetTable
             dataSource={targetData}
             onRemove={(key) => {
-              setTargetData(targetData.filter((i) => i.serviceName !== key));
+              setTargetData((data) =>
+                data.filter((i) => i.serviceName !== key)
+              );
             }}
             onEntranceChange={(val, recordIndex) => {
-              const tmpData = [...targetData];
-              tmpData[recordIndex] = val;
-              setTargetData(tmpData);
+              setTargetData((data) => {
+                const tmpData = [...data];
+                tmpData[recordIndex] = val;
+                return tmpData;
+              });
             }}
           />
         </Transfer.Cell>

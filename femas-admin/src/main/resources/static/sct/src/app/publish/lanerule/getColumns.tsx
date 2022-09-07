@@ -1,5 +1,5 @@
 import * as React from "react";
-import { LaneRuleItem, TAGOPERATORENUM_LABEL } from "./types";
+import { GRAYTYPE_LABEL, LaneRuleItem, TAGOPERATORENUM_LABEL } from "./types";
 import { DuckCmpProps } from "saga-duck";
 import LaneRulePageDuck from "./PageDuck";
 import { Link } from "react-router-dom";
@@ -40,6 +40,11 @@ export default ({
         </Text>
       </>
     ),
+  },
+  {
+    key: "grayType",
+    header: "灰度类型",
+    render: (x) => <Tag>{GRAYTYPE_LABEL[x.grayType]}</Tag>,
   },
   {
     key: "create",

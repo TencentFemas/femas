@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Justify, Table } from "tea-component";
+import { Button, Justify, Table, TagSearchBox } from "tea-component";
 import { DuckCmpProps } from "saga-duck";
 import { SearchBox } from "tea-component";
 import { Card } from "tea-component";
@@ -23,7 +23,10 @@ export default function LaneRulePage(props: DuckCmpProps<LaneRulePageDuck>) {
     []
   );
   const columns = React.useMemo(() => getColumns(props), []);
-
+  console.log(
+    selectors.pendingKeyword(store),
+    "selectors.pendingKeyword(store)"
+  );
   return (
     <>
       <Table.ActionPanel>

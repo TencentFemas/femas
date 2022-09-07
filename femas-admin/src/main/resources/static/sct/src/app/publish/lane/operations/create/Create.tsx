@@ -74,7 +74,10 @@ export default function Create(props: DuckCmpProps<Duck>) {
         <>
           <Form layout="vertical">
             <FormField showStatusIcon={false} field={laneServiceList}>
-              <Deploy onChange={(list) => laneServiceList.setValue(list)} />
+              <Deploy
+                value={laneServiceList.getValue() || []}
+                onChange={(list) => laneServiceList.setValue(list)}
+              />
             </FormField>
           </Form>
 

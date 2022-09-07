@@ -2,7 +2,6 @@ import DetailPage from "@src/common/ducks/DetailPage";
 import { ComposedId } from "../PageDuck";
 import { createToPayload, reduceFromPayload } from "saga-duck";
 import { LaneItem } from "../../types";
-import { takeLatest, select, put } from "redux-saga/effects";
 import { Modal } from "tea-component";
 import { configureLane } from "../../model";
 import { Action } from "@src/common/types";

@@ -89,7 +89,7 @@ export default function BaseInfo(props: DuckCmpProps<BaseInfoDuck>) {
                 <Switch
                   value={cvm.entrance}
                   onChange={(val) => handlers.changeEntrance(recordIndex, val)}
-                  tooltip="禁用"
+                  tooltip={cvm.entrance ? "禁用" : "启用"}
                 ></Switch>
               );
             },

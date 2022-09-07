@@ -1,6 +1,7 @@
 import NamespaceSelectDuck from "@src/app/namespace/components/NamespaceSelectDuck";
 import GridPageDuck, { Filter as BaseFilter } from "@src/common/ducks/GridPage";
-import { put, select, takeLatest } from "redux-saga/effects";
+import { put, select } from "redux-saga/effects";
+import { takeEvery, takeLatest } from "redux-saga-catch";
 import { createToPayload } from "saga-duck";
 import { resolvePromise } from "saga-duck/build/helper";
 import { Modal } from "tea-component";
@@ -14,6 +15,7 @@ import { LaneRuleItem } from "./types";
 import { Action } from "@src/common/types";
 import create from "./operations/create";
 import { EDIT_TYPE } from "./operations/create/CreateDuck";
+import { TAB } from "../types";
 
 interface Filter extends BaseFilter {
   remark: string;
@@ -30,7 +32,7 @@ export default class LaneRulePageDuck extends GridPageDuck {
   }
 
   get baseUrl() {
-    return "/publish";
+    return "/publish?tab=" + TAB.LANERULE;
   }
 
   get initialFetch() {
@@ -137,6 +139,7 @@ export default class LaneRulePageDuck extends GridPageDuck {
       }>
     ) {
       const { laneId, targetLaneId } = action.payload;
+      if (!laneId || !targetLaneId) return;
       yield adjustLaneRulePriority({ laneId, targetLaneId });
       yield put(creators.reload());
     });
