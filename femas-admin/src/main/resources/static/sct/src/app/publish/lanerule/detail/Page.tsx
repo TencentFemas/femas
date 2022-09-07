@@ -18,7 +18,13 @@ import {
 import formatDate from "@src/common/util/formatDate";
 import { Button } from "tea-component";
 import { STEPS_LABLES, STEPS } from "../operations/create/types";
-import { RELEATION_LABEL, TAGOPERATORENUM_LABEL } from "../types";
+import {
+  RELEATION_LABEL,
+  TAGOPERATORENUM_LABEL,
+  GRAYTYPE_LABEL,
+  ENABLE,
+  ENABLE_LABEL,
+} from "../types";
 
 export default function LaneDetailPage(props: DuckCmpProps<LaneDetailDuck>) {
   const { duck, store, dispatch } = props;
@@ -53,20 +59,24 @@ export default function LaneDetailPage(props: DuckCmpProps<LaneDetailDuck>) {
                   <Form.Item label={"名称"}>
                     <Form.Text>{laneInfo.ruleName}</Form.Text>
                   </Form.Item>
+                  <Form.Item label={"灰度类型"}>
+                    <Form.Text>
+                      <Tag>{GRAYTYPE_LABEL[laneInfo.grayType]}</Tag>
+                    </Form.Text>
+                  </Form.Item>
+                  <Form.Item label={"生效状态"}>
+                    <Form.Text>
+                      <Text
+                        theme={
+                          laneInfo.enable === ENABLE.OPEN ? "success" : "danger"
+                        }
+                      >
+                        {ENABLE_LABEL[laneInfo.enable]}
+                      </Text>
+                    </Form.Text>
+                  </Form.Item>
                   <Form.Item label={"创建时间"}>
                     <Form.Text>{formatDate(laneInfo.createTime)}</Form.Text>
-                  </Form.Item>
-                  <Form.Item label={"标签"}>
-                    <Form.Text>
-                      {laneInfo.ruleTagList.map((v, i) => {
-                        return (
-                          <Tag key={i}>
-                            {v.tagName} {TAGOPERATORENUM_LABEL[v.tagOperator]}{" "}
-                            {v.tagValue}
-                          </Tag>
-                        );
-                      })}
-                    </Form.Text>
                   </Form.Item>
                   <Form.Item label={"备注"}>
                     <Form.Text>{laneInfo.remark}</Form.Text>
@@ -114,7 +124,7 @@ export default function LaneDetailPage(props: DuckCmpProps<LaneDetailDuck>) {
                         header: "逻辑关系",
                         render: (x, rowKey, recordIndex) => (
                           <Text overflow tooltip={x.tagOperator}>
-                            {x.tagOperator}
+                            {TAGOPERATORENUM_LABEL[x.tagOperator]}
                           </Text>
                         ),
                       },

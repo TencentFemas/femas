@@ -1,12 +1,13 @@
 import Form from "@src/common/ducks/Form";
 import FormDialog from "@src/common/ducks/FormDialog";
 import { nameTipMessage } from "@src/common/types";
-import { put, select, takeLatest } from "redux-saga/effects";
+import { put, select } from "redux-saga/effects";
 import { createToPayload, reduceFromPayload } from "saga-duck";
 import { resolvePromise } from "saga-duck/build/helper";
 import { configureLaneRule } from "../../model";
 import { GRAYTYPE, LaneRuleItem, LaneRuleTag } from "../../types";
 import { STEPS, STEPS_LABLES } from "./types";
+import { takeEvery, takeLatest } from "redux-saga-catch";
 
 export enum EDIT_TYPE {
   create = "create",
@@ -32,8 +33,15 @@ const validator = CreateForm.combineValidators<LaneRuleItem, {}>({
     if (v?.length > 60 || !/^[a-z0-9]([-_a-z0-9]*[a-z0-9])?$/.test(v))
       return nameTipMessage;
   },
-  grayType(v) {
+  grayType(v, data) {
     if (!v) return "请选择灰度类型";
+    // 编辑时， 蓝绿灰度验证
+    if (
+      data.ruleId &&
+      v === GRAYTYPE.TAG &&
+      (!data.ruleTagList || data.ruleTagList.length <= 0)
+    )
+      return `蓝绿灰度类型的tag至少需要一条`;
   },
   ruleTagList(v, data) {
     if (data.grayType === GRAYTYPE.TAG && (!v || v.length <= 0)) {

@@ -1,7 +1,8 @@
 import { TAB } from "./types";
 import { createToPayload, DuckMap, reduceFromPayload } from "saga-duck";
 import PageDuck from "@src/common/ducks/Page";
-import { takeEvery } from "redux-saga/effects";
+import { takeEvery, takeLatest } from "redux-saga-catch";
+
 import { Action } from "@src/common/types";
 
 export const TAB_STORAGE_KEY = "publish_tab_id";
@@ -69,7 +70,7 @@ export default class PlushPageDuck extends PageDuck {
 
   *saga() {
     yield* super.saga();
-    yield* this.routeInitialized();
+    // yield* this.routeInitialized();
     const {
       types,
       ducks: {},

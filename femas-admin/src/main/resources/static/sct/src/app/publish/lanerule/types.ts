@@ -21,10 +21,14 @@ export interface LaneRuleTag {
 }
 
 // 是否开启 1：开启 0：关闭
-enum enableEnum {
+export enum ENABLE {
   OPEN = 1,
   CLOSE = 0,
 }
+export const ENABLE_LABEL = {
+  [ENABLE.OPEN]: "开启",
+  [ENABLE.CLOSE]: "关闭",
+};
 
 // 灰度类型 蓝绿：tag 金丝雀：canary
 export enum GRAYTYPE {
@@ -49,7 +53,7 @@ export interface LaneRuleItem {
   ruleId: string;
   ruleName: string;
   remark: string;
-  enable: enableEnum;
+  enable: ENABLE;
   grayType: GRAYTYPE;
   priority: number;
   createTime: number;

@@ -2,7 +2,8 @@ import DetailPage from "@src/common/ducks/DetailPage";
 import { ComposedId } from "../PageDuck";
 import { createToPayload, reduceFromPayload } from "saga-duck";
 import { LaneItem } from "../../types";
-import { takeLatest, select, put } from "redux-saga/effects";
+import { select, put } from "redux-saga/effects";
+import { takeLatest } from "redux-saga-catch";
 import { Modal } from "tea-component";
 import { configureLane } from "../../model";
 import { Action } from "@src/common/types";
@@ -107,9 +108,7 @@ export default class BaseInfoDuck extends DetailPage {
       const res = yield* resolvePromise(
         create(data, { editType: EDIT_TYPE.create })
       );
-      if (res) {
-        yield put(creators.reload());
-      }
+      yield put({ type: types.CHANGE_DONE });
     });
   }
 

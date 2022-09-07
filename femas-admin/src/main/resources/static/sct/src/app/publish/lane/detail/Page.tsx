@@ -17,6 +17,7 @@ import {
 import formatDate from "@src/common/util/formatDate";
 import { TAB, TAB_LABLES } from "./types";
 import { Button } from "tea-component";
+import { STEPS, STEPS_LABLES } from "../operations/create/types";
 
 const tabs: Array<Tab> = Object.keys(TAB_LABLES).map((id) => ({
   id,
@@ -44,7 +45,7 @@ export default function LaneDetailPage(props: DuckCmpProps<LaneDetailDuck>) {
       <>
         <Card>
           <Card.Body
-            title="基本信息"
+            title={STEPS_LABLES[STEPS.BASE]}
             operation={
               <Button type="link" onClick={handlers.edit}>
                 编辑
@@ -59,9 +60,6 @@ export default function LaneDetailPage(props: DuckCmpProps<LaneDetailDuck>) {
                   </Form.Item>
                   <Form.Item label={"创建时间"}>
                     <Form.Text>{formatDate(laneInfo.createTime)}</Form.Text>
-                  </Form.Item>
-                  <Form.Item label={"标签"}>
-                    <Form.Text></Form.Text>
                   </Form.Item>
                   <Form.Item label={"备注"}>
                     <Form.Text>{laneInfo.remark}</Form.Text>
