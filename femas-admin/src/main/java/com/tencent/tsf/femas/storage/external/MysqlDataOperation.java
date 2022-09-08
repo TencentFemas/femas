@@ -1196,13 +1196,13 @@ public class MysqlDataOperation implements DataOperation {
         RowMapper rowMapper = RowMapperFactory.getMapper(LANE_RULE);
         PageService pageService;
         String sql = "select * from lane_rule";
-        if(StringUtils.isEmpty(laneRuleModel.getRuleId())){
+        if(!StringUtils.isEmpty(laneRuleModel.getRuleId())){
             sql += " and lane_rule.rule_id like '%" + laneRuleModel.getRuleId() + "%'";
         }
-        if(StringUtils.isEmpty(laneRuleModel.getRemark())){
+        if(!StringUtils.isEmpty(laneRuleModel.getRemark())){
             sql += " and lane_rule.remark like '%" + laneRuleModel.getRemark() + "%'";
         }
-        if(StringUtils.isEmpty(laneRuleModel.getRuleName())){
+        if(!StringUtils.isEmpty(laneRuleModel.getRuleName())){
             sql += " and lane_rule.rule_name like '%" + laneRuleModel.getRuleName() + "%'";
         }
         sql = sql.replaceFirst("and", "where");
