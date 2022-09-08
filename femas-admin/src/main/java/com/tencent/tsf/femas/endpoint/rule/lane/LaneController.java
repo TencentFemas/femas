@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @Descriptioin
  */
 @RestController
-@RequestMapping("atom/v1//lane")
+@RequestMapping("atom/v1/lane")
 @Api(tags = "泳道配置模块")
 public class LaneController extends AbstractBaseEndpoint {
 
