@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { DuckCmpProps } from "saga-duck";
-import { Switch } from "tea-component";
+import { Switch, Tag } from "tea-component";
 import {
   Transfer,
   Table,
@@ -21,10 +21,11 @@ const sourceColumns = [
     header: "ID/实例名",
     render: (cvm) => (
       <>
-        <p>
+        <p style={{ display: "flex", alignItems: "center" }}>
           <a>{cvm.serviceName}</a>
+          <span style={{ marginLeft: "6px" }}>{cvm.version}</span>
         </p>
-        <p>{cvm.namespaceName}</p>
+        <Tag>命名空间：{cvm.namespaceName}</Tag>
       </>
     ),
   },
@@ -36,10 +37,11 @@ const getTargetColumns = (props) => [
     header: "部署组",
     render: (cvm) => (
       <>
-        <p>
+        <p style={{ display: "flex", alignItems: "center" }}>
           <a>{cvm.serviceName}</a>
+          <span style={{ marginLeft: "6px" }}>{cvm.version}</span>
         </p>
-        <p>{cvm.namespaceName}</p>
+        <Tag>命名空间：{cvm.namespaceName}</Tag>
       </>
     ),
   },
@@ -66,7 +68,7 @@ function SourceTable({ dataSource, targetKeys, onChange }) {
     <Table
       hideHeader={true}
       records={dataSource}
-      recordKey="serviceName"
+      recordKey={(v) => v.serviceName + v.version}
       columns={sourceColumns}
       addons={[
         scrollable({
@@ -91,7 +93,7 @@ function TargetTable({ dataSource, onRemove, onEntranceChange }) {
   return (
     <Table
       records={dataSource}
-      recordKey="serviceName"
+      recordKey={(v) => v.serviceName + v.version}
       columns={columns}
       addons={[removeable({ onRemove })]}
     />
@@ -146,11 +148,14 @@ export default function Deploy(props: DuckCmpProps<DeployDuck> & Props) {
         >
           <SourceTable
             dataSource={serviceList}
-            targetKeys={targetData.map((v) => v.serviceName)}
+            targetKeys={targetData.map((v) => v.serviceName + v.version)}
             onChange={(keys, { selectedRecords }) => {
               setTargetData((data) => {
                 const alredyData = selectedRecords.filter((v) => {
-                  return !data.find((j) => j.serviceName === v.serviceName);
+                  return !data.find(
+                    (j) =>
+                      j.serviceName + j.version === v.serviceName + v.version
+                  );
                 });
                 return [...data, ...alredyData];
               });
@@ -163,8 +168,9 @@ export default function Deploy(props: DuckCmpProps<DeployDuck> & Props) {
           <TargetTable
             dataSource={targetData}
             onRemove={(key) => {
+              console.log(key);
               setTargetData((data) =>
-                data.filter((i) => i.serviceName !== key)
+                data.filter((i) => i.serviceName + i.version !== key)
               );
             }}
             onEntranceChange={(val, recordIndex) => {

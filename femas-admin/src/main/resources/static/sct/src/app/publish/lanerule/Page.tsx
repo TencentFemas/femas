@@ -26,7 +26,10 @@ export default function LaneRulePage(props: DuckCmpProps<LaneRulePageDuck>) {
     }),
     []
   );
-  const columns = React.useMemo(() => getColumns(props), []);
+  const columns = React.useMemo(() => getColumns(props), [
+    selectors.page(store),
+    selectors.count(store),
+  ]);
 
   return (
     <>

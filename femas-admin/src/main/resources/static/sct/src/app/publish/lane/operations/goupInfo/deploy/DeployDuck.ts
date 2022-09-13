@@ -1,7 +1,7 @@
 import NamespaceSelectDuck from "@src/app/namespace/components/NamespaceSelectDuck";
 import { call, select, put } from "redux-saga/effects";
 import { DuckMap, reduceFromPayload } from "saga-duck";
-import { fetchAllServiceList } from "./model";
+import { describeServiceInstanceByNsId } from "./model";
 // import Form from "@src/common/ducks/Form";
 import { takeLatest } from "redux-saga-catch";
 
@@ -58,14 +58,17 @@ export default class DeployDuck extends DuckMap {
       if (!namespaceId) return;
       const namespaceItem = yield namespace.getSelectedItem();
 
-      const result = yield call(fetchAllServiceList, { namespaceId });
+      const result = yield call(describeServiceInstanceByNsId, {
+        id: namespaceId,
+      });
+
       yield put({
         type: types.FETCH,
-        payload: result.list.map((v) => ({
-          ...v,
-          version: v.versionNum,
-          namespaceId,
+        payload: result.map((v) => ({
           namespaceName: namespaceItem.name,
+          namespaceId: v.namespaceId,
+          serviceName: v.serviceName,
+          version: v.version,
         })),
       });
     });

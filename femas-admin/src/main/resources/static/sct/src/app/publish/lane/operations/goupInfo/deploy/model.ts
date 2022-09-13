@@ -46,3 +46,10 @@ export async function describeRegisterService(params: Params) {
 export async function fetchAllServiceList(params) {
   return getAllList(describeRegisterService)(params);
 }
+
+export async function describeServiceInstanceByNsId(params) {
+  return serviceRequest<{ id: string }>({
+    action: "describeServiceInstanceByNsId",
+    data: params,
+  });
+}
