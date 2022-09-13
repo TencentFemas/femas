@@ -20,8 +20,10 @@ package com.tencent.tsf.femas.endpoint.servicegovern;
 import com.tencent.tsf.femas.common.entity.ServiceInstance;
 import com.tencent.tsf.femas.common.util.Result;
 import com.tencent.tsf.femas.endpoint.adaptor.AbstractBaseEndpoint;
+import com.tencent.tsf.femas.entity.IdModel;
 import com.tencent.tsf.femas.entity.KVEntity;
 import com.tencent.tsf.femas.entity.PageService;
+import com.tencent.tsf.femas.entity.ServiceVersion;
 import com.tencent.tsf.femas.entity.param.InstanceVersionParam;
 import com.tencent.tsf.femas.entity.param.RegistryInstanceParam;
 import com.tencent.tsf.femas.entity.param.RegistryServiceParam;
@@ -96,6 +98,12 @@ public class ServiceManageEndpoint extends AbstractBaseEndpoint {
     public Result<PageService<ServiceEventView>> describeServiceEvent(
             @RequestBody ServiceEventModel serviceEventModel) {
         return executor.process(() -> serviceManagerService.describeServiceEvent(serviceEventModel));
+    }
+
+    @ApiOperation(value = "通过命名空间获取服务实例列表", notes = "通过命名空间获取服务实例列表")
+    @PostMapping("/describeServiceInstanceByNsId")
+    public Result<List<ServiceVersion>> describeServiceEvent(@RequestBody IdModel idModel) {
+        return executor.process(() -> serviceManagerService.describeServiceInstance(idModel.getId()));
     }
 
     @RequestMapping("fetchEventType")

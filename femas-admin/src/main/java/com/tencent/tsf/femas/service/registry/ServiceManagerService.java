@@ -9,11 +9,10 @@ import com.tencent.tsf.femas.common.util.CollectionUtil;
 import com.tencent.tsf.femas.common.util.Result;
 import com.tencent.tsf.femas.common.util.StringUtils;
 import com.tencent.tsf.femas.entity.PageService;
+import com.tencent.tsf.femas.entity.ServiceVersion;
 import com.tencent.tsf.femas.entity.param.InstanceVersionParam;
 import com.tencent.tsf.femas.entity.param.RegistryInstanceParam;
-import com.tencent.tsf.femas.entity.registry.ApiModel;
-import com.tencent.tsf.femas.entity.registry.ServiceApi;
-import com.tencent.tsf.femas.entity.registry.ServiceOverview;
+import com.tencent.tsf.femas.entity.registry.*;
 import com.tencent.tsf.femas.entity.rule.FemasEventData;
 import com.tencent.tsf.femas.entity.service.ServiceEventModel;
 import com.tencent.tsf.femas.entity.service.ServiceEventView;
@@ -151,5 +150,28 @@ public class ServiceManagerService {
 
     public void reportServiceEvent(String namespaceId, String serviceName, String eventId, String data) {
         dataOperation.reportServiceEvent(namespaceId, serviceName, eventId, data);
+    }
+
+    public Result<List<ServiceVersion>> describeServiceInstance(String namespaceId){
+        Result<RegistryPageService> registryPageServiceResult = registryService.describeRegisterService(namespaceId, null, 1, Integer.MAX_VALUE, null);
+        ArrayList<ServiceVersion> res = new ArrayList<>();
+        if(registryPageServiceResult.getData() == null || CollectionUtil.isEmpty(registryPageServiceResult.getData().getServiceBriefInfos())){
+            return Result.successData(res);
+        }
+        for(ServiceBriefInfo serviceBriefInfo : registryPageServiceResult.getData().getServiceBriefInfos()){
+            InstanceVersionParam instanceVersionParam = new InstanceVersionParam();
+            instanceVersionParam.setNamespaceId(namespaceId);
+            instanceVersionParam.setServiceName(serviceBriefInfo.getServiceName());
+            Result<PageService<ServiceInstance>> pageServiceResult = describeServiceInstance(instanceVersionParam);
+            if(pageServiceResult.getData() == null || CollectionUtil.isEmpty(pageServiceResult.getData().getData())){
+                continue;
+            }
+            for(ServiceInstance serviceInstance: pageServiceResult.getData().getData()){
+                String version = serviceInstance.getAllMetadata().get(FEMAS_META_APPLICATION_VERSION_KEY);
+                ServiceVersion serviceVersion = new ServiceVersion(serviceBriefInfo.getServiceName(), version, namespaceId);
+                res.add(serviceVersion);
+            }
+        }
+        return Result.successData(res);
     }
 }
