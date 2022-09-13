@@ -49,35 +49,31 @@ export default function BaseInfo(props: DuckCmpProps<BaseInfoDuck>) {
       <Table
         bordered={true}
         records={laneServiceList}
-        recordKey="serviceName"
+        recordKey={(v) => v.serviceName + v.version}
         columns={[
           {
             key: "serviceName",
             header: "部署组",
             render: (cvm) => (
               <>
-                <p>
-                  <a>{cvm.serviceName}</a>
-                </p>
-                <p>{cvm.namespaceName}</p>
+                <p>{cvm.version}</p>
               </>
             ),
           },
           {
             key: "group",
-            header: "部署组",
+            header: "服务名",
             render: (cvm) => (
               <>
                 <p>
                   <a>{cvm.serviceName}</a>
                 </p>
-                <p>{cvm.namespaceName}</p>
               </>
             ),
           },
           {
             key: "namespace",
-            header: "部署组",
+            header: "命名空间",
             render: (cvm) => <p>{cvm.namespaceName}</p>,
           },
           {

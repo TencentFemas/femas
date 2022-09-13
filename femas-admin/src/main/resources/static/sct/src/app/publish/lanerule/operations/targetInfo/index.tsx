@@ -12,7 +12,7 @@ import {
 } from "tea-component";
 import CreateDuck, { DialogOptions } from "../create/CreateDuck";
 import { showDialog } from "@src/common/helpers/showDialog";
-import { LaneRuleItem } from "../../types";
+import { GRAYTYPE, LaneRuleItem } from "../../types";
 import Dialog from "@src/common/duckComponents/Dialog";
 import router from "@src/common/util/router";
 import { useEffect } from "react";
@@ -30,7 +30,10 @@ export const TargetInfo = purify(function TargetInfo(
   } = duck;
 
   const formApi = form.getAPI(store, dispatch);
-  const { relativeLane } = formApi.getFields(["relativeLane"]);
+  const { grayType, relativeLane } = formApi.getFields([
+    "grayType",
+    "relativeLane",
+  ]);
 
   type relativeLaneItem = { key: string; value: string };
   const handlers = {
@@ -158,7 +161,14 @@ export const TargetInfo = purify(function TargetInfo(
               },
             ]}
             bottomTip={
-              <Button type="link" onClick={handlers.add}>
+              <Button
+                disabled={
+                  grayType.getValue() === GRAYTYPE.TAG &&
+                  handlers.getValue().length > 0
+                }
+                type="link"
+                onClick={handlers.add}
+              >
                 新增
               </Button>
             }
