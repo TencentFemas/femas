@@ -14,6 +14,7 @@ import java.util.Map;
 public class ConfigUtils {
 
     private final static Logger logger = LoggerFactory.getLogger(ConfigUtils.class);
+    private final static Yaml yml = new Yaml();
 
     public static Map<String, Object> loadRelativeConfig(String fileName) {
         String content = null;
@@ -26,7 +27,7 @@ public class ConfigUtils {
     }
 
     public static Map<String, Object> loadRelativeYamlConfig(String relativePath) {
-        Yaml yml = new Yaml();
+
         Map<String, Object> map = new HashMap<>();
         InputStream is = null;
         InputStreamReader reader = null;
@@ -71,8 +72,7 @@ public class ConfigUtils {
 
     public static Map<String, Object> content2Map(String content) {
         if (StringUtils.isNotEmpty(content)) {
-            Yaml yaml = new Yaml();
-            return yaml.load(content);
+            return yml.load(content);
         }
         return MapUtils.EMPTY_MAP;
     }

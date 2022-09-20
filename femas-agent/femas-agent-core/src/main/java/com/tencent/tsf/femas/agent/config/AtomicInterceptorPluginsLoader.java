@@ -23,9 +23,9 @@ public class AtomicInterceptorPluginsLoader {
     private final static AgentLogger logger = AgentLogger.getLogger(AtomicInterceptorPluginsLoader.class);
 
     private final String filePath;
-
     private Map<String, Object> conf;
     private JsonNode finalYamlLocations;
+    private static final Yaml yml = new Yaml();
     private static final ObjectMapper mapper = new ObjectMapper();
 
     public AtomicInterceptorPluginsLoader(String filePath) {
@@ -33,7 +33,6 @@ public class AtomicInterceptorPluginsLoader {
     }
 
     public List<InterceptPluginConfig> getInterceptConfig() {
-        Yaml yml = new Yaml();
         FileReader reader = null;
         try {
             reader = new FileReader(filePath);

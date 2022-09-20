@@ -23,11 +23,11 @@ public class FemasContext extends Context {
 
     public static final String FEMAS_TAG_PLUGIN_HEADER_PREFIX = "femas-ut-";
     public static final String DEFAULT_NAMESPACE = "ns-default";
-    private static final  Logger logger = LoggerFactory.getLogger(FemasContext.class);
-    private static final  AtomicBoolean isLoggerPrinted = new AtomicBoolean(true);
+    private static final Logger logger = LoggerFactory.getLogger(FemasContext.class);
+    private static final AtomicBoolean isLoggerPrinted = new AtomicBoolean(true);
     public static Map<String, String> REGISTRY_CONFIG_MAP = new ConcurrentHashMap<>();
     private static String TOKEN;
-    private static volatile  String SERVICE_NAME;
+    private static volatile String SERVICE_NAME;
 
     /**
      * 初始化，从环境变量中读取config值放入SYS_TAG
@@ -61,6 +61,7 @@ public class FemasContext extends Context {
         String applicationVersion = FemasConfig.getProperty(FemasConstant.FEMAS_APPLICATION_VERSION_KEY);
         if (!StringUtils.isEmpty(applicationVersion)) {
             SYSTEM_TAGS.put(FemasConstant.FEMAS_APPLICATION_VERSION, applicationVersion);
+            SYSTEM_TAGS.put(FemasConstant.FEMAS_GROUP_ID, applicationVersion);
         }
 
         String appId = FemasConfig.getProperty(FemasConstant.FEMAS_APP_ID_KEY);
@@ -416,7 +417,7 @@ public class FemasContext extends Context {
         String userTags = headerUtils.getRequestMeta(ContextConstant.USER_TAGS_HEADER_KEY);
         String systemTags = headerUtils.getRequestMeta(ContextConstant.SYSTEM_TAGS_HEADER_KEY);
 
-        if(logger.isDebugEnabled()) {
+        if (logger.isDebugEnabled()) {
             logger.debug("get original upstream userTags:{}, systemTags:{}", userTags, systemTags);
         }
 
@@ -431,10 +432,10 @@ public class FemasContext extends Context {
         // 后解析 tag 插件，如果存在相同 tag，这里优先
         Map<String, String> femasTagHeaders =
                 headerUtils.getPrefixRequestMetas(FEMAS_TAG_PLUGIN_HEADER_PREFIX);
-        if(logger.isDebugEnabled()) {
+        if (logger.isDebugEnabled()) {
             logger.debug("get femasTagHeaders:{}", femasTagHeaders);
         }
-        for(Map.Entry<String, String> headers: femasTagHeaders.entrySet()) {
+        for (Map.Entry<String, String> headers : femasTagHeaders.entrySet()) {
             putTag(headers.getKey().substring(FEMAS_TAG_PLUGIN_HEADER_PREFIX.length()),
                     headers.getValue());
         }

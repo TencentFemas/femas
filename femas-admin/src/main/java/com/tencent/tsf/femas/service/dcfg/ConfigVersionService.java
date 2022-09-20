@@ -15,6 +15,7 @@ import com.tencent.tsf.femas.service.ServiceExecutor;
 import com.tencent.tsf.femas.service.registry.RegistryManagerService;
 import com.tencent.tsf.femas.storage.DataOperation;
 import com.tencent.tsf.femas.util.ResultCheck;
+
 import java.io.ByteArrayInputStream;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -41,6 +42,7 @@ public class ConfigVersionService implements ServiceExecutor {
     private static final Logger log = LoggerFactory.getLogger(ConfigVersionService.class);
 
     private final DataOperation dataOperation;
+    private final Yaml yaml = new Yaml();
 
     @Autowired
     private ConfigService configService;
@@ -166,7 +168,7 @@ public class ConfigVersionService implements ServiceExecutor {
 
 
     public boolean releaseFemasConfig(Config config, ConfigVersion lastVersion, ConfigVersion releaseVersion,
-            boolean rollback) {
+                                      boolean rollback) {
         Object[] params = null;
         try {
             Namespace namespace = dataOperation.fetchNamespaceById(config.getNamespaceId());
@@ -180,7 +182,7 @@ public class ConfigVersionService implements ServiceExecutor {
             RegistryConfig registryConfig = registryManagerService.getConfigById(namespaceId);
             params = new Object[]{config.getNamespaceId(), config.getConfigId(), config.getSystemTag(),
                     releaseVersion.getConfigValue(), config.getConfigType(), config.getServiceName(),
-                    registryConfig.getRegistryCluster(),registryConfig.getUsername(),registryConfig.getPassword()};
+                    registryConfig.getRegistryCluster(), registryConfig.getUsername(), registryConfig.getPassword()};
 
             String paramStr = Arrays.toString(params);
             log.info("release femasConfig requestParam: {}", paramStr);
@@ -228,7 +230,6 @@ public class ConfigVersionService implements ServiceExecutor {
             }
         } else if ("yaml".equals(type)) {
             try {
-                Yaml yaml = new Yaml();
                 yaml.loadAs(configValue, LinkedHashMap.class);
             } catch (ScannerException e) {
                 return Result.errorData("格式校验失败:" + e.getMessage(), "formatError");

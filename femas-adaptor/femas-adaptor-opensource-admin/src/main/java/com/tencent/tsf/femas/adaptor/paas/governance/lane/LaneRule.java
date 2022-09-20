@@ -1,6 +1,7 @@
 package com.tencent.tsf.femas.adaptor.paas.governance.lane;
 
 import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -16,13 +17,23 @@ public class LaneRule {
     /**
      * 越小优先级越高
      */
-    private Integer priority;
+    private Long priority;
 
     private String remark;
 
     private List<LaneRuleTag> ruleTagList;
 
     private RuleTagRelationship ruleTagRelationship;
+
+    /**
+     * 关联泳道
+     */
+    private HashMap<String, Integer> relativeLane;
+
+    /**
+     * 灰度类型 蓝绿：tag  金丝雀：canary
+     */
+    private String grayType;
 
     private String laneId;
 
@@ -38,6 +49,22 @@ public class LaneRule {
      */
     private Timestamp updateTime;
 
+    public HashMap<String, Integer> getRelativeLane() {
+        return relativeLane;
+    }
+
+    public void setRelativeLane(HashMap<String, Integer> relativeLane) {
+        this.relativeLane = relativeLane;
+    }
+
+    public String getGrayType() {
+        return grayType;
+    }
+
+    public void setGrayType(String grayType) {
+        this.grayType = grayType;
+    }
+
     public String getRuleId() {
         return ruleId;
     }
@@ -46,11 +73,11 @@ public class LaneRule {
         this.ruleId = ruleId;
     }
 
-    public Integer getPriority() {
+    public Long getPriority() {
         return priority;
     }
 
-    public void setPriority(final Integer priority) {
+    public void setPriority(final Long priority) {
         this.priority = priority;
     }
 

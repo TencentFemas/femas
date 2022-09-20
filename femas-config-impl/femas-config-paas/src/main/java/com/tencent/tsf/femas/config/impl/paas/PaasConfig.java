@@ -157,7 +157,7 @@ public class PaasConfig extends AbstractStringConfig {
                     GetValue newValue = curEntry.getValue();
                     if (!oldValue.containsKey(newKey)) {
                         ConfigChangeEvent<String> event = new ConfigChangeEvent<>(newKey, null, newValue.getValue(),
-                                PropertyChangeType.MODIFIED);
+                                PropertyChangeType.ADDED);
                         configChangeEvents.add(event);
                     }
                 }

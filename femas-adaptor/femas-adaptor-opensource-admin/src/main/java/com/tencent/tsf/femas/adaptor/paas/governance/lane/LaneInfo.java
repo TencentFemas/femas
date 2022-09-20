@@ -1,13 +1,9 @@
 package com.tencent.tsf.femas.adaptor.paas.governance.lane;
 
-import java.sql.Timestamp;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * 泳道
- * User: MackZhang
- * Date: 2020/1/14
  */
 public class LaneInfo {
 
@@ -29,23 +25,24 @@ public class LaneInfo {
     /**
      * 规则创建时间
      */
-    private Timestamp createTime;
+    private Long createTime;
 
     /**
      * 规则更新时间
      */
-    private Timestamp updateTime;
+    private Long updateTime;
 
     /**
-     * 泳道部署组信息
+     * 泳道服务列表
      */
-    private List<LaneGroup> laneGroupList;
+    private List<ServiceInfo> laneServiceList;
+
 
     public String getLaneId() {
         return laneId;
     }
 
-    public void setLaneId(final String laneId) {
+    public void setLaneId(String laneId) {
         this.laneId = laneId;
     }
 
@@ -53,7 +50,7 @@ public class LaneInfo {
         return laneName;
     }
 
-    public void setLaneName(final String laneName) {
+    public void setLaneName(String laneName) {
         this.laneName = laneName;
     }
 
@@ -61,48 +58,31 @@ public class LaneInfo {
         return remark;
     }
 
-    public void setRemark(final String remark) {
+    public void setRemark(String remark) {
         this.remark = remark;
     }
 
-    public List<LaneGroup> getLaneGroupList() {
-        return laneGroupList;
-    }
-
-    public void setLaneGroupList(final List<LaneGroup> laneGroupList) {
-        this.laneGroupList = laneGroupList;
-    }
-
-    public Timestamp getCreateTime() {
+    public Long getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(final Timestamp createTime) {
+    public void setCreateTime(Long createTime) {
         this.createTime = createTime;
     }
 
-    public Timestamp getUpdateTime() {
+    public Long getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(final Timestamp updateTime) {
+    public void setUpdateTime(Long updateTime) {
         this.updateTime = updateTime;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof LaneInfo)) {
-            return false;
-        }
-        LaneInfo laneInfo = (LaneInfo) o;
-        return Objects.equals(laneId, laneInfo.laneId);
+    public List<ServiceInfo> getLaneServiceList() {
+        return laneServiceList;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(laneId);
+    public void setLaneServiceList(List<ServiceInfo> laneServiceList) {
+        this.laneServiceList = laneServiceList;
     }
 }

@@ -2,6 +2,7 @@ package com.tencent.tsf.femas.governance.lane.entity;
 
 import com.tencent.tsf.femas.common.tag.TagRule;
 import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.Objects;
 
 public class LaneRule {
@@ -11,11 +12,14 @@ public class LaneRule {
     /**
      * 越小优先级越高
      */
-    private Integer priority;
+    private Long priority;
 
     private TagRule tagRule;
-
     private String laneId;
+
+    private String grayType;
+
+    private HashMap<String, Integer> relativeLane;
 
     /**
      * 规则创建时间
@@ -46,11 +50,11 @@ public class LaneRule {
         this.laneId = laneId;
     }
 
-    public Integer getPriority() {
+    public Long getPriority() {
         return priority;
     }
 
-    public void setPriority(final Integer priority) {
+    public void setPriority(final Long priority) {
         this.priority = priority;
     }
 
@@ -60,6 +64,22 @@ public class LaneRule {
 
     public void setTagRule(TagRule tagRule) {
         this.tagRule = tagRule;
+    }
+
+    public String getGrayType() {
+        return grayType;
+    }
+
+    public void setGrayType(String grayType) {
+        this.grayType = grayType;
+    }
+
+    public HashMap<String, Integer> getRelativeLane() {
+        return relativeLane;
+    }
+
+    public void setRelativeLane(HashMap<String, Integer> relativeLane) {
+        this.relativeLane = relativeLane;
     }
 
     @Override

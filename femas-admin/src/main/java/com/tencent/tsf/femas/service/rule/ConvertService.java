@@ -18,9 +18,11 @@ import com.tencent.tsf.femas.entity.rule.lane.LaneRule;
 import com.tencent.tsf.femas.entity.rule.limit.LimitModel;
 import com.tencent.tsf.femas.entity.rule.route.TolerateModel;
 import com.tencent.tsf.femas.storage.DataOperation;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -47,7 +49,7 @@ public class ConvertService {
         try {
             String[] split = key.split("/");
             String namespaceId = null;
-            if(split.length > 1){
+            if (split.length > 1) {
                 namespaceId = split[1];
             }
             String serviceName = null;
@@ -62,9 +64,9 @@ public class ConvertService {
             } else if (key.startsWith("ratelimit")) {
                 serviceName = split[2];
                 return convertLimit(key, namespaceId, serviceName);
-            }else if(key.startsWith("lane-info")){
+            } else if (key.startsWith("lane-info")) {
                 return convertLaneInfo(key);
-            }else if(key.startsWith("lane-rule")){
+            } else if (key.startsWith("lane-rule")) {
                 return convertLaneRule(key);
             }
         } catch (Exception e) {
@@ -72,7 +74,6 @@ public class ConvertService {
         }
         return null;
     }
-
 
 
     public String convertAuthRule(String key, String namespaceId, String serviceName) {
@@ -200,11 +201,33 @@ public class ConvertService {
 
     private String convertLaneInfo(String key) {
         List<LaneInfo> laneInfos = dataOperation.fetchLaneInfo();
-        return JSONSerializer.serializeStr(laneInfos);
+        if (CollectionUtil.isEmpty(laneInfos)) {
+            return "";
+        }
+        List<GetValue> res = new ArrayList<>();
+        laneInfos.stream().forEach(e -> {
+            GetValue getValue = new GetValue();
+            getValue.setKey(e.getLaneId());
+            getValue.setValue(JSONSerializer.serializeStr(e));
+            res.add(getValue);
+        });
+        return JSONSerializer.serializeStr(res);
     }
 
     private String convertLaneRule(String key) {
         List<LaneRule> laneRules = dataOperation.fetchLaneRule();
-        return JSONSerializer.serializeStr(laneRules);
+        if (CollectionUtil.isEmpty(laneRules)) {
+            return "";
+        }
+        List<GetValue> res = new ArrayList<>();
+        laneRules.stream().forEach(e -> {
+            if (e.getEnable() == 1) {
+                GetValue getValue = new GetValue();
+                getValue.setKey(e.getRuleId());
+                getValue.setValue(JSONSerializer.serializeStr(e));
+                res.add(getValue);
+            }
+        });
+        return JSONSerializer.serializeStr(res);
     }
 }

@@ -32,6 +32,7 @@ public class FemasLaneHandler extends ConfigHandler {
 
     private static AtomicBoolean SUBSCRIBED_LANE_CONFIG = new AtomicBoolean(false);
     private static AtomicBoolean SUBSCRIBED_LANE_RULE_CONFIG = new AtomicBoolean(false);
+    private static final Yaml yaml = new Yaml();
 
     /**
      * @see com.tencent.tsf.femas.common.spi.SpiExtensionClass#getType()
@@ -53,7 +54,7 @@ public class FemasLaneHandler extends ConfigHandler {
         }
         FemasLaneFilter femasLaneFilter = new FemasLaneFilter();
         LaneService.refreshLaneFilter(femasLaneFilter);
-        String laneKey = "lane/info/";
+        String laneKey = "lane-info";
 
         Config config = FemasPaasConfigManager.getConfig();
         // 初始化时，同步获取 lane info
@@ -124,7 +125,7 @@ public class FemasLaneHandler extends ConfigHandler {
             return;
         }
 
-        String laneKey = "lane/rule/";
+        String laneKey = "lane-rule";
 
         Config config = FemasPaasConfigManager.getConfig();
 
@@ -192,7 +193,7 @@ public class FemasLaneHandler extends ConfigHandler {
     private static LaneInfo parseLaneInfo(String laneInfoString) {
         try {
             if (!StringUtils.isEmpty(laneInfoString)) {
-                Yaml yaml = new Yaml();
+
                 ObjectMapper mapper = new ObjectMapper();
                 // 配置 ObjectMapper在反序列化时，忽略目标对象没有的属性
                 mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -214,7 +215,6 @@ public class FemasLaneHandler extends ConfigHandler {
     private static LaneRule parseLaneRule(String laneRuleString) {
         try {
             if (!StringUtils.isEmpty(laneRuleString)) {
-                Yaml yaml = new Yaml();
                 ObjectMapper mapper = new ObjectMapper();
                 // 配置 ObjectMapper在反序列化时，忽略目标对象没有的属性
                 mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -228,24 +228,22 @@ public class FemasLaneHandler extends ConfigHandler {
                 femasLaneRule.setLaneId(laneRule.getLaneId());
                 femasLaneRule.setPriority(laneRule.getPriority());
                 femasLaneRule.setRuleId(laneRule.getRuleId());
-
+                femasLaneRule.setRelativeLane(laneRule.getRelativeLane());
                 TagRule tagRule = new TagRule();
                 String expression = laneRule.getRuleTagRelationship() == RuleTagRelationship.RELEATION_AND ? TagExpression.RELATION_AND : TagExpression.RELATION_OR;
                 tagRule.setExpression(expression);
-
                 List<Tag> tags = new ArrayList<>();
-                for (LaneRuleTag laneRuleTag : laneRule.getRuleTagList()) {
-                    Tag tag = new Tag();
-                    tag.setTagValue(laneRuleTag.getTagValue());
-                    tag.setTagOperator(laneRuleTag.getTagOperator());
-                    tag.setTagField(laneRuleTag.getTagName());
-                    tag.setTagType(TagConstant.TYPE.CUSTOM);
-
-                    tags.add(tag);
-
+                if (CollectionUtil.isNotEmpty(laneRule.getRuleTagList())) {
+                    for (LaneRuleTag laneRuleTag : laneRule.getRuleTagList()) {
+                        Tag tag = new Tag();
+                        tag.setTagValue(laneRuleTag.getTagValue());
+                        tag.setTagOperator(laneRuleTag.getTagOperator());
+                        tag.setTagField(laneRuleTag.getTagName());
+                        tag.setTagType(TagConstant.TYPE.CUSTOM);
+                        tags.add(tag);
+                    }
                 }
                 tagRule.setTags(tags);
-
                 femasLaneRule.setTagRule(tagRule);
 
                 return femasLaneRule;
