@@ -166,12 +166,18 @@ public class ServiceManagerService {
             if(pageServiceResult.getData() == null || CollectionUtil.isEmpty(pageServiceResult.getData().getData())){
                 continue;
             }
+            HashSet<String> versions = new HashSet<>();
             for(ServiceInstance serviceInstance: pageServiceResult.getData().getData()){
                 String version = serviceInstance.getAllMetadata().get(FEMAS_META_APPLICATION_VERSION_KEY);
-                ServiceVersion serviceVersion = new ServiceVersion(serviceBriefInfo.getServiceName(), version, namespaceId);
-                res.add(serviceVersion);
+                boolean notExist = versions.add(version);
+                if(notExist){
+                    ServiceVersion serviceVersion = new ServiceVersion(serviceBriefInfo.getServiceName(), version, namespaceId);
+                    res.add(serviceVersion);
+                }
             }
         }
         return Result.successData(res);
     }
+
+
 }
