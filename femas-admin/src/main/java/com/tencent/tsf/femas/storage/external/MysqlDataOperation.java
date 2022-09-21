@@ -276,18 +276,23 @@ public class MysqlDataOperation implements DataOperation {
         }
         String[] addresses = registryAddress.split(",");
         for(RegistryConfig config : registryConfigs){
+            String registryCluster = config.getRegistryCluster();
+            if (StringUtils.isBlank(registryCluster)) {
+                continue;
+            }
+            // 对 localhost 进行转换
+            if (registryCluster.contains(AdminConstants.LOCALHOST_STRING)) {
+                registryCluster = registryCluster.replace(AdminConstants.LOCALHOST_STRING, AdminConstants.LOCALHOST_IP);
+            }
+
             //获取注册中心信息
             RegistryOpenApiInterface registryOpenApiInterface = factory.select(config.getRegistryType());
             List<Namespace> namespaces = registryOpenApiInterface.allNamespaces(config);
             Namespace remoteNamespace = namespaces.stream().filter(namespace -> namespace.getNamespaceId().equals(namespaceId)).findFirst().orElse(null);
             for(String address : addresses){
                 // 对 localhost 进行转换
-                String registryCluster = config.getRegistryCluster();
-                if (registryCluster.contains("localhost")) {
-                    registryCluster = registryCluster.replace("localhost", "127.0.0.1");
-                }
-                if (address.contains("localhost")) {
-                    address = address.replace("localhost", "127.0.0.1");
+                if (address.contains(AdminConstants.LOCALHOST_STRING)) {
+                    address = address.replace(AdminConstants.LOCALHOST_STRING, AdminConstants.LOCALHOST_IP);
                 }
                 if(registryCluster.contains(address)){
                     Namespace namespace = new Namespace();
