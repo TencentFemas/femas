@@ -1,4 +1,4 @@
-package com.tencent.tsf.femas.plugin;/*
+/*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -14,7 +14,7 @@ package com.tencent.tsf.femas.plugin;/*
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+package com.tencent.tsf.femas.plugin;
 
 import com.tencent.tsf.femas.agent.classloader.AgentClassLoader;
 import com.tencent.tsf.femas.agent.classloader.InterceptorClassLoaderCache;
@@ -138,7 +138,7 @@ public class DefaultConfigurablePluginHolder {
          */
         INIT_SUCCESS(1);
 
-        private int status;
+        private final int status;
 
         InitStatus(int status) {
             this.status = status;

@@ -17,7 +17,6 @@
 
 package com.tencent.tsf.femas.plugin.config.gov;
 
-
 import com.tencent.tsf.femas.plugin.config.PluginConfig;
 import com.tencent.tsf.femas.plugin.config.verify.Verifier;
 
@@ -28,7 +27,6 @@ import com.tencent.tsf.femas.plugin.config.verify.Verifier;
  * @date 2019/8/20
  */
 public interface LoadBalanceConfig extends PluginConfig, Verifier {
-
     /**
      * 负载均衡类型
      *

@@ -17,8 +17,6 @@
 
 package com.tencent.tsf.femas.plugin.config.global;
 
-
-import com.tencent.tsf.femas.plugin.config.PluginConfig;
 import com.tencent.tsf.femas.plugin.config.verify.Verifier;
 
 /**
