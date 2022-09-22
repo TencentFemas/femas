@@ -3,7 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>com.tencent.tsf</groupId>
+        <groupId>com.tencent.cloud</groupId>
         <artifactId>femas-dubbo-starters</artifactId>
         <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
@@ -11,7 +11,7 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.tencent.tsf</groupId>
+    <groupId>com.tencent.cloud</groupId>
     <artifactId>femas-apache-dubbo3-starter</artifactId>
 
     <properties>
@@ -20,12 +20,12 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.tencent.tsf</groupId>
+            <groupId>com.tencent.cloud</groupId>
             <artifactId>femas-adaptor-opensource-admin</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>com.tencent.tsf</groupId>
+            <groupId>com.tencent.cloud</groupId>
             <artifactId>femas-extension-apache-dubbo3</artifactId>
         </dependency>
 

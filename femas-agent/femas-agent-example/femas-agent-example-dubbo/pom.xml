@@ -8,7 +8,7 @@
 
     <parent>
         <artifactId>femas-agent-example</artifactId>
-        <groupId>com.tencent.tsf</groupId>
+        <groupId>com.tencent.cloud</groupId>
         <version>${revision}</version>
     </parent>
 
@@ -47,7 +47,7 @@
             </dependency>
 
             <dependency>
-                <groupId>com.tencent.tsf</groupId>
+                <groupId>com.tencent.cloud</groupId>
                 <artifactId>femas-agent-example-apache-dubbo3-api</artifactId>
                 <version>${project.version}</version>
             </dependency>

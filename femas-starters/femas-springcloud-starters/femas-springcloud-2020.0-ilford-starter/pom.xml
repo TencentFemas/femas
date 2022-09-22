@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.tencent.tsf</groupId>
+        <groupId>com.tencent.cloud</groupId>
         <artifactId>femas-springcloud-starters</artifactId>
         <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
@@ -63,11 +63,11 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.tencent.tsf</groupId>
+            <groupId>com.tencent.cloud</groupId>
             <artifactId>femas-adaptor-opensource-admin</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.tencent.tsf</groupId>
+            <groupId>com.tencent.cloud</groupId>
             <artifactId>femas-extension-springcloud-2020.0-ilford</artifactId>
         </dependency>
 

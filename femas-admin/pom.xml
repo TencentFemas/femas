@@ -4,7 +4,7 @@
         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>femas-parent</artifactId>
-        <groupId>com.tencent.tsf</groupId>
+        <groupId>com.tencent.cloud</groupId>
         <version>${revision}</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -80,18 +80,18 @@
         </dependency>
 
         <dependency>
-            <groupId>com.tencent.tsf</groupId>
+            <groupId>com.tencent.cloud</groupId>
             <artifactId>femas-common</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>com.tencent.tsf</groupId>
+            <groupId>com.tencent.cloud</groupId>
             <artifactId>femas-config</artifactId>
         </dependency>
 
         <!-- 需要使用nacos时，可以把注释放开 -->
         <dependency>
-            <groupId>com.tencent.tsf</groupId>
+            <groupId>com.tencent.cloud</groupId>
             <artifactId>femas-config-nacos</artifactId>
             <scope>compile</scope>
         </dependency>
@@ -103,7 +103,7 @@
         </dependency>
 
         <dependency>
-            <groupId>com.tencent.tsf</groupId>
+            <groupId>com.tencent.cloud</groupId>
             <artifactId>femas-registry</artifactId>
         </dependency>
 

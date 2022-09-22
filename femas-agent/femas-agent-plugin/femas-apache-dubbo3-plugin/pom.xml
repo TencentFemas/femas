@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>femas-agent-plugin</artifactId>
-        <groupId>com.tencent.tsf</groupId>
+        <groupId>com.tencent.cloud</groupId>
         <version>${revision}</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -24,7 +24,7 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>com.tencent.tsf</groupId>
+                <groupId>com.tencent.cloud</groupId>
                 <artifactId>femas-apache-dubbo3-plugin-common</artifactId>
                 <version>${project.version}</version>
             </dependency>

@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.tencent.tsf</groupId>
+        <groupId>com.tencent.cloud</groupId>
         <artifactId>femas-extension-springcloud</artifactId>
         <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
@@ -78,12 +78,12 @@
         </dependency>
 
         <dependency>
-            <groupId>com.tencent.tsf</groupId>
+            <groupId>com.tencent.cloud</groupId>
             <artifactId>femas-api</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>com.tencent.tsf</groupId>
+            <groupId>com.tencent.cloud</groupId>
             <artifactId>femas-extension-springcloud-common</artifactId>
         </dependency>
 

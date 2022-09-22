@@ -4,7 +4,7 @@
         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.tencent.tsf</groupId>
+    <groupId>com.tencent.cloud</groupId>
     <artifactId>femas-dependencies-bom</artifactId>
     <packaging>pom</packaging>
     <version>${revision}</version>
@@ -126,31 +126,31 @@
 <!--	        </dependency>-->
 
             <dependency>
-                <groupId>com.tencent.tsf</groupId>
+                <groupId>com.tencent.cloud</groupId>
                 <artifactId>femas-common</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.tencent.tsf</groupId>
+                <groupId>com.tencent.cloud</groupId>
                 <artifactId>femas-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.tencent.tsf</groupId>
+                <groupId>com.tencent.cloud</groupId>
                 <artifactId>femas-config</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.tencent.tsf</groupId>
+                <groupId>com.tencent.cloud</groupId>
                 <artifactId>femas-adaptor-opensource-admin</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.tencent.tsf</groupId>
+                <groupId>com.tencent.cloud</groupId>
                 <artifactId>femas-adaptor</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -162,199 +162,199 @@
             </dependency>
 
             <dependency>
-                <groupId>com.tencent.tsf</groupId>
+                <groupId>com.tencent.cloud</groupId>
                 <artifactId>femas-config-consul</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.tencent.tsf</groupId>
+                <groupId>com.tencent.cloud</groupId>
                 <artifactId>femas-config-paas</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.tencent.tsf</groupId>
+                <groupId>com.tencent.cloud</groupId>
                 <artifactId>femas-config-nacos</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.tencent.tsf</groupId>
+                <groupId>com.tencent.cloud</groupId>
                 <artifactId>femas-registry</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.tencent.tsf</groupId>
+                <groupId>com.tencent.cloud</groupId>
                 <artifactId>femas-example</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.tencent.tsf</groupId>
+                <groupId>com.tencent.cloud</groupId>
                 <artifactId>femas-governance-impl</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.tencent.tsf</groupId>
+                <groupId>com.tencent.cloud</groupId>
                 <artifactId>femas-governance</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.tencent.tsf</groupId>
+                <groupId>com.tencent.cloud</groupId>
                 <artifactId>femas-registry-impl</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.tencent.tsf</groupId>
+                <groupId>com.tencent.cloud</groupId>
                 <artifactId>femas-plugin</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.tencent.tsf</groupId>
+                <groupId>com.tencent.cloud</groupId>
                 <artifactId>femas-plugin-impl</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.tencent.tsf</groupId>
+                <groupId>com.tencent.cloud</groupId>
                 <artifactId>femas-registry-consul</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.tencent.tsf</groupId>
+                <groupId>com.tencent.cloud</groupId>
                 <artifactId>femas-registry-eureka</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.tencent.tsf</groupId>
+                <groupId>com.tencent.cloud</groupId>
                 <artifactId>femas-registry-nacos</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.tencent.tsf</groupId>
+                <groupId>com.tencent.cloud</groupId>
                 <artifactId>femas-registry-k8s</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.tencent.tsf</groupId>
+                <groupId>com.tencent.cloud</groupId>
                 <artifactId>femas-extensions</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.tencent.tsf</groupId>
+                <groupId>com.tencent.cloud</groupId>
                 <artifactId>femas-agent-tools</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.tencent.tsf</groupId>
+                <groupId>com.tencent.cloud</groupId>
                 <artifactId>femas-agent-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.tencent.tsf</groupId>
+                <groupId>com.tencent.cloud</groupId>
                 <artifactId>femas-extension-springcloud-common</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.tencent.tsf</groupId>
+                <groupId>com.tencent.cloud</groupId>
                 <artifactId>femas-extension-springcloud-greenwich</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.tencent.tsf</groupId>
+                <groupId>com.tencent.cloud</groupId>
                 <artifactId>femas-extension-springcloud-hoxton</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.tencent.tsf</groupId>
+                <groupId>com.tencent.cloud</groupId>
                 <artifactId>femas-extension-springcloud-2020.0-ilford</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.tencent.tsf</groupId>
+                <groupId>com.tencent.cloud</groupId>
                 <artifactId>femas-springcloud-greenwich-zuul-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.tencent.tsf</groupId>
+                <groupId>com.tencent.cloud</groupId>
                 <artifactId>femas-springcloud-greenwich-gateway-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.tencent.tsf</groupId>
+                <groupId>com.tencent.cloud</groupId>
                 <artifactId>femas-springcloud-greenwich-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.tencent.tsf</groupId>
+                <groupId>com.tencent.cloud</groupId>
                 <artifactId>femas-springcloud-hoxton-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.tencent.tsf</groupId>
+                <groupId>com.tencent.cloud</groupId>
                 <artifactId>femas-springcloud-2020.0-ilford-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.tencent.tsf</groupId>
+                <groupId>com.tencent.cloud</groupId>
                 <artifactId>femas-extension-springcloud-greenwich-zuul</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.tencent.tsf</groupId>
+                <groupId>com.tencent.cloud</groupId>
                 <artifactId>femas-extension-springcloud-greenwich-gateway</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.tencent.tsf</groupId>
+                <groupId>com.tencent.cloud</groupId>
                 <artifactId>femas-extension-alibaba-dubbo</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.tencent.tsf</groupId>
+                <groupId>com.tencent.cloud</groupId>
                 <artifactId>femas-alibaba-dubbo-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.tencent.tsf</groupId>
+                <groupId>com.tencent.cloud</groupId>
                 <artifactId>femas-extension-apache-dubbo3</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.tencent.tsf</groupId>
+                <groupId>com.tencent.cloud</groupId>
                 <artifactId>femas-apache-dubbo3-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.tencent.tsf</groupId>
+                <groupId>com.tencent.cloud</groupId>
                 <artifactId>femas-springcloud-plugin-common</artifactId>
                 <version>${project.version}</version>
             </dependency>

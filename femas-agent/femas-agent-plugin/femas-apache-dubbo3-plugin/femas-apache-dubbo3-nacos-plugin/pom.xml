@@ -3,7 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>com.tencent.tsf</groupId>
+        <groupId>com.tencent.cloud</groupId>
         <artifactId>femas-apache-dubbo3-plugin</artifactId>
         <version>${revision}</version>
     </parent>
@@ -42,7 +42,7 @@
         </dependency>
 
         <dependency>
-            <groupId>com.tencent.tsf</groupId>
+            <groupId>com.tencent.cloud</groupId>
             <artifactId>femas-apache-dubbo3-plugin-common</artifactId>
             <version>${project.version}</version>
         </dependency>
