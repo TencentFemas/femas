@@ -232,7 +232,7 @@ spring:
  
 <!-- femas中间件依赖 -->
 <dependency>
-    <groupId>com.tencent.tsf</groupId>
+    <groupId>com.tencent.cloud</groupId>
     <artifactId>femas-springcloud-greenwich-starter</artifactId>
     <version>${femas.latest.version}</version>
 </dependency>

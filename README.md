@@ -219,7 +219,7 @@ Execute the script under the femas parent pom:
  
 <!-- femas middleware dependency -->
 <dependency>
-    <groupId>com.tencent.tsf</groupId>
+    <groupId>com.tencent.cloud</groupId>
     <artifactId>femas-extension-springcloud-greenwich-starter</artifactId>
     <version>${femas.latest.version}</version>
 </dependency>

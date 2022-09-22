@@ -16,7 +16,7 @@
     </modules>
 
     <parent>
-        <groupId>com.tencent.tsf</groupId>
+        <groupId>com.tencent.cloud</groupId>
         <artifactId>femas-parent</artifactId>
         <version>${revision}</version>
     </parent>
