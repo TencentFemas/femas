@@ -1,4 +1,4 @@
-package com.tencent.tsf.femas.plugin; /**
+/**
  * Tencent is pleased to support the open source community by making Polaris available.
  * <p>
  * Copyright (C) 2019 THL A29 Limited, a Tencent company. All rights reserved.
@@ -14,7 +14,7 @@ package com.tencent.tsf.femas.plugin; /**
  * CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-
+package com.tencent.tsf.femas.plugin;
 
 import com.tencent.tsf.femas.common.exception.FemasRuntimeException;
 

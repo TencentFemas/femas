@@ -10,13 +10,17 @@ import com.tencent.tsf.femas.plugin.context.ConfigContext;
  */
 @SPI
 public interface ConfigProvider extends SpiExtensionClass {
-
+    /**
+     * 获取配置上下文
+     *
+     * @return 配置上下文
+     */
     ConfigContext getPluginConfigs();
 
     /**
      * 插件归属
      *
-     * @return
+     * @return 插件归属
      */
     Attribute getAttr();
 

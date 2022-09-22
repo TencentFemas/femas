@@ -15,14 +15,14 @@ public interface PluginProvider extends SpiExtensionClass {
     /**
      * 实现充分的灵活性，实现层提供插件列表，femas不指定插件列表
      *
-     * @return
+     * @return 插件列表
      */
     List<Class<? extends Plugin>> getPluginTypes();
 
     /**
      * 插件归属
      *
-     * @return
+     * @return 插件归属
      */
     Attribute getAttr();
 

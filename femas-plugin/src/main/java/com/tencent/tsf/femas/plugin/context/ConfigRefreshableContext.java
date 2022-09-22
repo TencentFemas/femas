@@ -60,6 +60,7 @@ public class ConfigRefreshableContext implements AbstractSDKContext {
 
     }
 
+    @SuppressWarnings("unchecked")
     public void onRefresh(Class<? extends Plugin> type, String name, final Object config) {
         Plugin plugin = this.getPlugin(type, name);
         plugin.freshFactoryBySpecifyConfig(config);
