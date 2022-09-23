@@ -20,7 +20,6 @@ package com.tencent.tsf.femas.plugin.impl.config;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.tencent.tsf.femas.plugin.config.global.SystemConfig;
 
-
 /**
  * api相关的配置对象
  *
@@ -29,7 +28,6 @@ import com.tencent.tsf.femas.plugin.config.global.SystemConfig;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SystemConfigImpl implements SystemConfig {
-
 
     @Override
     public void verify() throws IllegalArgumentException {

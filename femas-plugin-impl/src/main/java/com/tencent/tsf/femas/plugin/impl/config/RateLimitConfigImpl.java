@@ -1,4 +1,4 @@
-/**
+/*
  * Tencent is pleased to support the open source community by making Polaris available.
  * <p>
  * Copyright (C) 2019 THL A29 Limited, a Tencent company. All rights reserved.
@@ -26,7 +26,6 @@ import com.tencent.tsf.femas.plugin.impl.config.rule.ratelimit.RateLimitRuleConf
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
-
 
 /**
  * 限流算法配置

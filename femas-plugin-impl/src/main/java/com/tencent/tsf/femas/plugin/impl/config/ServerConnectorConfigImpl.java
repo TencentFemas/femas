@@ -24,7 +24,6 @@ import com.tencent.tsf.femas.plugin.config.PluginConfigImpl;
 import com.tencent.tsf.femas.plugin.config.global.ServerConnectorConfig;
 import com.tencent.tsf.femas.plugin.config.global.ServerConnectorEnum;
 
-
 import java.util.List;
 
 /**
