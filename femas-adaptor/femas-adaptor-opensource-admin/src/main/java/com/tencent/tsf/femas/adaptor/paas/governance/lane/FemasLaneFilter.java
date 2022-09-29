@@ -145,6 +145,10 @@ public class FemasLaneFilter implements LaneFilter {
                     colorInstances);
         }
 
+        if (instances.isEmpty()) {
+            return serviceInstances;
+        }
+
         return instances;
     }
 
