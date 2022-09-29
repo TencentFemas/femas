@@ -42,7 +42,7 @@ public class FemasConfigManagerFactory {
         static {
             // SPI加载并初始化实现类
             //spi加载器加载不到agent class的问题
-            AgentConfig.getThenSetAgentClassLoader(FemasConfigManagerFactory.class, Thread.currentThread());
+            AgentConfig.getThenSetAgentClassLoaderIfStartAgent(FemasConfigManagerFactory.class, Thread.currentThread());
             ServiceLoader<FemasConfigManager> femasConfigManagerLoader = ServiceLoader.load(FemasConfigManager.class);
             Iterator<FemasConfigManager> femasConfigManagerIterator = femasConfigManagerLoader.iterator();
             // 一般就一个实现类，如果有多个，那么加载的是最后一个
