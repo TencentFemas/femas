@@ -15,9 +15,6 @@ package com.tencent.tsf.femas.plugin;/*
  * limitations under the License.
  */
 
-
-import com.tencent.tsf.femas.agent.classloader.AgentClassLoader;
-import com.tencent.tsf.femas.agent.classloader.InterceptorClassLoaderCache;
 import com.tencent.tsf.femas.common.context.AgentConfig;
 import com.tencent.tsf.femas.common.exception.FemasRuntimeException;
 import com.tencent.tsf.femas.plugin.context.AbstractSDKContext;
@@ -31,8 +28,6 @@ import java.util.List;
 import java.util.ServiceLoader;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-
-import static com.tencent.tsf.femas.common.context.ContextConstant.START_AGENT_FEMAS;
 
 /**
  * @Author leoziltong
@@ -94,15 +89,7 @@ public class DefaultConfigurablePluginHolder {
         ConfigContext initContext = null;
         //插件具体配置
         //spi加载器加载不到agent class的问题
-        if (AgentConfig.doGetProperty(START_AGENT_FEMAS) != null && (Boolean) AgentConfig.doGetProperty(START_AGENT_FEMAS)) {
-            AgentClassLoader agentClassLoader;
-            try {
-                agentClassLoader = InterceptorClassLoaderCache.getAgentClassLoader(DefaultConfigurablePluginHolder.class.getClassLoader());
-            } catch (Exception e) {
-                agentClassLoader = InterceptorClassLoaderCache.getAgentClassLoader(Thread.currentThread().getContextClassLoader());
-            }
-            Thread.currentThread().setContextClassLoader(agentClassLoader);
-        }
+        AgentConfig.getThenSetAgentClassLoader(DefaultConfigurablePluginHolder.class, Thread.currentThread());
         ServiceLoader<ConfigProvider> configProviders = ServiceLoader.load(ConfigProvider.class);
         //插件列表
         ServiceLoader<PluginProvider> providers = ServiceLoader.load(PluginProvider.class);
