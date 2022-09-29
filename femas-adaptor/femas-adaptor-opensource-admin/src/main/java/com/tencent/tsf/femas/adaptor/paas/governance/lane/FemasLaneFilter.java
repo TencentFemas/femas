@@ -150,6 +150,7 @@ public class FemasLaneFilter implements LaneFilter {
         }
 
         return instances;
+
     }
 
     public static synchronized void addLaneInfo(LaneInfo laneInfo) {
