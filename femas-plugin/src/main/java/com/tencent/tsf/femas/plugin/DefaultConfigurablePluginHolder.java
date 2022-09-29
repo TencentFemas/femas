@@ -89,7 +89,7 @@ public class DefaultConfigurablePluginHolder {
         ConfigContext initContext = null;
         //插件具体配置
         //spi加载器加载不到agent class的问题
-        AgentConfig.getThenSetAgentClassLoader(DefaultConfigurablePluginHolder.class, Thread.currentThread());
+        AgentConfig.getThenSetAgentClassLoaderIfStartAgent(DefaultConfigurablePluginHolder.class, Thread.currentThread());
         ServiceLoader<ConfigProvider> configProviders = ServiceLoader.load(ConfigProvider.class);
         //插件列表
         ServiceLoader<PluginProvider> providers = ServiceLoader.load(PluginProvider.class);

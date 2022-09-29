@@ -52,16 +52,20 @@ public class AgentConfig {
         return conf;
     }
 
-    public static void getThenSetAgentClassLoader(Class<?> clazz, Thread thread) {
+    public static void getThenSetAgentClassLoaderIfStartAgent(Class<?> clazz, Thread thread) {
         if (AgentConfig.doGetProperty(START_AGENT_FEMAS) != null && (Boolean) AgentConfig.doGetProperty(START_AGENT_FEMAS)) {
-            AgentClassLoader agentClassLoader;
-            try {
-                agentClassLoader = InterceptorClassLoaderCache.getAgentClassLoader(clazz.getClassLoader());
-            } catch (Exception e) {
-                agentClassLoader = InterceptorClassLoaderCache.getAgentClassLoader(thread.getContextClassLoader());
-            }
-            thread.setContextClassLoader(agentClassLoader);
+            thread.setContextClassLoader(getAgentClassLoader(clazz, thread));
         }
+    }
+
+    public static AgentClassLoader getAgentClassLoader(Class<?> clazz, Thread thread) {
+        AgentClassLoader agentClassLoader;
+        try {
+            agentClassLoader = InterceptorClassLoaderCache.getAgentClassLoader(clazz.getClassLoader());
+        } catch (Exception e) {
+            agentClassLoader = InterceptorClassLoaderCache.getAgentClassLoader(thread.getContextClassLoader());
+        }
+        return agentClassLoader;
     }
 
 }
