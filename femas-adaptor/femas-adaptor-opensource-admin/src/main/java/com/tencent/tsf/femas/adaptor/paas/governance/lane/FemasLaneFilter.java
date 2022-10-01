@@ -145,7 +145,12 @@ public class FemasLaneFilter implements LaneFilter {
                     colorInstances);
         }
 
+        if (CollectionUtil.isEmpty(instances)) {
+            return serviceInstances;
+        }
+
         return instances;
+
     }
 
     public static synchronized void addLaneInfo(LaneInfo laneInfo) {
