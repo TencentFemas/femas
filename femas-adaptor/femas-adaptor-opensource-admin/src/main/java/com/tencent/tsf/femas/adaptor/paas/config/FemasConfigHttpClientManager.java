@@ -6,6 +6,7 @@ import com.tencent.tsf.femas.common.context.factory.ContextFactory;
 import com.tencent.tsf.femas.common.entity.Service;
 import com.tencent.tsf.femas.common.exception.FemasRuntimeException;
 import com.tencent.tsf.femas.common.httpclient.ApacheHttpClientHolder;
+import com.tencent.tsf.femas.common.httpclient.HttpLongPollingConnectorManager;
 import com.tencent.tsf.femas.common.httpclient.client.AbstractHttpClient;
 import com.tencent.tsf.femas.common.httpclient.factory.ApacheDefaultHttpClientFactory;
 import com.tencent.tsf.femas.common.httpclient.factory.HttpClientFactory;
@@ -38,12 +39,13 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class FemasConfigHttpClientManager implements ServerConnectorManager {
+public class FemasConfigHttpClientManager implements ServerConnectorManager, HttpLongPollingConnectorManager {
 
     private static final Logger log = LoggerFactory.getLogger(FemasConfigHttpClientManager.class);
 
     private static final String webContext = "/atom";
     private static final String fetchKeyUrl = "/v1/sdk/fetchData";
+    private static final String fetchLongPollingKeyUrl = "/v1/sdk/longPolling/fetchData";
     private static final String reportCircuitEvent = "/v1/sdk/reportServiceEvent";
     private static final String reportApis = "/v1/sdk/reportServiceApi";
     private static final String intiNamespace = "/v1/sdk/initNamespace";
@@ -75,6 +77,7 @@ public class FemasConfigHttpClientManager implements ServerConnectorManager {
      */
     private String paasServerDomain;
     private String keyListenerUrl;
+    private String longPollingKeyListenerUrl;
     private String reportCircuitEventUrl;
     private String reportApisUrl;
     private String initNamespaceUrl;
@@ -94,6 +97,7 @@ public class FemasConfigHttpClientManager implements ServerConnectorManager {
         }
         this.paasServerDomain = paasServerDomainByConfig;
         this.keyListenerUrl = paasServerDomain.concat(webContext).concat(fetchKeyUrl);
+        this.longPollingKeyListenerUrl = paasServerDomain.concat(webContext).concat(fetchLongPollingKeyUrl);
         this.reportCircuitEventUrl = paasServerDomain.concat(webContext).concat(reportCircuitEvent);
         this.reportApisUrl = paasServerDomain.concat(webContext).concat(reportApis);
         this.initNamespaceUrl = paasServerDomain.concat(webContext).concat(intiNamespace);
@@ -232,4 +236,24 @@ public class FemasConfigHttpClientManager implements ServerConnectorManager {
         }
     }
 
+    @Override
+    public String fetchLongPollingKvValue(String key, String namespaceId) {
+        final Map<String, Object> params = new HashMap<>(3);
+        params.put("namespaceId", namespaceId);
+        params.put("key", key);
+        if (context.isEmptyPaasServer()) {
+            log.debug("fetchLongPollingKvValue failed , could not find the paas address profile");
+            return null;
+        }
+        HttpResult<String> httpResult = null;
+        try {
+            httpResult = httpClient.get(longPollingKeyListenerUrl, builderHeader(), params);
+        } catch (Exception e) {
+            log.error("config http manager fetchLongPollingKvValue failed", e);
+        }
+        if (httpResult != null) {
+            return httpResult.getData();
+        }
+        return null;
+    }
 }

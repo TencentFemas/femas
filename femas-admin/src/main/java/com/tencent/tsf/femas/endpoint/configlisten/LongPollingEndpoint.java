@@ -54,6 +54,11 @@ public class LongPollingEndpoint extends AbstractBaseEndpoint {
         return convertService.convert(key);
     }
 
+    @GetMapping("/longPolling/fetchData")
+    public String fetchLongPollingBreakerRule(String key) {
+        return convertService.convert(key);
+    }
+
 //    @GetMapping("showData")
 //    public HashMap<String, String> get() {
 //        StorageResult<List<String>> result = kvStoreManager.scanPrefix("");
