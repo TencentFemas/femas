@@ -5,6 +5,7 @@ import static java.util.concurrent.Executors.newCachedThreadPool;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tencent.tsf.femas.common.httpclient.HttpLongPollingConnectorManager;
 import com.tencent.tsf.femas.common.util.*;
 import com.tencent.tsf.femas.config.enums.PropertyChangeType;
 import com.tencent.tsf.femas.config.internals.AbstractStringConfig;
@@ -104,7 +105,13 @@ public class PaasConfig extends AbstractStringConfig {
         }
 
         private void processValue() {
-            final String strValue = manager.fetchKVValue(key, "");
+            final String strValue;
+            if (manager instanceof HttpLongPollingConnectorManager) {
+                HttpLongPollingConnectorManager longPollingManager = (HttpLongPollingConnectorManager) manager;
+                strValue = longPollingManager.fetchLongPollingKvValue(key, "");
+            } else {
+                strValue = manager.fetchKVValue(key, "");
+            }
             Integer currentIndex = MD5Util.getIndex(strValue);
 
             if (currentIndex != null && currentIndex != index) {
