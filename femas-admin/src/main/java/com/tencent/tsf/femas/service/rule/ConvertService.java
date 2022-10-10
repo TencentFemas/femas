@@ -54,6 +54,8 @@ public class ConvertService {
             return "lane-info";
         } else if (key.startsWith("lane-rule")) {
             return "lane-rule";
+        } else if (key.startsWith("affinity")) {
+            return "affinity";
         } else {
             return "";
         }
