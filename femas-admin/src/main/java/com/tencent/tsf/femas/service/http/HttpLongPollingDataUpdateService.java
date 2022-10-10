@@ -62,7 +62,7 @@ public class HttpLongPollingDataUpdateService implements ConfigDataChangedListen
             response.setHeader("Cache-Control", "no-cache,no-store");
             response.setStatus(HttpServletResponse.SC_OK);
             response.setContentType("application/json;charset=UTF-8");
-            response.getWriter().println(Result.successData(updatedData));
+            response.getWriter().println(updatedData);
         } catch (IOException ex) {
             LOG.error("sending response failed.", ex);
         }
