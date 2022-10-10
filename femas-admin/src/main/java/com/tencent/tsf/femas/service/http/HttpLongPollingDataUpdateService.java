@@ -1,7 +1,8 @@
 package com.tencent.tsf.femas.service.http;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import org.apache.commons.lang3.StringUtils;
+import com.tencent.tsf.femas.common.util.Result;
+import com.tencent.tsf.femas.event.ConfigDataChangedListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ import java.util.concurrent.TimeUnit;
  * @author mroccyen
  */
 @Service
-public class HttpLongPollingDataUpdateService {
+public class HttpLongPollingDataUpdateService implements ConfigDataChangedListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(HttpLongPollingDataUpdateService.class);
 
@@ -37,6 +38,11 @@ public class HttpLongPollingDataUpdateService {
         this.clients = new ArrayBlockingQueue<>(1024);
         this.scheduler = new ScheduledThreadPoolExecutor(1,
                 (new ThreadFactoryBuilder()).setNameFormat("httpLongPollingExecutor-%d").setDaemon(true).build());
+    }
+
+    @Override
+    public void onChanged(String key, String updateData) {
+        doSendUpdatedData(key, updateData);
     }
 
     public void doLongPolling(String key, final HttpServletRequest request) {
@@ -56,7 +62,7 @@ public class HttpLongPollingDataUpdateService {
             response.setHeader("Cache-Control", "no-cache,no-store");
             response.setStatus(HttpServletResponse.SC_OK);
             response.setContentType("application/json;charset=UTF-8");
-            response.getWriter().println(updatedData);
+            response.getWriter().println(Result.successData(updatedData));
         } catch (IOException ex) {
             LOG.error("sending response failed.", ex);
         }
@@ -86,7 +92,7 @@ public class HttpLongPollingDataUpdateService {
                 this.asyncTimeoutFuture = scheduler.schedule(() -> {
                     clients.remove(HttpLongPollingClient.this);
                     //到超时时间了还是没有数据更新，则返回空，告诉客户端可以进行下一次请求了
-                    sendResponse(StringUtils.EMPTY);
+                    sendResponse("NONE");
                 }, timeoutTime, TimeUnit.MILLISECONDS);
                 clients.add(this);
             } catch (Exception ex) {

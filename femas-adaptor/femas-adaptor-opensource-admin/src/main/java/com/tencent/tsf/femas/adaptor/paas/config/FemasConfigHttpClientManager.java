@@ -45,7 +45,7 @@ public class FemasConfigHttpClientManager implements ServerConnectorManager, Htt
 
     private static final String webContext = "/atom";
     private static final String fetchKeyUrl = "/v1/sdk/fetchData";
-    private static final String fetchLongPollingKeyUrl = "/v1/sdk/longPolling/fetchData";
+    private static final String longPollingListenerKeyUrl = "/v1/sdk/listener";
     private static final String reportCircuitEvent = "/v1/sdk/reportServiceEvent";
     private static final String reportApis = "/v1/sdk/reportServiceApi";
     private static final String intiNamespace = "/v1/sdk/initNamespace";
@@ -97,7 +97,7 @@ public class FemasConfigHttpClientManager implements ServerConnectorManager, Htt
         }
         this.paasServerDomain = paasServerDomainByConfig;
         this.keyListenerUrl = paasServerDomain.concat(webContext).concat(fetchKeyUrl);
-        this.longPollingKeyListenerUrl = paasServerDomain.concat(webContext).concat(fetchLongPollingKeyUrl);
+        this.longPollingKeyListenerUrl = paasServerDomain.concat(webContext).concat(longPollingListenerKeyUrl);
         this.reportCircuitEventUrl = paasServerDomain.concat(webContext).concat(reportCircuitEvent);
         this.reportApisUrl = paasServerDomain.concat(webContext).concat(reportApis);
         this.initNamespaceUrl = paasServerDomain.concat(webContext).concat(intiNamespace);

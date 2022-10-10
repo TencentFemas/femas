@@ -108,7 +108,13 @@ public class PaasConfig extends AbstractStringConfig {
             final String strValue;
             if (manager instanceof HttpLongPollingConnectorManager) {
                 HttpLongPollingConnectorManager longPollingManager = (HttpLongPollingConnectorManager) manager;
-                strValue = longPollingManager.fetchLongPollingKvValue(key, "");
+                String listenerValue = longPollingManager.fetchLongPollingKvValue(key, "");
+                LOGGER.info("[Femas paas Config Client] Key : " + key + ", listener value = " + listenerValue);
+                //没有变化，则不处理后面
+                if ("NONE".equals(listenerValue)) {
+                    return;
+                }
+                strValue = manager.fetchKVValue(key, "");
             } else {
                 strValue = manager.fetchKVValue(key, "");
             }

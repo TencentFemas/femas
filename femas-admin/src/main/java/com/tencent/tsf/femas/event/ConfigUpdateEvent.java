@@ -10,7 +10,19 @@ import org.springframework.context.ApplicationEvent;
  */
 public class ConfigUpdateEvent extends ApplicationEvent {
 
-    public ConfigUpdateEvent(Object source) {
-        super(source);
+    private final String key;
+
+    public ConfigUpdateEvent(String key, String updateData) {
+        super(updateData);
+        this.key = key;
+    }
+
+    @Override
+    public String getSource() {
+        return (String) super.getSource();
+    }
+
+    public String getKey() {
+        return key;
     }
 }
