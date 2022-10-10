@@ -1,7 +1,6 @@
 package com.tencent.tsf.femas.service.http;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import com.tencent.tsf.femas.common.util.Result;
 import com.tencent.tsf.femas.event.ConfigDataChangedListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,7 +61,7 @@ public class HttpLongPollingDataUpdateService implements ConfigDataChangedListen
             response.setHeader("Cache-Control", "no-cache,no-store");
             response.setStatus(HttpServletResponse.SC_OK);
             response.setContentType("application/json;charset=UTF-8");
-            response.getWriter().println(updatedData);
+            response.getWriter().write(updatedData);
         } catch (IOException ex) {
             LOG.error("sending response failed.", ex);
         }
