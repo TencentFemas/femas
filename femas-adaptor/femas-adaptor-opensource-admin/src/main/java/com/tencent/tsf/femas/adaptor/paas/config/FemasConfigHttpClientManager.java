@@ -9,6 +9,7 @@ import com.tencent.tsf.femas.common.httpclient.ApacheHttpClientHolder;
 import com.tencent.tsf.femas.common.httpclient.HttpLongPollingConnectorManager;
 import com.tencent.tsf.femas.common.httpclient.client.AbstractHttpClient;
 import com.tencent.tsf.femas.common.httpclient.factory.ApacheDefaultHttpClientFactory;
+import com.tencent.tsf.femas.common.httpclient.factory.ApacheLongPollingHttpClientFactory;
 import com.tencent.tsf.femas.common.httpclient.factory.HttpClientFactory;
 import com.tencent.tsf.femas.common.util.CollectionUtil;
 import com.tencent.tsf.femas.common.util.HttpHeaderKeys;
@@ -53,6 +54,10 @@ public class FemasConfigHttpClientManager implements ServerConnectorManager, Htt
             .getInteger("femas.paas.config.client.readTimeOut", 50000);
     private static final int DEFAULT_CON_TIME_OUT_MILLIS = Integer
             .getInteger("femas.paas.config.client.conTimeOut", 3000);
+    private static final int DEFAULT_LONG_POLLING_READ_TIME_OUT_MILLIS = Integer
+            .getInteger("femas.paas.config.client.longPolling.readTimeOut", 900000);
+    private static final int DEFAULT_LONG_POLLING_CON_TIME_OUT_MILLIS = Integer
+            .getInteger("femas.paas.config.client.longPolling.conTimeOut", 3000);
     private static Context commonContext = ContextFactory.getContextInstance();
     private static volatile FemasConfigHttpClientManager singleton = null;
     private volatile Context context = ContextFactory.getContextInstance();
@@ -82,11 +87,14 @@ public class FemasConfigHttpClientManager implements ServerConnectorManager, Htt
     private String reportApisUrl;
     private String initNamespaceUrl;
     private AbstractHttpClient httpClient;
+    private AbstractHttpClient httpLongPollingClient;
 
     public FemasConfigHttpClientManager() {
         Map<String, String> configMap = commonContext.getRegistryConfigMap();
         HttpClientFactory httpClientFactory = new ApacheDefaultHttpClientFactory(DEFAULT_READ_TIME_OUT_MILLIS,
                 DEFAULT_CON_TIME_OUT_MILLIS);
+        HttpClientFactory httpLongPollingFactory = new ApacheLongPollingHttpClientFactory(DEFAULT_LONG_POLLING_READ_TIME_OUT_MILLIS,
+                DEFAULT_LONG_POLLING_CON_TIME_OUT_MILLIS);
 
         String paasServerDomainByConfig = null;
         if (configMap != null) {
@@ -102,6 +110,7 @@ public class FemasConfigHttpClientManager implements ServerConnectorManager, Htt
         this.reportApisUrl = paasServerDomain.concat(webContext).concat(reportApis);
         this.initNamespaceUrl = paasServerDomain.concat(webContext).concat(intiNamespace);
         this.httpClient = ApacheHttpClientHolder.getHttpClient(httpClientFactory);
+        this.httpLongPollingClient = ApacheHttpClientHolder.getHttpClient(httpLongPollingFactory);
     }
 
     @Override
@@ -247,7 +256,7 @@ public class FemasConfigHttpClientManager implements ServerConnectorManager, Htt
         }
         HttpResult<String> httpResult = null;
         try {
-            httpResult = httpClient.get(longPollingKeyListenerUrl, builderHeader(), params);
+            httpResult = httpLongPollingClient.get(longPollingKeyListenerUrl, builderHeader(), params);
         } catch (Exception e) {
             log.error("config http manager fetchLongPollingKvValue failed", e);
         }
