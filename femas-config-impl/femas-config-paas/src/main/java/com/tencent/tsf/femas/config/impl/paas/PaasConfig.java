@@ -112,8 +112,10 @@ public class PaasConfig extends AbstractStringConfig {
                 LOGGER.info("[Femas paas Config Client] Key : " + key + ", listener value = " + listenerValue);
                 //没有变化，则不处理后面
                 if ("NONE".equals(listenerValue)) {
+                    LOGGER.info("[Femas paas Config Client] Key : " + key + ", no changed");
                     return;
                 }
+                LOGGER.info("[Femas paas Config Client] Key : " + key + " get new config value");
                 strValue = manager.fetchKVValue(key, "");
             } else {
                 strValue = manager.fetchKVValue(key, "");
