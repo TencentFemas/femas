@@ -56,9 +56,9 @@ public class LongPollingEndpoint extends AbstractBaseEndpoint {
         return convertService.convert(key);
     }
 
-    @GetMapping("/longPolling/fetchData")
-    public void fetchLongPollingBreakerRule(final HttpServletRequest request, String key) {
-        httpLongPollingDataUpdateService.doLongPolling(key, request);
+    @GetMapping("listener")
+    public void longPollingListener(final HttpServletRequest request, String key) {
+        httpLongPollingDataUpdateService.doLongPolling(convertService.getKeyType(key), request);
     }
 
 //    @GetMapping("showData")
