@@ -93,8 +93,8 @@ public class FemasConfigHttpClientManager implements ServerConnectorManager, Htt
         Map<String, String> configMap = commonContext.getRegistryConfigMap();
         HttpClientFactory httpClientFactory = new ApacheDefaultHttpClientFactory(DEFAULT_READ_TIME_OUT_MILLIS,
                 DEFAULT_CON_TIME_OUT_MILLIS);
-        HttpClientFactory httpLongPollingFactory = new ApacheLongPollingHttpClientFactory(DEFAULT_LONG_POLLING_READ_TIME_OUT_MILLIS,
-                DEFAULT_LONG_POLLING_CON_TIME_OUT_MILLIS);
+        HttpClientFactory httpLongPollingFactory = new ApacheLongPollingHttpClientFactory(DEFAULT_LONG_POLLING_CON_TIME_OUT_MILLIS,
+                DEFAULT_LONG_POLLING_READ_TIME_OUT_MILLIS);
 
         String paasServerDomainByConfig = null;
         if (configMap != null) {
