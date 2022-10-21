@@ -1113,17 +1113,19 @@ public class MysqlDataOperation implements DataOperation {
             long time = new Date().getTime();
             laneInfo.setCreateTime(time);
             laneInfo.setUpdateTime(time);
-            return manager.update("insert into lane_info(lane_id,lane_name,remark,create_time,update_time,lane_service_list) " +
-                            "values(?,?,?,?,?,?)",
+            return manager.update("insert into lane_info(lane_id,lane_name,remark,create_time,update_time,lane_service_list,stable_service_list) " +
+                            "values(?,?,?,?,?,?,?)",
                     laneInfo.getLaneId(), laneInfo.getLaneName(),
                     laneInfo.getRemark(), laneInfo.getCreateTime(),
-                    laneInfo.getUpdateTime(), JSONSerializer.serializeStr(laneInfo.getLaneServiceList()));
+                    laneInfo.getUpdateTime(), JSONSerializer.serializeStr(laneInfo.getLaneServiceList()),
+                    JSONSerializer.serializeStr(laneInfo.getStableServiceList()));
         }else {
             laneInfo.setUpdateTime(new Date().getTime());
-            return manager.update("update lane_info set lane_name=?, remark=?, create_time=?, update_time=?, lane_service_list=? where lane_id=?",
+            return manager.update("update lane_info set lane_name=?, remark=?, create_time=?, update_time=?, lane_service_list=?, stable_service_list=? where lane_id=?",
                     laneInfo.getLaneName(), laneInfo.getRemark(),
                     laneInfo.getCreateTime(), laneInfo.getUpdateTime(),
-                    JSONSerializer.serializeStr(laneInfo.getLaneServiceList()), laneInfo.getLaneId());
+                    JSONSerializer.serializeStr(laneInfo.getLaneServiceList()),
+                    JSONSerializer.serializeStr(laneInfo.getStableServiceList()), laneInfo.getLaneId());
         }
     }
 
