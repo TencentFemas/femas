@@ -23,6 +23,9 @@ public class LaneService implements ServiceExecutor {
     }
 
     public Result configureLane(LaneInfo laneInfo) {
+        if(CollectionUtil.isEmpty(laneInfo.getStableServiceList())){
+            return Result.errorMessage("稳定版本不能为空");
+        }
         Integer res = dataOperation.configureLane(laneInfo);
         if(res == 1){
             return Result.successMessage("泳道编辑成功");
