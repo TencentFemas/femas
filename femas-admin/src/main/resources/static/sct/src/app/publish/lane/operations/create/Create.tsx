@@ -32,14 +32,17 @@ export default function Create(props: DuckCmpProps<Duck>) {
   );
   const step = selectors.step(store);
   const formApi = form.getAPI(store, dispatch);
-  const { laneServiceList } = formApi.getFields(["laneServiceList"]);
-
+  const { laneServiceList, stableServiceList } = formApi.getFields([
+    "laneServiceList",
+    "stableServiceList",
+  ]);
+  
   return (
     <Dialog
       duck={duck}
       store={store}
       dispatch={dispatch}
-      size={800}
+      size={900}
       showFooter={false}
       title={`新建泳道`}
     >
@@ -76,7 +79,9 @@ export default function Create(props: DuckCmpProps<Duck>) {
             <FormField showStatusIcon={false} field={laneServiceList}>
               <Deploy
                 value={laneServiceList.getValue() || []}
+                stableValue={stableServiceList.getValue() || []}
                 onChange={(list) => laneServiceList.setValue(list)}
+                onStableChange={(list) => stableServiceList.setValue(list)}
               />
             </FormField>
           </Form>
