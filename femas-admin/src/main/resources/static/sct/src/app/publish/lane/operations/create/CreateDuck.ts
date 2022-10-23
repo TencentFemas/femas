@@ -134,14 +134,29 @@ export default class CreateDuck extends FormDialog {
       selectors,
       ducks: { form },
     } = this;
-    const { laneId, laneName, laneServiceList, remark } = form.selectors.values(
-      yield select()
-    );
+    const {
+      laneId,
+      laneName,
+      laneServiceList,
+      stableServiceList,
+      remark,
+    } = form.selectors.values(yield select());
     const res = yield* resolvePromise(
       configureLane({
         laneId,
         laneName,
         laneServiceList: laneServiceList.map(
+          ({ entrance, namespaceId, namespaceName, serviceName, version }) => {
+            return {
+              entrance,
+              namespaceId,
+              namespaceName,
+              serviceName,
+              version,
+            };
+          }
+        ),
+        stableServiceList: stableServiceList.map(
           ({ entrance, namespaceId, namespaceName, serviceName, version }) => {
             return {
               entrance,

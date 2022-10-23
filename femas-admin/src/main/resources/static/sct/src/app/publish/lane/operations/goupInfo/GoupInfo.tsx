@@ -18,19 +18,24 @@ export const GroupInfo = purify(function GroupInfo(
     ducks: { form },
   } = duck;
   const formApi = form.getAPI(store, dispatch);
-  const { laneServiceList } = formApi.getFields(["laneServiceList"]);
+  const { laneServiceList, stableServiceList } = formApi.getFields([
+    "laneServiceList",
+    "stableServiceList",
+  ]);
   return (
     <Dialog
       duck={duck}
       store={store}
       dispatch={dispatch}
-      size={800}
+      size={900}
       title={STEPS_LABLES[STEPS.NAMESPACE]}
     >
       <FormField showStatusIcon={false} field={laneServiceList}>
         <Deploy
           value={laneServiceList.getValue() || []}
+          stableValue={stableServiceList.getValue() || []}
           onChange={(list) => laneServiceList.setValue(list)}
+          onStableChange={(list) => stableServiceList.setValue(list)}
         />
       </FormField>
     </Dialog>
