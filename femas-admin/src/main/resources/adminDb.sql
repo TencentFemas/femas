@@ -220,6 +220,7 @@ CREATE TABLE `lane_info` (
   `create_time` bigint(20) DEFAULT NULL COMMENT '规则创建时间',
   `update_time` bigint(20) DEFAULT NULL COMMENT '规则更新时间',
   `lane_service_list` varchar(5000) DEFAULT NULL COMMENT '泳道服务列表',
+  `stable_service_list` varchar(5000) DEFAULT NULL COMMENT '稳定版本',
  PRIMARY KEY (`lane_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 

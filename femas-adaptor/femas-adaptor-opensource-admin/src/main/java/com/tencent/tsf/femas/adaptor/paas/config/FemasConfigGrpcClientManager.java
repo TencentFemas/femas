@@ -27,11 +27,15 @@ public class FemasConfigGrpcClientManager implements ServerConnectorManager {
 
     public FemasConfigGrpcClientManager() {
         String host = GrpcHepler.getPaasServerHost();
-        int port = GrpcHepler.getPaasGrpcPort();
-        channel = NettyChannelBuilder
-                .forAddress(host, port)
-                .usePlaintext()
-                .build();
+        if(StringUtils.isNotEmpty(host)){
+            int port = GrpcHepler.getPaasGrpcPort();
+            channel = NettyChannelBuilder
+                    .forAddress(host, port)
+                    .usePlaintext()
+                    .build();
+        }else {
+            log.warn("skipping initialization of grpc channel, because doesn't found the femas address configuration");
+        }
     }
 
     @Override

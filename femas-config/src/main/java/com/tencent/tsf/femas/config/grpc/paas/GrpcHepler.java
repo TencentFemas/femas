@@ -16,7 +16,7 @@ public class GrpcHepler {
 
     final static String SUCC = "0";
     final static String FAIL = "-1";
-
+    final static String DEFAULT_GRPC_ADDRESS = "localhost";
     final static int DEFAULT_GRPC_PORT = 5555;
     static final String PAAS_SERVER_ADDRESS = "paas_server_address";
     static final String PAAS_GRPC_PORT = "paas_grpc_port";
@@ -25,7 +25,7 @@ public class GrpcHepler {
     public static String getPaasServerHost(){
         String domain = FemasConfig.getProperty(PAAS_SERVER_ADDRESS);
         if(StringUtils.isBlank(domain)){
-            return null;
+            return DEFAULT_GRPC_ADDRESS;
         }
         URI  url = URI.create(domain);
         return url.getHost();

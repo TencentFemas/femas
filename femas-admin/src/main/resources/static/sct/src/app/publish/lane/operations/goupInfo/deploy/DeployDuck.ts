@@ -58,7 +58,7 @@ export default class DeployDuck extends DuckMap {
       if (!namespaceId) return;
       const namespaceItem = yield namespace.getSelectedItem();
 
-      const result = yield call(describeServiceInstanceByNsId, {
+      let result = yield call(describeServiceInstanceByNsId, {
         id: namespaceId,
       });
 

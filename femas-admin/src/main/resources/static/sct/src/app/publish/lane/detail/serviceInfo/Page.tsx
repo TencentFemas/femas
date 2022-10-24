@@ -15,6 +15,7 @@ import {
   Justify,
   Switch,
   Button,
+  Tag,
 } from "tea-component";
 import BaseInfoDuck from "./PageDuck";
 
@@ -34,7 +35,7 @@ export default function BaseInfo(props: DuckCmpProps<BaseInfoDuck>) {
     }),
     []
   );
-  const { laneServiceList } = data;
+  const { laneServiceList, stableServiceList } = data;
 
   return (
     <Table.ActionPanel>
@@ -54,11 +55,23 @@ export default function BaseInfo(props: DuckCmpProps<BaseInfoDuck>) {
           {
             key: "serviceName",
             header: "部署组",
-            render: (cvm) => (
-              <>
-                <p>{cvm.version}</p>
-              </>
-            ),
+            render: (cvm) => {
+              const find = stableServiceList.find(
+                (v) =>
+                  v.namespaceId === cvm.namespaceId && v.version === cvm.version
+              );
+              return (
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <p style={{ marginRight: "10px" }}>{cvm.version}</p>
+                  {find ? <Tag theme="success">stable</Tag> : ""}
+                </div>
+              );
+            },
           },
           {
             key: "group",

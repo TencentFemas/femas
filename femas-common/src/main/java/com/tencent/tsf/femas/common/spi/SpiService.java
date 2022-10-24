@@ -19,15 +19,7 @@ public class SpiService {
 
     public static <T extends SpiExtensionClass> Map<String, T> init(Class<T> spiExtensionClass) {
         //spi加载器加载不到agent class的问题
-        if (AgentConfig.doGetProperty(START_AGENT_FEMAS) != null && (Boolean) AgentConfig.doGetProperty(START_AGENT_FEMAS)) {
-            AgentClassLoader agentClassLoader;
-            try {
-                agentClassLoader = InterceptorClassLoaderCache.getAgentClassLoader(SpiService.class.getClassLoader());
-            } catch (Exception e) {
-                agentClassLoader = InterceptorClassLoaderCache.getAgentClassLoader(Thread.currentThread().getContextClassLoader());
-            }
-            Thread.currentThread().setContextClassLoader(agentClassLoader);
-        }
+        AgentConfig.getThenSetAgentClassLoaderIfStartAgent(SpiService.class, Thread.currentThread());
         ServiceLoader<T> registryFactoryServiceLoader = ServiceLoader.load(spiExtensionClass);
         Iterator<T> it = registryFactoryServiceLoader.iterator();
 
