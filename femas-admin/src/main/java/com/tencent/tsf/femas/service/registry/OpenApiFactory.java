@@ -32,23 +32,22 @@ public class OpenApiFactory {
     private final NacosRegistryOpenApi nacosRegistryOpenApi;
     private final EurekaRegistryOpenApi eurekaRegistryOpenApi;
     private final ConsulRegistryOpenApi consulRegistryOpenApi;
-    private final KubernetesFabricRegistryOpenApi k8sRegistryOpenApi;
+    //    private final KubernetesFabricRegistryOpenApi k8sRegistryOpenApi;
     private final PolarisRegistryOpenApi polarisRegistryOpenApi;
 
     private final Map<String, RegistryOpenApiInterface> registryOpenApiInterfaceMapCache = new ConcurrentHashMap<>();
 
-    public OpenApiFactory(NacosRegistryOpenApi nacosRegistryOpenApi, EurekaRegistryOpenApi eurekaRegistryOpenApi, ConsulRegistryOpenApi consulRegistryOpenApi, KubernetesFabricRegistryOpenApi k8sRegistryOpenApi, PolarisRegistryOpenApi polarisRegistryOpenApi) {
+    public OpenApiFactory(NacosRegistryOpenApi nacosRegistryOpenApi, EurekaRegistryOpenApi eurekaRegistryOpenApi, ConsulRegistryOpenApi consulRegistryOpenApi, PolarisRegistryOpenApi polarisRegistryOpenApi) {
         this.nacosRegistryOpenApi = nacosRegistryOpenApi;
         this.eurekaRegistryOpenApi = eurekaRegistryOpenApi;
         this.consulRegistryOpenApi = consulRegistryOpenApi;
-        this.k8sRegistryOpenApi = k8sRegistryOpenApi;
+//        this.k8sRegistryOpenApi = k8sRegistryOpenApi;
         this.polarisRegistryOpenApi = polarisRegistryOpenApi;
         registryOpenApiInterfaceMapCache.put(RegistryEnum.CONSUL.getAlias(), consulRegistryOpenApi);
         registryOpenApiInterfaceMapCache.put(RegistryEnum.NACOS.getAlias(), nacosRegistryOpenApi);
         registryOpenApiInterfaceMapCache.put(RegistryEnum.EUREKA.getAlias(), eurekaRegistryOpenApi);
-        registryOpenApiInterfaceMapCache.put(RegistryEnum.KUBERNETES.getAlias(), k8sRegistryOpenApi);
+//        registryOpenApiInterfaceMapCache.put(RegistryEnum.KUBERNETES.getAlias(), k8sRegistryOpenApi);
         registryOpenApiInterfaceMapCache.put(RegistryEnum.POLARIS.getAlias(), polarisRegistryOpenApi);
-
     }
 
     public RegistryOpenApiInterface select(String type) {

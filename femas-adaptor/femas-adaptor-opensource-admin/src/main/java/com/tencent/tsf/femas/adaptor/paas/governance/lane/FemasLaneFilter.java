@@ -108,17 +108,18 @@ public class FemasLaneFilter implements LaneFilter {
 
         LOGGER.debug("[FEMAS LANE] Choose Colorful instances. Femas lane take effect, color service list = {}",
                 serverList);
+
+
         return serverList;
     }
 
     /**
-     * 将有色节点选择出来
+     * 将无色节点选择出来
      */
     private static List<ServiceInstance> chooseColorlessInstances(Service service,
                                                                   List<ServiceInstance> serviceInstances) {
         List<ServiceInstance> instances = new ArrayList<>();
         String namespaceId = service.getNamespace();
-
         /**
          * 该命名空间下没有配置泳道信息
          */
@@ -126,7 +127,6 @@ public class FemasLaneFilter implements LaneFilter {
                 .get(namespaceId).isEmpty()) {
             return serviceInstances;
         }
-
         Set<ServiceInstance> colorInstances = new HashSet<>();
         for (ServiceInstance instance : serviceInstances) {
             String groupId = instance.getMetadata(FemasConstant.FEMAS_META_APPLICATION_VERSION_KEY);
@@ -139,12 +139,13 @@ public class FemasLaneFilter implements LaneFilter {
 
             instances.add(instance);
         }
-
         if (!CollectionUtil.isEmpty(colorInstances)) {
             LOGGER.debug("[FEMAS LANE] Choose Colorless instances. lane take effect, filter color instance list = {}",
                     colorInstances);
         }
-
+        if (CollectionUtils.isEmpty(instances)) {
+            return serviceInstances;
+        }
         return instances;
     }
 
@@ -280,7 +281,6 @@ public class FemasLaneFilter implements LaneFilter {
 
     public static synchronized void addLaneRule(LaneRule laneRule) {
         ALL_LANE_RULES.add(laneRule);
-
         refreshEffectiveLaneRule();
     }
 
@@ -288,7 +288,6 @@ public class FemasLaneFilter implements LaneFilter {
         ALL_LANE_RULES.remove(laneRule);
         EFFECTIVE_LANE_RULES_SET.remove(laneRule);
         EFFECTIVE_LANE_RULES.remove(laneRule);
-
         LOGGER.info("EFFECTIVE LANE Rule changed. EFFECTIVE_LANE_RULES : " + EFFECTIVE_LANE_RULES);
     }
 
@@ -402,6 +401,9 @@ public class FemasLaneFilter implements LaneFilter {
         }
         return reverseMap.get(res);
     }
+
+
+
 
     @Override
     public String getName() {

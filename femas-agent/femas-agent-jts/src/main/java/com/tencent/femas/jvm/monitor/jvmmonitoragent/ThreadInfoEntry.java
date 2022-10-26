@@ -1,0 +1,92 @@
+/**
+ * Copyright 2010-2021 the original author or authors
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining
+ * a copy of this software and associated documentation files (the
+ * "Software"), to deal in the Software without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish,
+ * distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+ * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+ * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+package com.tencent.femas.jvm.monitor.jvmmonitoragent;
+
+public class ThreadInfoEntry {
+    private String threadName;
+    private String threadState;
+    private String threadCpuUtil;
+    private String threadAllocatedBytes;
+    private String threadCpuTime;
+    private String threadBlockCount;
+    private String threadInfos;
+
+
+    public String getThreadName() {
+        return threadName;
+    }
+
+    public void setThreadName(String threadName) {
+        this.threadName = threadName;
+    }
+
+    public String getThreadState() {
+        return threadState;
+    }
+
+    public void setThreadState(String threadState) {
+        this.threadState = threadState;
+    }
+
+    public String getThreadInfos() {
+        return threadInfos;
+    }
+
+    public void setThreadInfos(String threadInfos) {
+        this.threadInfos = threadInfos;
+    }
+
+    public String getThreadCpuUtil() {
+        return threadCpuUtil;
+    }
+
+    public void setThreadCpuUtil(String threadCpuUtil) {
+        this.threadCpuUtil = threadCpuUtil;
+    }
+
+    public String getThreadAllocatedBytes() {
+        return threadAllocatedBytes;
+    }
+
+    public void setThreadAllocatedBytes(String threadAllocatedBytes) {
+        this.threadAllocatedBytes = threadAllocatedBytes;
+    }
+
+    public String getThreadCpuTime() {
+        return threadCpuTime;
+    }
+
+    public void setThreadCpuTime(String threadCpuTime) {
+        this.threadCpuTime = threadCpuTime;
+    }
+
+    public String getThreadBlockCount() {
+        return threadBlockCount;
+    }
+
+    public void setThreadBlockCount(String threadBlockCount) {
+        this.threadBlockCount = threadBlockCount;
+    }
+
+}

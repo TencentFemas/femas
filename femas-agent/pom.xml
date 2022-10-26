@@ -31,6 +31,7 @@
         <module>femas-agent-starter</module>
         <module>femas-agent-tools</module>
         <module>femas-agent-plugin</module>
+        <module>femas-agent-jts</module>
         <module>femas-agent-example</module>
     </modules>
 
