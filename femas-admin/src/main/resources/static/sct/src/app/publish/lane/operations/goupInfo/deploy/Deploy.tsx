@@ -27,9 +27,7 @@ const SourceTable = ({
   const [relations, setRelations] = useState({});
   type ServiceTree = {
     childs: Array<ServiceInfo>;
-    serviceName: string;
     namespaceId: string;
-    uniqKey: string;
     stable: string;
   };
   const [serviceTree, setServiceTree] = useState<Array<ServiceTree>>([]);
@@ -39,18 +37,16 @@ const SourceTable = ({
     // 树状结构
     setServiceTree(
       dataSource.reduce((a, b) => {
-        const uniqKey = b.serviceName + b.namespaceId;
-        tmpRelations[b.uniqKey] = uniqKey;
-        if (uniqKey in groupMap) {
-          a[groupMap[uniqKey]].childs.push(b);
+        tmpRelations[b.uniqKey] = b.namespaceId;
+        if (b.namespaceId in groupMap) {
+          a[groupMap[b.namespaceId]].childs.push(b);
         } else {
-          groupMap[uniqKey] = a.length;
+          groupMap[b.namespaceId] = a.length;
           const find = stableValue.find(
-            (v) => v.serviceName + v.namespaceId === uniqKey
+            (v) =>
+              v.serviceName === b.serviceName && v.namespaceId === b.namespaceId
           );
           a.push({
-            uniqKey: uniqKey,
-            serviceName: b.serviceName,
             namespaceId: b.namespaceId,
             childs: [b],
             stable: find ? find.version : "",
@@ -65,11 +61,56 @@ const SourceTable = ({
     setRelations(tmpRelations);
   }, [dataSource, stableValue]);
 
+  // 指定稳定版本
+  const stableClickHandle = (namespaceId, version) => {
+    setServiceTree((data) => {
+      const findIndex = data.findIndex((v) => v.namespaceId === namespaceId);
+      if (findIndex !== -1)
+        data = data.map((v, i) =>
+          i === findIndex ? { ...v, stable: version } : v
+        );
+      // 稳定版本修改
+      onStableChange(
+        data.reduce((a, b) => {
+          const find = b.childs.find((v) => v.version === b.stable);
+          if (find) {
+            const alreadyIndex = a.findIndex(
+              (v) => v.namespaceId === b.namespaceId
+            );
+            if (alreadyIndex !== -1) {
+              a = a.map((v, i) => (i === alreadyIndex ? find : v));
+            } else {
+              a = [...a, find];
+            }
+          }
+          return a;
+        }, stableValue)
+      );
+      return data;
+    });
+  };
+
   const renderNamespace = (record) => {
     return (
-      <>
-        <a>{record.serviceName}</a>
-      </>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <Tag>命名空间：{record.namespaceId}</Tag>
+        <div>
+          稳定版本:
+          {record.stable ? (
+            <span style={{ marginLeft: "6px", color: "green" }}>
+              {record.stable}
+            </span>
+          ) : (
+            <span style={{ marginLeft: "6px" }}>未指定</span>
+          )}
+        </div>
+      </div>
     );
   };
 
@@ -87,8 +128,18 @@ const SourceTable = ({
             <a>{record.serviceName}</a>
             <span style={{ marginLeft: "6px" }}>{record.version}</span>
           </p>
+          <Button
+            style={{ marginLeft: "16px" }}
+            type="link"
+            title="指定为稳定版本"
+            onClick={(e) => {
+              stableClickHandle(record.namespaceId, record.version);
+              e.stopPropagation();
+            }}
+          >
+            指定
+          </Button>
         </div>
-        <Tag>命名空间：{record.namespaceId}</Tag>
       </>
     );
   };
@@ -97,10 +148,12 @@ const SourceTable = ({
     <Table
       hideHeader={true}
       records={serviceTree}
-      recordKey={"uniqKey"}
+      recordKey={(v: ServiceTree & (ServiceInfo & { uniqKey: string })) =>
+        v.childs ? v.namespaceId : v.uniqKey
+      }
       columns={[
         {
-          key: "serviceName",
+          key: "namespaceId",
           header: "ID/实例名",
           render: (record) => {
             if (record.childs) return renderNamespace(record);
@@ -118,23 +171,22 @@ const SourceTable = ({
           shouldRecordExpandable: (record) => Boolean(record.childs),
         }),
         // 缩进
-        indentable({ targetColumnKey: "serviceName", relations }),
+        indentable({ targetColumnKey: "namespaceId", relations }),
         // 选择
         selectable({
-          targetColumnKey: "serviceName",
+          targetColumnKey: "namespaceId",
           all: false,
           value: targetKeys,
           relations,
           onChange,
           render: (element, { record }) => {
             if (record.childs) return renderNamespace(record);
-            // const diabled = targetData.find(
-            //   (v) =>
-            //     v.namespaceId === record.namespaceId &&
-            //     v.version !== record.version
-            // );
-            // if (!diabled)
-            return element;
+            const diabled = targetData.find(
+              (v) =>
+                v.namespaceId === record.namespaceId &&
+                v.version !== record.version
+            );
+            if (!diabled) return element;
             return (
               <label className="tea-form-check tea-form-check--table-select is-disabled">
                 <input disabled type="checkbox" className="tea-checkbox" />
@@ -144,61 +196,6 @@ const SourceTable = ({
                   </div>
                 </span>
               </label>
-            );
-          },
-        }),
-        removeable({
-          width: 120,
-          render: (element, { record }) => {
-            if (record.childs)
-              return (
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "flex-end",
-                  }}
-                >
-                  稳定版本:
-                  {record.stable ? (
-                    <span style={{ marginLeft: "6px", color: "green" }}>
-                      {record.stable}
-                    </span>
-                  ) : (
-                    <span style={{ marginLeft: "6px" }}>未指定</span>
-                  )}
-                </div>
-              );
-            const find = stableValue.find(
-              (v) =>
-                v.namespaceId === record.namespaceId &&
-                v.serviceName === record.serviceName &&
-                v.version === record.version
-            );
-            return (
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "flex-end",
-                }}
-              >
-                {find ? (
-                  <Tag theme="success">stable</Tag>
-                ) : (
-                  <Button
-                    style={{ marginLeft: "16px" }}
-                    type="link"
-                    title="指定为稳定版本"
-                    onClick={(e) => {
-                      onStableChange(record);
-                      e.stopPropagation();
-                    }}
-                  >
-                    指定
-                  </Button>
-                )}
-              </div>
             );
           },
         }),
@@ -214,6 +211,17 @@ const TargetTable = ({
   stableValue,
   onStableChange,
 }) => {
+  const stableClickHandle = (record) => {
+    const findIndex = stableValue.findIndex(
+      (v) => v.namespaceId === record.namespaceId
+    );
+    if (findIndex !== -1)
+      return onStableChange(
+        stableValue.map((v, i) => (i === findIndex ? record : v))
+      );
+    onStableChange([...stableValue, record]);
+  };
+
   const getTargetColumns = (props) => [
     {
       key: "serviceName",
@@ -262,7 +270,6 @@ const TargetTable = ({
             const find = stableValue.find(
               (v) =>
                 v.namespaceId === record.namespaceId &&
-                v.serviceName === record.serviceName &&
                 v.version === record.version
             );
             return (
@@ -280,7 +287,7 @@ const TargetTable = ({
                     type="link"
                     title="指定为稳定版本"
                     onClick={(e) => {
-                      onStableChange(record);
+                      stableClickHandle(record);
                       e.stopPropagation();
                     }}
                   >
@@ -337,36 +344,6 @@ export default function Deploy(props: DuckCmpProps<DeployDuck> & Props) {
     onChange(targetData);
   }, [targetData]);
 
-  // 修改稳定版本
-  const stableChangeHandle = (record) => {
-    const findIndex = stableValue.findIndex(
-      (v) =>
-        v.serviceName === record.serviceName &&
-        v.namespaceId === record.namespaceId
-    );
-
-    if (findIndex !== -1)
-      return onStableChange(
-        stableValue.map((v, i) => (i === findIndex ? record : v))
-      );
-    onStableChange([...stableValue, record]);
-  };
-  // target修改
-  const targetChangeHandle = (keys, { recordKey, checked }) => {
-    setTargetData((data) => {
-      // 取消选中
-      if (!checked) return data.filter((v) => v.uniqKey !== recordKey);
-      // 选中
-      const record = serviceList.find((v) => v.uniqKey === recordKey);
-      if (!record) return data;
-      return [
-        ...data,
-        // 默认非入口
-        { entrance: false, ...record },
-      ];
-    });
-  };
-
   return (
     <Transfer
       leftCell={
@@ -396,8 +373,22 @@ export default function Deploy(props: DuckCmpProps<DeployDuck> & Props) {
             targetData={targetData}
             dataSource={serviceList}
             targetKeys={targetData.map((v) => v.uniqKey)}
-            onChange={targetChangeHandle}
-            onStableChange={stableChangeHandle}
+            onChange={(keys, { recordKey, checked }) => {
+              setTargetData((data) => {
+                // 取消选中
+                if (!checked)
+                  return data.filter((v) => v.uniqKey !== recordKey);
+                // 选中
+                const record = serviceList.find((v) => v.uniqKey === recordKey);
+                if (!record) return data;
+                return [
+                  ...data,
+                  // 默认非入口
+                  { entrance: false, ...record },
+                ];
+              });
+            }}
+            onStableChange={onStableChange}
           />
         </Transfer.Cell>
       }
@@ -416,7 +407,7 @@ export default function Deploy(props: DuckCmpProps<DeployDuck> & Props) {
               });
             }}
             stableValue={stableValue}
-            onStableChange={stableChangeHandle}
+            onStableChange={onStableChange}
           />
         </Transfer.Cell>
       }
