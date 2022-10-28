@@ -33,8 +33,10 @@ const validator = CreateForm.combineValidators<LaneItem, {}>({
     if (v?.length > 60 || !/^[a-z0-9]([-_a-z0-9]*[a-z0-9])?$/.test(v))
       return nameTipMessage;
   },
-  laneServiceList(v) {
+  laneServiceList(v, record) {
     if (!v || v.length <= 0) return "请选择部署组";
+    // if (!record.stableServiceList || record.stableServiceList.length <= 0)
+    //   return "请指定稳定版本";
   },
 });
 
@@ -137,8 +139,8 @@ export default class CreateDuck extends FormDialog {
     const {
       laneId,
       laneName,
-      laneServiceList,
-      stableServiceList,
+      laneServiceList = [],
+      stableServiceList = [],
       remark,
     } = form.selectors.values(yield select());
     const res = yield* resolvePromise(
