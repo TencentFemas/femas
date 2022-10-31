@@ -363,7 +363,6 @@ public class FemasLaneFilter implements LaneFilter {
 
     private String getLaneIdByPercentage(Map<String, Integer> laneMap) {
         TreeMap<Integer, String> weightMap = new TreeMap<>();
-
         int cur = 0;
         for (Map.Entry<String, Integer> entry : laneMap.entrySet()) {
             cur += entry.getValue();
