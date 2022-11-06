@@ -13,6 +13,8 @@
         <module>feams-example-springcloud-hoxton</module>
         <module>femas-example-apache-dubbo3</module>
         <module>femas-example-springcloud-discovery</module>
+        <module>femas-gray-example-springcloud-consumer</module>
+        <module>femas-gray-example-springcloud-provider</module>
     </modules>
 
     <parent>
