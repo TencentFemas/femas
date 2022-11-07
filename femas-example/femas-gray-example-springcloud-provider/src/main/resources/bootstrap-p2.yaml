@@ -1,0 +1,22 @@
+server:
+  port: 29003
+spring:
+  application:
+    name: femas-gray-example-cloud-provider
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 43.143.122.232:8848
+        namespace: gray
+      username: nacos
+      password: nacos
+      config:
+        server-addr: 43.143.122.232:8848
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+logging:
+  file: ./log/femas/${spring.application.name}/${spring.application.name}
+
