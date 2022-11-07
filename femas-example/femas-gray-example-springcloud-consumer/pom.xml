@@ -49,6 +49,11 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>2.1.16.RELEASE</version>
+                <configuration>
+                    <executable>true</executable>
+                    <mainClass>${MainClass}</mainClass>
+                    <layout>JAR</layout>
+                </configuration>
                 <executions>
                     <execution>
                         <goals>
