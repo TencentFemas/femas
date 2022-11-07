@@ -1,0 +1,32 @@
+
+#控制台配置（治理规则从控制台拉取热更新，不配置此项，则插件治理规则从此文件加载）
+#paas_server_address: http://106.53.107.83:8080/
+paas_server_address: http://127.0.0.1:8080
+
+femas_namespace_id: gray
+
+#治理插件配置（插件类型，插件规则，不配置则加载Femas默认插件）
+rateLimit:
+  type: femasRateLimit
+
+authenticate:
+  type: femasAuthenticate
+
+serviceRouter:
+  chain:
+    - FemasDefaultRoute
+
+loadbalancer:
+  type: random
+
+circuitBreaker:
+  enable: true
+  chain:
+    - femasCircuitBreaker
+#  plugin:
+#    femasCircuitBreaker:
+#      continuousErrorThreshold: 10
+#      metricStatTimeWindow: 1s
+#      requestCountAfterHalfOpen: 3
+#      sleepWindow: 5s
+#      successCountAfterHalfOpen: 2
