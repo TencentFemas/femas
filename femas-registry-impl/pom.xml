@@ -21,6 +21,7 @@
         <module>femas-registry-k8s</module>
     	<module>femas-registry-polaris</module>
         <module>femas-registry-etcd</module>
+        <module>femas-registry-zookeeper</module>
   </modules>
 
     <dependencies>
