@@ -1,5 +1,7 @@
 package com.tencent.tsf.femas.common.httpclient;
 
+import com.tencent.tsf.femas.common.util.HttpResult;
+
 /**
  * @author mroccyen
  */
@@ -11,5 +13,5 @@ public interface HttpLongPollingConnectorManager {
      * @param namespaceId 命名空间id
      * @return 获取到的数据
      */
-    String fetchLongPollingKvValue(String key, String namespaceId);
+    HttpResult<String> fetchLongPollingKvValue(String key, String namespaceId);
 }
