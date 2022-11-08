@@ -1,0 +1,7 @@
+femas:
+  agent:
+    interceptors:
+      - plugin:
+          className: org.springframework.cloud.zookeeper.serviceregistry.ZookeeperServiceRegistry
+          methodName: register
+          interceptorClass: com.tencent.tsf.femas.agent.zookeeper.instrument.ZookeeperServiceRegistryInterceptor

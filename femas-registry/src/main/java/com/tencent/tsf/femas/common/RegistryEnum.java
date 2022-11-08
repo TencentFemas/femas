@@ -35,7 +35,12 @@ public enum RegistryEnum {
     /**
      * etcd
      */
-    ETCD("ETCD");
+    ETCD("ETCD"),
+
+    /**
+     * zookeeper
+     */
+    ZOOKEEPER("ZOOKEEPER");
 
     /**
      * alias
