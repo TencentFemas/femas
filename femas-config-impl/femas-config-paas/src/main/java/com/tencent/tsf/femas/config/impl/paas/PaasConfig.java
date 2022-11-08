@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tencent.tsf.femas.common.httpclient.HttpLongPollingConnectorManager;
+import com.tencent.tsf.femas.common.httpclient.HttpStatus;
 import com.tencent.tsf.femas.common.util.*;
 import com.tencent.tsf.femas.config.enums.PropertyChangeType;
 import com.tencent.tsf.femas.config.internals.AbstractStringConfig;
@@ -110,7 +111,8 @@ public class PaasConfig extends AbstractStringConfig {
                 HttpLongPollingConnectorManager longPollingManager = (HttpLongPollingConnectorManager) manager;
                 HttpResult<String> httpResult = longPollingManager.fetchLongPollingKvValue(key, "");
                 //没有变化，则不处理后面
-                if ("204".equals(httpResult.getCode())) {
+                String stateCode = String.valueOf(HttpStatus.NO_CONTENT.value());
+                if (stateCode.equals(httpResult.getCode())) {
                     LOGGER.info("[Femas paas Config Client] Key : " + key + ", no changed");
                     return;
                 }
