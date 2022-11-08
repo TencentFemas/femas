@@ -59,9 +59,14 @@ public class HttpLongPollingDataUpdateService implements ConfigDataChangedListen
             response.setHeader("Pragma", "no-cache");
             response.setDateHeader("Expires", 0);
             response.setHeader("Cache-Control", "no-cache,no-store");
-            response.setStatus(HttpServletResponse.SC_OK);
             response.setContentType("application/json;charset=UTF-8");
-            response.getWriter().write(updatedData);
+            if (updatedData == null) {
+                response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+                response.getWriter().write("");
+            } else {
+                response.setStatus(HttpServletResponse.SC_OK);
+                response.getWriter().write(updatedData);
+            }
         } catch (IOException ex) {
             LOG.error("sending response failed.", ex);
         }
@@ -91,7 +96,7 @@ public class HttpLongPollingDataUpdateService implements ConfigDataChangedListen
                 this.asyncTimeoutFuture = scheduler.schedule(() -> {
                     clients.remove(HttpLongPollingClient.this);
                     //到超时时间了还是没有数据更新，则返回空，告诉客户端可以进行下一次请求了
-                    sendResponse("NONE");
+                    sendResponse(null);
                 }, timeoutTime, TimeUnit.MILLISECONDS);
                 clients.add(this);
             } catch (Exception ex) {

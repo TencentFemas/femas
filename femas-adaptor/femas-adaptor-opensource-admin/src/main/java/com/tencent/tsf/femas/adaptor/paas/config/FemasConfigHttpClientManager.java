@@ -246,7 +246,7 @@ public class FemasConfigHttpClientManager implements ServerConnectorManager, Htt
     }
 
     @Override
-    public String fetchLongPollingKvValue(String key, String namespaceId) {
+    public HttpResult<String> fetchLongPollingKvValue(String key, String namespaceId) {
         final Map<String, Object> params = new HashMap<>(3);
         params.put("namespaceId", namespaceId);
         params.put("key", key);
@@ -260,9 +260,6 @@ public class FemasConfigHttpClientManager implements ServerConnectorManager, Htt
         } catch (Exception e) {
             log.error("config http manager fetchLongPollingKvValue failed", e);
         }
-        if (httpResult != null) {
-            return httpResult.getData();
-        }
-        return null;
+        return httpResult;
     }
 }
