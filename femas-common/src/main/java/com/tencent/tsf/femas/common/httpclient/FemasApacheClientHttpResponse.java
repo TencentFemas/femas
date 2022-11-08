@@ -43,6 +43,9 @@ public class FemasApacheClientHttpResponse implements HttpClientResponse {
 
     @Override
     public InputStream getBody() throws IOException {
+        if (response.getEntity() == null) {
+            return null;
+        }
         return response.getEntity().getContent();
     }
 
