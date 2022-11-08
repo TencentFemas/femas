@@ -70,6 +70,7 @@
         <polaris.version>1.2.0</polaris.version>
         <log4j.version>2.17.1</log4j.version>
         <javax.annotation.version>1.3.2</javax.annotation.version>
+        <zookeeper.version>3.8.0</zookeeper.version>
     </properties>
 
     <dependencyManagement>
@@ -835,6 +836,13 @@
                 <artifactId>javax.annotation-api</artifactId>
                 <version>${javax.annotation.version}</version>
                 <optional>true</optional>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/org.apache.zookeeper/zookeeper -->
+            <dependency>
+                <groupId>org.apache.zookeeper</groupId>
+                <artifactId>zookeeper</artifactId>
+                <version>${zookeeper.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
