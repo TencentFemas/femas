@@ -42,7 +42,8 @@ jobs:
           - 8761:8761
       zookeeper:
         image: zookeeper
-        ports: 2181:2181
+        ports:
+          - 2181:2181
     steps:
       - name: checkout
         uses: actions/checkout@v2
