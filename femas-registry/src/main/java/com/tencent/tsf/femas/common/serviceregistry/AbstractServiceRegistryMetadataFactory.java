@@ -45,15 +45,7 @@ public class AbstractServiceRegistryMetadataFactory {
 
         static {
             //spi加载器加载不到agent class的问题
-            if (AgentConfig.doGetProperty(START_AGENT_FEMAS) != null && (Boolean) AgentConfig.doGetProperty(START_AGENT_FEMAS)) {
-                AgentClassLoader agentClassLoader;
-                try {
-                    agentClassLoader = InterceptorClassLoaderCache.getAgentClassLoader(AbstractServiceRegistryMetadata.class.getClassLoader());
-                } catch (Exception e) {
-                    agentClassLoader = InterceptorClassLoaderCache.getAgentClassLoader(Thread.currentThread().getContextClassLoader());
-                }
-                Thread.currentThread().setContextClassLoader(agentClassLoader);
-            }
+            AgentConfig.getThenSetAgentClassLoaderIfStartAgent(AbstractServiceRegistryMetadata.class, Thread.currentThread());
             // SPI加载并初始化实现类
             ServiceLoader<AbstractServiceRegistryMetadata> contextServiceLoader = ServiceLoader
                     .load(AbstractServiceRegistryMetadata.class);

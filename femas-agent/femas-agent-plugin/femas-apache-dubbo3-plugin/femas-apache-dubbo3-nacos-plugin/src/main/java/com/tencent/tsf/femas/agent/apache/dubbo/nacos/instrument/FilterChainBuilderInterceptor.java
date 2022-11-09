@@ -4,6 +4,7 @@ import com.tencent.tsf.femas.agent.classloader.AgentClassLoader;
 import com.tencent.tsf.femas.agent.classloader.InterceptorClassLoaderCache;
 import com.tencent.tsf.femas.agent.interceptor.InstanceMethodsAroundInterceptor;
 import com.tencent.tsf.femas.agent.interceptor.wrapper.InterceptResult;
+import com.tencent.tsf.femas.common.context.AgentConfig;
 import com.tencent.tsf.femas.common.context.factory.ContextFactory;
 import org.apache.dubbo.rpc.Invoker;
 import org.apache.dubbo.rpc.model.ApplicationModel;
@@ -25,12 +26,7 @@ public class FilterChainBuilderInterceptor implements InstanceMethodsAroundInter
             return new InterceptResult();
         }
 
-        AgentClassLoader agentClassLoader;
-        try {
-            agentClassLoader = InterceptorClassLoaderCache.getAgentClassLoader(ContextFactory.class.getClassLoader());
-        } catch (Exception e) {
-            agentClassLoader = InterceptorClassLoaderCache.getAgentClassLoader(Thread.currentThread().getContextClassLoader());
-        }
+        AgentClassLoader agentClassLoader = AgentConfig.getAgentClassLoader(ContextFactory.class, Thread.currentThread());
 
         Thread.currentThread().setContextClassLoader(agentClassLoader);
         ApplicationModel applicationModel = invoker.getUrl().getApplicationModel();

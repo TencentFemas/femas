@@ -46,8 +46,14 @@ public class LaneInfo {
     /**
      * 泳道服务列表
      */
-    @ApiModelProperty("")
+    @ApiModelProperty("泳道服务列表")
     private List<ServiceInfo> laneServiceList;
+
+    /**
+     * 稳定版本
+     */
+    @ApiModelProperty("稳定版本")
+    private List<ServiceInfo> stableServiceList;
 
 
     public String getLaneId() {
@@ -96,5 +102,13 @@ public class LaneInfo {
 
     public void setLaneServiceList(List<ServiceInfo> laneServiceList) {
         this.laneServiceList = laneServiceList;
+    }
+
+    public List<ServiceInfo> getStableServiceList() {
+        return stableServiceList;
+    }
+
+    public void setStableServiceList(List<ServiceInfo> stableServiceList) {
+        this.stableServiceList = stableServiceList;
     }
 }

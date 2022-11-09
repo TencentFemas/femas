@@ -32,6 +32,9 @@ public class LaneRowMapper implements RowMapper<LaneInfo> {
         String laneServiceListStr = rs.getString("lane_service_list");
         List<ServiceInfo> laneServiceList = mapper.readValue(laneServiceListStr, new TypeReference<List<ServiceInfo>>() {});
         laneInfo.setLaneServiceList(laneServiceList);
+        String stableServiceListStr = rs.getString("stable_service_list");
+        List<ServiceInfo> stableServiceList = mapper.readValue(stableServiceListStr, new TypeReference<List<ServiceInfo>>() {});
+        laneInfo.setStableServiceList(stableServiceList);
         return laneInfo;
     }
 }
