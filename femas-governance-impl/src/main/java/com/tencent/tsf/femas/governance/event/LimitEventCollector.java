@@ -19,7 +19,7 @@ public class LimitEventCollector extends EventCollector {
         FemasEventData eventData = FemasEventData.custom()
                 .setInstanceId(instanceId)
                 .setEventType(EventTypeEnum.RATELIMIT)
-                .setOccurTime(new Date().getTime())
+                .setOccurTime(System.currentTimeMillis())
                 .setUpstream(sysTag.get("source.service.name"))
                 .setDownstream(sysTag.get("service.name"))
                 .setAddition(UPSTREAM_NAMESPACE_ID_KEY, sysTag.get("namespace.id"))

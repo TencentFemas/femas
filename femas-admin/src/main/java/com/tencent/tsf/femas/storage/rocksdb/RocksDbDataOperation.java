@@ -567,7 +567,7 @@ public class RocksDbDataOperation implements DataOperation {
     public int configureAuthRule(FemasAuthRule authRule) {
         if (StringUtils.isEmpty(authRule.getRuleId())) {
             authRule.setRuleId("auth-" + iidGeneratorService.nextHashId());
-            authRule.setCreateTime(new Date().getTime());
+            authRule.setCreateTime(System.currentTimeMillis());
         }
         // 静默处理
         if("1".equalsIgnoreCase(authRule.getIsEnabled())){
@@ -584,7 +584,7 @@ public class RocksDbDataOperation implements DataOperation {
             }
         }
         String authKey = "authority/" + authRule.getNamespaceId() + "/" + authRule.getServiceName() + "/" + authRule.getRuleId();
-        authRule.setAvailableTime(new Date().getTime());
+        authRule.setAvailableTime(System.currentTimeMillis());
         StorageResult res = kvStoreManager.put(authKey, JSONSerializer.serializeStr(authRule));
         if (res.getStatus().equalsIgnoreCase(StorageResult.SUCCESS)) {
             return 1;
@@ -646,7 +646,7 @@ public class RocksDbDataOperation implements DataOperation {
             circuitBreakerRule.setRuleId("bk-" + iidGeneratorService.nextHashId());
         }
         String cbKey = "circuitbreaker/" + circuitBreakerRule.getNamespaceId() + "/" + circuitBreakerRule.getServiceName() + "/" + circuitBreakerRule.getRuleId();
-        circuitBreakerRule.setUpdateTime(new Date().getTime());
+        circuitBreakerRule.setUpdateTime(System.currentTimeMillis());
         StorageResult res = kvStoreManager.put(cbKey, JSONSerializer.serializeStr(circuitBreakerRule));
         if(!res.getStatus().equalsIgnoreCase(StorageResult.SUCCESS)){
             return Result.errorMessage("服务熔断规则编辑失败");
@@ -713,7 +713,7 @@ public class RocksDbDataOperation implements DataOperation {
         if (StringUtils.isEmpty(limitRule.getRuleId())) {
             limitRule.setRuleId("lt-" + iidGeneratorService.nextHashId());
         }
-        limitRule.setUpdateTime(new Date().getTime());
+        limitRule.setUpdateTime(System.currentTimeMillis());
         String rateLimitKey = "ratelimit/" + limitRule.getNamespaceId() + "/" + limitRule.getServiceName() + "/" + limitRule.getRuleId();
         StorageResult res = kvStoreManager.put(rateLimitKey, JSONSerializer.serializeStr(limitRule));
         if(res.getStatus().equalsIgnoreCase(StorageResult.SUCCESS)){
@@ -807,7 +807,7 @@ public class RocksDbDataOperation implements DataOperation {
     public int configureRouteRule(FemasRouteRule routeRule) {
         if (StringUtils.isEmpty(routeRule.getRuleId())) {
             routeRule.setRuleId("rt-" + iidGeneratorService.nextHashId());
-            routeRule.setCreateTime(new Date().getTime());
+            routeRule.setCreateTime(System.currentTimeMillis());
         }
         // 静默处理
         if(!StringUtils.isEmpty(routeRule.getStatus()) && "1".equalsIgnoreCase(routeRule.getStatus())){
@@ -825,7 +825,7 @@ public class RocksDbDataOperation implements DataOperation {
                 }
             }
         }
-        routeRule.setUpdateTime(new Date().getTime());
+        routeRule.setUpdateTime(System.currentTimeMillis());
         String routeKey = "route/" + routeRule.getNamespaceId() + "/" + routeRule.getServiceName() + "/" + routeRule.getRuleId();
         StorageResult res = kvStoreManager.put(routeKey, JSONSerializer.serializeStr(routeRule));
         if(res.getStatus().equalsIgnoreCase(StorageResult.SUCCESS)){
@@ -842,7 +842,7 @@ public class RocksDbDataOperation implements DataOperation {
      */
     @Override
     public int configureRecord(Record record) {
-        StorageResult res = kvStoreManager.put(AdminConstants.RECORD_LOG.concat(new Date().getTime() + ""), JSONSerializer.serializeStr(record));
+        StorageResult res = kvStoreManager.put(AdminConstants.RECORD_LOG.concat(System.currentTimeMillis() + ""), JSONSerializer.serializeStr(record));
         if(res.getStatus().equalsIgnoreCase(StorageResult.SUCCESS)){
             return 1;
         }
@@ -1266,9 +1266,9 @@ public class RocksDbDataOperation implements DataOperation {
     public Integer configureLane(LaneInfo laneInfo) {
         if (StringUtils.isEmpty(laneInfo.getLaneId())) {
             laneInfo.setLaneId("lane-" + iidGeneratorService.nextHashId());
-            laneInfo.setCreateTime(new Date().getTime());
+            laneInfo.setCreateTime(System.currentTimeMillis());
         }
-        laneInfo.setUpdateTime(new Date().getTime());
+        laneInfo.setUpdateTime(System.currentTimeMillis());
         String routeKey = "lane-info/" + laneInfo.getLaneId();
         StorageResult res = kvStoreManager.put(routeKey, JSONSerializer.serializeStr(laneInfo));
         if(res.getStatus().equalsIgnoreCase(StorageResult.SUCCESS)){
@@ -1327,11 +1327,11 @@ public class RocksDbDataOperation implements DataOperation {
     public Integer configureLaneRule(LaneRule laneRule) {
         if (StringUtils.isEmpty(laneRule.getRuleId())) {
             laneRule.setRuleId("lane-rule-" + iidGeneratorService.nextHashId());
-            long time = new Date().getTime();
+            long time = System.currentTimeMillis();
             laneRule.setCreateTime(time);
             laneRule.setPriority(time);
         }
-        laneRule.setUpdateTime(new Date().getTime());
+        laneRule.setUpdateTime(System.currentTimeMillis());
         String routeKey = "lane-rule/" + laneRule.getRuleId();
         StorageResult res = kvStoreManager.put(routeKey, JSONSerializer.serializeStr(laneRule));
         if(res.getStatus().equalsIgnoreCase(StorageResult.SUCCESS)){
