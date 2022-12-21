@@ -4,6 +4,8 @@ import com.tencent.tsf.femas.common.util.CollectionUtil;
 import com.tencent.tsf.femas.common.util.Result;
 import com.tencent.tsf.femas.entity.PageService;
 import com.tencent.tsf.femas.entity.rule.lane.*;
+import com.tencent.tsf.femas.event.ConfigUpdateEvent;
+import com.tencent.tsf.femas.event.EventPublishCenter;
 import com.tencent.tsf.femas.service.ServiceExecutor;
 import com.tencent.tsf.femas.storage.DataOperation;
 import org.springframework.stereotype.Service;
@@ -18,13 +20,17 @@ public class LaneService implements ServiceExecutor {
 
     private final DataOperation dataOperation;
 
-    public LaneService(DataOperation dataOperation) {
+    private final EventPublishCenter eventPublishCenter;
+
+    public LaneService(DataOperation dataOperation, EventPublishCenter eventPublishCenter) {
         this.dataOperation = dataOperation;
+        this.eventPublishCenter = eventPublishCenter;
     }
 
     public Result configureLane(LaneInfo laneInfo) {
         Integer res = dataOperation.configureLane(laneInfo);
         if(res == 1){
+            eventPublishCenter.publishEvent(new ConfigUpdateEvent("lane-info", "lane-info"));
             return Result.successMessage("泳道编辑成功");
         }
         return Result.errorMessage("泳道编辑失败");
@@ -46,6 +52,7 @@ public class LaneService implements ServiceExecutor {
         if(res == 0){
             return Result.errorMessage("泳道删除失败");
         }
+        eventPublishCenter.publishEvent(new ConfigUpdateEvent("lane-info", "lane-info"));
         return Result.successMessage("泳道删除成功");
     }
 
@@ -66,6 +73,7 @@ public class LaneService implements ServiceExecutor {
         }
         Integer res = dataOperation.configureLaneRule(laneRule);
         if(res == 1){
+            eventPublishCenter.publishEvent(new ConfigUpdateEvent("lane-rule", "lane-rule"));
             return Result.successMessage("泳道规则编辑成功");
         }
         return Result.errorMessage("泳道规则编辑失败");
@@ -86,6 +94,7 @@ public class LaneService implements ServiceExecutor {
         if(res == 0){
             return Result.errorMessage("泳道规则删除失败");
         }
+        eventPublishCenter.publishEvent(new ConfigUpdateEvent("lane-rule", "lane-rule"));
         return Result.successMessage("泳道规则删除成功");
     }
 
@@ -104,6 +113,7 @@ public class LaneService implements ServiceExecutor {
         if(!Result.SUCCESS.equals(configureLaneRule(laneRule).getCode()) || !Result.SUCCESS.equals(configureLaneRule(targetLaneRule).getCode()) ){
             return Result.errorMessage("优先级调整失败");
         }
+        eventPublishCenter.publishEvent(new ConfigUpdateEvent("lane-rule", "lane-rule"));
         return Result.successData("优先级调整成功");
     }
 }

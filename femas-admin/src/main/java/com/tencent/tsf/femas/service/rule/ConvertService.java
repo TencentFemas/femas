@@ -41,6 +41,25 @@ public class ConvertService {
         this.dataOperation = dataOperation;
     }
 
+    public String getKeyType(String key) {
+        if (key.startsWith("authority")) {
+            return "authority";
+        } else if (key.startsWith("circuitbreaker")) {
+            return "circuitbreaker";
+        } else if (key.startsWith("route")) {
+            return "route";
+        } else if (key.startsWith("ratelimit")) {
+            return "ratelimit";
+        } else if (key.startsWith("lane-info")) {
+            return "lane-info";
+        } else if (key.startsWith("lane-rule")) {
+            return "lane-rule";
+        } else if (key.startsWith("affinity")) {
+            return "affinity";
+        } else {
+            return "";
+        }
+    }
 
     public String convert(String key) {
         if (StringUtils.isEmpty(key)) {

@@ -21,7 +21,7 @@ public class RouterEventCollector extends EventCollector {
         FemasEventData eventData = FemasEventData.custom()
                 .setEventType(EventTypeEnum.ROUTER)
                 .setInstanceId(instanceId)
-                .setOccurTime(new Date().getTime())
+                .setOccurTime(System.currentTimeMillis())
                 .setUpstream(Context.getSystemTag("service.name"))
                 .setDownstream(targetService.getName())
                 .setAddition(UPSTREAM_NAMESPACE_ID_KEY, Context.getSystemTag("namespace.id"))
