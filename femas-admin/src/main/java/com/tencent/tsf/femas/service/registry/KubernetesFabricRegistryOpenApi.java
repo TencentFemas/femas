@@ -25,12 +25,10 @@ import com.tencent.tsf.femas.entity.registry.ClusterServer;
 import com.tencent.tsf.femas.entity.registry.RegistryConfig;
 import com.tencent.tsf.femas.entity.registry.RegistryPageService;
 import com.tencent.tsf.femas.entity.registry.ServiceBriefInfo;
-import com.tencent.tsf.femas.exception.FemasException;
 import io.fabric8.kubernetes.api.model.*;
 import io.fabric8.kubernetes.client.Config;
 import io.fabric8.kubernetes.client.DefaultKubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClient;
-
 import io.fabric8.kubernetes.client.VersionInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,9 +41,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
-import java.io.StringReader;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -154,11 +150,8 @@ public class KubernetesFabricRegistryOpenApi extends RegistryOpenApiAdaptor {
 
     @Override
     public boolean healthCheck(RegistryConfig config) {
-        VersionInfo versions = getApiClient(config).getVersion();
-        if (Optional.of(versions).isPresent()) {
-            return true;
-        }
-        return false;
+        VersionInfo versionInfo = getApiClient(config).getVersion();
+        return Optional.of(versionInfo).map(VersionInfo::getMajor).isPresent();
     }
 
     @Override
