@@ -162,7 +162,7 @@ public class RegistryManagerService implements ServiceExecutor {
 
     public Result<RegistryInfo> describeRegistryCluster(String registryId) {
         RegistryInfo registryInfo = new RegistryInfo();
-        RegistryConfig config = getConfigById(registryId);
+        RegistryConfig config = getSafetyConfigById(registryId);
         if (config == null) {
             return Result.success();
         }
@@ -291,7 +291,7 @@ public class RegistryManagerService implements ServiceExecutor {
         return instances;
     }
 
-
+    //查询注册中心参数
     public RegistryConfig getConfigById(String registryId) {
         RegistryConfig config = registryConfigMapCache.get(registryId);
         try {
@@ -300,6 +300,16 @@ public class RegistryManagerService implements ServiceExecutor {
             }
         } catch (Exception e) {
             log.error("registry manager get config by id failed ", e);
+        }
+        return config;
+    }
+
+    //查询去掉nacos用户名和密码的注册中心参数
+    public RegistryConfig getSafetyConfigById(String registryId) {
+        RegistryConfig config = getConfigById(registryId);
+        if (config != null) {
+            config.setUsername("");
+            config.setPassword("");
         }
         return config;
     }

@@ -124,7 +124,7 @@ public class NamespaceMangerService implements ServiceExecutor {
             NamespaceVo vo = NamespaceVo.build(ns, registryConfigs);;
             if(!CollectionUtil.isEmpty(ns.getRegistryId())){
                 for(String registryId : ns.getRegistryId()){
-                    RegistryConfig config = registryManagerService.getConfigById(registryId);
+                    RegistryConfig config = registryManagerService.getSafetyConfigById(registryId);
                     if(config != null){
                         registryConfigs.add(config);
                     }
