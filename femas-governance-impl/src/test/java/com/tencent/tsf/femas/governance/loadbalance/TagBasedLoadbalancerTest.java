@@ -38,7 +38,6 @@ public class TagBasedLoadbalancerTest {
         tags.add(tagZone1);
 
         TagBasedLoadbalancer tagBasedLoadbalancer = new TagBasedLoadbalancer(tags);
-        LoadbalancerManager.update(tagBasedLoadbalancer);
 
         // 构造Endpoint
         Set<ServiceInstance> gz = new HashSet<>();
@@ -114,19 +113,19 @@ public class TagBasedLoadbalancerTest {
         Context.getRpcInfo().setRequest(request);
 
         for (int i = 0; i < 1000; i++) {
-            ServiceInstance instance = LoadbalancerManager.select(serviceInstances);
+            ServiceInstance instance = tagBasedLoadbalancer.select(serviceInstances);
             Assert.assertTrue(gz.contains(instance));
         }
 
         serviceInstances.removeAll(gz);
         for (int i = 0; i < 1000; i++) {
-            ServiceInstance instance = LoadbalancerManager.select(serviceInstances);
+            ServiceInstance instance = tagBasedLoadbalancer.select(serviceInstances);
             Assert.assertTrue(zone1.contains(instance));
         }
 
         serviceInstances.removeAll(zone1);
         for (int i = 0; i < 1000; i++) {
-            ServiceInstance instance = LoadbalancerManager.select(serviceInstances);
+            ServiceInstance instance = tagBasedLoadbalancer.select(serviceInstances);
             Assert.assertTrue(sh.contains(instance) || zone2.contains(instance));
         }
     }
