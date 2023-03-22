@@ -33,7 +33,7 @@ public class SlidingWindowRateLimiter implements RateLimiter<RateLimiterRule> {
 
     @Override
     public boolean acquire(int permits) {
-        int curCount = slidingTimeWindowMetrics.getSnapshot().getTotalNumberOfCalls();
+        int curCount = slidingTimeWindowMetrics.getSnapshot().getNumberOfSuccessfulCalls();
         if (curCount + permits > limit) {
             slidingTimeWindowMetrics.record(Metrics.Outcome.BLOCK);
             return false;
