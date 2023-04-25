@@ -63,13 +63,17 @@
                resultAlias="%name%.#attribute#.#key#"/>
          -->
 
+
     </queries>
-    <outputWriter class="org.jmxtrans.agent.Tencent.TSFFileOutputWriter">
+
+    <!-- because use maven-shade-plugin to shade class path, TSFFileOutputWriter must put a prefix:
+     com.tencent.femas.tencentcloudjvmmonitor.dependencies,or can not load this class.the other is class same as this one.   -->
+    <outputWriter class="com.tencent.femas.tencentcloudjvmmonitor.dependencies.org.jmxtrans.agent.Tencent.TSFFileOutputWriter">
         <enabled>true</enabled>
         <!--
         <fileName>jmxtrans-agent.data</fileName>
         -->
-        <fileName>/data/femas_apm/monitor/jvm-metrics/jmxtrans-agent.data</fileName>
+        <fileName>/Users/momo/data/tsf_apm/monitor/jvm-metrics/jmxtrans-agent.data</fileName>
         <maxFileSize>50</maxFileSize>
         <maxBackupIndex>8</maxBackupIndex>
     </outputWriter>

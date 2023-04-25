@@ -2,84 +2,50 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
     <parent>
-        <groupId>com.tencent.tsf</groupId>
         <artifactId>femas-agent</artifactId>
+        <groupId>com.tencent.tsf</groupId>
         <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-
-    <modelVersion>4.0.0</modelVersion>
     <artifactId>femas-agent-jts</artifactId>
-
+    <packaging>jar</packaging>
+    <name>femas-agent-jts</name>
     <properties>
+        <shade.package>com.tencent.femas.tencentcloudjvmmonitor.dependencies</shade.package>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <shade.jackson.source>com.fasterxml.jackson</shade.jackson.source>
+        <shade.jackson.target>${shade.package}.${shade.jackson.source}</shade.jackson.target>
+        <shade.org.apache.http.source>org.apache.http</shade.org.apache.http.source>
+        <shade.org.apache.http.target>${shade.package}.${shade.org.apache.http.source}</shade.org.apache.http.target>
+        <shade.org.apache.commons.source>org.apache.commons</shade.org.apache.commons.source>
+        <shade.org.apache.commons.target>${shade.package}.${shade.org.apache.commons.source}
+        </shade.org.apache.commons.target>
+        <shade.one.profiler.source>one.profiler</shade.one.profiler.source>
+        <shade.one.profiler.target>${shade.package}.${shade.one.profiler.source}</shade.one.profiler.target>
+        <shade.org.jmxtrans.agent.source>org.jmxtrans.agent</shade.org.jmxtrans.agent.source>
+        <shade.org.jmxtrans.agent.target>${shade.package}.${shade.org.jmxtrans.agent.source}
+        </shade.org.jmxtrans.agent.target>
+        <license.dir>${basedir}</license.dir>
+        <file.name>femas-agent-jts</file.name>
     </properties>
 
     <repositories>
         <repository>
-            <id>femas-agent-jts</id>
-            <name>femas agent jts</name>
+            <id>femas-local-repo</id>
+            <name>femas local repo</name>
             <url>file://${project.basedir}/lib</url>
         </repository>
     </repositories>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.jmxtrans.agent</groupId>
-            <artifactId>jmxtrans-agent</artifactId>
-            <version>1.2.10-SNAPSHOT</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <exclusions>
-                <exclusion>
-                    <artifactId>commons-logging</artifactId>
-                    <groupId>commons-logging</groupId>
-                </exclusion>
-            </exclusions>
-            <scope>compile</scope>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.jetbrains/annotations-java5 -->
-        <dependency>
-            <groupId>org.jetbrains</groupId>
-            <artifactId>annotations-java5</artifactId>
-            <version>18.0.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->
-        <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.ow2.asm</groupId>
-            <artifactId>asm</artifactId>
-            <version>7.3.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>one.profiler</groupId>
-            <artifactId>async-profiler</artifactId>
-            <version>0.1</version>
-        </dependency>
-    </dependencies>
-
     <build>
+        <finalName>${project.artifactId}-${project.version}-${maven.build.timestamp}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.6.1</version>
                 <configuration>
                     <source>8</source>
                     <target>8</target>
@@ -93,39 +59,104 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.1.1</version>
+                <artifactId>maven-jar-plugin</artifactId>
                 <configuration>
-                    <minimizeJar>true</minimizeJar>
-                    <shadedArtifactAttached>false</shadedArtifactAttached>
-                    <createDependencyReducedPom>false</createDependencyReducedPom>
-                    <filters>
-                        <filter>
-                            <artifact>*:*</artifact>
-                            <excludes>
-                                <exclude>META-INF/*.SF</exclude>
-                                <exclude>META-INF/*.DSA</exclude>
-                                <exclude>META-INF/*.RSA</exclude>
-                            </excludes>
-                        </filter>
-                    </filters>
+                    <archive>
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                            <addClasspath>false</addClasspath>
+                            <classpathPrefix>lib/</classpathPrefix>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                        </manifest>
+                        <manifestEntries>
+                            <Premain-Class>
+                                com.tencent.femas.tencentcloudjvmmonitor.jvmmonitoragent.TencentJvmMonitorAgent
+                            </Premain-Class>
+                            <Agent-Class>
+                                com.tencent.femas.tencentcloudjvmmonitor.jvmmonitoragent.TencentJvmMonitorAgent
+                            </Agent-Class>
+                            <Can-Redefine-Classes>true</Can-Redefine-Classes>
+                            <Can-Retransform-Classes>true</Can-Retransform-Classes>
+                        </manifestEntries>
+                    </archive>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
                 <executions>
                     <execution>
-                        <configuration>
-                            <transformers>
-                                <transformer
-                                        implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
-                            </transformers>
-                        </configuration>
                         <phase>package</phase>
                         <goals>
                             <goal>shade</goal>
                         </goals>
+                        <configuration>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+
+                            <relocations>
+                                <relocation>
+                                    <pattern>${shade.jackson.source}</pattern>
+                                    <shadedPattern>${shade.jackson.target}</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>${shade.org.apache.http.source}</pattern>
+                                    <shadedPattern>${shade.org.apache.http.target}</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>${shade.org.apache.commons.source}</pattern>
+                                    <shadedPattern>${shade.org.apache.commons.target}</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>${shade.one.profiler.source}</pattern>
+                                    <shadedPattern>${shade.one.profiler.target}</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>${shade.org.jmxtrans.agent.source}</pattern>
+                                    <shadedPattern>${shade.org.jmxtrans.agent.target}</shadedPattern>
+                                </relocation>
+                            </relocations>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
 
+            <!-- License information -->
+            <plugin>
+                <groupId>com.mycila.maven-license-plugin</groupId>
+                <artifactId>maven-license-plugin</artifactId>
+                <version>1.10.b1</version>
+                <configuration>
+                    <header>${license.dir}/LICENSE</header>
+                    <properties>
+                        <project>
+                            ${project.name}
+                        </project>
+                        <founder>${project.organization.name}</founder>
+                        <year>${project.inceptionYear}</year>
+                    </properties>
+                    <includes>
+                        <include>src/main/java/**</include>
+                        <include>src/test/java/**</include>
+                    </includes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>format</goal>
+                        </goals>
+                        <phase>process-sources</phase>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.mycila</groupId>
+                        <artifactId>licenses</artifactId>
+                        <version>1</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
@@ -138,23 +169,14 @@
                         <configuration>
                             <tasks>
                                 <mkdir dir="${project.basedir}/../femas-agent"/>
-                                <mkdir dir="${project.basedir}/../femas-agent/plugins/jts"/>
-                                <copy file="${project.build.directory}/${project.artifactId}-${project.version}.jar"
-                                      tofile="${project.basedir}/../femas-agent/plugins/jts/${project.artifactId}-${project.version}.jar"
-                                      overwrite="true"/>
-
-                                <copy file="${project.basedir}/lib/one/profiler/async-profiler/0.1/async-profiler-0.1.jar"
-                                      tofile="${project.basedir}/../femas-agent/plugins/jts/async-profiler-0.1.jar"
-                                      overwrite="true"/>
-                                <copy file="${project.basedir}/lib/org/jmxtrans/agent/jmxtrans-agent/1.2.10-SNAPSHOT/jmxtrans-agent-1.2.10-SNAPSHOT.jar"
-                                      tofile="${project.basedir}/../femas-agent/plugins/jts/jmxtrans-agent-1.2.10-SNAPSHOT.jar"
+                                <copy file="${project.build.directory}/${project.artifactId}-${project.version}-${maven.build.timestamp}.jar"
+                                      tofile="${project.basedir}/../femas-agent/${file.name}.jar" overwrite="true"/>
                                       overwrite="true"/>
                             </tasks>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
-
         </plugins>
         <resources>
             <resource>
@@ -172,5 +194,66 @@
             </resource>
         </resources>
     </build>
+    <dependencies>
 
+        <dependency>
+            <groupId>org.jmxtrans.agent</groupId>
+            <artifactId>jmxtrans-agent</artifactId>
+            <version>1.2.10-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>one.profiler</groupId>
+            <artifactId>async-profiler</artifactId>
+            <version>0.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-validator</groupId>
+            <artifactId>commons-validator</artifactId>
+            <version>1.6</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.13.2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.13.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>2.13.2</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.jetbrains/annotations-java5 -->
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations-java5</artifactId>
+            <version>18.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.2</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.15</version>
+        </dependency>
+        <dependency>
+            <groupId>org.ow2.asm</groupId>
+            <artifactId>asm</artifactId>
+            <version>7.3.1</version>
+        </dependency>
+
+    </dependencies>
 </project>

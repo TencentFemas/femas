@@ -42,8 +42,8 @@
     </queries>
 
     <!-- because use maven-shade-plugin to shade class path, TSFFileOutputWriter must put a prefix:
-     com.tencent.qcloudmiddleware.tencentcloudjvmmonitor.dependencies,or can not load this class.the other is class same as this one.   -->
-    <outputWriter class="org.jmxtrans.agent.Tencent.TSFFileOutputWriter">
+     com.tencent.femas.tencentcloudjvmmonitor.dependencies,or can not load this class.the other is class same as this one.   -->
+    <outputWriter class="com.tencent.femas.tencentcloudjvmmonitor.dependencies.org.jmxtrans.agent.Tencent.TSFFileOutputWriter">
         <enabled>true</enabled>
         <maxFileSize>50</maxFileSize>
         <maxBackupIndex>8</maxBackupIndex>

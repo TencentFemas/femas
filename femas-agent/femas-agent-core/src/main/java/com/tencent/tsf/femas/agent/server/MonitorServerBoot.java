@@ -48,18 +48,17 @@ public class MonitorServerBoot implements ServerBoot {
 
     private static final AgentLogger LOGGER = AgentLogger.getLogger(MonitorServerBoot.class);
 
-    private static final String QOCO_CLASS_NAME =
-            "com.tencent.femas.jvm.monitor.jvmmonitoragent.JvmMonitorAgentEntrance";
+    private static final String QOCO_CLASS_NAME = "com.tencent.femas.jvm.monitor.jvmmonitoragent.JvmMonitorAgentEntrance";
     private static final String QOCO_MAIN_METHOD = "main";
     private static final String QOCO_PROFILERAGENTMAIN_METHOD = "profilerAgentMain";
     // must be same as DEFAULT_PORT in JvmMonitorAgentEntrance, but we dont want to load it.
-    private static final String DEFAULT_PORT = "11339";
+    private static final String DEFAULT_PORT = "11099";
     // must be same as JDK_CTX in JvmMonitorAgentEntrance
     public static final String JDK_CTX = "/jvm";
     private static boolean alreadyLoaded = false;
     private static Instrumentation instrumentation;
     private static Class<?> qClass = null;
-    private static AgentClassLoader monitorClassLoader = null;
+    private static JvmMonitorClassloader monitorClassLoader = null;
     private static final String PARENT_DIR_JTS = "jts";
 
     @Override
@@ -70,30 +69,20 @@ public class MonitorServerBoot implements ServerBoot {
             }
         }
         try {
-//            LOGGER.info("class path: " + System.getProperty("java.class.path")
-//                    + " Loader: " + MonitorServerBoot.class.getClassLoader());
-//            String classPath = System.getProperty("java.class.path");
-//            String[] cpArr = classPath.split(":");
-//            int len = cpArr.length;
-//            File file = new File(AgentPackagePathScanner.getPath(), PARENT_DIR_JTS);
-//            File[] listFiles = file.listFiles();
-//            File jtsJar = listFiles[0];
-//            URL[] urls = new URL[len + 1];
-//            for (int i = 0; i < len; i++) {
-//                urls[i] = Paths.get(cpArr[i]).toUri().toURL();
-//            }
-//            URI uri = jtsJar.toURI();
-//            urls[len] = uri.toURL();
-            monitorClassLoader = new AgentClassLoader(MonitorServerBoot.class.getClassLoader(), PARENT_DIR_JTS);
+            String classPath = System.getProperty("java.class.path");
+            String[] cpArr = classPath.split(":");
+            int len = cpArr.length;
+            URL[] urls = new URL[len];
+            for (int i = 0; i < len; i++) {
+                urls[i] = Paths.get(cpArr[i]).toUri().toURL();
+            }
+            monitorClassLoader = new JvmMonitorClassloader(urls);
             qClass = monitorClassLoader.loadClass(QOCO_CLASS_NAME);
         } catch (ClassNotFoundException e) {
             LOGGER.error("MonitorServerBoot init failed", e);
+        } catch (MalformedURLException e) {
+            LOGGER.error("Fail create URL for method " + QOCO_MAIN_METHOD);
         }
-//        } catch (
-//                MalformedURLException e) {
-//            LOGGER.error("Fail create URL for method " + QOCO_MAIN_METHOD);
-//            e.printStackTrace();
-//        }
     }
 
     private static String extractPortNum(String options) {
