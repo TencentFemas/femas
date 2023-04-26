@@ -266,6 +266,12 @@
 
             <dependency>
                 <groupId>com.tencent.tsf</groupId>
+                <artifactId>femas-agent-jts</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.tencent.tsf</groupId>
                 <artifactId>femas-extension-springcloud-common</artifactId>
                 <version>${project.version}</version>
             </dependency>

@@ -7,8 +7,6 @@ import java.util.concurrent.TimeUnit;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.protocol.RequestContent;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @Author leoziltong
@@ -17,8 +15,6 @@ import org.slf4j.LoggerFactory;
  * @Version 1.0
  */
 public class ApacheDefaultHttpClientFactory implements HttpClientFactory {
-
-    private static final  Logger log = LoggerFactory.getLogger(ApacheDefaultHttpClientFactory.class);
 
     private boolean authenticateSslClients = true;
 

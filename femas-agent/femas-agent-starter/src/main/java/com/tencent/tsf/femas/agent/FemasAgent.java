@@ -23,7 +23,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import com.tencent.tsf.femas.agent.config.*;
 import com.tencent.tsf.femas.agent.interceptor.wrapper.*;
-
 import com.tencent.tsf.femas.agent.tools.AgentLogger;
 import com.tencent.tsf.femas.agent.tools.JvmRuntimeInfo;
 import com.tencent.tsf.femas.agent.transformer.CompositeTransformer;
@@ -225,7 +224,6 @@ public class FemasAgent {
                 InterceptPlugin interceptPlugin = plugin.getPlugin();
                 agentBuilder = pluginAgentBuilder(agentBuilder, interceptPlugin);
             }
-
             if (ACTIVATE_CROSS_THREAD_TRANSFORMER.equalsIgnoreCase(agentArguments)) {
                 instrumentation.addTransformer(new CompositeTransformer(new ExecutorTransformer(), new TimerTaskTransformer(), new ForkJoinTransformer()), true);
             }

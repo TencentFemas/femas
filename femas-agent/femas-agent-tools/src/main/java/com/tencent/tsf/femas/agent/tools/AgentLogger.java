@@ -50,6 +50,10 @@ public class AgentLogger {
         logger.log(Level.WARNING, formatMessage);
     }
 
+    public void error(String msg) {
+        error(msg, null);
+    }
+
     public void error(String msg, Throwable throwable) {
         String exceptionMessage = toString(throwable);
         String stackTrace = getStackTraceString(throwable);
