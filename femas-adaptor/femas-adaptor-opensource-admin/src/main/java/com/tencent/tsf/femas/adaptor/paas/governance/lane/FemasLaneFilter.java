@@ -17,7 +17,6 @@ import com.tencent.tsf.femas.common.util.StringUtils;
 import com.tencent.tsf.femas.governance.lane.LaneFilter;
 import com.tencent.tsf.femas.plugin.context.ConfigContext;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.MapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -143,10 +142,11 @@ public class FemasLaneFilter implements LaneFilter {
             LOGGER.debug("[FEMAS LANE] Choose Colorless instances. lane take effect, filter color instance list = {}",
                     colorInstances);
         }
-        if (CollectionUtils.isEmpty(instances)) {
+        if (CollectionUtil.isEmpty(instances)) {
             return serviceInstances;
         }
         return instances;
+
     }
 
     public static synchronized void addLaneInfo(LaneInfo laneInfo) {
@@ -172,7 +172,6 @@ public class FemasLaneFilter implements LaneFilter {
             NAMESPACE_LANE_INFO_MAP.get(serviceInfo.getNamespaceId()).add(laneInfo.getLaneId());
             String serviceGroup = getLaneConfiguredVersionKey(serviceInfo.getServiceName(), serviceInfo.getVersion());
             if (!GROUP_LANE_INFO_COLOR_MAP.containsKey(serviceGroup)) {
-//                GROUP_LANE_INFO_COLORLESS_MAP.putIfAbsent(laneGroup.getGroupId(), new HashSet<>());
                 GROUP_LANE_INFO_COLOR_MAP.putIfAbsent(serviceGroup, new HashSet<>());
             }
 //            /**
@@ -191,13 +190,6 @@ public class FemasLaneFilter implements LaneFilter {
              * 所以这里删除所有为false的Service
              */
             EFFECTIVE_SERVICE_MAP.clear();
-//            Iterator<Map.Entry<Service, Boolean>> iterator = EFFECTIVE_SERVICE_MAP.entrySet().iterator();
-//            while (iterator.hasNext()) {
-//                Map.Entry<Service, Boolean> entry = iterator.next();
-//                if (entry.getValue() == false) {
-//                    iterator.remove();
-//                }
-//            }
         }
     }
 
@@ -220,10 +212,8 @@ public class FemasLaneFilter implements LaneFilter {
             String serviceGroup = getLaneConfiguredVersionKey(serviceInfo.getServiceName(), serviceInfo.getVersion());
 
             if (!GROUP_LANE_INFO_COLOR_MAP.containsKey(serviceGroup)) {
-//                GROUP_LANE_INFO_COLORLESS_MAP.putIfAbsent(laneGroup.getGroupId(), new HashSet<>());
                 GROUP_LANE_INFO_COLOR_MAP.putIfAbsent(serviceGroup, new HashSet<>());
             }
-//            GROUP_LANE_INFO_COLORLESS_MAP.get(laneGroup.getGroupId()).remove(laneInfo.getLaneId());
             GROUP_LANE_INFO_COLOR_MAP.get(serviceGroup).remove(laneInfo.getLaneId());
 
             /**
@@ -231,13 +221,6 @@ public class FemasLaneFilter implements LaneFilter {
              * 所以这里删除所有为true的Service
              */
             EFFECTIVE_SERVICE_MAP.clear();
-//            Iterator<Map.Entry<Service, Boolean>> iterator = EFFECTIVE_SERVICE_MAP.entrySet().iterator();
-//            while (iterator.hasNext()) {
-//                Map.Entry<Service, Boolean> entry = iterator.next();
-//                if (entry.getValue() == true) {
-//                    iterator.remove();
-//                }
-//            }
         }
     }
 
@@ -267,14 +250,11 @@ public class FemasLaneFilter implements LaneFilter {
     private static synchronized void resortLaneRule() {
         List<LaneRule> laneRules = new ArrayList<>(EFFECTIVE_LANE_RULES_SET);
         EFFECTIVE_LANE_RULES = laneRules;
-        Collections.sort(EFFECTIVE_LANE_RULES, new Comparator<LaneRule>() {
-            @Override
-            public int compare(LaneRule r1, LaneRule r2) {
-                if (r1.getPriority().equals(r2.getPriority())) {
-                    return Long.compare(r2.getCreateTime().getTime(), r1.getCreateTime().getTime());
-                } else {
-                    return r1.getPriority().compareTo(r2.getPriority());
-                }
+        Collections.sort(EFFECTIVE_LANE_RULES, (r1, r2) -> {
+            if (r1.getPriority().equals(r2.getPriority())) {
+                return Long.compare(r2.getCreateTime().getTime(), r1.getCreateTime().getTime());
+            } else {
+                return r1.getPriority().compareTo(r2.getPriority());
             }
         });
     }
@@ -377,29 +357,18 @@ public class FemasLaneFilter implements LaneFilter {
     }
 
     private String getLaneIdByPercentage(Map<String, Integer> laneMap) {
-        Map<Integer, String> reverseMap = new HashMap<>();
-        List<Integer> integers = new ArrayList<>();
-        laneMap.entrySet().stream().forEach(e -> {
-            reverseMap.put(e.getValue(), e.getKey());
-            integers.add(e.getValue());
-        });
-        Collections.sort(integers, new Comparator<Integer>() {
-            @Override
-            public int compare(Integer r1, Integer r2) {
-                return r1 - r2;
-            }
-        });
+        TreeMap<Integer, String> weightMap = new TreeMap<>();
+        int cur = 0;
+        for (Map.Entry<String, Integer> entry : laneMap.entrySet()) {
+            cur += entry.getValue();
+            weightMap.put(cur, entry.getKey());
+        }
+
         Random random = new Random();
         Integer index = random.nextInt(100);
-        int cur = 0;
-        int res = 0;
-        for (int a = 0; a < integers.size(); a++) {
-            cur += integers.get(a);
-            if (index < cur) {
-                res = integers.get(a);
-            }
-        }
-        return reverseMap.get(res);
+
+        SortedMap<Integer, String> tailMap = weightMap.tailMap(index, false);
+        return  weightMap.get(tailMap.firstKey());
     }
 
 

@@ -6,6 +6,8 @@ import com.tencent.tsf.femas.entity.PageService;
 import com.tencent.tsf.femas.entity.rule.FemasCircuitBreakerRule;
 import com.tencent.tsf.femas.entity.rule.RuleModel;
 import com.tencent.tsf.femas.entity.rule.breaker.CircuitBreakerModel;
+import com.tencent.tsf.femas.event.ConfigUpdateEvent;
+import com.tencent.tsf.femas.event.EventPublishCenter;
 import com.tencent.tsf.femas.service.ServiceExecutor;
 import com.tencent.tsf.femas.storage.DataOperation;
 import com.tencent.tsf.femas.util.ResultCheck;
@@ -21,10 +23,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class BreakerService implements ServiceExecutor {
 
+    private final EventPublishCenter eventPublishCenter;
 
     private final DataOperation dataOperation;
 
-    public BreakerService(DataOperation dataOperation) {
+    public BreakerService(EventPublishCenter eventPublishCenter, DataOperation dataOperation) {
+        this.eventPublishCenter = eventPublishCenter;
         this.dataOperation = dataOperation;
     }
 
@@ -53,7 +57,9 @@ public class BreakerService implements ServiceExecutor {
                 }
             }
         }
-        return dataOperation.configureBreakerRule(circuitBreakerRule);
+        Result result = dataOperation.configureBreakerRule(circuitBreakerRule);
+        eventPublishCenter.publishEvent(new ConfigUpdateEvent("circuitbreaker", "circuitbreaker"));
+        return result;
     }
 
     public Result<PageService<FemasCircuitBreakerRule>> fetchBreakerRule(CircuitBreakerModel circuitBreakerModel) {
@@ -64,6 +70,7 @@ public class BreakerService implements ServiceExecutor {
     public Result deleteBreakerRule(RuleModel ruleModel) {
         int res = dataOperation.deleteBreakerRule(ruleModel);
         if (ResultCheck.checkCount(res)) {
+            eventPublishCenter.publishEvent(new ConfigUpdateEvent("circuitbreaker", "circuitbreaker"));
             return Result.successMessage("规则删除成功");
         }
         return Result.errorMessage("规则删除失败");

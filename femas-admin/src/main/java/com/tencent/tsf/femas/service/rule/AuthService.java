@@ -5,6 +5,8 @@ import com.tencent.tsf.femas.entity.PageService;
 import com.tencent.tsf.femas.entity.rule.FemasAuthRule;
 import com.tencent.tsf.femas.entity.rule.auth.AuthRuleModel;
 import com.tencent.tsf.femas.entity.rule.auth.ServiceAuthRuleModel;
+import com.tencent.tsf.femas.event.ConfigUpdateEvent;
+import com.tencent.tsf.femas.event.EventPublishCenter;
 import com.tencent.tsf.femas.service.ServiceExecutor;
 import com.tencent.tsf.femas.storage.DataOperation;
 import com.tencent.tsf.femas.util.ResultCheck;
@@ -21,14 +23,18 @@ public class AuthService implements ServiceExecutor {
 
     private final DataOperation dataOperation;
 
-    public AuthService(DataOperation dataOperation) {
+    private final EventPublishCenter eventPublishCenter;
+
+    public AuthService(DataOperation dataOperation, EventPublishCenter eventPublishCenter) {
         this.dataOperation = dataOperation;
+        this.eventPublishCenter = eventPublishCenter;
     }
 
 
     public Result configureAuthRule(FemasAuthRule authRule) {
         int res = dataOperation.configureAuthRule(authRule);
         if (ResultCheck.checkCount(res)) {
+            eventPublishCenter.publishEvent(new ConfigUpdateEvent("authority", "authority"));
             return Result.successMessage("服务鉴权规则配置成功");
         }
         return Result.errorMessage("服务鉴权规则配置失败");
@@ -42,6 +48,7 @@ public class AuthService implements ServiceExecutor {
     public Result deleteAuthRule(ServiceAuthRuleModel serviceAuthRuleModel) {
         int res = dataOperation.deleteAuthRule(serviceAuthRuleModel);
         if (ResultCheck.checkCount(res)) {
+            eventPublishCenter.publishEvent(new ConfigUpdateEvent("authority", "authority"));
             return Result.successMessage("删除成功");
         }
         return Result.errorMessage("删除失败");

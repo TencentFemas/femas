@@ -1,5 +1,7 @@
 package com.tencent.tsf.femas.adaptor.paas.governance.lane;
 
+import java.util.Optional;
+
 /**
  * @Author: cody
  * @Date: 2022/7/26
@@ -50,7 +52,8 @@ public class ServiceInfo {
     }
 
     public Boolean getEntrance() {
-        return entrance;
+        return Optional.ofNullable(entrance)
+                .orElse(false);
     }
 
     public void setEntrance(Boolean entrance) {

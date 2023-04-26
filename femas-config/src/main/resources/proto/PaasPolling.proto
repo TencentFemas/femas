@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package grpc;
+option java_package = "com.tencent.tsf.femas.config.grpc.paas";
+option java_outer_classname = "LongPollingServer";
+option java_multiple_files = true;
+
+
+//添加一个服务
+service PaasPolling{ 
+    rpc fetchBreakerRule(SimpleParam) returns (PollingResult){}
+    rpc reportServiceApi(ServiceApiRequest) returns (PollingResult){}
+    rpc reportServiceEvent(ReportEventRequest) returns (PollingResult){}
+    rpc initNamespace(InitNamespaceRequest) returns (PollingResult){}
+}
+
+message SimpleParam{
+   string param =1;
+}
+
+
+
+message ServiceApiRequest{
+      string namespaceId = 1;
+      string serviceName = 2;
+      string applicationVersion = 3;
+      string data = 4;
+}
+
+message ReportEventRequest{
+      string namespaceId = 1;
+      string serviceName = 2;
+      string eventId = 3;
+      string data = 4;
+}
+
+message InitNamespaceRequest{
+      string namespaceId = 1;
+      string registryAddress = 2;
+}
+
+message PollingResult{
+   string code =1;
+   string message=2;
+   string result=3;
+}

@@ -7,4 +7,5 @@ export interface LaneItem {
   createTime: number;
   updateTime: number;
   laneServiceList: Array<ServiceInfo>;
+  stableServiceList: Array<ServiceInfo>;
 }

@@ -6,6 +6,8 @@ import com.tencent.tsf.femas.entity.PageService;
 import com.tencent.tsf.femas.entity.rule.FemasLimitRule;
 import com.tencent.tsf.femas.entity.rule.RuleModel;
 import com.tencent.tsf.femas.entity.rule.limit.LimitModel;
+import com.tencent.tsf.femas.event.ConfigUpdateEvent;
+import com.tencent.tsf.femas.event.EventPublishCenter;
 import com.tencent.tsf.femas.service.ServiceExecutor;
 import com.tencent.tsf.femas.storage.DataOperation;
 import com.tencent.tsf.femas.util.ResultCheck;
@@ -23,8 +25,11 @@ public class LimitService implements ServiceExecutor {
 
     private final DataOperation dataOperation;
 
-    public LimitService(DataOperation dataOperation) {
+    private final EventPublishCenter eventPublishCenter;
+
+    public LimitService(DataOperation dataOperation, EventPublishCenter eventPublishCenter) {
         this.dataOperation = dataOperation;
+        this.eventPublishCenter = eventPublishCenter;
     }
 
     public Result configureLimitRule(FemasLimitRule limitRule) {
@@ -50,6 +55,7 @@ public class LimitService implements ServiceExecutor {
         }
         int res = dataOperation.configureLimitRule(limitRule);
         if (ResultCheck.checkCount(res)) {
+            eventPublishCenter.publishEvent(new ConfigUpdateEvent("ratelimit", "ratelimit"));
             return Result.successMessage("规则编辑成功");
         }
         return Result.errorMessage("规则编辑失败");
@@ -63,6 +69,7 @@ public class LimitService implements ServiceExecutor {
     public Result deleteLimitRule(RuleModel ruleModel) {
         int res = dataOperation.deleteLimitRule(ruleModel);
         if (ResultCheck.checkCount(res)) {
+            eventPublishCenter.publishEvent(new ConfigUpdateEvent("ratelimit", "ratelimit"));
             return Result.successMessage("规则删除成功");
         }
         return Result.errorMessage("规则删除失败");
