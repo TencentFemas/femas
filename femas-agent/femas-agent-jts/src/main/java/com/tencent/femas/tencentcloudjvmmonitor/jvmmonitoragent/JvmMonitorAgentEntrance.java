@@ -81,7 +81,7 @@ public class JvmMonitorAgentEntrance {
         portNum = DEFAULT_PORT;
         enableDiagAgent = false;
         bciArguments = DEFAULT_BCI_ARGUMENTS;
-        hasController = false;
+        hasController = true;
         controllerType = ControllerType.HTTP;
     }
 
