@@ -30,6 +30,7 @@
         </shade.org.jmxtrans.agent.target>
         <license.dir>${basedir}</license.dir>
         <file.name>femas-agent-jts</file.name>
+        <maven.build.timestamp.format>yyyy.MM.dd</maven.build.timestamp.format>
     </properties>
 
     <repositories>
