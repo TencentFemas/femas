@@ -49,6 +49,9 @@ public class AdminConstants {
 
     public static final String FEMAS_K8S_SELECT_LABEL_KEY = "femas-service-app=";
 
+    public static final String LOCALHOST_STRING = "localhost";
+    public static final String LOCALHOST_IP = "127.0.0.1";
+
     public static class StorageKeyPrefix {
 
         public static final String REGISTRY_CONFIG_PREFIX = CONTEXT_PATH_PREFIX.concat("registry/config/");

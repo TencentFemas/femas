@@ -6,6 +6,8 @@ import com.tencent.tsf.femas.entity.ServiceModel;
 import com.tencent.tsf.femas.entity.rule.FemasRouteRule;
 import com.tencent.tsf.femas.entity.rule.RuleModel;
 import com.tencent.tsf.femas.entity.rule.route.Tolerate;
+import com.tencent.tsf.femas.event.ConfigUpdateEvent;
+import com.tencent.tsf.femas.event.EventPublishCenter;
 import com.tencent.tsf.femas.service.ServiceExecutor;
 import com.tencent.tsf.femas.storage.DataOperation;
 import com.tencent.tsf.femas.util.ResultCheck;
@@ -23,8 +25,11 @@ public class RouteService implements ServiceExecutor {
 
     private final DataOperation dataOperation;
 
-    public RouteService(DataOperation dataOperation) {
+    private final EventPublishCenter eventPublishCenter;
+
+    public RouteService(DataOperation dataOperation, EventPublishCenter eventPublishCenter) {
         this.dataOperation = dataOperation;
+        this.eventPublishCenter = eventPublishCenter;
     }
 
     public Result<PageService<FemasRouteRule>> fetchRouteRule(ServiceModel serviceModel) {
@@ -35,6 +40,7 @@ public class RouteService implements ServiceExecutor {
     public Result deleteRouteRule(RuleModel ruleModel) {
         int res = dataOperation.deleteRouteRule(ruleModel);
         if (ResultCheck.checkCount(res)) {
+            eventPublishCenter.publishEvent(new ConfigUpdateEvent("route", "route"));
             return Result.successMessage("路由规则删除成功");
         }
         return Result.errorMessage("路由规则删除失败");
@@ -43,6 +49,7 @@ public class RouteService implements ServiceExecutor {
     public Result configureRouteRule(@RequestBody FemasRouteRule routeRule) {
         int res = dataOperation.configureRouteRule(routeRule);
         if (ResultCheck.checkCount(res)) {
+            eventPublishCenter.publishEvent(new ConfigUpdateEvent("route", "route"));
             return Result.successMessage("规则编辑成功");
         }
         return Result.errorMessage("规则编辑失败");
@@ -51,6 +58,7 @@ public class RouteService implements ServiceExecutor {
     public Result configureTolerant(@RequestBody Tolerate tolerate) {
         int res = dataOperation.configureTolerant(tolerate);
         if (ResultCheck.checkCount(res)) {
+            eventPublishCenter.publishEvent(new ConfigUpdateEvent("route", "route"));
             return Result.successData("修改成功");
         }
         return Result.errorMessage("修改失败");

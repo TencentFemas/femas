@@ -99,7 +99,7 @@ public class ControllerExecutorTemplate {
             return;
         }
         Record record = new Record();
-        record.setTime(new Date().getTime());
+        record.setTime(System.currentTimeMillis());
         record.setStatus(status);
         record.setModule(module);
         record.setUser("admin");

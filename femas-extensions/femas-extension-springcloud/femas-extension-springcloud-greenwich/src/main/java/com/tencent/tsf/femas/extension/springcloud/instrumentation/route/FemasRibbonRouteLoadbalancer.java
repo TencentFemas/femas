@@ -1,6 +1,5 @@
 package com.tencent.tsf.femas.extension.springcloud.instrumentation.route;
 
-import com.alibaba.cloud.nacos.ribbon.NacosServer;
 import com.google.common.collect.Lists;
 import com.netflix.loadbalancer.Server;
 import com.tencent.tsf.femas.api.ExtensionManager;
@@ -24,7 +23,7 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author leo
@@ -53,12 +52,9 @@ public class FemasRibbonRouteLoadbalancer implements FemasServiceFilterLoadBalan
         // rest 的先进行 before invoke 的判断，因此需要这里进入熔断级别判断和抛异常
         String beforeInvokeFlag = Context.getRpcInfo().get(BEFORE_INVOKE_FLAG_KEY);
         Context.getRpcInfo().put(BEFORE_INVOKE_FLAG_KEY, null);
-        if (server != null && Boolean.TRUE.toString().equals(beforeInvokeFlag)
-                && !circuitBreakerService.tryAcquirePermission(request)) {
-            FemasCircuitBreakerIsolationLevelEnum isolationLevel = circuitBreakerService
-                    .getServiceCircuitIsolationLevel(request.getTargetService());
-            throw new RuntimeException(
-                    "CircuitBreaker Error. IsolationLevel : " + isolationLevel + ", Request : " + request);
+        if (server != null && Boolean.TRUE.toString().equals(beforeInvokeFlag) && !circuitBreakerService.tryAcquirePermission(request)) {
+            FemasCircuitBreakerIsolationLevelEnum isolationLevel = circuitBreakerService.getServiceCircuitIsolationLevel(request.getTargetService());
+            throw new RuntimeException("CircuitBreaker Error. IsolationLevel : " + isolationLevel + ", Request : " + request);
         }
     }
 
@@ -100,8 +96,13 @@ public class FemasRibbonRouteLoadbalancer implements FemasServiceFilterLoadBalan
     }
 
     private Request getRequest(final List<Server> servers) {
-        Server femasServer = getFemasServerIfPresent(servers);
-        ServiceInstance serviceInstance = converter.convert(femasServer);
+        ServiceInstance serviceInstance = null;
+        for (Server server : servers) {
+            serviceInstance = converter.convert(server);
+            if (Optional.ofNullable(serviceInstance).map(ServiceInstance::getService).map(Service::getNamespace).filter(StringUtils::isNotBlank).isPresent()) {
+                break;
+            }
+        }
         Request request = new Request();
         String serviceName = null;
         if (serviceInstance != null && serviceInstance.getService() != null) {
@@ -114,29 +115,5 @@ public class FemasRibbonRouteLoadbalancer implements FemasServiceFilterLoadBalan
         request.setTargetService(service);
         Context.getRpcInfo().setRequest(request);
         return request;
-    }
-
-    /**
-     * 针对不是所有实例接入Femas的场景，优先选择Femas实例
-     */
-    private Server getFemasServerIfPresent(final List<Server> servers){
-        if(servers.size()==1){
-            return servers.get(0);
-        }
-        if(!(servers.get(0) instanceof NacosServer)){
-            return servers.get(0);
-        }
-
-        for(Server server:servers){
-            NacosServer nacosServer = (NacosServer) server;
-            if (nacosServer.getMetadata() != null) {
-                Map<String, String> meta = nacosServer.getMetadata();
-                String nameSpace = meta.get(contextConstant.getMetaNamespaceIdKey());
-                if(StringUtils.isNotBlank(nameSpace)){
-                    return server;
-                }
-            }
-        }
-        return servers.get(0);
     }
 }

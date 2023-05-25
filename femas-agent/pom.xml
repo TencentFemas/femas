@@ -31,6 +31,7 @@
         <module>femas-agent-starter</module>
         <module>femas-agent-tools</module>
         <module>femas-agent-plugin</module>
+        <module>femas-agent-jts</module>
         <module>femas-agent-example</module>
     </modules>
 
@@ -135,30 +136,5 @@
             </distributionManagement>
         </profile>
     </profiles>
-
-    <!-- 添加相关仓库依赖 -->
-    <repositories>
-        <repository>
-            <id>nexus-snapshots</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-
-        <repository>
-            <id>nexus-releases</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
 
 </project>
