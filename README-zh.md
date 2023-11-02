@@ -1,6 +1,6 @@
 <img src="https://user-images.githubusercontent.com/22976760/153148783-0ce5ae2f-cc36-4217-8f80-b29a2930b593.png" width="400px">
 
-# Femas：基于JavaAgent的微服务治理平台
+# Femas：腾讯云开源微服务治理平台
 
 **[`English`](./README.md) | `简体中文`**
 
