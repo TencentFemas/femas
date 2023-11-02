@@ -2,13 +2,6 @@
 
 # Femas：基于JavaAgent的微服务治理平台
 
-## [Femas体验环境](http://106.53.107.83:8080/femas)
-> 用户名：admin
-
-> 密码：123456
-
-**觉得不错的话，star fork下，欢迎社区开发者共建腾讯开源**
-
 **[`English`](./README.md) | `简体中文`**
 
 
