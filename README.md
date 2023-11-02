@@ -294,8 +294,8 @@ circuitBreaker:
 > For details, see the official document below
 
 ## Documentation
-#### [Official Document](http://femas.io/)
-#### [FAQ](http://femas.io/doc/community/FAQ.html)
+#### [Official Document](https://zilongtong.notion.site/Femas-Home-4e1ad62bc48d4f23b6063c460a337c40)
+#### [FAQ](https://zilongtong.notion.site/FAQ-c5ac338be9d948bfb36bc7c3025837ca)
 #### [Contribution Manual](./CONTRIBUTING.md)
 #### [Code of Conduct](./Code-of-Conduct.md)
 
