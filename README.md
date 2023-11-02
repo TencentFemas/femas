@@ -2,13 +2,6 @@
 
 # Femas: Javaagent-based Microservice Governance Platform
 
-## [Show me femas](http://106.53.107.83:8080/femas)
-> username:admin
-
-> password:123456
-
-**If you like,star fork it and join us**
-
 `English` | **[`简体中文`](./README-zh.md)**
 
 - [Introduction](#introduction)
