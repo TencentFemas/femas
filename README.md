@@ -1,6 +1,6 @@
 <img src="https://user-images.githubusercontent.com/22976760/153148783-0ce5ae2f-cc36-4217-8f80-b29a2930b593.png" width="400px">
 
-# Femas: Javaagent-based Microservice Governance Platform
+# Femas: Tencent Cloud Open Source Microservices Governance Platform
 
 `English` | **[`简体中文`](./README-zh.md)**
 
