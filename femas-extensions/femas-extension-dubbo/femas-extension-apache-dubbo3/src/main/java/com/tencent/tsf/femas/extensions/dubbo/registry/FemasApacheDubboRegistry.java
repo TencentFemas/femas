@@ -3,7 +3,6 @@ package com.tencent.tsf.femas.extensions.dubbo.registry;
 
 import com.tencent.tsf.femas.api.ExtensionManager;
 import com.tencent.tsf.femas.api.IExtensionLayer;
-import com.tencent.tsf.femas.common.context.Context;
 import com.tencent.tsf.femas.common.context.ContextConstant;
 import com.tencent.tsf.femas.common.context.factory.ContextFactory;
 import com.tencent.tsf.femas.common.entity.Service;
@@ -13,8 +12,6 @@ import com.tencent.tsf.femas.extensions.dubbo.util.CommonUtils;
 import org.apache.dubbo.common.URL;
 import org.apache.dubbo.common.constants.CommonConstants;
 import org.apache.dubbo.common.constants.RegistryConstants;
-import org.apache.dubbo.common.logger.Logger;
-import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.common.utils.UrlUtils;
 import org.apache.dubbo.registry.Constants;
 import org.apache.dubbo.registry.NotifyListener;
@@ -28,21 +25,17 @@ import java.util.stream.Collectors;
 
 /**
  * apache dubbo registry center implementation for femas
+ * @author rottenmu
  */
 
 public class FemasApacheDubboRegistry extends FailbackRegistry {
-    private final Logger logger = LoggerFactory.getLogger(getClass());
-
     private static volatile ContextConstant contextConstant = ContextFactory.getContextConstantInstance();
-    private static String namespace = Context.getSystemTag(contextConstant.getNamespaceId());
     private IExtensionLayer extensionLayer = ExtensionManager.getExtensionLayer();
-    private static final String group = Context.getSystemTag(contextConstant.getGroupId());
 
     public FemasApacheDubboRegistry(URL url) {
         super(url);
         ServiceInstance instance = createServiceInstance(url);
         Service service = CommonUtils.buildService(url);
-//        Service service = new Service(namespace, url.getParameter("application"));
         extensionLayer.init(service, url.getPort());
         instance.setPort(url.getPort());
         instance.setService(service);
