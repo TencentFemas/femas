@@ -19,6 +19,7 @@
         <module>femas-springcloud-greenwich-consul-plugin</module>
         <module>femas-springcloud-plugin-common</module>
         <module>femas-springcloud-greenwich-eureka-plugin</module>
+        <module>femas-springcloud-greenwich-zookeeper-plugin</module>
     </modules>
 
 </project>
