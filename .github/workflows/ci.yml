@@ -40,6 +40,10 @@ jobs:
         image: huyuanxin/eureka-server:3.1.2
         ports:
           - 8761:8761
+      zookeeper:
+        image: zookeeper
+        ports:
+          - 2181:2181
     steps:
       - name: checkout
         uses: actions/checkout@v2
