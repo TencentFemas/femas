@@ -3,6 +3,7 @@ package com.tencent.tsf.femas.common.context;
 import com.tencent.tsf.femas.agent.classloader.AgentClassLoader;
 import com.tencent.tsf.femas.agent.classloader.AgentPackagePathScanner;
 import com.tencent.tsf.femas.agent.classloader.InterceptorClassLoaderCache;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
@@ -22,12 +23,22 @@ public class AgentConfig {
     private final static String filePath = "/config/femas.yaml";
     private static final Yaml yml = new Yaml();
     private static Map<String, Object> conf = new ConcurrentHashMap<>();
+
     static {
         FileReader reader = null;
         try {
             reader = new FileReader(AgentPackagePathScanner.getPath() + filePath);
             BufferedReader buffer = new BufferedReader(reader);
             conf = yml.load(buffer);
+            //If there is a configuration in the system variable, overwrite the configuration in the femas.yaml file
+            if (null != conf && !conf.isEmpty()) {
+                conf.forEach((k, v) -> {
+                    String value = System.getProperty(k);
+                    if (StringUtils.isNotBlank(value)) {
+                        conf.put(k, value);
+                    }
+                });
+            }
         } catch (FileNotFoundException e) {
             logger.info("load agent Config failed, 'femas.yaml' file not found");
         } catch (Exception e) {
