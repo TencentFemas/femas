@@ -1,0 +1,2 @@
+com.tencent.tsf.femas.governance.conector.FemasConfigGrpcClientManager
+com.tencent.tsf.femas.governance.conector.FemasConfigHttpClientManager
