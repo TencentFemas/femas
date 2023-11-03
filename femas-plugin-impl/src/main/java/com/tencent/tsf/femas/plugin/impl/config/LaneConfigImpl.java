@@ -1,4 +1,4 @@
-/**
+/*
  * Tencent is pleased to support the open source community by making Polaris available.
  * <p>
  * Copyright (C) 2019 THL A29 Limited, a Tencent company. All rights reserved.
@@ -23,7 +23,6 @@ import com.tencent.tsf.femas.plugin.config.PluginConfigImpl;
 import com.tencent.tsf.femas.plugin.config.gov.LaneConfig;
 import com.tencent.tsf.femas.plugin.config.verify.DefaultValues;
 import org.apache.commons.lang3.StringUtils;
-
 
 /**
  * @author leozilong

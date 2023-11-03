@@ -1,7 +1,5 @@
 package com.tencent.tsf.femas.plugin.impl.config.rule.router;
 
-
-
 import com.tencent.tsf.femas.plugin.config.gov.ServiceRouterConfig;
 import com.tencent.tsf.femas.plugin.config.verify.Verifier;
 

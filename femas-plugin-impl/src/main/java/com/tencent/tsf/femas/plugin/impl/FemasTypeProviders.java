@@ -1,7 +1,5 @@
 package com.tencent.tsf.femas.plugin.impl;
 
-
-
 import com.tencent.tsf.femas.plugin.Attribute;
 import com.tencent.tsf.femas.plugin.Plugin;
 import com.tencent.tsf.femas.plugin.PluginProvider;

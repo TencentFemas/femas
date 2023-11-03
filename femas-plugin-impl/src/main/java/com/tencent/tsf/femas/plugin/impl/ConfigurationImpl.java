@@ -1,4 +1,4 @@
-/**
+/*
  * Tencent is pleased to support the open source community by making Polaris available.
  * <p>
  * Copyright (C) 2019 THL A29 Limited, a Tencent company. All rights reserved.
@@ -22,7 +22,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tencent.tsf.femas.plugin.config.Configuration;
 import com.tencent.tsf.femas.plugin.config.gov.*;
 import com.tencent.tsf.femas.plugin.impl.config.*;
-
 
 /**
  * SDK全量配置对象
@@ -178,14 +177,17 @@ public class ConfigurationImpl implements Configuration {
         return lane;
     }
 
+    @Override
     public MetricsConfig getMetrics() {
         return metrics;
     }
 
+    @Override
     public MetricsExporterConfig getMetricsExporter() {
         return metricsExporter;
     }
 
+    @Override
     public MetricsTransformerConfig getMetricsTransformer() {
         return metricsTransformer;
     }
