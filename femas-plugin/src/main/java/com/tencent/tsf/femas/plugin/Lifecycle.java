@@ -13,8 +13,8 @@ public interface Lifecycle {
     /**
      * 根据配置初始化配置
      *
-     * @param conf
-     * @throws FemasRuntimeException
+     * @param conf 插件上下文信息
+     * @throws FemasRuntimeException 异常信息
      */
     void init(final ConfigContext conf) throws FemasRuntimeException;
 

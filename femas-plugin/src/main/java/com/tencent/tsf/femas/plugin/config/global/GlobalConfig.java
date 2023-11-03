@@ -17,8 +17,6 @@
 
 package com.tencent.tsf.femas.plugin.config.global;
 
-
-import com.tencent.tsf.femas.plugin.config.PluginConfig;
 import com.tencent.tsf.femas.plugin.config.verify.Verifier;
 
 /**
@@ -28,7 +26,11 @@ import com.tencent.tsf.femas.plugin.config.verify.Verifier;
  * @date 2019/8/20
  */
 public interface GlobalConfig extends Verifier {
-
+    /**
+     * 获取api相关的配置
+     *
+     * @return api相关的配置
+     */
     SystemConfig getSystem();
 
     /**

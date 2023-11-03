@@ -17,7 +17,6 @@
 
 package com.tencent.tsf.femas.plugin.config.gov;
 
-
 import com.tencent.tsf.femas.plugin.config.PluginConfig;
 import com.tencent.tsf.femas.plugin.config.verify.Verifier;
 
@@ -30,8 +29,6 @@ import java.util.List;
  * @date 2019/8/20
  */
 public interface CircuitBreakerConfig extends PluginConfig, Verifier {
-
-
     /**
      * 是否启用熔断
      *

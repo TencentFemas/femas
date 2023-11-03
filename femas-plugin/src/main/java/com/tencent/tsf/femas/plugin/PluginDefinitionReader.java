@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tencent.tsf.femas.common.context.AgentConfig;
 import com.tencent.tsf.femas.common.util.ConfigUtils;
-import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,18 +25,20 @@ import static com.tencent.tsf.femas.common.context.ContextConstant.START_AGENT_F
  */
 public class PluginDefinitionReader {
 
-    private static final Logger logger = LoggerFactory.getLogger(PluginDefinitionReader.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PluginDefinitionReader.class);
 
-    //默认加载顺序，跟springboot保持一致，参见ConfigFileApplicationListener
+    /**
+     * 默认加载顺序，跟springboot保持一致，参见ConfigFileApplicationListener
+     */
     private static final String DEFAULT_SEARCH_LOCATIONS = "classpath:/,classpath:/config/";
     public static final String CLASSPATH_URL_PREFIX = "classpath:/";
     private static final String YAML_DEFAULT_NAMES = "femas.yaml";
 
     public static final String FEMAS_CONF_LOCATION_PROPERTY = "femas.yaml";
 
-    private static final Map<String, Object> conf;
-    private static final JsonNode finalYamlLocations;
-    private static final Properties finalPropertiesLocations;
+    private static final Map<String, Object> CONF;
+    private static final JsonNode FINAL_YAML_LOCATIONS;
+    private static final Properties FINAL_PROPERTIES_LOCATIONS;
 
     static {
         // 加载外部配置文件
@@ -45,39 +46,40 @@ public class PluginDefinitionReader {
         String location = properties.getProperty(FEMAS_CONF_LOCATION_PROPERTY);
         if (StringUtils.isNotBlank(location)) {
             File configFile = new File(location);
-            conf = ConfigUtils.loadAbsoluteConfig(configFile);
+            CONF = ConfigUtils.loadAbsoluteConfig(configFile);
         } else {
-            conf = new TreeMap<>();
+            CONF = new TreeMap<>();
             // 加载 classpath 配置文件
             String[] locationAdds = DEFAULT_SEARCH_LOCATIONS.split(",");
             for (String lo : locationAdds) {
                 lo = lo.substring(CLASSPATH_URL_PREFIX.length()).concat(YAML_DEFAULT_NAMES);
-                conf.putAll(ConfigUtils.loadRelativeYamlConfig(lo));
+                CONF.putAll(ConfigUtils.loadRelativeYamlConfig(lo));
             }
         }
         if (AgentConfig.doGetProperty(START_AGENT_FEMAS) != null && ((Boolean) AgentConfig.doGetProperty(START_AGENT_FEMAS))) {
-            conf.putAll(AgentConfig.getConf());
+            CONF.putAll(AgentConfig.getConf());
         }
-        conf.putAll(new LinkedHashMap(System.getenv()));
-        conf.putAll(new LinkedHashMap(System.getProperties())); // 注意部分属性可能被覆盖为字符串
+        CONF.putAll(new LinkedHashMap<>(System.getenv()));
+        // 注意部分属性可能被覆盖为字符串
+        CONF.putAll(new LinkedHashMap(System.getProperties()));
 
         ObjectMapper mapper = new ObjectMapper();
-        finalYamlLocations = mapper.convertValue(conf, JsonNode.class);
+        FINAL_YAML_LOCATIONS = mapper.convertValue(CONF, JsonNode.class);
 
-        finalPropertiesLocations = new Properties();
-        finalPropertiesLocations.putAll(conf);
+        FINAL_PROPERTIES_LOCATIONS = new Properties();
+        FINAL_PROPERTIES_LOCATIONS.putAll(CONF);
     }
 
     public Object getProperty(String serviceName) {
-        return this.conf.get(serviceName);
+        return CONF.get(serviceName);
     }
 
     public JsonNode getJsonNode() {
-        return this.finalYamlLocations;
+        return FINAL_YAML_LOCATIONS;
     }
 
     public Properties getProperties() {
-        return this.finalPropertiesLocations;
+        return FINAL_PROPERTIES_LOCATIONS;
     }
 
 }

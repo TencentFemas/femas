@@ -1,4 +1,4 @@
-/**
+/*
  * Tencent is pleased to support the open source community by making Polaris available.
  * <p>
  * Copyright (C) 2019 THL A29 Limited, a Tencent company. All rights reserved.
@@ -28,6 +28,8 @@ public interface Verifier {
 
     /**
      * 执行校验操作，参数校验失败会抛出IllegalArgumentException
+     *
+     * @throws IllegalArgumentException 异常信息
      */
     void verify() throws IllegalArgumentException;
 

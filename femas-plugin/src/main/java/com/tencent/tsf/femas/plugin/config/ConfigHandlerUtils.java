@@ -25,7 +25,7 @@ import java.util.Map;
 
 public class ConfigHandlerUtils {
 
-    private static Logger logger = LoggerFactory.getLogger(ConfigHandlerUtils.class);
+    private static final Logger logger = LoggerFactory.getLogger(ConfigHandlerUtils.class);
 
     public static void subscribeServiceConfig(ConfigHandler configHandler, Service service) {
         if (configHandler != null) {

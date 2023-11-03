@@ -17,11 +17,9 @@
 
 package com.tencent.tsf.femas.plugin.context;
 
-
 import com.tencent.tsf.femas.common.exception.FemasRuntimeException;
 import com.tencent.tsf.femas.plugin.Plugin;
 import com.tencent.tsf.femas.plugin.PluginFactory;
-
 
 import java.util.List;
 
@@ -36,8 +34,8 @@ public interface AbstractSDKContext extends PluginFactory {
      * 初始化插件列表
      *
      * @param context 插件初始化上下文
-     * @param types 插件类型
-     * @throws Exception 插件初始化过程中抛出异常
+     * @param types   插件类型
+     * @throws FemasRuntimeException 插件初始化过程中抛出异常
      */
     void initPlugins(ConfigContext context, List<Class<? extends Plugin>> types) throws FemasRuntimeException;
 

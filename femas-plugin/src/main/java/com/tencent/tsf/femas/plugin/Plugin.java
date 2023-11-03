@@ -1,4 +1,4 @@
-package com.tencent.tsf.femas.plugin;/*
+/*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -14,7 +14,7 @@ package com.tencent.tsf.femas.plugin;/*
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+package com.tencent.tsf.femas.plugin;
 
 import com.tencent.tsf.femas.common.spi.SpiExtensionClass;
 
@@ -37,7 +37,7 @@ public interface Plugin<T> extends SpiExtensionClass, Lifecycle {
     /**
      * 初始化之后，提供动态调整机制，也不强制
      *
-     * @param config
+     * @param config 配置信息
      */
     default void freshFactoryBySpecifyConfig(final T config) {
     }

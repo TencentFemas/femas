@@ -1,4 +1,4 @@
-package com.tencent.tsf.femas.plugin;/*
+/*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -14,6 +14,7 @@ package com.tencent.tsf.femas.plugin;/*
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.tencent.tsf.femas.plugin;
 
 /**
  * @Author leoziltong
